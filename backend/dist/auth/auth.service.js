@@ -16,8 +16,28 @@ let AuthService = class AuthService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    login() {
-        return 'I am logged';
+    async validateUser(details) {
+        const { id } = details;
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id
+            }
+        });
+        if (user)
+            return user;
+        return this.createUser(details);
+    }
+    createUser(details) {
+        console.log('Creating user');
+        const user = this.prisma.user.create({ data: details });
+        return this.prisma.user;
+    }
+    findUser(Id) {
+        return this.prisma.user.findUnique({
+            where: {
+                id: Id
+            }
+        });
     }
 };
 AuthService = __decorate([

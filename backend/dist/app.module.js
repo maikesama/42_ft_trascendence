@@ -12,6 +12,7 @@ const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma/prisma.module");
+const passport_1 = require("@nestjs/passport");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -22,7 +23,8 @@ AppModule = __decorate([
             prisma_module_1.PrismaModule,
             config_1.ConfigModule.forRoot({
                 isGlobal: true
-            })
+            }),
+            passport_1.PassportModule.register({ session: true }),
         ],
         controllers: [],
         providers: [],
