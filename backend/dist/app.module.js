@@ -13,6 +13,7 @@ const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma/prisma.module");
 const passport_1 = require("@nestjs/passport");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -27,7 +28,7 @@ AppModule = __decorate([
             passport_1.PassportModule.register({ session: true }),
         ],
         controllers: [],
-        providers: [],
+        providers: [prisma_service_1.PrismaService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

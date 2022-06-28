@@ -11,9 +11,13 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
+  id              Int             @id @default(autoincrement())
+  idIntra         String          @unique
+  userName        String          @unique
+  email           String          @default("")
+  tel             String          @default("")
+  img             String
+  firstName       String
+  lastName        String
 
-  username String?
-  email String?
-  // hash String
 }
