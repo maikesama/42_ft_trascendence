@@ -49,10 +49,7 @@ export class AuthService {
 					'Authorization': `Bearer ${token}`
 				}
 			})
-			.then(response => 
-				{
-					return response.json()
-				})
+			.then(response => response.json())
 			.then(datiJson => {
 				let ret: UserData = ({
 					idIntra: datiJson.login,

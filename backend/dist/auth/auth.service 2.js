@@ -84,7 +84,7 @@ let AuthService = class AuthService {
                 const tokens = await this.generateJwtTokens(user.id, user.email);
                 await this.updateRtHash(user.id, tokens.refresh_token);
                 res.cookie('at', tokens.access_token, { httpOnly: true });
-                res.redirect('http://localhost:3000/home');
+                res.redirect('/home');
             });
         }
         catch (e) {
