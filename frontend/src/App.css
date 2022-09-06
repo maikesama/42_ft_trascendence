@@ -1,0 +1,66 @@
+@import url("https://fonts.googleapis.com/css?family=Kanit:900%22");
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+.App {
+  text-align: center;
+  background-color: #282c34;
+  min-height: 100vh;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+  border-radius: 1000px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 2s ease-out;
+  }
+}
+
+.loginform {
+  padding-top: 100px;
+  color: whitesmoke;
+  font-weight: bolder;
+}
+
+.logTitle {
+  color: whitesmoke;
+  font-family: 'Roboto', sans-serif;
+  padding-top: 50px;
+  /* font-weight: bolder; */
+}
+
+.logTitle sup {
+  font-size: .5em;
+}
+
+.img {
+  margin-top: 75px;
+}
+
+.App-header {
+  /* display: flex; */
+  background-color: #282c34;
+  min-height: 100vh;
+  /* align-items: center;
+  justify-content: center;
+  color: #35D8C9;
+  flex-direction: column;
+  font-size: calc(10px + 2vmin); */
+   
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
