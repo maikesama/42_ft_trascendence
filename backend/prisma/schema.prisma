@@ -25,3 +25,12 @@ model User {
   RtHashed        String?          
 
 }
+
+// TABELLE e modello e/R    (optional = ?) (dubbio ??)
+
+//User (IDuser,nickname,password[encrypted] ??, time_register)
+//Client (IDclient, muted_time?, banned_time?, operator[bool], CODchannel)
+//Channel (IDchannel, name, visibilita, password?)
+//Message (IDmessage, message, time, CODchannel)
+//Blocked (IDuser, CODuser)
+//Partita (IDpartita, user1, user2, winner, points, points2, time_game, points_achived)
