@@ -12,12 +12,9 @@ export const Landing = () => {
 		evt.preventDefault();
 
         //home
-		window.location.replace('/home')
+		window.location.replace('./home')
 	}
 
-    function func(){
-        window.location.replace('/home')
-    }
 	return (
 		<>
 			<section className="vh-100" style={{backgroundColor: '#9A616D'}}>
@@ -39,7 +36,7 @@ export const Landing = () => {
                             </div>
                             <h5 className="align-items-center fw-normal mb-3 pb-3" style={{letterSpacing: '1px'}}>Sign into your account</h5>
                             <div className="pt-1 mb-4">
-                                <button className="btn btn-dark btn-lg btn-block" onClick={func}>Login</button>
+                                <button className="btn btn-dark btn-lg btn-block" onClick={logFunction}>Login</button>
                             </div>
                             </form>
 
