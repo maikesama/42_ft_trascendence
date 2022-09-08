@@ -6,6 +6,7 @@ import './App.css';
 import { TitleComp } from './components/TitleComp';
 import { LoginComp } from './components/LoginComp';
 import { Landing } from './pages/Landing';
+import { Homepage } from './pages/Homepage';
 
 
 function App() {
@@ -13,7 +14,7 @@ function App() {
     <div className="App">
     <Routes>
       <Route path="/" element={<Landing />}/>
-      <Route path='/home' element={<TitleComp />}/>
+      <Route path='/home' element={<Homepage />}/>
     </Routes>
     
     </div>

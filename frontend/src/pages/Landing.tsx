@@ -11,9 +11,13 @@ export const Landing = () => {
 	async function logFunction(evt: any) {
 		evt.preventDefault();
 
-		window.location.replace('/api/auth')
+        //home
+		window.location.replace('/home')
 	}
 
+    function func(){
+        window.location.replace('/home')
+    }
 	return (
 		<>
 			<section className="vh-100" style={{backgroundColor: '#9A616D'}}>
@@ -35,9 +39,7 @@ export const Landing = () => {
                             </div>
                             <h5 className="align-items-center fw-normal mb-3 pb-3" style={{letterSpacing: '1px'}}>Sign into your account</h5>
                             <div className="pt-1 mb-4">
-                                <Form action="" onSubmit={logFunction}>
-                                <button className="btn btn-dark btn-lg btn-block" type="submit">Login</button>
-                                </Form>
+                                <button className="btn btn-dark btn-lg btn-block" onClick={func}>Login</button>
                             </div>
                             </form>
 
