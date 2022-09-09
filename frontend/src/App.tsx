@@ -7,6 +7,8 @@ import { TitleComp } from './components/TitleComp';
 import { LoginComp } from './components/LoginComp';
 import { Landing } from './pages/Landing';
 import { Homepage } from './pages/Homepage';
+import { Error404 } from './pages/Error404';
+import { Leaderboard } from './pages/Leaderboard';
 
 
 function App() {
@@ -15,6 +17,8 @@ function App() {
     <Routes>
       <Route path="/" element={<Landing />}/>
       <Route path='/home' element={<Homepage />}/>
+      <Route path="/leaderboard" element={<Leaderboard />} />
+      <Route path="*" element={<Error404 />} />
     </Routes>
     
     </div>

@@ -1,8 +1,9 @@
 import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
+import { Navbar } from './Navbar';
 
-export function Navbar(props:any) {
+export function Header(props:any) {
 
   function menu() {
     let menu = document.getElementById("menu");
@@ -10,35 +11,36 @@ export function Navbar(props:any) {
       menu.style.display = "block";
     }
   }
+  
   const element = {
-    transition: 'none', color: 'white'
-  };
-
-  const element2 = {
-    transition: 'none', color: 'white', fontSize: 17
+    transition: 'none', color: 'black', textDecoration: 'none' ,
   };
 
   const profile = {
     width: '45px', height: '45px', marginTop: 5, marginBottom: -10
   }
+  const menuCss = {
+    backgroundColor: 'white',
+    marginLeft:15,
+    marginRight:5,
+    width:'15%',
+    height: '10%',
+    display: 'none'
+  }
 	return(
-    <Nav defaultActiveKey="/home" className="flex-row  navbar navbar-dark bg-dark align-items-center">
-      <Nav.Item>
-      <Nav.Link className="navbar-brand" href="/home">Trascendence</Nav.Link>
-      </Nav.Item>
-      <Nav.Link style={element} href="/home">Home</Nav.Link>
-      <Nav.Link style={element} href="/leaderboard">Leaderboard</Nav.Link>
-      <Nav.Link style={element} href="/admin">Admin</Nav.Link>
-      <Nav.Item className="ms-auto" style={{marginRight: 50}}>
-        
-        <Nav.Link onClick={menu} style={element2} href="/home">
-        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FProfile-Avatar-PNG.png" style={profile} alt="" />
-        <br/>
-        <div style={{padding: 10}}>Profile</div> 
-        </Nav.Link>
-      </Nav.Item>
-    </Nav>
-    
+    <>
+    <Navbar/>
+    <div className="container-fluid" style={{border: 5}}>
+            <div className="row" style={{border: '1px red'}}>
+                <div className="col-10"></div>
+                <div id="menu" className="col-2 menu" style={menuCss}>
+                    <a style={element} href="/user:user">Profile</a><br/>
+                    <a style={element} href="/settings">Settings</a><br/>
+                    <a style={element} href="/logout">Logout</a>
+                </div>
+            </div>
+        </div>
+    </>
 	)
 }
 

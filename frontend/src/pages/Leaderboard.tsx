@@ -9,7 +9,7 @@ import '../font/font.css';
 
 let logged = false;
 
-export const Homepage = () => {
+export const Leaderboard = () => {
     const modality = {
         color : 'white',
         fontFamily: 'MyWebFont'
@@ -19,18 +19,12 @@ export const Homepage = () => {
         color : 'trasparent',
         textDecoration: 'none'
     }
-    const menu = {
-        backgroundColor: 'white',
-        marginLeft:15,
-        marginRight:5,
-        width:'15%',
-        height: '10%',
-        display: 'none'
-    }
+    
 
 	return (
         <>
-        <Header/>
+        <Header />
+        
         <div className="container mt-4">
             <div className="row">
                 <div className="col-12">
