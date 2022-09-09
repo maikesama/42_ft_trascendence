@@ -2,8 +2,6 @@ import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
 
-
-
 export function Navbar(props:any) {
 
   function menu() {
@@ -12,21 +10,31 @@ export function Navbar(props:any) {
       menu.style.display = "block";
     }
   }
+  const element = {
+    transition: 'none', color: 'white'
+  };
 
+  const element2 = {
+    transition: 'none', color: 'white', fontSize: 17
+  };
+
+  const profile = {
+    width: '45px', height: '45px', marginTop: 5, marginBottom: -10
+  }
 	return(
     <Nav defaultActiveKey="/home" className="flex-row  navbar navbar-dark bg-dark align-items-center">
       <Nav.Item>
       <Nav.Link className="navbar-brand" href="/home">Trascendence</Nav.Link>
       </Nav.Item>
-      <Nav.Link style={{transition: 'none', color: 'white'}} href="/home">Home</Nav.Link>
-      <Nav.Link style={{transition: 'none', color: 'white'}} href="/home">Tournament</Nav.Link>
-      <Nav.Link style={{transition: 'none', color: 'white'}} href="/home">Leaderboard</Nav.Link>
-      <Nav.Link style={{transition: 'none', color: 'white'}} href="/home">Guilds</Nav.Link>
-      <Nav.Link style={{transition: 'none', color: 'white'}} href="/home">Admin</Nav.Link>
+      <Nav.Link style={element} href="/home">Home</Nav.Link>
+      <Nav.Link style={element} href="/home">Tournament</Nav.Link>
+      <Nav.Link style={element} href="/home">Leaderboard</Nav.Link>
+      <Nav.Link style={element} href="/home">Guilds</Nav.Link>
+      <Nav.Link style={element} href="/home">Admin</Nav.Link>
       <Nav.Item className="ms-auto" style={{marginRight: 50}}>
         
-        <Nav.Link onClick={menu} style={{transition: 'none', color: 'white', fontSize: 17}} href="/home">
-        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FProfile-Avatar-PNG.png" style={{width: '45px', height: '45px', marginTop: 5, marginBottom: -10}} alt="" />
+        <Nav.Link onClick={menu} style={element2} href="/home">
+        <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FProfile-Avatar-PNG.png" style={profile} alt="" />
         <br/>
         <div style={{padding: 10}}>Profile</div> 
         </Nav.Link>
