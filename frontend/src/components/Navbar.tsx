@@ -34,7 +34,7 @@ export function Navbar(props:any) {
       <Nav.Link style={element} href="/chat"><i className="bi-chat"></i></Nav.Link>
       <Nav.Item className="ms-auto" style={{marginRight: 50}}>
         
-        <Nav.Link onClick={menu} style={element2} href="/home">
+        <Nav.Link onClick={menu} style={element2}>
         <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FProfile-Avatar-PNG.png" style={profile} alt="" />
         <br/>
         <div style={{padding: 10}}>Profile</div> 
