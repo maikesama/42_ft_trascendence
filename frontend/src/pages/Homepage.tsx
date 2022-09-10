@@ -27,29 +27,42 @@ export const Homepage = () => {
         height: '10%',
         display: 'none'
     }
+    const lightText = {
+        color: 'white',
+        backgroundColor : '#510ac2',
+        borderRadius: 4,
+        padding: 15,
+        marginTop: '2%'
+    }
 
+    const submitButton = {
+        width: '25%',
+        marginTop: 15
+    }
 	return (
         <>
         <Header/>
-        <div className="container mt-4">
-            <div className="row">
-                <div className="col-12">
-                    <h1 style={modality}>42 PONG</h1>
+        <div className="container box-modality" style={lightText}>
+            <div className="container mt-4" style={{justifyContent: 'center', alignItems: 'center'}}>
+                <div className="row">
+                    <div className="col-12" style={lightText}>
+                        <h1 style={modality}>42 PONG</h1>
+                    </div>
                 </div>
             </div>
-        </div>
-        <hr style={{color: 'white'}}/>
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-6">
-                    <a href="./home" style={linkModality}>
-                    <h3 style={modality}>CLASSICO</h3>
-                    </a>
-                </div>
-                <div className="col-6">
-                    <a href="./home" style={linkModality}>
-                    <h3 style={modality}>INVERTITO</h3>
-                    </a>
+            <hr style={{color: 'white'}}/>
+            <div className="container mt-5" style={lightText}>
+                <div className="row">
+                    <div className="col-6">
+                        <a href="./home" style={linkModality}>
+                        <h3 style={modality}>CLASSICO</h3>
+                        </a>
+                    </div>
+                    <div className="col-6">
+                        <a href="./home" style={linkModality}>
+                        <h3 style={modality}>INVERTITO</h3>
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
