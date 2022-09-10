@@ -11,6 +11,8 @@ import { Error404 } from './pages/Error404';
 import { Leaderboard } from './pages/Leaderboard';
 import { Settings } from './pages/Settings';
 import { Chat } from './pages/Chat';
+import { Profile } from './pages/Profile';
+
 
 function App() {
   return (
@@ -21,6 +23,7 @@ function App() {
       <Route path="/leaderboard" element={<Leaderboard />} />
       <Route path="/settings" element={<Settings />} />
       <Route path="/chat" element={<Chat />} />
+      <Route path="/user" element={<Profile />} />
       <Route path="*" element={<Error404 />} />
     </Routes>
     

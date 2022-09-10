@@ -2,16 +2,21 @@ import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
 //import icon from 'bootstrap-icons';
+import axios from 'axios'
 
 
 export function Navbar(props:any) {
 
   function menu() {
     let menu = document.getElementById("menu");
-    if (menu) {
+    if (menu && menu.style.display == "none") {
       menu.style.display = "block";
     }
+    else if (menu && menu.style.display == "block") {
+      menu.style.display = "none";
+    }
   }
+
   const element = {
     transition: 'none', color: 'white'
   };
@@ -37,6 +42,7 @@ export function Navbar(props:any) {
         <Nav.Link onClick={menu} style={element2}>
         <img src="https://external-content.duckduckgo.com/iu/?u=http%3A%2F%2Fwww.pngall.com%2Fwp-content%2Fuploads%2F5%2FProfile-Avatar-PNG.png" style={profile} alt="" />
         <br/>
+        
         <div style={{padding: 10}}>Profile</div> 
         </Nav.Link>
       </Nav.Item>
