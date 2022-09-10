@@ -10,7 +10,7 @@ import { Homepage } from './pages/Homepage';
 import { Error404 } from './pages/Error404';
 import { Leaderboard } from './pages/Leaderboard';
 import { Settings } from './pages/Settings';
-
+import { Chat } from './pages/Chat';
 
 function App() {
   return (
@@ -20,6 +20,7 @@ function App() {
       <Route path='/home' element={<Homepage />}/>
       <Route path="/leaderboard" element={<Leaderboard />} />
       <Route path="/settings" element={<Settings />} />
+      <Route path="/chat" element={<Chat />} />
       <Route path="*" element={<Error404 />} />
     </Routes>
     

@@ -1,6 +1,8 @@
 import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
+//import icon from 'bootstrap-icons';
+
 
 export function Navbar(props:any) {
 
@@ -29,6 +31,7 @@ export function Navbar(props:any) {
       <Nav.Link style={element} href="/home">Home</Nav.Link>
       <Nav.Link style={element} href="/leaderboard">Leaderboard</Nav.Link>
       <Nav.Link style={element} href="/admin">Admin</Nav.Link>
+      <Nav.Link style={element} href="/chat"><i className="bi-chat"></i></Nav.Link>
       <Nav.Item className="ms-auto" style={{marginRight: 50}}>
         
         <Nav.Link onClick={menu} style={element2} href="/home">
