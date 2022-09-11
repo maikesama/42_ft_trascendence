@@ -1,6 +1,6 @@
 import {Header} from '../components/Header'
 import {MessageSent, MessageReceived} from '../components/Message'
-import '../components/css/Chat.css'
+import './css/Chat.css'
 export const Chat = () => {
 
     const title = {
@@ -18,6 +18,7 @@ export const Chat = () => {
         <MessageSent message="Hey come va?" time="11.00"/>
         <MessageReceived message="Ma tutt appost e tu?" time="11.02" />
         </div>
+        
         </>
     );
 }

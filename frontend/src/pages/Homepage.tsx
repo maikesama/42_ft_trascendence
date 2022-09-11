@@ -4,8 +4,11 @@ import React from "react";
 import { Form } from "react-bootstrap";
 import {Navbar} from '../components/Navbar';
 import {Header} from '../components/Header';
+import {Modality} from '../components/Modality';
 
 import '../font/font.css';
+import { url } from "inspector";
+import background from '../images/bg_room.jpg'
 
 let logged = false;
 
@@ -39,33 +42,20 @@ export const Homepage = () => {
         width: '25%',
         marginTop: 15
     }
+
 	return (
         <>
         <Header/>
-        <div className="container box-modality" style={lightText}>
-            <div className="container mt-4" style={{justifyContent: 'center', alignItems: 'center'}}>
-                <div className="row">
-                    <div className="col-12" style={lightText}>
-                        <h1 style={modality}>42 PONG</h1>
-                    </div>
-                </div>
-            </div>
-            <hr style={{color: 'white'}}/>
-            <div className="container mt-5" style={lightText}>
-                <div className="row">
-                    <div className="col-6">
-                        <a href="./home" style={linkModality}>
-                        <h3 style={modality}>CLASSICO</h3>
-                        </a>
-                    </div>
-                    <div className="col-6">
-                        <a href="./home" style={linkModality}>
-                        <h3 style={modality}>INVERTITO</h3>
-                        </a>
-                    </div>
+        <div style={{backgroundColor: '#764ABC', padding: 15, color: 'white'}} >
+            <div style={{ padding: 15}}>
+                <img src={background} alt="" style={{width: '100%'}}/>
+                <div style={{position: 'absolute', top: '60%', left:'20%', display: 'flex' }}>
+                    <Modality  page="/classico" name="Classico"/>
+                    <Modality page="/invertito" name="Invertito"/>
                 </div>
             </div>
         </div>
+        
         </>
 	);
 }
