@@ -12,12 +12,4 @@ RUN npm install
 
 COPY . .
 
-# RUN npx prisma generate
-
-
-
-# RUN npx prisma migrate dev --name mig
-
-# RUN npm run build
-
 CMD [ "bash", "setup.sh" ]

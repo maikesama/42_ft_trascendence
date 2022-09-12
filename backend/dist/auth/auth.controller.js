@@ -17,14 +17,16 @@ const common_1 = require("@nestjs/common");
 const auth_service_1 = require("./auth.service");
 const prisma_service_1 = require("../prisma/prisma.service");
 const guards_1 = require("./guards");
+const TwoFA_service_1 = require("./TwoFA/TwoFA.service");
 let tokens;
 let AuthController = class AuthController {
-    constructor(prisma, authservice) {
+    constructor(prisma, authservice, twoFaService) {
         this.prisma = prisma;
         this.authservice = authservice;
+        this.twoFaService = twoFaService;
     }
     login(res) {
-        return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=c226c936db32c32c2c9e438d2b4f8389e53598d521963643b76c1be5385b6b2f&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A80%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`);
+        return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A80%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`);
     }
     getAuthCode(query, res) {
         this.authservice.getAuthCode(query, res);
@@ -32,15 +34,21 @@ let AuthController = class AuthController {
     status() {
         return { msg: 'ok' };
     }
-    sendId(res) {
+    logout(res) {
+        res.clearCookie('at');
+        res.redirect('/');
     }
-    logout(req) {
-        const user = req.user;
-        return this.authservice.logout(user['sub']);
+    async complete2fa(id) {
+        console.log(id);
+        let x = await this.twoFaService.complete2fa(id);
+        return { QRcode: x };
     }
-    refresh(req) {
-        const user = req.user;
-        return this.authservice.refreshTok(user['sub'], user['refreshToken']);
+    async verify2fa(body, res) {
+        this.twoFaService.verify2fa(body, res)
+            .then((e) => { e ? res.redirect('/') : res.redirect('/'); return e; });
+    }
+    async turnOn2fa(body) {
+        await this.twoFaService.turnOnTwoFa(body.id);
     }
 };
 __decorate([
@@ -65,31 +73,40 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "status", null);
 __decorate([
-    (0, common_1.Get)('getId'),
-    __param(0, (0, common_1.Res)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "sendId", null);
-__decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Post)('logout'),
-    __param(0, (0, common_1.Req)()),
+    (0, common_1.Get)('logout'),
+    __param(0, (0, common_1.Res)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "logout", null);
 __decorate([
-    (0, common_1.UseGuards)(guards_1.RtGuard),
-    (0, common_1.Post)('refresh'),
-    __param(0, (0, common_1.Req)()),
+    (0, common_1.Post)('2fa/:id'),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "refresh", null);
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "complete2fa", null);
+__decorate([
+    (0, common_1.Post)('verify2fa'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "verify2fa", null);
+__decorate([
+    (0, common_1.Post)('turn-on-2fa'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "turnOn2fa", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, auth_service_1.AuthService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        auth_service_1.AuthService,
+        TwoFA_service_1.TwoFactorAuthenticationService])
 ], AuthController);
 exports.AuthController = AuthController;
 //# sourceMappingURL=auth.controller.js.map

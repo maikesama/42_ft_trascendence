@@ -5,11 +5,12 @@ import { PrismaService } from "src/prisma/prisma.service";
 import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { AtStrategy, RtStrategy } from "./strategies";
+import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
 // import { SessionSerializer } from "./Serializer";
 
 @Module({
 	imports: [JwtModule.register({})],
 	controllers: [AuthController],
-	providers: [ AuthService, AtStrategy, RtStrategy ]
+	providers: [ AuthService, AtStrategy, RtStrategy, TwoFactorAuthenticationService ]
 })
 export class AuthModule {}
