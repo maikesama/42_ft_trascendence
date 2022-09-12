@@ -5,6 +5,7 @@
     padding: 10px;
     margin: 5px auto 5px;
     width: 80%;
+    scale: 0.92
   }
   
   /* Darker chat container */
@@ -23,7 +24,7 @@
   /* Style images */
   .container-message img {
     float: left;
-    max-width: 60px;
+    max-width: 40px;
     width: 100%;
     margin-right: 20px;
     border-radius: 50%;
@@ -40,12 +41,14 @@
   .time-right {
     float: right;
     color: #aaa;
+    scale: 0.8
   }
   
   /* Style time text */
   .time-left {
     float: left;
     color: #999;
+    scale: 0.8
   }
 
   p{

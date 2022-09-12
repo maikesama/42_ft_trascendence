@@ -10,7 +10,7 @@ export function MessageSent(props:any) {
 
     return (
     <>
-    <div className="container-message">
+    <div style={{marginLeft: '20%'}} className="container-message">
     <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" />
         
     <p>{props.message}</p>
@@ -25,7 +25,7 @@ export function MessageReceived(props:any) {
 
     return (
     <>
-    <div className="container-message darker">
+    <div style={{marginLeft: '0%'}} className="container-message darker">
     <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" />
     <p>{props.message}</p>
     <span className="time-left">{props.time}</span>
