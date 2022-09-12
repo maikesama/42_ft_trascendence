@@ -13,7 +13,7 @@ export function LeaderboardItem(props:any) {
         borderRadius: 8,
         height: 50,
         margin: 'auto',
-        marginTop: 25,
+        marginTop: 15,
         alignItems: 'space-between',
         padding: 5,
 
@@ -23,7 +23,7 @@ export function LeaderboardItem(props:any) {
     const img = {
         width: '40px',
         borderRadius: '50%',
-        marginLeft: '-12%',
+        marginLeft: '-13%',
     }
     
     const onstatus = props.status;
@@ -46,7 +46,6 @@ export function LeaderboardItem(props:any) {
 
 	return(
     <>
-    <Navbar/>
         <div className='d-flex justify-content-evenly align-items-center' style={leaderboardItem}>
             <label>{props.id}</label>
             <img src={props.image} style={img}/>
