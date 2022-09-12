@@ -1,10 +1,9 @@
-import {Modality} from '../components/Modality'
+import {LeaderboardItem} from '../components/LeaderboardItem'
 
 export const Test = () => {
 	return (
         <>
-        <img src='localhost:3000/images/bg_room.jpg' />
-        <Modality/>
+        <LeaderboardItem id="1" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="liafigli" guilds="42Dragons" score="1123" status="online"/>
         </>
 	);
 }
