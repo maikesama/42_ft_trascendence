@@ -20,7 +20,7 @@ model User {
   firstName       String
   lastName        String
   isVerified      Boolean         @default(false)
-  twoFa           Boolean         @default(true)
+  twoFa           Boolean         @default(false)
   otpSecret       String          @default("")
   otpUrl          String          @default("")          
 
@@ -28,7 +28,14 @@ model User {
 
 // TABELLE e modello e/R    (optional = ?) (dubbio ??)
 
-//User (IDuser,nickname,password[encrypted] ??, time_register)
+model Partite {
+  IDpartita             Int             @id @unique @default(autoincrement())
+  user1                 String          @unique
+  user2                 String          @unique
+  winner                Int          
+
+}
+
 //Client (IDclient, muted_time?, banned_time?, operator[bool], CODchannel)
 //Channel (IDchannel, name, visibilita, password?)
 //Message (IDmessage, message, time, CODchannel)

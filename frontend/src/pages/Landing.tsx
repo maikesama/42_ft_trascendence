@@ -12,7 +12,7 @@ export const Landing = () => {
 		evt.preventDefault();
 
         //home
-		window.location.replace('./home')
+		window.location.replace('/api/auth')
 	}
 
 	return (

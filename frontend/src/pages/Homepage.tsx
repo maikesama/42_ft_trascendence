@@ -13,6 +13,16 @@ import background from '../images/bg_room.jpg'
 let logged = false;
 
 export const Homepage = () => {
+
+    function richiedi() {
+        axios.get("api/user", {
+            responseType: "json",
+        })
+        .then(function (response) {
+            console.log(response.data);
+        });
+}
+    richiedi();
     const modality = {
         color : 'white',
         fontFamily: 'MyWebFont'
