@@ -1,16 +1,17 @@
-import { Controller, Get, Res, Post, UseGuards, Query, Req, HttpException, HttpStatus} from "@nestjs/common";
+import { Controller, Get, Res, Post, UseGuards, Query, Body, Param, Bind} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {PrismaService} from "../prisma/prisma.service"
-import { AuthGuard } from "@nestjs/passport";
-import { Request, Response } from 'express'
-import { AtGuard, RtGuard } from "./guards";
-import { Public } from './decorators/public.decorator'
+import { Response } from 'express'
+import { AtGuard } from "./guards";
+import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
 
 let tokens;
 
 @Controller('auth')
 export class AuthController{
-	constructor(private readonly prisma: PrismaService, private authservice: AuthService) {}
+	constructor(private readonly prisma: PrismaService,
+		 private authservice: AuthService,
+		  private twoFaService: TwoFactorAuthenticationService) {}
 
 		//@Public()
 		@Get()
@@ -23,34 +24,35 @@ export class AuthController{
 		getAuthCode(@Query('code') query: string, @Res() res) {
 			this.authservice.getAuthCode(query, res)
 		}
-	
 
-		@Get('status')
-		status() {
-			return {msg: 'ok'}
-		}
-
-		@Get('getId')
-		sendId(@Res() res)
-		{
-			//console.log(tokens);
-
-		}
 
 		@UseGuards(AtGuard)
-		@Post('logout')
-		logout(@Req() req: Request) {
-			const user = req.user;
-			return this.authservice.logout(user['sub'])
+		@Get('logout')
+		logout(@Res() res: Response) {
+			res.clearCookie('at');
+        	res.redirect('/');
 		}
 
-		//@Public()
-		@UseGuards(RtGuard)
-		@Post('refresh')
-		refresh(@Req() req: Request)
-		{
-			const user = req.user;
-			return this.authservice.refreshTok(user['sub'], user['refreshToken'])
+		@Get('2fa/:id')
+		@Bind(Param('id'))
+		async findone(id) {
+			console.log(id)
+			let x = await this.twoFaService.complete2fa(id)
+				return {QRcode : x}
+		}
+		
+			
+
+		@Post('verify2fa')
+		
+		async verify2fa(@Body() body, @Res() res:Response){
+			this.twoFaService.verify2fa(body, res)
+				.then((e) => {e? res.redirect('/') : res.redirect('/'); return e})
+		}
+
+		@Post('turn-on-2fa')
+		async turnOn2fa(@Body() body) {
+			await this.twoFaService.turnOnTwoFa(body.id);
 		}
 	
 }

@@ -82,10 +82,14 @@ export class AuthService {
 						data: ret
 					})
 				}
-				const tokens = await this.generateJwtTokens(user.id, user.email);
-				await this.updateRtHash(user.id, tokens.refresh_token);
-				res.cookie('at', tokens.access_token, { httpOnly: true })
-				res.redirect('/home')
+				if (user.twoFa === true)
+					res.redirect(`/api/auth/2fa/${user.id}`)
+				else
+				{
+					const tokens = await this.generateJwtTokens(user.id, user.email);
+					res.cookie('at', tokens.access_token, { httpOnly: true })
+					res.redirect('/home')
+				}
 			})
 		}
 		catch (e) {
@@ -123,44 +127,4 @@ export class AuthService {
 		}
 	}
 
-	async updateRtHash(userId: number, rt: string) {
-		const hash = await this.hashData(rt);
-		await this.prisma.user.update({
-			where: {
-				id: userId
-			},
-			data: {
-				RtHashed: hash
-			}
-		})
-	}
-
-	async logout(userId: number) {
-		await this.prisma.user.updateMany({
-			where:{
-				id: userId,
-				RtHashed:{
-					not: null
-				}
-			},
-			data: {
-				RtHashed: null
-			}
-		})
-	}
-
-	async refreshTok(userId: number, rt: string) {
-		const user = await this.prisma.user.findUnique({
-			where:{
-				id: userId
-			}
-		})
-		if (!user || !user.RtHashed) throw new ForbiddenException("Access Denied")
-
-		const rtMatches = await argon.verify(rt, user.RtHashed)
-		if (!rtMatches) throw new ForbiddenException("Access Denied")
-		const tokens = await this.generateJwtTokens(user.id, user.email);
-		await this.updateRtHash(user.id, tokens.refresh_token);
-		return tokens;
-	}
 }

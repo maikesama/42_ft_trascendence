@@ -11,38 +11,82 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TwoFactorAuthenticationService = void 0;
 const common_1 = require("@nestjs/common");
-const otplib_1 = require("otplib");
-const qrcode_1 = require("qrcode");
 const prisma_service_1 = require("../../prisma/prisma.service");
+const speakeasy = require("speakeasy");
+const qrcode = require("qrcode");
+const auth_service_1 = require("../auth.service");
 let TwoFactorAuthenticationService = class TwoFactorAuthenticationService {
-    constructor(prisma) {
+    constructor(prisma, authservice) {
         this.prisma = prisma;
+        this.authservice = authservice;
     }
-    async generateTwoFactorAuthenticationSecret(user) {
-        const secret = otplib_1.authenticator.generateSecret();
-        const otpAuthURL = otplib_1.authenticator.keyuri(user.email, process.env.TWO_FACTOR_AUTHENTICATION_APP_NAME, secret);
-        await this.prisma.user.update({
-            where: { id: user.id },
-            data: { secret: secret }
+    async turnOnTwoFa(id) {
+        let otp = await this.prisma.user.findUnique({
+            where: {
+                id: id
+            },
+            select: {
+                otpSecret: true
+            }
         });
-        return {
-            secret,
-            otpAuthURL
-        };
+        if (otp.otpSecret === "") {
+            let secret = speakeasy.generateSecret({
+                name: "42Pong"
+            });
+            await this.prisma.user.update({
+                where: {
+                    id: id,
+                },
+                data: {
+                    otpSecret: secret.base32,
+                    otpUrl: secret.otpauth_url,
+                }
+            });
+        }
     }
-    async pipeQrCodeStream(stream, otpauthUrl) {
-        return (0, qrcode_1.toFileStream)(stream, otpauthUrl);
-    }
-    isTwoFaCodeValid(twofaCode, user) {
-        return otplib_1.authenticator.verify({
-            token: twofaCode,
-            secret: user.secret,
+    async complete2fa(body) {
+        let secret = await this.prisma.user.findUnique({
+            where: {
+                id: body.id
+            },
+            select: {
+                twoFa: true,
+                otpUrl: true,
+            }
         });
+        if (!secret.twoFa)
+            return;
+        return (await qrcode.toDataURL(secret.otpUrl));
+    }
+    async verify2fa(body, res) {
+        let user = await this.prisma.user.findUnique({
+            where: {
+                id: body.id
+            },
+            select: {
+                idIntra: true,
+                otpSecret: true,
+                id: true,
+                email: true
+            }
+        });
+        let verified = speakeasy.totp.verify({
+            secret: user.otpSecret,
+            encoding: 'base32',
+            token: body.totp
+        });
+        if (verified) {
+            const tokens = await this.authservice.generateJwtTokens(user.id, user.email);
+            res.cookie('at', tokens.access_token, { httpOnly: true });
+            res.redirect('/home');
+            return true;
+        }
+        return false;
     }
 };
 TwoFactorAuthenticationService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, auth_service_1.AuthService])
 ], TwoFactorAuthenticationService);
 exports.TwoFactorAuthenticationService = TwoFactorAuthenticationService;
 //# sourceMappingURL=TwoFA.service.js.map

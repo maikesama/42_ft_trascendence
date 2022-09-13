@@ -51,9 +51,7 @@ let AuthService = class AuthService {
                     'Authorization': `Bearer ${token}`
                 }
             })
-                .then(response => {
-                return response.json();
-            })
+                .then(response => response.json())
                 .then(datiJson => {
                 let ret = ({
                     idIntra: datiJson.login,
@@ -81,10 +79,13 @@ let AuthService = class AuthService {
                         data: ret
                     });
                 }
-                const tokens = await this.generateJwtTokens(user.id, user.email);
-                await this.updateRtHash(user.id, tokens.refresh_token);
-                res.cookie('at', tokens.access_token, { httpOnly: true });
-                res.redirect('/home');
+                if (user.twoFa === true)
+                    res.redirect(`/api/auth/2fa/${user.id}`);
+                else {
+                    const tokens = await this.generateJwtTokens(user.id, user.email);
+                    res.cookie('at', tokens.access_token, { httpOnly: true });
+                    res.redirect('/home');
+                }
             });
         }
         catch (e) {
@@ -115,45 +116,6 @@ let AuthService = class AuthService {
             access_token: at,
             refresh_token: rt
         };
-    }
-    async updateRtHash(userId, rt) {
-        const hash = await this.hashData(rt);
-        await this.prisma.user.update({
-            where: {
-                id: userId
-            },
-            data: {
-                RtHashed: hash
-            }
-        });
-    }
-    async logout(userId) {
-        await this.prisma.user.updateMany({
-            where: {
-                id: userId,
-                RtHashed: {
-                    not: null
-                }
-            },
-            data: {
-                RtHashed: null
-            }
-        });
-    }
-    async refreshTok(userId, rt) {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                id: userId
-            }
-        });
-        if (!user || !user.RtHashed)
-            throw new common_1.ForbiddenException("Access Denied");
-        const rtMatches = await argon.verify(rt, user.RtHashed);
-        if (!rtMatches)
-            throw new common_1.ForbiddenException("Access Denied");
-        const tokens = await this.generateJwtTokens(user.id, user.email);
-        await this.updateRtHash(user.id, tokens.refresh_token);
-        return tokens;
     }
 };
 __decorate([
