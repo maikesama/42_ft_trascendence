@@ -1,0 +1,31 @@
+
+
+.modality{
+    width:360px;
+    height:100px;
+    border-radius: 50px 75px 30px 80px;
+    border: 5px solid lightgrey;
+    background-image: url('https://www.friv.com/z/thumbs/4colors360x100Min.png');
+    background-size: 100%;
+    transition: background-size 1s;
+     -webkit-box-shadow: 5px 5px 64px 16px #0D0528;
+    -moz-box-shadow: 5px 5px 64px 16px #0D0528;
+    -o-box-shadow: 5px 5px 64px 16px #0D0528;
+    box-shadow: 5px 5px 64px 16px #0D0528;
+}
+
+.modality:hover{
+    background-size: 110%;
+}
+
+h3{
+    color: white;
+    text-align: left;
+    text-decoration: solid;
+    margin-left : 4%;
+    margin-top: 4px;
+}
+
+a{
+    text-decoration: none;
+}

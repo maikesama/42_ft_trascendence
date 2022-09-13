@@ -1,0 +1,9 @@
+
+.chat-box{
+    margin: auto;
+    background-color: rgba(255, 255, 255, 0.972);
+    width: 25%;
+    border: 3px solid black;
+    padding: 10px;
+    border-radius: 20px;
+}
