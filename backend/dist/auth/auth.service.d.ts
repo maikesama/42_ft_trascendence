@@ -12,10 +12,4 @@ export declare class AuthService {
         access_token: string;
         refresh_token: string;
     }>;
-    updateRtHash(userId: number, rt: string): Promise<void>;
-    logout(userId: number): Promise<void>;
-    refreshTok(userId: number, rt: string): Promise<{
-        access_token: string;
-        refresh_token: string;
-    }>;
 }

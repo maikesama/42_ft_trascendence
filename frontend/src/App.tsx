@@ -30,7 +30,6 @@ function App() {
       <Route path="/user" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/test" element={<Test />} />
-      
     </Routes>
     
     </div>

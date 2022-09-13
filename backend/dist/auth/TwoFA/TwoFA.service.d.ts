@@ -1,13 +1,11 @@
 import { Response } from 'express';
-import { User } from "@prisma/client";
 import { PrismaService } from "../../prisma/prisma.service";
+import { AuthService } from "../auth.service";
 export declare class TwoFactorAuthenticationService {
-    private readonly prisma;
-    constructor(prisma: PrismaService);
-    generateTwoFactorAuthenticationSecret(user: User): Promise<{
-        secret: string;
-        otpAuthURL: string;
-    }>;
-    pipeQrCodeStream(stream: Response, otpauthUrl: string): Promise<any>;
-    isTwoFaCodeValid(twofaCode: string, user: User): boolean;
+    private prisma;
+    private authservice;
+    constructor(prisma: PrismaService, authservice: AuthService);
+    turnOnTwoFa(id: number): Promise<void>;
+    complete2fa(body: any): Promise<string>;
+    verify2fa(body: any, res: Response): Promise<Boolean>;
 }
