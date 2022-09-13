@@ -37,6 +37,7 @@ export class TwoFactorAuthenticationService {
 
 	async complete2fa(body: any) : Promise<string>{
 		var Id: number = +body
+		console.log(Id)
 		this.turnOnTwoFa(Id)
 		let secret : {otpUrl: string, twoFa: Boolean} = await this.prisma.user.findUniqueOrThrow({
 			where:{
@@ -50,8 +51,14 @@ export class TwoFactorAuthenticationService {
 
 		if (!secret.twoFa)
 			return
-		console.log(secret.otpUrl)
-		return(await qrcode.toDataURL(secret.otpUrl));
+		if (secret.otpUrl)
+		{
+			console.log(secret.otpUrl)
+			return(await qrcode.toDataURL(secret.otpUrl));
+
+		}
+		else
+			return "non ce niente"
 	}
 
 	async verify2fa(body: any, res: Response) :Promise<Boolean> {

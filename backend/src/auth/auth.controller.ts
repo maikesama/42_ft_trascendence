@@ -24,12 +24,6 @@ export class AuthController{
 		getAuthCode(@Query('code') query: string, @Res() res) {
 			this.authservice.getAuthCode(query, res)
 		}
-	
-
-		@Get('status')
-		status() {
-			return {msg: 'ok'}
-		}
 
 
 		@UseGuards(AtGuard)
@@ -41,16 +35,16 @@ export class AuthController{
 
 		@Get('2fa/:id')
 		@Bind(Param('id'))
-		async findone(id, @Res() res: Response) {
+		async findone(id) {
 			console.log(id)
 			let x = await this.twoFaService.complete2fa(id)
-				res.render({QRcode : x})
 				return {QRcode : x}
 		}
 		
 			
 
 		@Post('verify2fa')
+		
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
 				.then((e) => {e? res.redirect('/') : res.redirect('/'); return e})
