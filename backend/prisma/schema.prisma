@@ -2,42 +2,88 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+	provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+	provider = "postgresql"
+	url      = env("DATABASE_URL")
 }
 
 model User {
-  id              Int             @id @unique @default(autoincrement())
-  idIntra         String          @unique
-  userName        String          @unique
-  email           String          @default("")
-  tel             String          @default("")
-  img             String
-  firstName       String
-  lastName        String
-  isVerified      Boolean         @default(false)
-  twoFa           Boolean         @default(false)
-  otpSecret       String          @default("")
-  otpUrl          String          @default("")          
-
+	id              Int             @id @unique @default(autoincrement())
+	idIntra         String          @unique
+	userName        String          @unique
+	email           String          @default("")
+	tel             String          @default("")
+	img             String
+	firstName       String
+	lastName        String
+	isVerified      Boolean         @default(false)
+	twoFa           Boolean         @default(false)
+	otpSecret       String          @default("")
+	otpUrl          String          @default("")  
+	win             Int             @default(0)
+	loss            Int             @default(0)
+	rank            Int             @default(0)
+	friends         Friends[]       @relation(name: "friends")
+	blocked         Blocklist[]     @relation(name: "block")
+	blockedby       Blocklist[]     @relation(name: "blocked")
+	chat						Chat[]
+	admin						Admin[]
+	participant			Participant[] 
 }
 
-// TABELLE e modello e/R    (optional = ?) (dubbio ??)
-
-model Partite {
-  IDpartita             Int             @id @unique @default(autoincrement())
-  user1                 String          @unique
-  user2                 String          @unique
-  winner                Int          
-
+model Friends {
+	friendId  String @unique
+	Friends   User  @relation(name: "friends", fields: [friendId], references: [idIntra])
 }
 
-//Client (IDclient, muted_time?, banned_time?, operator[bool], CODchannel)
-//Channel (IDchannel, name, visibilita, password?)
-//Message (IDmessage, message, time, CODchannel)
-//Blocked (IDuser, CODuser)
-//Partita (IDpartita, user1, user2, winner, points, points2, time_game, points_achived)
+model Blocklist {
+	blockId   String
+	blockedId String
+
+	block     User    @relation(name: "block", fields: [blockId], references: [idIntra])
+	blocked     User    @relation(name: "blocked", fields: [blockedId], references: [idIntra])
+
+	@@id([blockId, blockedId])
+}
+
+model Games {
+	idGame                Int             @id @default(autoincrement())
+	user1                 String          
+	user2                 String          
+	scoreP1               Int             @default(0) 
+	scoreP2               Int             @default(0)       
+}
+
+model Admin{
+	idIntra String
+	idChat	Int
+	user		User	@relation(fields: [idIntra], references: [idIntra])
+	chat		Chat	@relation(fields: [idChat], references: [id])
+	@@id([idIntra, idChat])
+}
+
+model Participant{
+	idIntra String
+	idChat	Int
+	user		User			@relation(fields: [idIntra], references: [idIntra])
+	chat		Chat			@relation(fields: [idChat], references: [id])
+	muted		Boolean		@default(false)
+	@@id([idIntra, idChat])
+}
+
+model Chat {
+	id					Int			@unique @default(autoincrement())
+	name				String
+	users				User		@relation(fields: [idIntra], references: [idIntra])
+	idIntra			String
+	type				String	@default("public")
+	password		String?
+	admin				Admin[]
+	participant	Participant[]
+	banned			String[]
+	@@id([name, idIntra])
+}
+
