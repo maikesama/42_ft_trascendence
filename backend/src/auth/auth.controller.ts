@@ -1,7 +1,7 @@
-import { Controller, Get, Res, Post, UseGuards, Query, Body, Param, Bind} from "@nestjs/common";
+import { Controller, Get, Res, Req, Post, UseGuards, Query, Body, Param, Bind} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {PrismaService} from "../prisma/prisma.service"
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { AtGuard } from "./guards";
 import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
 
@@ -54,5 +54,29 @@ export class AuthController{
 			await this.twoFaService.turnOnTwoFa(body.id);
 		}
 	
+
+		@Get('/user')
+		@UseGuards(AtGuard)
+		async user(@Req() req) {
+			const user = await this.prisma.user.findUnique({
+				where:{
+					id: req.id
+				},
+				include: {
+					chat           : true,
+					admin          : true,
+					participant    : true,
+					friends		   : true,
+					blocked        : true,
+					blockedby      : true,
+				}
+			});
+
+			delete user.otpSecret;
+			delete user.otpUrl;
+			delete user.twoFa;
+
+			return user;
+		}
 }
 
