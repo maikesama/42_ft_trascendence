@@ -17,6 +17,4 @@ export class UserController{
         return await this.userservice.getProfile(req.id)
     }
 
-    axios.get(/api/user/me).then(marcello => marcello.json())
-
 }

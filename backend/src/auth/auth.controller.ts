@@ -16,7 +16,7 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A80%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
 
 		//@Public()
@@ -30,7 +30,7 @@ export class AuthController{
 		@Get('logout')
 		logout(@Res() res: Response) {
 			res.clearCookie('at');
-        	res.redirect('/');
+        	res.redirect(`http://${process.env.HOST}:3000/`);
 		}
 
 		@Get('2fa/:id')
@@ -46,7 +46,7 @@ export class AuthController{
 		@Post('verify2fa')
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
-				.then((e) => {e? res.redirect('/') : res.redirect('/'); return e})
+				.then((e) => {e? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e})
 		}
 
 		@Post('turn-on-2fa')
@@ -64,7 +64,6 @@ export class AuthController{
 				},
 				include: {
 					chat           : true,
-					admin          : true,
 					participant    : true,
 					friends		   : true,
 					blocked        : true,

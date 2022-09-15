@@ -31,7 +31,8 @@ model User {
 	blocked         Blocklist[]     @relation(name: "block")
 	blockedby       Blocklist[]     @relation(name: "blocked")
 	chat			Chat[]
-	participant		Participant[] 
+	participant		Participant[]
+	messages		Message[]
 }
 
 model Friends {
@@ -87,8 +88,8 @@ model Chat {
 	idIntra				String
 	type				String	@default("public")
 	password			String?
-	admin				Admin[]?
 	participant			Participant[]
+	messages			Message[]	
 	createdAt		DateTime  		@default(now())
 	@@id([name, idIntra])
 }
@@ -96,7 +97,9 @@ model Chat {
 model Message {
 	id 					Int 		@unique @default(autoincrement())
 	message 			String
+	idChat				Int
+	idIntra				String
 	sendedAt			DateTime  	@default(now())
 	users				User		@relation(fields: [idIntra], references: [idIntra])
-	chat				Chat		@relation(fields: [idChat], references: [idChat])
+	chat				Chat		@relation(fields: [idChat], references: [id])
 }

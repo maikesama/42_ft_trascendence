@@ -26,29 +26,44 @@ let AuthController = class AuthController {
         this.twoFaService = twoFaService;
     }
     login(res) {
-        return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A80%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`);
+        return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`);
     }
     getAuthCode(query, res) {
         this.authservice.getAuthCode(query, res);
     }
-    status() {
-        return { msg: 'ok' };
-    }
     logout(res) {
         res.clearCookie('at');
-        res.redirect('/');
+        res.redirect(`http://${process.env.HOST}:3000/`);
     }
-    async complete2fa(id) {
+    async findone(id) {
         console.log(id);
         let x = await this.twoFaService.complete2fa(id);
         return { QRcode: x };
     }
     async verify2fa(body, res) {
         this.twoFaService.verify2fa(body, res)
-            .then((e) => { e ? res.redirect('/') : res.redirect('/'); return e; });
+            .then((e) => { e ? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e; });
     }
     async turnOn2fa(body) {
         await this.twoFaService.turnOnTwoFa(body.id);
+    }
+    async user(req) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: req.id
+            },
+            include: {
+                chat: true,
+                participant: true,
+                friends: true,
+                blocked: true,
+                blockedby: true,
+            }
+        });
+        delete user.otpSecret;
+        delete user.otpUrl;
+        delete user.twoFa;
+        return user;
     }
 };
 __decorate([
@@ -67,12 +82,6 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "getAuthCode", null);
 __decorate([
-    (0, common_1.Get)('status'),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
-    __metadata("design:returntype", void 0)
-], AuthController.prototype, "status", null);
-__decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.Get)('logout'),
     __param(0, (0, common_1.Res)()),
@@ -81,12 +90,12 @@ __decorate([
     __metadata("design:returntype", void 0)
 ], AuthController.prototype, "logout", null);
 __decorate([
-    (0, common_1.Post)('2fa/:id'),
-    __param(0, (0, common_1.Param)('id')),
+    (0, common_1.Get)('2fa/:id'),
+    (0, common_1.Bind)((0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
-], AuthController.prototype, "complete2fa", null);
+], AuthController.prototype, "findone", null);
 __decorate([
     (0, common_1.Post)('verify2fa'),
     __param(0, (0, common_1.Body)()),
@@ -102,6 +111,14 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "turnOn2fa", null);
+__decorate([
+    (0, common_1.Get)('/user'),
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "user", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,
