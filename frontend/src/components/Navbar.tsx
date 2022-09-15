@@ -29,7 +29,7 @@ export function Navbar(props:any) {
     width: '45px', height: '45px', marginTop: 5, marginBottom: -10
   }
 	return(
-    <Nav defaultActiveKey="/home" className="flex-row  navbar navbar-dark bg-dark align-items-center">
+    <Nav defaultActiveKey="/home" style={{height: '150px'}} className="flex-row  navbar navbar-dark bg-dark align-items-center">
       <Nav.Item>
       <Nav.Link className="navbar-brand" href="/home">Trascendence</Nav.Link>
       </Nav.Item>

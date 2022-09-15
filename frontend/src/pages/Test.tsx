@@ -1,16 +1,13 @@
-import {LeaderboardItem} from '../components/LeaderboardItem'
-import {LeaderboardHeader} from '../components/LeaderboardHeader'
-import {Header} from '../components/Header'
-import background from '../images/bg_room.jpg'
-
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 export const Test = () => {
-	return (
-        <>
-        <Header />
-        <div style={{height:"100vh", backgroundImage: 'url(' + background + ')' ,backgroundSize: 'cover', imageResolution: '100%', position: 'relative'}}>
-.sdfsdfdfsd
-        </div>
-        </>
-	);
+        return (
+    <Stack spacing={2} direction="row">
+      <Button variant="text">Text</Button>
+      <Button variant="contained">Contained</Button>
+      <Button variant="outlined">Outlined</Button>
+    </Stack>
+  );
 }
