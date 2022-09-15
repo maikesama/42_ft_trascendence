@@ -48,21 +48,7 @@ let AuthController = class AuthController {
         await this.twoFaService.turnOnTwoFa(body.id);
     }
     async user(req) {
-        const user = await this.prisma.user.findUnique({
-            where: {
-                id: req.id
-            },
-            include: {
-                chat: true,
-                participant: true,
-                friends: true,
-                blocked: true,
-                blockedby: true,
-            }
-        });
-        delete user.otpSecret;
-        delete user.otpUrl;
-        delete user.twoFa;
+        const user = await this.prisma.user.findMany({});
         return user;
     }
 };
@@ -112,7 +98,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "turnOn2fa", null);
 __decorate([
-    (0, common_1.Get)('/user'),
+    (0, common_1.Get)('user'),
     (0, common_1.UseGuards)(guards_1.AtGuard),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),

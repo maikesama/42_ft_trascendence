@@ -15,11 +15,5 @@ export declare class AuthController {
     }>;
     verify2fa(body: any, res: Response): Promise<void>;
     turnOn2fa(body: any): Promise<void>;
-    user(req: any): Promise<import(".prisma/client").User & {
-        chat: import(".prisma/client").Chat[];
-        participant: import(".prisma/client").Participant[];
-        friends: import(".prisma/client").Friends[];
-        blocked: import(".prisma/client").Blocklist[];
-        blockedby: import(".prisma/client").Blocklist[];
-    }>;
+    user(req: any): Promise<import(".prisma/client").User[]>;
 }

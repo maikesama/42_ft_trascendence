@@ -55,25 +55,23 @@ export class AuthController{
 		}
 	
 
-		@Get('/user')
 		@UseGuards(AtGuard)
+		@Get('user')
 		async user(@Req() req) {
-			const user = await this.prisma.user.findUnique({
-				where:{
-					id: req.id
-				},
-				include: {
-					chat           : true,
-					participant    : true,
-					friends		   : true,
-					blocked        : true,
-					blockedby      : true,
-				}
+			const user = await this.prisma.user.findMany({
+				
+				// include: {
+				// 	chat           : true,
+				// 	participant    : true,
+				// 	friends		   : true,
+				// 	blocked        : true,
+				// 	blockedby      : true,
+				// }
 			});
 
-			delete user.otpSecret;
-			delete user.otpUrl;
-			delete user.twoFa;
+			// delete user.otpSecret;
+			// delete user.otpUrl;
+			// delete user.twoFa;
 
 			return user;
 		}
