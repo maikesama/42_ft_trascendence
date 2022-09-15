@@ -11,11 +11,12 @@ export class UserController{
         private userservice: UserService) {}
 
     @UseGuards(AtGuard)
-    Get('me')
+    @Get('me')
     async getMe(@Req() req)
     {
-        const data = await this.jwt.verifyAsync(req.cookies['at'])
-        return await this.userservice.getProfile(data['id'])
+        return await this.userservice.getProfile(req.id)
     }
+
+    axios.get(/api/user/me).then(marcello => marcello.json())
 
 }

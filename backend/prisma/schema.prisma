@@ -19,58 +19,64 @@ model User {
 	img             String
 	firstName       String
 	lastName        String
+	createdAt		DateTime  		@default(now())
 	isVerified      Boolean         @default(false)
 	twoFa           Boolean         @default(false)
 	otpSecret       String          @default("")
 	otpUrl          String          @default("")  
 	win             Int             @default(0)
 	loss            Int             @default(0)
-	rank            Int             @default(0)
+	rank            Int             @default(1000)
 	friends         Friends[]       @relation(name: "friends")
 	blocked         Blocklist[]     @relation(name: "block")
 	blockedby       Blocklist[]     @relation(name: "blocked")
-	chat						Chat[]
-	admin						Admin[]
-	participant			Participant[] 
+	chat			Chat[]
+	participant		Participant[] 
 }
 
 model Friends {
-	friendId  String @unique
-	Friends   User  @relation(name: "friends", fields: [friendId], references: [idIntra])
+	friendId  	String 			@unique
+	addedAt		DateTime  		@default(now())
+	Friends   	User  			@relation(name: "friends", fields: [friendId], references: [idIntra])
 }
 
 model Blocklist {
-	blockId   String
-	blockedId String
+	blockId   		String
+	blockedId 		String
 
-	block     User    @relation(name: "block", fields: [blockId], references: [idIntra])
-	blocked     User    @relation(name: "blocked", fields: [blockedId], references: [idIntra])
+	block    		User    		@relation(name: "block", fields: [blockId], references: [idIntra])
+	blocked     	User    		@relation(name: "blocked", fields: [blockedId], references: [idIntra])
 
 	@@id([blockId, blockedId])
 }
 
 model Games {
-	idGame                Int             @id @default(autoincrement())
+	idGame                Int             	@id @default(autoincrement())
+	startedAt			  DateTime  		@default(now())
+	endedAt				  DateTime?  		
 	user1                 String          
 	user2                 String          
-	scoreP1               Int             @default(0) 
-	scoreP2               Int             @default(0)       
-}
-
-model Admin{
-	idIntra String
-	idChat	Int
-	user		User	@relation(fields: [idIntra], references: [idIntra])
-	chat		Chat	@relation(fields: [idChat], references: [id])
-	@@id([idIntra, idChat])
+	scoreP1               Int             	@default(0) 
+	scoreP2               Int            	@default(0)
+	status				  Boolean		  	@default(true)  
+	winner                String?
+	loser				  String?
 }
 
 model Participant{
-	idIntra String
-	idChat	Int
+	idIntra 	String
+	idChat		Int
 	user		User			@relation(fields: [idIntra], references: [idIntra])
 	chat		Chat			@relation(fields: [idChat], references: [id])
-	muted		Boolean		@default(false)
+	muted		Boolean			@default(false)
+	admin		Boolean			@default(false)
+	banned		Boolean			@default(false)
+	joinedAt	DateTime  		@default(now())
+	mutedAt		DateTime?
+	bannedAt	DateTime?
+	adminAt		DateTime?
+
+
 	@@id([idIntra, idChat])
 }
 
@@ -78,12 +84,19 @@ model Chat {
 	id					Int			@unique @default(autoincrement())
 	name				String
 	users				User		@relation(fields: [idIntra], references: [idIntra])
-	idIntra			String
+	idIntra				String
 	type				String	@default("public")
-	password		String?
-	admin				Admin[]
-	participant	Participant[]
-	banned			String[]
+	password			String?
+	admin				Admin[]?
+	participant			Participant[]
+	createdAt		DateTime  		@default(now())
 	@@id([name, idIntra])
 }
 
+model Message {
+	id 					Int 		@unique @default(autoincrement())
+	message 			String
+	sendedAt			DateTime  	@default(now())
+	users				User		@relation(fields: [idIntra], references: [idIntra])
+	chat				Chat		@relation(fields: [idChat], references: [idChat])
+}
