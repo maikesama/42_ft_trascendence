@@ -36,7 +36,6 @@ export class AuthController{
 		@Get('2fa/:id')
 		@Bind(Param('id'))
 		async findone(id) {
-			console.log(id)
 			let x = await this.twoFaService.complete2fa(id)
 				return {QRcode : x}
 		}

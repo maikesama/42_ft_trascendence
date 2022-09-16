@@ -8,12 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
-const config_1 = require("@nestjs/config");
 const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma/prisma.module");
 const passport_1 = require("@nestjs/passport");
 const prisma_service_1 = require("./prisma/prisma.service");
+const microservices_1 = require("@nestjs/microservices");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -22,10 +22,13 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             user_module_1.UserModule,
             prisma_module_1.PrismaModule,
-            config_1.ConfigModule.forRoot({
-                isGlobal: true
-            }),
             passport_1.PassportModule.register({ session: true }),
+            microservices_1.ClientsModule.register([
+                {
+                    name: "NOTIFICATION_SERVICE",
+                    transport: microservices_1.Transport.TCP
+                }
+            ])
         ],
         controllers: [],
         providers: [prisma_service_1.PrismaService,

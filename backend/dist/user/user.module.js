@@ -12,12 +12,18 @@ const strategies_1 = require("../auth/strategies");
 const user_controller_1 = require("./user.controller");
 const user_service_1 = require("./user.service");
 const jwt_1 = require("@nestjs/jwt");
+const auth_module_1 = require("../auth/auth.module");
+const prisma_service_1 = require("../prisma/prisma.service");
 let UserModule = class UserModule {
 };
 UserModule = __decorate([
     (0, common_1.Module)({
+        imports: [
+            auth_module_1.AuthModule
+        ],
         controllers: [user_controller_1.UserController],
-        providers: [user_service_1.UserService, strategies_1.AtStrategy, jwt_1.JwtService]
+        providers: [user_service_1.UserService, strategies_1.AtStrategy, jwt_1.JwtService, prisma_service_1.PrismaService],
+        exports: [user_service_1.UserService]
     })
 ], UserModule);
 exports.UserModule = UserModule;

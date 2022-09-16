@@ -25,7 +25,14 @@ let UserController = class UserController {
         this.userservice = userservice;
     }
     async getMe(req) {
-        return await this.userservice.getProfile(req.id);
+        const user = req.user;
+        return await this.userservice.getProfile(user['sub']);
+    }
+    async getUserProfile(idIntra) {
+        return await this.userservice.getUserProfile(idIntra);
+    }
+    async getAllUsers() {
+        return await this.userservice.getAllUsers();
     }
 };
 __decorate([
@@ -36,6 +43,21 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getMe", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Get)(':idIntra'),
+    (0, common_1.Bind)((0, common_1.Param)('idIntra')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUserProfile", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Get)('all'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getAllUsers", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

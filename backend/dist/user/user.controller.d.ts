@@ -6,5 +6,14 @@ export declare class UserController {
     private jwt;
     private userservice;
     constructor(prisma: PrismaService, jwt: JwtService, userservice: UserService);
-    getMe(req: any): Promise<void>;
+    getMe(req: any): Promise<import(".prisma/client").User>;
+    getUserProfile(idIntra: any): Promise<import(".prisma/client").User>;
+    getAllUsers(): Promise<{
+        idIntra: string;
+        userName: string;
+        img: string;
+        win: number;
+        loss: number;
+        rank: number;
+    }[]>;
 }

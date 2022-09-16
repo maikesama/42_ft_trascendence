@@ -18,7 +18,40 @@ let UserService = class UserService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
-    async getProfile(query) {
+    async getProfile(Id) {
+        const user = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                id: Id
+            }
+        });
+        delete user.otpSecret;
+        delete user.otpUrl;
+        delete user.twoFa;
+        return user;
+    }
+    async getUserProfile(idintra) {
+        const user = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                idIntra: idintra
+            }
+        });
+        delete user.otpSecret;
+        delete user.otpUrl;
+        delete user.twoFa;
+        return user;
+    }
+    async getAllUsers() {
+        const allUsers = await this.prisma.user.findMany({
+            select: {
+                idIntra: true,
+                userName: true,
+                img: true,
+                win: true,
+                loss: true,
+                rank: true
+            }
+        });
+        return allUsers;
     }
 };
 UserService = __decorate([

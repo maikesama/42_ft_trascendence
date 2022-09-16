@@ -20,7 +20,6 @@ model User {
 	firstName       String
 	lastName        String
 	createdAt		DateTime  		@default(now())
-	isVerified      Boolean         @default(false)
 	twoFa           Boolean         @default(false)
 	otpSecret       String          @default("")
 	otpUrl          String          @default("")  

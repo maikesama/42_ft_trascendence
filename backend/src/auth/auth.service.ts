@@ -67,11 +67,11 @@ export class AuthService {
 			.then( async ret => {
 				let user;
 				try{
-					user = await this.prisma.user.findUnique({
+					user = await this.prisma.user.findUniqueOrThrow({
 						where:{
 							idIntra: ret.idIntra,
 						},
-						rejectOnNotFound: true
+					
 					})
 					
 				}

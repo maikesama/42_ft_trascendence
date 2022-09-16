@@ -36,7 +36,6 @@ let AuthController = class AuthController {
         res.redirect(`http://${process.env.HOST}:3000/`);
     }
     async findone(id) {
-        console.log(id);
         let x = await this.twoFaService.complete2fa(id);
         return { QRcode: x };
     }
@@ -98,8 +97,8 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "turnOn2fa", null);
 __decorate([
-    (0, common_1.Get)('user'),
     (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Get)('user'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
