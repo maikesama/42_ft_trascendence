@@ -5,6 +5,7 @@ import { Form } from "react-bootstrap";
 import {Navbar} from '../components/Navbar';
 import {Header} from '../components/Header';
 import {Modality} from '../components/Modality';
+import ModalGame from '../components/ModalGame';
 import headerImage from '../images/2.jpg';
 import '../font/font.css';
 import { url } from "inspector";
@@ -73,6 +74,7 @@ export const Homepage = () => {
         backgroundRepeat: "no-repeat",
         backgroundSize: '100% 100%',
     }
+    //https://img.freepik.com/free-vector/vector-cartoon-background-quest-room-with-closed-doors_33099-1202.jpg
     //d-flex justify-content-evenly align-items-center mw-100
     //w-50 h-50 d-inline-block
     //backgroundImage: `url(${background})`
@@ -86,13 +88,12 @@ export const Homepage = () => {
                     <div>
                         <h1 style={{background: 'white' , borderRadius: 35, padding: 15, opacity: 0.85}}>TRANSCENDENCE</h1><br /><br />
                         <div style={{fontFamily: 'Arial'}} className="d-flex flex-row justify-content-center align-items-center">
-                            <Modality name="Classico" page="classico"/>
+                            <Modality name="Classico"/>
                             <Modality name="Invertito" page="invertito"/>
                         </div>
                     </div>
                 </div>
             </div>
-            
         </div>
         </>
 	);
