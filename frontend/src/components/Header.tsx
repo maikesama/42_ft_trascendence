@@ -14,6 +14,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import Grid from '@mui/material/Grid'; // Grid version 1
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
@@ -109,13 +111,12 @@ export function Header(props:any) {
             TRANSCENDENCE
           </Typography>
           {/*-----------------WEB-----------------*/}
-          
             <Typography
               variant="h4"
               noWrap
               component="a"
               href="/"
-              align='center'
+              align="center"
               sx={{
                 mr: 2,
                 display: { xs: 'none', md: 'flex' },
@@ -128,6 +129,7 @@ export function Header(props:any) {
             >
               TRANSCENDENCE
             </Typography>
+          
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', paddingLeft: 30 } }}>
             {pages.map((page) => (
               <Button
@@ -144,7 +146,7 @@ export function Header(props:any) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="https://42.fr/wp-content/uploads/2021/08/42.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
