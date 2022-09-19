@@ -95,7 +95,7 @@ export const Homepage = () => {
                         <h1 className="modalityName">Classico</h1> 
                     </div>
                     <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
-                        <h1 className="modalityName">Invertito</h1> 
+                        <h1 className="modalityName">Custom</h1> 
                     </div>
                 </div>
         </div>

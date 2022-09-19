@@ -52,26 +52,29 @@ export function Header(props:any) {
     <ThemeProvider theme={darkTheme}>
     <AppBar position="static" style={{height: 150, justifyContent: 'center', alignItems: 'center'}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
-          <Typography
-            variant="h4"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
-              fontWeight: 1000,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
-              
-            }}
-          >
-            TRANSCENDENCE
-          </Typography>
+        <Toolbar disableGutters> 
+          {/*-----------------WEB-----------------*/}
+            <Typography
+              variant="h4"
+              noWrap
+              component="a"
+              href="/"
+              align='center'
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 1000,
+                letterSpacing: '.3rem',
+                color: 'inherit',
+                textDecoration: 'none',
+              }}
+            >
+              TRANSCENDENCE
+            </Typography>
+          {/*-----------------WEB-----------------*/}
 
+          {/*-----------------MOBILE-----------------*/}
           <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton
               size="large"
@@ -108,7 +111,6 @@ export function Header(props:any) {
               ))}
             </Menu>
           </Box>
-          
           <Typography
             variant="h4"
             noWrap
@@ -127,6 +129,9 @@ export function Header(props:any) {
           >
             TRANSCENDENCE
           </Typography>
+          {/*-----------------MOBILE-----------------*/}
+
+          {/*-----------------WEB-----------------*/}
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', paddingLeft: 30 } }}>
             {pages.map((page) => (
               <Button
@@ -171,6 +176,7 @@ export function Header(props:any) {
               ))}
             </Menu>
           </Box>
+          {/*-----------------WEB-----------------*/}
         </Toolbar>
       </Container>
     </AppBar>
