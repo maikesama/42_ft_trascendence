@@ -68,6 +68,12 @@ export const Homepage = () => {
          opacity: 0.8
     }
 
+    const thebody = {
+        height: '100%',
+        display: 'flex',
+        justifyContent: 'space-between',
+    }
+
     const home = {
         backgroundImage: `url(${headerImage})`,
         height: '100%',
@@ -83,13 +89,13 @@ export const Homepage = () => {
 	return (
         <>
         <Header/>
-        <div className="container-fluid " style={{height: `calc(100vh - ${headerHeight})`, backgroundColor: 'black', backgroundSize: '100%', }}>
-                <div className="row" style={{height: '100%', padding:20, border: '3px solid black'}}>
+        <div className="container-fluid " id="bodybox">
+                <div className="row" style={thebody}>
                     <div className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
-                        
+                        <h1 className="modalityName">Classico</h1> 
                     </div>
                     <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
-                        
+                        <h1 className="modalityName">Invertito</h1> 
                     </div>
                 </div>
         </div>

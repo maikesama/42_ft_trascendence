@@ -3,7 +3,8 @@
     background-image: url('../../images/classic.jpg');
     background-repeat: no-repeat;
     background-size: 100%;
-    
+    scale: 0.7;
+    border-radius: 100px 50px;
 }
 
 #classic:hover{
@@ -16,10 +17,26 @@
     background-image: url('../../images/custom.jpg');
     background-repeat: no-repeat;
     background-size: 100%;
+    scale: 0.7;
+    border-radius: 100px 50px;
 }
 
 #custom:hover{
     background-image: url('../../images/custom.gif');
     height: 100%;
     max-width: 100%;
+}
+
+#bodybox {
+    height: calc(100vh - 150px);
+    background-image: url("../../images/bg_room.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    
+}
+
+.modalityName{
+    color: white;
+    font-size: 70px;
+    font-family: MyWebFont;
 }
