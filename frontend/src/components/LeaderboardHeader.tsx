@@ -48,7 +48,7 @@ export function LeaderboardHeader(props:any) {
 	return(
     <>
         <div className='d-flex justify-content-evenly align-items-end' style={leaderboardItem}>
-            <label style={{left:20}}>{props.id}</label>
+            <label style={{marginRight:20}}>{props.id}</label>
             
             <label>{props.nickname}</label>
             <label>{props.guilds}</label>
