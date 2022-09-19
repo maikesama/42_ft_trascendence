@@ -36,7 +36,7 @@ export const Settings = () => {
                     <input type="checkbox" name="two_factor_auth" id="two_factor_auth" style={{width: 18, height: 18}}/>
                     <label>&nbsp; Two Factor Authenticator</label>
                     <br></br><br />
-                    <input style={submitButton} type="submit" value="Salva" />
+                    <input style={submitButton} type="submit" value="Save" />
                 </div>
             </div>
         </div>

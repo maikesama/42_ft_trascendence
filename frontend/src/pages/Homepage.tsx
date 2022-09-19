@@ -8,6 +8,7 @@ import {Modality} from '../components/Modality';
 import ModalGame from '../components/ModalGame';
 import headerImage from '../images/2.jpg';
 import '../font/font.css';
+import './css/Homepage.css';
 import { url } from "inspector";
 import background from '../images/bg_room.jpg'
 
@@ -82,18 +83,15 @@ export const Homepage = () => {
 	return (
         <>
         <Header/>
-        <div className="container-fluid " style={{height: `calc(100vh - ${headerHeight})`, backgroundColor: 'grey', backgroundSize: '100%', }}>
-            <div className="row " style={{height: '100%'}}>
-                <div className="col-md-12 d-flex justify-content-center align-items-center" style={home}>
-                    <div>
-                        <h1 style={{background: 'white' , borderRadius: 35, padding: 15, opacity: 0.85}}>TRANSCENDENCE</h1><br /><br />
-                        <div style={{fontFamily: 'Arial'}} className="d-flex flex-row justify-content-center align-items-center">
-                            <Modality name="Classico"/>
-                            <Modality name="Invertito" page="invertito"/>
-                        </div>
+        <div className="container-fluid " style={{height: `calc(100vh - ${headerHeight})`, backgroundColor: 'black', backgroundSize: '100%', }}>
+                <div className="row" style={{height: '100%', padding:20, border: '3px solid black'}}>
+                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
+                        
+                    </div>
+                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
+                        
                     </div>
                 </div>
-            </div>
         </div>
         </>
 	);
