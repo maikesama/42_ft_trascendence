@@ -1,15 +1,17 @@
-import {Controller, Get, UseGuards, Req, Bind, Param} from "@nestjs/common";
+import {Controller, Get, UseGuards, Req, Bind, Param, Post} from "@nestjs/common";
 import { AtGuard } from "src/auth/guards";
 import {JwtService} from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "./user.service";
 import { bindCallback } from "rxjs";
+import { TwoFactorAuthenticationService} from './../auth/TwoFA/TwoFA.service'
 
 @Controller('user')
 export class UserController{
     constructor(private prisma: PrismaService,
         private jwt: JwtService,
-        private userservice: UserService) {}
+        private userservice: UserService,
+        private twofa: TwoFactorAuthenticationService) {}
 
     @UseGuards(AtGuard)
     @Get('me')
@@ -22,9 +24,10 @@ export class UserController{
     @UseGuards(AtGuard)
     @Get(':idIntra')
     @Bind(Param('idIntra'))
-    async getUserProfile(idIntra)
+    async getUserProfile(idIntra, @Req() req)
     {
-       return await this.userservice.getUserProfile(idIntra)
+       const user = req.user
+       return await this.userservice.getUserProfile(idIntra, user['sub'])
     }
 
     @UseGuards(AtGuard)
@@ -34,4 +37,38 @@ export class UserController{
         return await this.userservice.getAllUsers()
     }
 
+    @UseGuards(AtGuard)
+    @Post('block/:idIntra')
+    @Bind(Param('idIntra'))
+    async blockUser(idIntra, @Req() req)
+    {
+       const user = req.user
+       return await this.userservice.block(idIntra, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Post('unblock/:idIntra')
+    @Bind(Param('idIntra'))
+    async unblockUser(idIntra, @Req() req)
+    {
+       const user = req.user
+       return await this.userservice.unblock(idIntra, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Get('turn-on-2fa')
+    async turnOn2fa(@Req() req)
+    {
+        const user = req.user
+        console.log(user)
+        return await this.twofa.turnOnTwoFa(user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Get('turn-off-2fa')
+    async turnOff2fa(@Req() req)
+    {
+        const user = req.user
+        return await this.userservice.turnOffTwoFa(user['sub'])
+    }
 }

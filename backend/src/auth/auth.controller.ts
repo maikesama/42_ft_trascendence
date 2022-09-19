@@ -48,10 +48,10 @@ export class AuthController{
 				.then((e) => {e? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e})
 		}
 
-		@Post('turn-on-2fa')
-		async turnOn2fa(@Body() body) {
-			await this.twoFaService.turnOnTwoFa(body.id);
-		}
+		// @Post('turn-on-2fa')
+		// async turnOn2fa(@Body() body) {
+		// 	await this.twoFaService.turnOnTwoFa(body.id);
+		// }
 	
 
 		@UseGuards(AtGuard)
