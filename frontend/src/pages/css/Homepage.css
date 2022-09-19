@@ -2,29 +2,34 @@
 #classic{
     background-image: url('../../images/classic.jpg');
     background-repeat: no-repeat;
-    background-size: 100%;
-    scale: 0.7;
-    border-radius: 100px 50px;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
+    
 }
 
 #classic:hover{
     background-image: url('../../images/classic.gif');
-    height: 100%;
-    max-width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
 }
 
 #custom{
     background-image: url('../../images/custom.jpg');
     background-repeat: no-repeat;
-    background-size: 100%;
-    scale: 0.7;
-    border-radius: 100px 50px;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
 }
 
 #custom:hover{
     background-image: url('../../images/custom.gif');
-    height: 100%;
-    max-width: 100%;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
 }
 
 #bodybox {
@@ -37,6 +42,6 @@
 
 .modalityName{
     color: white;
-    font-size: 70px;
+    font-size: 65px;
     font-family: MyWebFont;
 }

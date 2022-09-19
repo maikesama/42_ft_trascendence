@@ -71,7 +71,7 @@ export const Homepage = () => {
     const thebody = {
         height: '100%',
         display: 'flex',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
     }
 
     const home = {
