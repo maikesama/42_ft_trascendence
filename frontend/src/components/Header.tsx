@@ -17,7 +17,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const pages = ['home', 'leaderboard', 'admin', 'chat'];
+const pages = ['Home', 'Leaderboard', 'Admin', 'Chat'];
 const settings = ['Profile', 'Settings', 'Logout'];
 
 export function Header(props:any) {
@@ -108,9 +108,9 @@ export function Header(props:any) {
               ))}
             </Menu>
           </Box>
-          <AdbIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          
           <Typography
-            variant="h3"
+            variant="h4"
             noWrap
             component="a"
             href=""
@@ -125,7 +125,7 @@ export function Header(props:any) {
               textDecoration: 'none',
             }}
           >
-            LOGO
+            TRANSCENDENCE
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', paddingLeft: 30 } }}>
             {pages.map((page) => (
