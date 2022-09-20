@@ -52,7 +52,7 @@ export function Header(props:any) {
 
   return (
     <ThemeProvider theme={darkTheme}>
-    <AppBar position="static" style={{height: 150, justifyContent: 'center', alignItems: 'center'}}>
+    <AppBar position="static" style={{height: 200, justifyContent: 'center', alignItems: 'center'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters> 
         {/*-----------------MOBILE-----------------*/}
@@ -111,42 +111,48 @@ export function Header(props:any) {
             TRANSCENDENCE
           </Typography>
           {/*-----------------WEB-----------------*/}
-            <Typography
-              variant="h4"
-              noWrap
-              component="a"
-              href="/"
-              align="center"
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 1000,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none',
-              }}
-            >
-              TRANSCENDENCE
-            </Typography>
-          
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', paddingLeft: 30 } }}>
+          <Grid container spacing={2} sx={{display: {xs: 'none', md:'block'}}}>
+          <Grid item md={12}>
+          <Typography
+            variant="h4"
+            fontSize="45px"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mt: 12,
+              display: { xs: 'none', md: 'block' },
+              flexGrow: 1,
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}
+          >
+            TRANSCENDENCE
+          </Typography>
+          </Grid>
+          <Grid item md={12}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'center' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
                 href={page}
-                sx={{ my: 2, color: 'white', display: 'block', fontSize: 18, padding:4 }}
+                sx={{ mt: -2, color: 'white', xs:'none', display: 'block', fontSize: 18, padding:4 }}
               >
                 {page}
               </Button>
             ))}
           </Box>
-
+            </Grid>
+          </Grid>
+          {/*------WEB & MOBILE (Settings 42 button) ------*/}
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="https://42.fr/wp-content/uploads/2021/08/42.jpg" />
+                <Avatar alt="Remy Sharp" src="https://42.fr/wp-content/uploads/2021/08/42.jpg" sx={{width: 50, height: 50}}/>
               </IconButton>
             </Tooltip>
             <Menu

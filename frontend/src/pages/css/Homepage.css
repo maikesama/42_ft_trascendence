@@ -33,7 +33,7 @@
 }
 
 #bodybox {
-    height: calc(100vh - 150px);
+    height: calc(100vh - 200px);
     background-image: url("../../images/bg_room.jpg");
     background-size: cover;
     background-repeat: no-repeat;
