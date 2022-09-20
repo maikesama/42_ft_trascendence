@@ -45,3 +45,9 @@
     font-size: 65px;
     font-family: MyWebFont;
 }
+
+.row{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
