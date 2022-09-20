@@ -115,6 +115,7 @@ export function Header(props:any) {
           <Grid container spacing={2} sx={{display: {xs: 'none', md:'block'}}}>
           <Grid item md={12}>
           <Typography
+            className="animateChar"
             variant="h4"
             fontSize="35px"
             noWrap
