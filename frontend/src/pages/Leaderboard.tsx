@@ -13,17 +13,7 @@ import '../font/font.css';
 let logged = false;
 
 export const Leaderboard = () => {
-    const modality = {
-        color : 'white',
-        fontFamily: 'MyWebFont'
-    }
-    const linkModality = {
-        transform: 'none',
-        color : 'trasparent',
-        textDecoration: 'none'
-    }
-    
-
+ 
 	return (
         <>
         <Header/>

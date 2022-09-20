@@ -20,7 +20,7 @@ import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ['Home', 'Leaderboard', 'Admin', 'Chat'];
-const settings = ['Profile', 'Settings', 'Logout'];
+const settings = ['Profile', 'Logout'];
 
 export function Header(props:any) {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
