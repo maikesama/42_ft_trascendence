@@ -134,7 +134,7 @@ export function Header(props:any) {
           </Typography>
           </Grid>
           <Grid item md={12}>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'center' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around' } }}>
             {pages.map((page) => (
               <Button
                 key={page}
