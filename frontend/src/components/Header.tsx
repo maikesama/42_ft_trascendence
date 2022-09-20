@@ -52,7 +52,7 @@ export function Header(props:any) {
 
   return (
     <ThemeProvider theme={darkTheme}>
-    <AppBar position="static" style={{height: 200, justifyContent: 'center', alignItems: 'center'}}>
+    <AppBar position="static" style={{height: 180, justifyContent: 'center', alignItems: 'center'}}>
       <Container maxWidth="xl">
         <Toolbar disableGutters> 
         {/*-----------------MOBILE-----------------*/}
@@ -94,6 +94,7 @@ export function Header(props:any) {
           </Box>
           <Typography
             variant="h4"
+            fontSize="25px"
             noWrap
             component="a"
             href=""
@@ -101,7 +102,7 @@ export function Header(props:any) {
               mr: 2,
               display: { xs: 'flex', md: 'none' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'MyWebFont',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',
@@ -115,15 +116,15 @@ export function Header(props:any) {
           <Grid item md={12}>
           <Typography
             variant="h4"
-            fontSize="45px"
+            fontSize="35px"
             noWrap
             component="a"
             href=""
             sx={{
-              mt: 12,
+              mt: 10,
               display: { xs: 'none', md: 'block' },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: 'MyWebFont',
               fontWeight: 700,
               letterSpacing: '.3rem',
               color: 'inherit',

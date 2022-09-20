@@ -10,7 +10,7 @@ import headerImage from '../images/2.jpg';
 import '../font/font.css';
 import './css/Homepage.css';
 import { url } from "inspector";
-import background from '../images/bg_room.jpg'
+import background from '../images/2.jpg'
 
 let logged = false;
 
