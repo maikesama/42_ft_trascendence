@@ -18,7 +18,7 @@ export const Friends = () => {
 	return (
 		<>
 			<Header />
-			<div className="searchBar">
+			<div className="container-fluid mt-4">
 			<TextField className="searchText" id="searchText" label="Search..." variant="outlined"></TextField>
 			</div>
 			<FriendsHeader id="Profile" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="Nickname" username="Username" score="Score" status="Status" />

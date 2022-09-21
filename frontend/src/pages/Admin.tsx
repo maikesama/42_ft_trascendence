@@ -50,7 +50,7 @@ export const Admin = () => {
         <Header />
         <AppBar position="static" style={{backgroundColor: 'transparent', border: 0, boxShadow: 'none', height: 180, justifyContent: 'center', alignItems: 'left'}}>
         <Container maxWidth="xl">
-        <Grid style={{marginTop: '15%'}} container spacing={2}>
+        <Grid style={{marginTop: '5%'}} container spacing={2}>
             <Grid item md={12} xs={12}>
                 <TextField sx={{backgroundColor: 'white', borderRadius: 15, width: '250px'}} id="filled-helperText" label="Search..." type="search" variant="filled" />
             </Grid>
