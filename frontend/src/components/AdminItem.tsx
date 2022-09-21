@@ -62,9 +62,9 @@ export function AdminItem(props:any) {
         <div className='d-flex justify-content-evenly align-items-center' style={adminItem}>
             <label>{props.id}</label>
             <label>{props.nickname}</label>
-            <label>{props.status}</label>
             <label>{props.banned}</label>
-            <label>{status} {props.admin}</label>
+            <label>{props.admin}</label>
+            <label>{status} {props.status}</label>
         </div>
     </>
 	)

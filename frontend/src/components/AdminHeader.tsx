@@ -45,12 +45,11 @@ export function AdminHeader(props:any){
     return(
         <>
             <div className='d-flex justify-content-evenly align-items-end' style={adminItem}>
-            <label style={{marginRight:20}}>ID</label>
-            
-            <label>Nickname</label>
-            <label>Status</label>
-            <label>Banned</label>
-            <label>Admin</label>
+            <label style={{marginRight:20}}>{props.elem1}</label>
+            <label>{props.elem2}</label>
+            <label>{props.elem3}</label>
+            <label>{props.elem4}</label>
+            <label>{props.elem5}</label>
         </div>
         </>
     )
