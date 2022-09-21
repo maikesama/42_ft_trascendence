@@ -19,7 +19,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-
+import { AdminItem } from "../components/AdminItem";
+import { AdminHeader } from "../components/AdminHeader";
 import '../font/font.css';
 
 let logged = false;
@@ -49,9 +50,15 @@ export const Admin = () => {
         <Header />
         <AppBar position="static" style={{backgroundColor: 'transparent', border: 0, /*boxShadow: 'none',*/ height: 180, justifyContent: 'center', alignItems: 'left'}}>
         <Container maxWidth="xl">
-        <Grid container spacing={2}>
+        <Grid style={{marginTop: '20%'}} container spacing={2}>
             <Grid item md={12}>
                 <TextField sx={{backgroundColor: 'white', borderRadius: 15, width: '20%'}} id="filled-helperText" label="Search..." type="search" variant="filled" />
+            </Grid>
+            <Grid item md={12} style={{marginTop: '10%'}}>
+            <AdminHeader admin="true" banned="false"/>
+            </Grid>
+            <Grid item md={12}>
+            <AdminItem id="1" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="liafigli" username="DaBaby" score="1123" status="online"/>
             </Grid>
         </Grid>
       </Container>
