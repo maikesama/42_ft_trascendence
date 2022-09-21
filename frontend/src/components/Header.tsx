@@ -16,7 +16,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-
+import "./css/Header.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ['Home', 'Leaderboard', 'Admin', 'Chat'];
@@ -87,7 +87,7 @@ export function Header(props:any) {
             >
               {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center">{page} dio</Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -136,9 +136,11 @@ export function Header(props:any) {
           </Typography>
           </Grid>
           <Grid item md={12}>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around' } }}>
+          <Box className="headerButtonsBox" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around' } }}>
             {pages.map((page) => (
               <Button
+                className="headerButtons"
+                style={{backgroundColor: 'transparent'}}
                 key={page}
                 onClick={handleCloseNavMenu}
                 href={page}
