@@ -2,7 +2,6 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Navbar} from '../components/Navbar';
 import '../font/font.css';
 
 let logged = false;
@@ -28,7 +27,6 @@ export const Error404 = () => {
 
 	return (
         <>
-        <Navbar />
         <div className="container-fluid" style={{border: 5}}>
             <div className="row" style={{border: '1px red'}}>
                 <div className="col-10"></div>

@@ -2,7 +2,6 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Navbar} from '../components/Navbar';
 import {Header} from '../components/Header';
 import { LeaderboardHeader } from "../components/LeaderboardHeader";
 import { LeaderboardItem } from "../components/LeaderboardItem";

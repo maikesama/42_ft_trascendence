@@ -1,10 +1,7 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Navbar} from '../components/Navbar';
 import {Header} from '../components/Header';
-import {Modality} from '../components/Modality';
-import ModalGame from '../components/ModalGame';
 import headerImage from '../images/2.jpg';
 import '../font/font.css';
 import './css/Homepage.css';

@@ -1,7 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
-import { Navbar } from './Navbar';
 import { flexbox } from '@mui/system';
 import { autocompleteClasses } from '@mui/material';
 
