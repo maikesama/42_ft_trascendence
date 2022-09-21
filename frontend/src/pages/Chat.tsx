@@ -1,5 +1,7 @@
 import {Header} from '../components/Header'
 import {MessageSent, MessageReceived} from '../components/Message'
+import {ChatContain} from '../components/ChatContain'
+
 import './css/Chat.css'
 export const Chat = () => {
 
@@ -43,17 +45,7 @@ export const Chat = () => {
         <>
         <Header/>
         
-        <div className="chat-box" style={chatBox}>
-        <h3 style={title}>Chat</h3><br />
-        <div id="demo">
-        <MessageSent message="Hey come va?" time="11.00"/>
-        <MessageReceived message="Ma tutt appost e tu?" time="11.02" />
-        <MessageSent message="Anche io grazie !!" time="11.03"/>
-        </div>
-        <br />
-        <input placeholder='Messaggio' type="textbox" name="message" id="message" style={textbox}/>
-        <input type="button" value="Invia"onClick={sendMessage} />
-        </div>
+        <ChatContain />
         
         </>
     );
