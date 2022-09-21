@@ -59,6 +59,7 @@ export function FriendsItem(props:any) {
 	return(
     <>
         <div className='d-flex justify-content-evenly align-items-center' style={friendsItem}>
+            
             <img src={props.image} style={img}/>
             <label>{props.nickname}</label>
             <label>{props.username}</label>
