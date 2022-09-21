@@ -36,7 +36,6 @@ export function FriendsItem(props:any) {
     const img = {
         width: '40px',
         borderRadius: '50%',
-        marginLeft: '-13%',
     }
     
     const onstatus = props.status;

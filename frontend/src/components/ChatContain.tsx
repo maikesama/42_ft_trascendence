@@ -39,12 +39,7 @@ export const ChatContain = () => {
 
   return (
       <div>
-        <Grid container>
-            <Grid item xs={12} >
-                <Typography variant="h5" className="header-message">Chat</Typography>
-            </Grid>
-        </Grid>
-        <Grid container component={Paper} className={classes.chatSection}>
+        <Grid container style={{top: 20}} component={Paper} className={classes.chatSection}>
             <Grid item xs={3} className={classes.borderRight500}>
                 <List>
                     <ListItem button key="RemySharp">
