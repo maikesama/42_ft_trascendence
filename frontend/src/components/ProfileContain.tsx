@@ -8,6 +8,10 @@ import Typography from '@mui/material/Typography';
 import profilePic from '../images/bg_room.jpg'
 import Grid from '@material-ui/core/Grid';
 import EditIcon from '@mui/icons-material/Edit';
+import IconButton from '@mui/material/IconButton';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+
 import "./css/ProfileContain.css"
 
 export const ProfileContain = (props: any) => {
@@ -40,8 +44,9 @@ export const ProfileContain = (props: any) => {
             </Typography>
             
             <Typography variant="body2" color="text.secondary" sx={{height: '80px'}}>
-            Lizards are a widespread group of squamate reptiles, with over 6,000
+             Lizards are a widespread group of squamate reptiles, with over 6,000
             species, ranging across all continents except Antarctica
+            {/*Non cancellare altrimenti resize*/}
             </Typography>
         </CardContent>
         <CardActions sx={{justifyContent: 'center'}}>
