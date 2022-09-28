@@ -9,12 +9,15 @@ import { PrismaService } from './prisma/prisma.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import * as redisStore from 'cache-manager-redis-store'
 import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AppGateway } from './app.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
     PrismaModule,
+    ChatModule,
     // ConfigModule.forRoot({
     //   isGlobal: true
     // }),
@@ -32,7 +35,7 @@ import { ClientsModule, Transport } from '@nestjs/microservices';
     // SessionSerializer
   ],
   controllers: [],
-  providers: [PrismaService, 
+  providers: [PrismaService, AppGateway, 
   //   {
   //   provide: APP_INTERCEPTOR,
   //   useClass: CacheInterceptor,

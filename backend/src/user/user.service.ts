@@ -132,5 +132,86 @@ export class UserService {
 		})
 	}
 
-	// need body for the other functions
+	async changepp(body, id: number)
+	{
+		await this.prisma.user.update({
+			where:{
+				id: id
+			},
+			data:{
+				img: body.img
+			}
+		})
+	}
+
+	async changeUserName(body, id: number)
+	{
+		await this.prisma.user.update({
+			where:{
+				id: id
+			},
+			data:{
+				userName: body.userName
+			}
+		})
+	}
+
+	async getChats(id: number)
+	{
+		const user = await this.prisma.user.findUnique({
+			where:{
+				id: id
+			}
+		})
+		const ret = await this.prisma.participant.findMany({
+			where:{
+				idIntra: user.idIntra
+			},
+			include: {
+				chat: true
+			}
+		})
+		
+		let rret = await Promise.all(ret.map(async (part: any)=> {
+			let partecipant = await this.prisma.participant.findMany({
+				where:{
+					idChat: part.chat.id
+				},
+				include:{
+					user: true, 
+				}
+			})
+			part.partecipant = partecipant
+			return part;
+		}))
+		return rret
+	}
+	
+
+	async showChat(idChat : number) {
+		    const chat : any = await this.prisma.chat.findUnique({
+			    where: {
+				    id: idChat
+			    },
+			    include: {
+				    participant: true
+			    }
+
+		    })
+		    chat.participant = await Promise.all(chat.participant.map(async (participant: any) => {
+		    	let user = await this.prisma.user.findUnique({
+				    where : {
+				    	idIntra : participant.idIntra,
+				    },
+				    select : {
+				    	id : true,
+				    	idIntra : true,
+					    img : true,
+					    userName : true
+				    }
+			    })
+			    return user;
+		    }))
+		    return chat;
+		}
 }

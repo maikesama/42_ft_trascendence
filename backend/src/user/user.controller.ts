@@ -1,10 +1,11 @@
-import {Controller, Get, UseGuards, Req, Bind, Param, Post} from "@nestjs/common";
+import {Controller, Get, UseGuards, Req, Bind, Param, Post, Body} from "@nestjs/common";
 import { AtGuard } from "src/auth/guards";
 import {JwtService} from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "./user.service";
 import { bindCallback } from "rxjs";
 import { TwoFactorAuthenticationService} from './../auth/TwoFA/TwoFA.service'
+import { MessageBody } from "@nestjs/websockets";
 
 @Controller('user')
 export class UserController{
@@ -70,5 +71,29 @@ export class UserController{
     {
         const user = req.user
         return await this.userservice.turnOffTwoFa(user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Post('update/pp')
+    async changePP(@Body() body, @Req() req)
+    {
+        const user = req.user
+        return await this.userservice.changepp(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Post('update/username')
+    async changeusername(@Body() body, @Req() req)
+    {
+        const user = req.user
+        return await this.userservice.changepp(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @Post('getUserChat')
+    async getUserChat(@Req() req)
+    {
+        const user = req.user
+        return await this.userservice.getChats(user['sub'])
     }
 }
