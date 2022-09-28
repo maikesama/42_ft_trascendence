@@ -1,0 +1,21 @@
+.UploadImageBtn {
+}
+
+.UploadImageBtn :hover{
+    display: block !important;
+    background-color: white;
+    position: absolute;
+    color: black;
+    padding : 10px;
+    border-radius: 10px;
+  }
+
+.UploadImageTxt{
+    display: none;
+}
+
+.UploadImageTxt:hover{
+    display: block !important;
+    color: black;
+    font-size: 700;
+}

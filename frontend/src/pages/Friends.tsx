@@ -1,30 +1,64 @@
+
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import { Header } from '../components/Header';
-import headerImage from '../images/2.jpg';
+import {Header} from '../components/Header';
+import { Grid } from '@mui/material';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import Menu from '@mui/material/Menu';
+import MenuIcon from '@mui/icons-material/Menu';
+import Container from '@mui/material/Container';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Link from '@mui/material/Link';
+import Tooltip from '@mui/material/Tooltip';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { AdminItem } from "../components/AdminItem";
+import { AdminHeader } from "../components/AdminHeader";
 import '../font/font.css';
-import '../components/css/Utils.css';
-import { url } from "inspector";
-import { FriendsHeader } from "../components/FriendsHeader";
-import { FriendsItem } from "../components/FriendsItem";
-import Grid from '@mui/material/Grid'; // Grid version 1
-import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-import { TextField } from "@mui/material";
 
+let logged = false;
 
 export const Friends = () => {
+    const modality = {
+        color : 'white',
+        fontFamily: 'MyWebFont'
+    }
+    const linkModality = {
+        transform: 'none',
+        color : 'trasparent',
+        textDecoration: 'none'
+    }
+    
+    const darkTheme = createTheme({
+        palette: {
+          mode: 'dark',
+          primary: {
+            main: '#1976d2',
+          },
+        },
+      });
 
 	return (
-		<>
-			<Header />
-			<div className="container-fluid mt-4">
-			<TextField className="searchText" id="searchText" label="Search..." variant="outlined"></TextField>
-			</div>
-			<FriendsHeader id="Profile" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="Nickname" username="Username" score="Score" status="Status" />
-			<FriendsItem id="1" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="liafigli" username="DaBaby" score="1123" status="online" />
-			<FriendsItem id="1" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="pippo" username="BossPoppin" score="345" status="offline" />
-			<FriendsItem id="1" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="hdede" username="JoeMama" score="3475" status="error" />
-		</>
+        <>
+        <Header />
+        <AppBar position="static" style={{backgroundColor: 'transparent', border: 0, boxShadow: 'none', height: 180, justifyContent: 'center', alignItems: 'left'}}>
+        <Container maxWidth="xl">
+        <Grid style={{marginTop: '5%'}} container spacing={2}>
+            <Grid item md={12} xs={12}>
+                <TextField sx={{backgroundColor: 'white', borderRadius: 15, width: '250px'}} id="filled-helperText" label="Search..." type="search" variant="filled" />
+            </Grid>
+        </Grid>
+        <AdminHeader elem1="ID" elem2="Nickname" elem3="Banned" elem4="Admin" elem5="Status"/>
+            <AdminItem id="1" nickname="liafigli" username="DaBaby" score="1123" banned="false" admin="true" status="online"/>
+      </Container>
+    </AppBar>
+    </>
 	);
 }

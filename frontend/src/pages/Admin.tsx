@@ -56,7 +56,7 @@ export const Admin = () => {
             </Grid>
         </Grid>
         <AdminHeader elem1="ID" elem2="Nickname" elem3="Banned" elem4="Admin" elem5="Status"/>
-            <AdminItem id="1" nickname="liafigli" username="DaBaby" score="1123" banned="false" admin="true" status="online"/>
+        <AdminItem id="1" nickname="liafigli" username="DaBaby" score="1123" banned="false" admin="true" status="online"/>
       </Container>
     </AppBar>
     </>
