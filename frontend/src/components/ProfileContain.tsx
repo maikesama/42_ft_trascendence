@@ -10,12 +10,19 @@ import Grid from '@material-ui/core/Grid';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import TextField from '@mui/material/TextField';
 
 
 import "./css/ProfileContain.css"
 
 export const ProfileContain = (props: any) => {
   
+  function handleNick(){
+    const inputbox = document.getElementById('txtNick');
+    inputbox?.removeAttribute('disabled')
+    inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+  }
+
   return (
     <Grid
   container
@@ -39,15 +46,28 @@ export const ProfileContain = (props: any) => {
         </Button>
         
         <CardContent>
-            <Typography gutterBottom variant="h5" component="div" sx={{height: '40px'}}>
-            Liafigli{props.nickname}
-            </Typography>
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             
-            <Typography variant="body2" color="text.secondary" sx={{height: '80px'}}>
-             Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica
-            {/*Non cancellare altrimenti resize*/}
+            <Typography variant="h5" component="div" sx={{marginTop: 2, marginRight: 2}}>
+            Nickname: 
             </Typography>
+            <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+            <Button sx={{color: 'black'}} onClick={handleNick}>
+            <EditIcon/>
+            </Button>
+          </div>
+
+          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            
+            <Typography variant="h5" component="div" sx={{marginTop: 2, marginRight: 2}}>
+            Username: 
+            </Typography>
+            <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+            <Button sx={{color: 'black', visibility: 'hidden'}} >
+            <EditIcon/>
+            </Button>
+          </div>
+            
         </CardContent>
         <CardActions sx={{justifyContent: 'center'}}>
             <Button>Save</Button>
