@@ -29,11 +29,11 @@ export const ProfileEdit = (props: any) => {
   spacing={0}
   direction="column"
   alignItems="center"
-  style={{ minHeight: '100vh',marginTop:50 }}
+  style={{ marginTop:50 }}
  >
 
   <Grid item xs={3}>
-        <Card sx={{ maxWidth: 550, height: 600 }}>
+        <Card sx={{ minWidth: 400, height: 600 }}>
         <Button className="UploadImageBtn" component="label" sx={{width: '100%', height: '380px', padding: 0}}>
         <CardMedia
             component="img"

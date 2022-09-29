@@ -21,9 +21,14 @@ export const ProfileContain = (props: any) => {
     const colors = {
         color: 'black', backgroundColor: 'white'
     }
-  
+    
+    const MatchesFriends = {
+        color: 'black', backgroundColor: 'white',
+        display: 'flex', alignItems: 'center', justifyContents: 'center'
+    }
+
   return (
-    <Grid container spacing={2} style={{marginTop: '50px'}}>
+    <Grid container spacing={2} style={{marginTop: 50}}>
     <Grid item xs={4} style={colors}>
     General Rank
     </Grid>
@@ -44,12 +49,13 @@ export const ProfileContain = (props: any) => {
     18
     </Grid>
     {/* Side edit profile */}
-    <Grid item xs={6} style={colors}>
+    <Grid item xs={4} style={colors}>
     <ProfileEdit/>
     </Grid>
     {/* Matches and Friends */}
-    <Grid item xs={6} style={colors}>
-    18
+    <Grid item xs={8} style={MatchesFriends}>
+    <ProfileEdit/>
+    <ProfileEdit/>
     </Grid>
     </Grid>
   );
