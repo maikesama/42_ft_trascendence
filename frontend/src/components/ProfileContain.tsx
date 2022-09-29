@@ -11,69 +11,46 @@ import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@mui/material/TextField';
+import { ProfileEdit } from "./ProfileEdit";
 
 
-import "./css/ProfileContain.css"
+import "./css/ProfileEdit.css"
 
 export const ProfileContain = (props: any) => {
   
-  function handleNick(){
-    const inputbox = document.getElementById('txtNick');
-    inputbox?.removeAttribute('disabled')
-    inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
-  }
-
+    const colors = {
+        color: 'black', backgroundColor: 'white'
+    }
+  
   return (
-    <Grid
-  container
-  spacing={0}
-  direction="column"
-  alignItems="center"
-  style={{ minHeight: '100vh',marginTop:50 }}
- >
-
-  <Grid item xs={3}>
-        <Card sx={{ maxWidth: 550, height: 600 }}>
-        <Button className="UploadImageBtn" component="label" sx={{width: '100%', height: '380px', padding: 0}}>
-        <CardMedia
-            component="img"
-            height="380"
-            image="https://cdn.intra.42.fr/users/liafigli.jpeg"
-            alt=""
-        />
-        <Typography className="UploadImageTxt">Upload Image</Typography>
-        <input type="file" hidden/>
-        </Button>
-        
-        <CardContent>
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            
-            <Typography variant="h5" component="div" sx={{marginTop: 2, marginRight: 2}}>
-            Nickname: 
-            </Typography>
-            <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
-            <Button sx={{color: 'black'}} onClick={handleNick}>
-            <EditIcon/>
-            </Button>
-          </div>
-
-          <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            
-            <Typography variant="h5" component="div" sx={{marginTop: 2, marginRight: 2}}>
-            Username: 
-            </Typography>
-            <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
-            <Button sx={{color: 'black', visibility: 'hidden'}} >
-            <EditIcon/>
-            </Button>
-          </div>
-            
-        </CardContent>
-        <CardActions sx={{justifyContent: 'center'}}>
-            <Button>Save</Button>
-        </CardActions>
-        </Card>
-        </Grid>
+    <Grid container spacing={2} style={{marginTop: '50px'}}>
+    <Grid item xs={4} style={colors}>
+    General Rank
+    </Grid>
+    <Grid item xs={4} style={colors}>
+    Victories
+    </Grid>
+    <Grid item xs={4} style={colors}>
+    Ladder victories
+    </Grid>
+    {/* Punti row */}
+    <Grid item xs={4} style={colors}>
+    12
+    </Grid>
+    <Grid item xs={4} style={colors}>
+    34
+    </Grid>
+    <Grid item xs={4} style={colors}>
+    18
+    </Grid>
+    {/* Side edit profile */}
+    <Grid item xs={6} style={colors}>
+    <ProfileEdit/>
+    </Grid>
+    {/* Matches and Friends */}
+    <Grid item xs={6} style={colors}>
+    18
+    </Grid>
     </Grid>
   );
 }

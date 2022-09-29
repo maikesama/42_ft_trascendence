@@ -1,7 +1,8 @@
 
 
-.txtNick{
-    
+#txtNick{
+    color:black;
+    font-size: bold;
 }
 
 .UploadImageBtn :hover{
