@@ -1,5 +1,5 @@
 import { CacheInterceptor, CacheModule, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+// import { ConfigModule } from '@nestjs/config';
 
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
@@ -8,17 +8,26 @@ import { PassportModule } from '@nestjs/passport';
 import { PrismaService } from './prisma/prisma.service';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import * as redisStore from 'cache-manager-redis-store'
-// import { SessionSerializer } from './auth/Serializer';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { AppGateway } from './app.gateway';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
     AuthModule,
     UserModule,
     PrismaModule,
-    ConfigModule.forRoot({
-      isGlobal: true
-    }),
+    ChatModule,
+    // ConfigModule.forRoot({
+    //   isGlobal: true
+    // }),
     PassportModule.register({ session: true }),
+    ClientsModule.register([
+      {
+        name:"NOTIFICATION_SERVICE",
+        transport: Transport.TCP
+      }
+    ])
     // CacheModule.register({
     //   store: redisStore,
     //   url: 'redis://redis:6379'
@@ -26,7 +35,7 @@ import * as redisStore from 'cache-manager-redis-store'
     // SessionSerializer
   ],
   controllers: [],
-  providers: [PrismaService, 
+  providers: [PrismaService, AppGateway, 
   //   {
   //   provide: APP_INTERCEPTOR,
   //   useClass: CacheInterceptor,

@@ -6,7 +6,6 @@ var cookieExtractor = function(req) {
 
 	var token = null;
 	if (req && req.cookies) {
-		console.log(req.cookies)
 		token = req.cookies['at'];
 		// if(!token) Will do it when we got 2fa
 		// 	token = req.cookies['2fa-at']
@@ -21,6 +20,7 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt')
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
 			secretOrKey: process.env.AtSecret
+			
 		});
 	}
 

@@ -12,7 +12,7 @@ export const Landing = () => {
 		evt.preventDefault();
 
         //home
-		window.location.replace('./home')
+		window.location.replace(`http://localhost:3333/auth`)
 	}
 
 	return (

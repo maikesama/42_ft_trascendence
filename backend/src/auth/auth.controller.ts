@@ -1,7 +1,7 @@
-import { Controller, Get, Res, Post, UseGuards, Query, Body, Param, Bind} from "@nestjs/common";
+import { Controller, Get, Res, Req, Post, UseGuards, Query, Body, Param, Bind} from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import {PrismaService} from "../prisma/prisma.service"
-import { Response } from 'express'
+import { Response, Request } from 'express'
 import { AtGuard } from "./guards";
 import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
 
@@ -16,7 +16,7 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A80%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
 
 		//@Public()
@@ -30,13 +30,12 @@ export class AuthController{
 		@Get('logout')
 		logout(@Res() res: Response) {
 			res.clearCookie('at');
-        	res.redirect('/');
+        	res.redirect(`http://${process.env.HOST}:3000/`);
 		}
 
 		@Get('2fa/:id')
 		@Bind(Param('id'))
 		async findone(id) {
-			console.log(id)
 			let x = await this.twoFaService.complete2fa(id)
 				return {QRcode : x}
 		}
@@ -44,16 +43,36 @@ export class AuthController{
 			
 
 		@Post('verify2fa')
-		
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
-				.then((e) => {e? res.redirect('/') : res.redirect('/'); return e})
+				.then((e) => {e? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e})
 		}
 
-		@Post('turn-on-2fa')
-		async turnOn2fa(@Body() body) {
-			await this.twoFaService.turnOnTwoFa(body.id);
-		}
+		// @Post('turn-on-2fa')
+		// async turnOn2fa(@Body() body) {
+		// 	await this.twoFaService.turnOnTwoFa(body.id);
+		// }
 	
+
+		@UseGuards(AtGuard)
+		@Get('user')
+		async user(@Req() req) {
+			const user = await this.prisma.user.findMany({
+				
+				// include: {
+				// 	chat           : true,
+				// 	participant    : true,
+				// 	friends		   : true,
+				// 	blocked        : true,
+				// 	blockedby      : true,
+				// }
+			});
+
+			// delete user.otpSecret;
+			// delete user.otpUrl;
+			// delete user.twoFa;
+
+			return user;
+		}
 }
 

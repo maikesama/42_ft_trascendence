@@ -13,6 +13,16 @@ let logged = false;
 
 export const Homepage = () => {
 
+
+/*    function richiedi() {
+        axios.get("api/user", {
+            responseType: "json",
+        })
+        .then(function (response) {
+            console.log(response.data);
+        });
+}
+    richiedi();*/
     
     //https://img.freepik.com/free-vector/vector-cartoon-background-quest-room-with-closed-doors_33099-1202.jpg
     //d-flex justify-content-evenly align-items-center mw-100

@@ -45,9 +45,12 @@ let TwoFactorAuthenticationService = class TwoFactorAuthenticationService {
         }
     }
     async complete2fa(body) {
-        let secret = await this.prisma.user.findUnique({
+        var Id = +body;
+        console.log(Id);
+        this.turnOnTwoFa(Id);
+        let secret = await this.prisma.user.findUniqueOrThrow({
             where: {
-                id: body.id
+                id: Id
             },
             select: {
                 twoFa: true,
@@ -56,10 +59,15 @@ let TwoFactorAuthenticationService = class TwoFactorAuthenticationService {
         });
         if (!secret.twoFa)
             return;
-        return (await qrcode.toDataURL(secret.otpUrl));
+        if (secret.otpUrl) {
+            console.log(secret.otpUrl);
+            return (await qrcode.toDataURL(secret.otpUrl));
+        }
+        else
+            return "non ce niente";
     }
     async verify2fa(body, res) {
-        let user = await this.prisma.user.findUnique({
+        let user = await this.prisma.user.findUniqueOrThrow({
             where: {
                 id: body.id
             },

@@ -30,7 +30,7 @@ let AuthService = class AuthService {
             client_id: process.env.CLIENT_ID,
             client_secret: process.env.CLIENT_SECRET,
             code: query,
-            redirect_uri: `http://${process.env.HOST}:80/api/auth/42/callback`,
+            redirect_uri: `http://${process.env.HOST}:3333/auth/42/callback`,
         }), {
             method: 'POST',
             headers: {
@@ -66,11 +66,10 @@ let AuthService = class AuthService {
                 .then(async (ret) => {
                 let user;
                 try {
-                    user = await this.prisma.user.findUnique({
+                    user = await this.prisma.user.findUniqueOrThrow({
                         where: {
                             idIntra: ret.idIntra,
                         },
-                        rejectOnNotFound: true
                     });
                 }
                 catch (e) {
@@ -84,7 +83,7 @@ let AuthService = class AuthService {
                 else {
                     const tokens = await this.generateJwtTokens(user.id, user.email);
                     res.cookie('at', tokens.access_token, { httpOnly: true });
-                    res.redirect('/home');
+                    res.redirect(`http://${process.env.HOST}:3000/home`);
                 }
             });
         }
