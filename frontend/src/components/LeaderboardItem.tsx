@@ -1,7 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
 import './css/Navbar.css';
-import { Navbar } from './Navbar';
 import { flexbox } from '@mui/system';
 import { autocompleteClasses } from '@mui/material';
 
@@ -47,7 +46,7 @@ export function LeaderboardItem(props:any) {
 	return(
     <>
         <div className='d-flex justify-content-evenly align-items-center' style={leaderboardItem}>
-            <label>{props.id}</label>
+            <label style={{marginRight: '34px'}}>1</label>
             <img src={props.image} style={img}/>
             <label>{props.nickname}</label>
             <label>{props.guilds}</label>

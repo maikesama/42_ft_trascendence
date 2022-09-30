@@ -1,29 +1,25 @@
-import {LeaderboardItem} from '../components/LeaderboardItem'
-import {LeaderboardHeader} from '../components/LeaderboardHeader'
-import {Header} from '../components/Header'
-import background from '../images/bg_room.jpg'
-import axios from "axios";
-import React, {useState, useEffect} from "react";
 
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import { Grid } from '@mui/material';
+import Item from '@mui/material/ListItem';
+
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 export const Test = () => {
 
-        const [post, setPost] = useState("");
-
-        React.useEffect(() => {
-                axios.get('http://localhost:3333/auth/user').then((response) => {
-                        //console.log(JSON.stringify(response.data));
-                        setPost(response.data);
-                });
-        }, []);
-
-        //if (!post) console.log("No post!")
-
-	return (
-        <>
-        <div>
-                <h1 style={{color: 'white'}}>{JSON.stringify(post[0])}</h1>
-        </div>
-        </>
-	);
+        return (
+          <Grid container spacing={3}>
+          <Grid item xs="auto">
+            <Item>variable width content</Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item>xs=6</Item>
+          </Grid>
+          <Grid item xs>
+            <Item>xs</Item>
+          </Grid>
+        </Grid>
+  );
 }

@@ -1,0 +1,57 @@
+
+#classic{
+    background-image: url('../../images/classic.jpg') ;
+    background-repeat: no-repeat ;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
+    margin-bottom: 5%;
+    
+}
+
+#classic:hover{
+    background-image: url('../../images/classic.gif');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
+    margin-bottom: 5%;
+}
+
+#custom{
+    background-image: url('../../images/custom.jpg');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
+    margin-bottom: 5%;
+}
+
+#custom:hover{
+    background-image: url('../../images/custom.gif');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    scale: 0.55;
+    border-radius: 50px 25px;
+    margin-bottom: 5%;
+}
+
+#bodybox {
+    height: calc(100vh - 180px);
+    background-image: url("../../images/2.jpg");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    
+}
+
+.modalityName{
+    color: white;
+    font-size: 65px;
+    font-family: MyWebFont;
+}
+
+.row{
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}

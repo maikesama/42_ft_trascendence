@@ -2,19 +2,19 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Navbar} from '../components/Navbar';
 import {Header} from '../components/Header';
-import {Modality} from '../components/Modality';
-
+import headerImage from '../images/2.jpg';
 import '../font/font.css';
+import './css/Homepage.css';
 import { url } from "inspector";
-import background from '../images/bg_room.jpg'
+import background from '../images/2.jpg'
 
 let logged = false;
 
 export const Homepage = () => {
 
-    function richiedi() {
+
+/*    function richiedi() {
         axios.get("api/user", {
             responseType: "json",
         })
@@ -22,50 +22,26 @@ export const Homepage = () => {
             console.log(response.data);
         });
 }
-    richiedi();
-    const modality = {
-        color : 'white',
-        fontFamily: 'MyWebFont'
-    }
-    const linkModality = {
-        transform: 'none',
-        color : 'trasparent',
-        textDecoration: 'none'
-    }
-    const menu = {
-        backgroundColor: 'white',
-        marginLeft:15,
-        marginRight:5,
-        width:'15%',
-        height: '10%',
-        display: 'none'
-    }
-    const lightText = {
-        color: 'white',
-        backgroundColor : '#510ac2',
-        borderRadius: 4,
-        padding: 15,
-        marginTop: '2%'
-    }
-
-    const submitButton = {
-        width: '25%',
-        marginTop: 15
-    }
-
+    richiedi();*/
+    
+    //https://img.freepik.com/free-vector/vector-cartoon-background-quest-room-with-closed-doors_33099-1202.jpg
+    //d-flex justify-content-evenly align-items-center mw-100
+    //w-50 h-50 d-inline-block
+    //backgroundImage: `url(${background})`
+    //d-flex justify-content-center align-items-center
 	return (
         <>
         <Header/>
-        <div style={{backgroundColor: '#764ABC', padding: 15, color: 'white'}} >
-            <div style={{ padding: 15}}>
-                <img src={background} alt="" style={{width: '100%'}}/>
-                <div style={{position: 'absolute', top: '60%', left:'20%', display: 'flex' }}>
-                    <Modality  page="/classico" name="Classico"/>
-                    <Modality page="/invertito" name="Invertito"/>
+        <div className="container-fluid " id="bodybox">
+                <div className="row" id="row">
+                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
+                        <h1 className="modalityName">Classico</h1> 
+                    </div>
+                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
+                        <h1 className="modalityName">Custom</h1> 
+                    </div>
                 </div>
-            </div>
         </div>
-        
         </>
 	);
 }

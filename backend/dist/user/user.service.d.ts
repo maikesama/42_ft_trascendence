@@ -12,4 +12,8 @@ export declare class UserService {
     block(idintra: string, requestId: number): Promise<void>;
     unblock(idintra: string, requestId: number): Promise<void>;
     turnOffTwoFa(Id: number): Promise<void>;
+    changepp(body: any, id: number): Promise<void>;
+    changeUserName(body: any, id: number): Promise<void>;
+    getChats(id: number): Promise<any[]>;
+    showChat(idChat: number): Promise<any>;
 }

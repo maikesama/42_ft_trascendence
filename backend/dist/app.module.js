@@ -15,6 +15,7 @@ const passport_1 = require("@nestjs/passport");
 const prisma_service_1 = require("./prisma/prisma.service");
 const microservices_1 = require("@nestjs/microservices");
 const app_gateway_1 = require("./app.gateway");
+const chat_module_1 = require("./chat/chat.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -23,6 +24,7 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             user_module_1.UserModule,
             prisma_module_1.PrismaModule,
+            chat_module_1.ChatModule,
             passport_1.PassportModule.register({ session: true }),
             microservices_1.ClientsModule.register([
                 {

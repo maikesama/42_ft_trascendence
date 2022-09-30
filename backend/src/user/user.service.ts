@@ -76,17 +76,22 @@ export class UserService {
 
 	async getAllUsers()
 	{
-		let allUsers = await this.prisma.user.findMany({})
+		let allUsers = await this.prisma.user.findMany({
+		})
 
 		allUsers = allUsers.map((user) => this.deleteSecrets(user))
 
 		return allUsers
+
+		
 	}
 
 	deleteSecrets(user : any) {
-        delete user.twoFa;
-        delete user.otpSecret;
-        delete user.otpUrl;
+
+		let usr = user
+        delete usr.twoFa;
+        delete usr.otpSecret;
+        delete usr.otpUrl;
         return user;
     }
 

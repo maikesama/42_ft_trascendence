@@ -3,13 +3,12 @@ import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {Route, Routes} from 'react-router-dom';
 import './App.css';
-import { TitleComp } from './components/TitleComp';
-import { LoginComp } from './components/LoginComp';
 import { Landing } from './pages/Landing';
 import { Homepage } from './pages/Homepage';
 import { Error404 } from './pages/Error404';
 import { Leaderboard } from './pages/Leaderboard';
-import { Settings } from './pages/Settings';
+import { Matches } from './pages/Matches';
+import { Friends } from './pages/Friends';
 import { Chat } from './pages/Chat';
 import { Profile } from './pages/Profile';
 import { Admin } from './pages/Admin';
@@ -25,10 +24,12 @@ function App() {
       <Route path="/" element={<Landing />}/>
       <Route path='/home' element={<Homepage />}/>
       <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/settings" element={<Settings />} />
+      <Route path="/matches" element={<Matches />} />
       <Route path="/chat" element={<Chat />} />
-      <Route path="/user" element={<Profile />} />
+      <Route path="/profile" element={<Profile />} />
       <Route path="/admin" element={<Admin />} />
+      <Route path="/matches" element={<Matches />} />
+      <Route path="/friends" element={<Friends />} />
       <Route path="/test" element={<Test />} />
     </Routes>
     

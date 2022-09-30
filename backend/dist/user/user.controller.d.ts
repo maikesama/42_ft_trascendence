@@ -15,4 +15,7 @@ export declare class UserController {
     unblockUser(idIntra: any, req: any): Promise<void>;
     turnOn2fa(req: any): Promise<void>;
     turnOff2fa(req: any): Promise<void>;
+    changePP(body: any, req: any): Promise<void>;
+    changeusername(body: any, req: any): Promise<void>;
+    getUserChat(req: any): Promise<any[]>;
 }

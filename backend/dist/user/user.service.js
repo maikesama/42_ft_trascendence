@@ -78,9 +78,10 @@ let UserService = class UserService {
         return allUsers;
     }
     deleteSecrets(user) {
-        delete user.twoFa;
-        delete user.otpSecret;
-        delete user.otpUrl;
+        let usr = user;
+        delete usr.twoFa;
+        delete usr.otpSecret;
+        delete usr.otpUrl;
         return user;
     }
     async block(idintra, requestId) {
@@ -112,6 +113,79 @@ let UserService = class UserService {
                 otpUrl: ""
             }
         });
+    }
+    async changepp(body, id) {
+        await this.prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                img: body.img
+            }
+        });
+    }
+    async changeUserName(body, id) {
+        await this.prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                userName: body.userName
+            }
+        });
+    }
+    async getChats(id) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id: id
+            }
+        });
+        const ret = await this.prisma.participant.findMany({
+            where: {
+                idIntra: user.idIntra
+            },
+            include: {
+                chat: true
+            }
+        });
+        let rret = await Promise.all(ret.map(async (part) => {
+            let partecipant = await this.prisma.participant.findMany({
+                where: {
+                    idChat: part.chat.id
+                },
+                include: {
+                    user: true,
+                }
+            });
+            part.partecipant = partecipant;
+            return part;
+        }));
+        return rret;
+    }
+    async showChat(idChat) {
+        const chat = await this.prisma.chat.findUnique({
+            where: {
+                id: idChat
+            },
+            include: {
+                participant: true
+            }
+        });
+        chat.participant = await Promise.all(chat.participant.map(async (participant) => {
+            let user = await this.prisma.user.findUnique({
+                where: {
+                    idIntra: participant.idIntra,
+                },
+                select: {
+                    id: true,
+                    idIntra: true,
+                    img: true,
+                    userName: true
+                }
+            });
+            return user;
+        }));
+        return chat;
     }
 };
 UserService = __decorate([

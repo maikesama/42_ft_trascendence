@@ -54,6 +54,18 @@ let UserController = class UserController {
         const user = req.user;
         return await this.userservice.turnOffTwoFa(user['sub']);
     }
+    async changePP(body, req) {
+        const user = req.user;
+        return await this.userservice.changepp(body, user['sub']);
+    }
+    async changeusername(body, req) {
+        const user = req.user;
+        return await this.userservice.changepp(body, user['sub']);
+    }
+    async getUserChat(req) {
+        const user = req.user;
+        return await this.userservice.getChats(user['sub']);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
@@ -113,6 +125,32 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "turnOff2fa", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Post)('update/pp'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "changePP", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Post)('update/username'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "changeusername", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Post)('getUserChat'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getUserChat", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

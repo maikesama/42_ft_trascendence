@@ -13,30 +13,65 @@ exports.AppGateway = void 0;
 const common_1 = require("@nestjs/common");
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
+const prisma_service_1 = require("./prisma/prisma.service");
 let AppGateway = class AppGateway {
-    constructor() {
-        this.wss = socket_io_1.Server;
+    constructor(prisma) {
+        this.prisma = prisma;
         this.logger = new common_1.Logger('AppGateway');
     }
     afterInit(server) {
         this.logger.log('initialized');
     }
-    handleMessage(client, payload) {
-        client.emit('msgToClient', payload);
+    async verifyPartecipant(idIntra, idChat) {
+        try {
+            const partecipant = await this.prisma.participant.findUnique({
+                where: {
+                    idIntra_idChat: { idIntra, idChat }
+                }
+            });
+            return partecipant && !partecipant.muted;
+        }
+        catch (e) {
+            return false;
+        }
+    }
+    async isChatAdmin(idIntra, idChat) {
+        try {
+            const partecipant = await this.prisma.participant.findUnique({
+                where: {
+                    idIntra_idChat: { idIntra, idChat }
+                }
+            });
+            return partecipant.admin;
+        }
+        catch (e) {
+            return false;
+        }
+    }
+    async handleMessage(client, message) {
+        try {
+            if (!(await this.verifyPartecipant(client.id, message.idChat)))
+                return;
+            this.server.to(String(message.idChat)).emit('msgToClient', message);
+        }
+        catch (e) {
+            console.log("error: ", e.message);
+        }
     }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
-    __metadata("design:type", Object)
-], AppGateway.prototype, "wss", void 0);
+    __metadata("design:type", socket_io_1.Server)
+], AppGateway.prototype, "server", void 0);
 __decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
-    __metadata("design:returntype", void 0)
+    __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleMessage", null);
 AppGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)()
+    (0, websockets_1.WebSocketGateway)(),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], AppGateway);
 exports.AppGateway = AppGateway;
 //# sourceMappingURL=app.gateway.js.map

@@ -1,8 +1,17 @@
 import { OnGatewayInit } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { PrismaService } from './prisma/prisma.service';
 export declare class AppGateway implements OnGatewayInit {
-    wss: typeof Server;
+    private prisma;
+    constructor(prisma: PrismaService);
+    server: Server;
     private logger;
     afterInit(server: any): void;
-    handleMessage(client: Socket, payload: any): void;
+    verifyPartecipant(idIntra: string, idChat: number): Promise<boolean>;
+    isChatAdmin(idIntra: string, idChat: number): Promise<boolean>;
+    handleMessage(client: Socket, message: {
+        sender: string;
+        idChat: number;
+        message: string;
+    }): Promise<void>;
 }

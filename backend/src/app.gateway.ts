@@ -1,9 +1,11 @@
 import { Logger } from '@nestjs/common';
 import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { PrismaService } from './prisma/prisma.service';
 
 @WebSocketGateway()
 export class AppGateway implements OnGatewayInit {
+  constructor(private prisma: PrismaService){}
 
   @WebSocketServer() server: Server;
 
@@ -15,7 +17,7 @@ export class AppGateway implements OnGatewayInit {
 
   async verifyPartecipant(idIntra: string, idChat: number) {
     try{
-      const partecipant = await this.prisma.partecipant.findUnique({
+      const partecipant = await this.prisma.participant.findUnique({
         where: {
           idIntra_idChat: {idIntra, idChat}
         }
@@ -30,7 +32,7 @@ export class AppGateway implements OnGatewayInit {
 
   async isChatAdmin(idIntra: string, idChat: number){
     try{
-      const partecipant = await this.prisma.partecipant.findUnique({
+      const partecipant = await this.prisma.participant.findUnique({
         where: {
           idIntra_idChat: {idIntra, idChat}
         }
@@ -44,14 +46,14 @@ export class AppGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, message:{ sender: string, room: string, message: string} ): void {
+  async handleMessage(client: Socket, message:{ sender: string, idChat: number, message: string} ): Promise<void> {
     try{
-      if (!(await this.verifyPartecipant(client.idIntra, Number(message.room))))
+      if (!(await this.verifyPartecipant(client.id, message.idChat)))
       return ;
 
       //need to save messages and notify other partecipants
 
-      this.server.to(message.room).emit('msgToClient', message)
+      this.server.to(String(message.idChat)).emit('msgToClient', message)
     }
     catch (e) {
       console.log("error: ", e.message)
