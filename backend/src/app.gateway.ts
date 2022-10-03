@@ -47,16 +47,16 @@ export class AppGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, message:{ sender: string, idChat: number, message: string} ): Promise<void> {
+  async handleMessage(client: Socket, message:{ room: string, text: string}/*message:{ sender: string, idChat: number, message: string}*/ ): Promise<void> {
     try{
       // if (!(await this.verifyPartecipant(client.id, message.idChat)))
       // return ;
 
       //need to save messages and notify other partecipants
 
-      this.server.emit('msgToClient', message)
+      //this.server.emit('msgToClient', message) No channell
 
-      // to(String(message.idChat))
+      this.server.to(message.room).emit('msgToClient', message)
     }
     catch (e) {
       console.log("error: ", e.message)

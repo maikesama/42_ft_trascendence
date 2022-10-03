@@ -10,8 +10,7 @@ export declare class AppGateway implements OnGatewayInit {
     verifyPartecipant(idIntra: string, idChat: number): Promise<boolean>;
     isChatAdmin(idIntra: string, idChat: number): Promise<boolean>;
     handleMessage(client: Socket, message: {
-        sender: string;
-        idChat: number;
-        message: string;
+        room: string;
+        text: string;
     }): Promise<void>;
 }
