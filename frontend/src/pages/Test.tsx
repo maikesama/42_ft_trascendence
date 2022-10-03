@@ -7,19 +7,30 @@ import Item from '@mui/material/ListItem';
 
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
+import {io} from 'socket.io-client';
+
 export const Test = () => {
 
+        function ciao()
+        {
+        const socket = io('ws://localhost:3333');
+
+        socket.on("msgToClient", (arg) => {
+          console.log(arg);
+        });
+
+        socket.emit("msgToServer", "stranger")
+        }
+
+      
         return (
-          <Grid container spacing={3}>
-          <Grid item xs="auto">
-            <Item>variable width content</Item>
-          </Grid>
-          <Grid item xs={6}>
-            <Item>xs=6</Item>
-          </Grid>
-          <Grid item xs>
-            <Item>xs</Item>
-          </Grid>
-        </Grid>
+          <>
+            <input type="text" name="box" id="" />
+            <button type="submit" onClick={ciao}>Invia</button>
+            <br /><br />
+            <div id="printer">
+              -
+            </div>
+          </>
   );
 }

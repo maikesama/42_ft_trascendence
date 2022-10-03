@@ -3,7 +3,8 @@ import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } fr
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 
-@WebSocketGateway()
+
+@WebSocketGateway({cors: true})
 export class AppGateway implements OnGatewayInit {
   constructor(private prisma: PrismaService){}
 
@@ -48,12 +49,14 @@ export class AppGateway implements OnGatewayInit {
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, message:{ sender: string, idChat: number, message: string} ): Promise<void> {
     try{
-      if (!(await this.verifyPartecipant(client.id, message.idChat)))
-      return ;
+      // if (!(await this.verifyPartecipant(client.id, message.idChat)))
+      // return ;
 
       //need to save messages and notify other partecipants
 
-      this.server.to(String(message.idChat)).emit('msgToClient', message)
+      this.server.emit('msgToClient', message)
+
+      // to(String(message.idChat))
     }
     catch (e) {
       console.log("error: ", e.message)

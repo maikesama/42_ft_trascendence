@@ -50,9 +50,7 @@ let AppGateway = class AppGateway {
     }
     async handleMessage(client, message) {
         try {
-            if (!(await this.verifyPartecipant(client.id, message.idChat)))
-                return;
-            this.server.to(String(message.idChat)).emit('msgToClient', message);
+            this.server.emit('msgToClient', message);
         }
         catch (e) {
             console.log("error: ", e.message);
@@ -70,7 +68,7 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleMessage", null);
 AppGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)(),
+    (0, websockets_1.WebSocketGateway)({ cors: true }),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService])
 ], AppGateway);
 exports.AppGateway = AppGateway;
