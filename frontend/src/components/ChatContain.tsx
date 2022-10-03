@@ -13,6 +13,11 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
 import Fab from '@material-ui/core/Fab';
 import SendIcon from '@material-ui/icons/Send';
+import Button from '@mui/material/Button';
+import { FormatAlignJustify } from '@material-ui/icons';
+import { AlignHorizontalLeft } from '@mui/icons-material';
+import { IconButton } from '@mui/material';
+import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
 
 const useStyles = makeStyles({
     table: {
@@ -59,8 +64,9 @@ export const ChatContain = (props:any) => {
         <div>
             <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
-                    <Grid item xs={12} style={{ padding: '10px' }}>
-                        <TextField id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+                    <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start'}}>
+                        <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth/>
+                        <IconButton aria-label="delete" style={{marginTop: '10px' }} size="small"><GroupAddSharpIcon fontSize="large"/></IconButton>
                     </Grid>
                     <Divider />
                     <List>
