@@ -9,7 +9,7 @@ export const Chat = () => {
         <>
         <Header/>
         
-        <ChatContain />
+        <ChatContain status="online"/>
         
         </>
     );
