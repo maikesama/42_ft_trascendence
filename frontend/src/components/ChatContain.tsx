@@ -70,15 +70,36 @@ export const ChatContain = (props: any) => {
         );
     }
 
-    const [open, setOpen] = React.useState(false);
+    const [openA, setOpenA] = React.useState(false);
+    const [openB, setOpenB] = React.useState(false);
 
-    const handleClickOpen = () => {
-        setOpen(true);
+    const handleClickOpenA = () => {
+        setOpenA(true);
     };
 
-    const handleClose = () => {
-        setOpen(false);
+    const handleCloseA = () => {
+        setOpenA(false);
     };
+
+    const handleClickOpenB = () => {
+        setOpenB(true);
+    };
+
+    const handleCloseB = () => {
+        setOpenB(false);
+    };
+
+    function renderRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+
+        return (
+            <ListItem style={style} key={index} >
+                <ListItemButton>
+                    <ListItemText primary={`Item ${index + 1}`} />
+                </ListItemButton>
+            </ListItem>
+        );
+    }
 
     return (
         <div>
@@ -86,42 +107,7 @@ export const ChatContain = (props: any) => {
                 <Grid item xs={3} className={classes.borderRight500}>
                     <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
-                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpen}><GroupAddSharpIcon fontSize="large" /></IconButton>
-                        <Dialog open={open} onClose={handleClose}>
-                            <DialogTitle>Create Group</DialogTitle>
-                            <DialogContent>
-                                <DialogContentText>
-                                    To create a new group chat, please enter the name of the channel here.
-                                </DialogContentText>
-                                <TextField
-                                    autoFocus
-                                    margin="dense"
-                                    id="name"
-                                    label="Group Name"
-                                    fullWidth
-                                    variant="standard"
-                                    required
-                                />
-                                <DialogContentText paddingTop={"10px"}>
-                                    Choose the channel's visibility.
-                                </DialogContentText>
-                                <NativeSelect
-                                    defaultValue={"Public"}
-                                    inputProps={{
-                                        name: 'visibility',
-                                        id: 'uncontrolled-native',
-                                    }}
-                                >
-                                    <option value={"Public"}>Public</option>
-                                    <option value={"Private"}>Private</option>
-                                </NativeSelect>
-                                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
-                            </DialogContent>
-                            <DialogActions>
-                                <Button onClick={handleClose}>Cancel</Button>
-                                <Button onClick={handleClose}>Create</Button>
-                            </DialogActions>
-                        </Dialog>
+                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenA}><GroupAddSharpIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
                     <List>
@@ -151,11 +137,11 @@ export const ChatContain = (props: any) => {
                 </Grid>
                 <Grid item xs={9}>
                     <List className={classes.messageArea}>
-                        <ListItem button key="LorenzoIafigliola">
+                        <ListItem button key="" onClick={handleClickOpenB}>
                             <ListItemIcon>
-                                <Avatar alt="Lorenzo Iafigliola" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                                <Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
                             </ListItemIcon>
-                            <ListItemText className="userNameChat" primary="Lorenzo">Lorenzo Iafigliola</ListItemText>
+                            <ListItemText className="userNameChat" primary="Lorenzo"></ListItemText>
                             <ListItem>{status}</ListItem>
                         </ListItem>
                         <Divider />
@@ -201,6 +187,68 @@ export const ChatContain = (props: any) => {
                     </Grid>
                 </Grid>
             </Grid>
+            {/*MODAL BLOCK USER */}
+            <Dialog open={openB} onClose={handleCloseB}>
+                <DialogTitle>Blocca</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Sei sicuro di voler bloccare questo utente?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseB}>Cancel</Button>
+                    <Button onClick={handleCloseB}>Blocca</Button>
+                </DialogActions>
+            </Dialog>
+            {/*MODAL CREARTE CHANNEL */}
+            <Dialog open={openA} onClose={handleCloseA}>
+                <DialogTitle>Create Group</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        To create a new group chat, please enter the name of the channel here:
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Group Name"
+                        fullWidth
+                        variant="standard"
+                        required
+                    />
+                    <DialogContentText paddingTop={"10px"}>
+                        Choose the channel's visibility:
+                    </DialogContentText>
+                    <NativeSelect
+                        defaultValue={"Public"}
+                        inputProps={{
+                            name: 'visibility',
+                            id: 'uncontrolled-native',
+                        }}
+                    >
+                        <option value={"Public"}>Public</option>
+                        <option value={"Private"}>Private</option>
+                    </NativeSelect>
+                    <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
+                        Add members to your channel group:
+                    </DialogContentText>
+                    <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
+                    <FixedSizeList
+                        
+                        height={230}
+                        width={500}
+                        itemSize={46}
+                        itemCount={10}
+                        overscanCount={5}
+                    >
+                        {renderRow}
+                    </FixedSizeList>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseA}>Cancel</Button>
+                    <Button onClick={handleCloseA}>Create</Button>
+                </DialogActions>
+            </Dialog>
         </div >
     );
 }
