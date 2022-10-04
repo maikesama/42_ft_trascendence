@@ -29,8 +29,7 @@ model User {
 	friends         Friends[]       @relation(name: "friends")
 	blocked         Blocklist[]     @relation(name: "block")
 	blockedby       Blocklist[]     @relation(name: "blocked")
-	chat			Chat[]
-	participant		Participant[]
+	partecipant		Partecipant[]
 	messages		Message[]
 }
 
@@ -63,7 +62,7 @@ model Games {
 	loser				  String?
 }
 
-model Participant{
+model Partecipant{
 	idIntra 	String
 	idChat		Int
 	user		User			@relation(fields: [idIntra], references: [idIntra])
@@ -73,6 +72,8 @@ model Participant{
 	banned		Boolean			@default(false)
 	joinedAt	DateTime  		@default(now())
 	mutedAt		DateTime?
+	bannedTime	DateTime?
+	mutedUntil	DateTime?
 	bannedAt	DateTime?
 	adminAt		DateTime?
 
@@ -82,15 +83,13 @@ model Participant{
 
 model Chat {
 	id					Int			@unique @default(autoincrement())
-	name				String
-	users				User		@relation(fields: [idIntra], references: [idIntra])
-	idIntra				String
+	name				String		@unique
 	type				String	@default("public")
 	password			String?
-	participant			Participant[]
+	partecipant			Partecipant[]
+	invited				String[]
 	messages			Message[]	
 	createdAt		DateTime  		@default(now())
-	@@id([name, idIntra])
 }
 
 model Message {

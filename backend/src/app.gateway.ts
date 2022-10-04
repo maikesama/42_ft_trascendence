@@ -18,7 +18,7 @@ export class AppGateway implements OnGatewayInit {
 
   async verifyPartecipant(idIntra: string, idChat: number) {
     try{
-      const partecipant = await this.prisma.participant.findUnique({
+      const partecipant = await this.prisma.partecipant.findUnique({
         where: {
           idIntra_idChat: {idIntra, idChat}
         }
@@ -33,7 +33,7 @@ export class AppGateway implements OnGatewayInit {
 
   async isChatAdmin(idIntra: string, idChat: number){
     try{
-      const partecipant = await this.prisma.participant.findUnique({
+      const partecipant = await this.prisma.partecipant.findUnique({
         where: {
           idIntra_idChat: {idIntra, idChat}
         }

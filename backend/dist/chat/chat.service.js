@@ -23,6 +23,13 @@ let ChatService = class ChatService {
                     id: userId
                 }
             });
+            const channel = this.prismaService.chat.create({
+                data: {
+                    name: body.name,
+                    type: body.type,
+                    partecipant: body.partecipants,
+                }
+            });
         }
         catch (err) {
             console.log(err);

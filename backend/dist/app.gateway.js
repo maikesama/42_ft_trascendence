@@ -24,7 +24,7 @@ let AppGateway = class AppGateway {
     }
     async verifyPartecipant(idIntra, idChat) {
         try {
-            const partecipant = await this.prisma.participant.findUnique({
+            const partecipant = await this.prisma.partecipant.findUnique({
                 where: {
                     idIntra_idChat: { idIntra, idChat }
                 }
@@ -37,7 +37,7 @@ let AppGateway = class AppGateway {
     }
     async isChatAdmin(idIntra, idChat) {
         try {
-            const partecipant = await this.prisma.participant.findUnique({
+            const partecipant = await this.prisma.partecipant.findUnique({
                 where: {
                     idIntra_idChat: { idIntra, idChat }
                 }
@@ -50,7 +50,7 @@ let AppGateway = class AppGateway {
     }
     async handleMessage(client, message) {
         try {
-            this.server.emit('msgToClient', message);
+            this.server.to(message.room).emit('msgToClient', message);
         }
         catch (e) {
             console.log("error: ", e.message);

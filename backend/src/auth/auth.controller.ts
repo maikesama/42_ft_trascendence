@@ -61,7 +61,7 @@ export class AuthController{
 				
 				// include: {
 				// 	chat           : true,
-				// 	participant    : true,
+				// 	partecipant    : true,
 				// 	friends		   : true,
 				// 	blocked        : true,
 				// 	blockedby      : true,

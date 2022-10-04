@@ -140,7 +140,7 @@ let UserService = class UserService {
                 id: id
             }
         });
-        const ret = await this.prisma.participant.findMany({
+        const ret = await this.prisma.partecipant.findMany({
             where: {
                 idIntra: user.idIntra
             },
@@ -149,7 +149,7 @@ let UserService = class UserService {
             }
         });
         let rret = await Promise.all(ret.map(async (part) => {
-            let partecipant = await this.prisma.participant.findMany({
+            let partecipant = await this.prisma.partecipant.findMany({
                 where: {
                     idChat: part.chat.id
                 },
@@ -168,13 +168,13 @@ let UserService = class UserService {
                 id: idChat
             },
             include: {
-                participant: true
+                partecipant: true
             }
         });
-        chat.participant = await Promise.all(chat.participant.map(async (participant) => {
+        chat.partecipant = await Promise.all(chat.partecipant.map(async (partecipant) => {
             let user = await this.prisma.user.findUnique({
                 where: {
-                    idIntra: participant.idIntra,
+                    idIntra: partecipant.idIntra,
                 },
                 select: {
                     id: true,

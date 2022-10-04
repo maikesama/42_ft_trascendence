@@ -168,7 +168,9 @@ export class UserService {
 				id: id
 			}
 		})
-		const ret = await this.prisma.participant.findMany({
+
+		//find chats where user is in
+		const ret = await this.prisma.partecipant.findMany({
 			where:{
 				idIntra: user.idIntra
 			},
@@ -177,8 +179,10 @@ export class UserService {
 			}
 		})
 		
-		let rret = await Promise.all(ret.map(async (part: any)=> {
-			let partecipant = await this.prisma.participant.findMany({
+
+		// return all partecipants of each user's chats
+		let chatsPartecipants = await Promise.all(ret.map(async (part: any)=> {
+			let partecipant = await this.prisma.partecipant.findMany({
 				where:{
 					idChat: part.chat.id
 				},
@@ -189,7 +193,7 @@ export class UserService {
 			part.partecipant = partecipant
 			return part;
 		}))
-		return rret
+		return chatsPartecipants
 	}
 	
 
@@ -199,14 +203,13 @@ export class UserService {
 				    id: idChat
 			    },
 			    include: {
-				    participant: true
+				    partecipant: true
 			    }
-
 		    })
-		    chat.participant = await Promise.all(chat.participant.map(async (participant: any) => {
+		    chat.partecipant = await Promise.all(chat.partecipant.map(async (partecipant: any) => {
 		    	let user = await this.prisma.user.findUnique({
 				    where : {
-				    	idIntra : participant.idIntra,
+				    	idIntra : partecipant.idIntra,
 				    },
 				    select : {
 				    	id : true,
