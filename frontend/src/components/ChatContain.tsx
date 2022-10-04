@@ -18,6 +18,16 @@ import { FormatAlignJustify } from '@material-ui/icons';
 import { AlignHorizontalLeft } from '@mui/icons-material';
 import { IconButton } from '@mui/material';
 import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import NativeSelect from '@mui/material/NativeSelect';
+import ListItemButton from '@mui/material/ListItemButton';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 const useStyles = makeStyles({
     table: {
@@ -40,12 +50,12 @@ const useStyles = makeStyles({
 });
 
 
-export const ChatContain = (props:any) => {
+export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     let status;
-    
-    
+
+
     if (onstatus && onstatus === "online") {
         status = (
             <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -60,13 +70,58 @@ export const ChatContain = (props:any) => {
         );
     }
 
+    const [open, setOpen] = React.useState(false);
+
+    const handleClickOpen = () => {
+        setOpen(true);
+    };
+
+    const handleClose = () => {
+        setOpen(false);
+    };
+
     return (
         <div>
             <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
-                    <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start'}}>
-                        <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth/>
-                        <IconButton aria-label="delete" style={{marginTop: '10px' }} size="small"><GroupAddSharpIcon fontSize="large"/></IconButton>
+                    <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
+                        <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpen}><GroupAddSharpIcon fontSize="large" /></IconButton>
+                        <Dialog open={open} onClose={handleClose}>
+                            <DialogTitle>Create Group</DialogTitle>
+                            <DialogContent>
+                                <DialogContentText>
+                                    To create a new group chat, please enter the name of the channel here.
+                                </DialogContentText>
+                                <TextField
+                                    autoFocus
+                                    margin="dense"
+                                    id="name"
+                                    label="Group Name"
+                                    fullWidth
+                                    variant="standard"
+                                    required
+                                />
+                                <DialogContentText paddingTop={"10px"}>
+                                    Choose the channel's visibility.
+                                </DialogContentText>
+                                <NativeSelect
+                                    defaultValue={"Public"}
+                                    inputProps={{
+                                        name: 'visibility',
+                                        id: 'uncontrolled-native',
+                                    }}
+                                >
+                                    <option value={"Public"}>Public</option>
+                                    <option value={"Private"}>Private</option>
+                                </NativeSelect>
+                                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
+                            </DialogContent>
+                            <DialogActions>
+                                <Button onClick={handleClose}>Cancel</Button>
+                                <Button onClick={handleClose}>Create</Button>
+                            </DialogActions>
+                        </Dialog>
                     </Grid>
                     <Divider />
                     <List>
