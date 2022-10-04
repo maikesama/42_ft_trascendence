@@ -70,23 +70,41 @@ export const ChatContain = (props: any) => {
         );
     }
 
-    const [openA, setOpenA] = React.useState(false);
-    const [openB, setOpenB] = React.useState(false);
+    const [openCreateGroup, setopenCreateGroup] = React.useState(false);
+    const [openGroupInfo, setopenGroupInfo] = React.useState(false);
+    const [openAdminActions, setopenAdminActions] = React.useState(false);
+    const [openUserActions, setopenUserActions] = React.useState(false);
 
-    const handleClickOpenA = () => {
-        setOpenA(true);
+    const handleClickOpenCreateGroup = () => {
+        setopenCreateGroup(true);
     };
 
-    const handleCloseA = () => {
-        setOpenA(false);
+    const handleCloseCreateGroup = () => {
+        setopenCreateGroup(false);
     };
 
-    const handleClickOpenB = () => {
-        setOpenB(true);
+    const handleClickOpenGroupInfo = () => {
+        setopenGroupInfo(true);
     };
 
-    const handleCloseB = () => {
-        setOpenB(false);
+    const handleCloseGroupInfo = () => {
+        setopenGroupInfo(false);
+    };
+
+    const handleClickOpenAdminActions = () => {
+        setopenAdminActions(true);
+    };
+
+    const handleCloseAdminActions = () => {
+        setopenAdminActions(false);
+    };
+
+    const handleClickOpenUserActions = () => {
+        setopenUserActions(true);
+    };
+
+    const handleCloseUserActions = () => {
+        setopenUserActions(false);
     };
 
     function renderRow(props: ListChildComponentProps) {
@@ -101,13 +119,37 @@ export const ChatContain = (props: any) => {
         );
     }
 
+    /*function renderGroupRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+
+        return (
+            <ListItem style={style} key={index} >
+                <ListItemButton onClick={handleClickOpenAdminActions}>
+                    <ListItemText primary={`Item ${index + 1}`} />
+                </ListItemButton>
+            </ListItem>
+        );
+    }*/
+
+    function renderGroupRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+
+        return (
+            <ListItem style={style} key={index} >
+                <ListItemButton onClick={handleClickOpenUserActions}>
+                    <ListItemText primary={`Item ${index + 1}`} />
+                </ListItemButton>
+            </ListItem>
+        );
+    }
+
     return (
         <div>
             <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
                     <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
-                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenA}><GroupAddSharpIcon fontSize="large" /></IconButton>
+                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenCreateGroup}><GroupAddSharpIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
                     <List>
@@ -137,7 +179,7 @@ export const ChatContain = (props: any) => {
                 </Grid>
                 <Grid item xs={9}>
                     <List className={classes.messageArea}>
-                        <ListItem button key="" onClick={handleClickOpenB}>
+                        <ListItem button key="" onClick={handleClickOpenGroupInfo}>
                             <ListItemIcon>
                                 <Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
                             </ListItemIcon>
@@ -187,8 +229,64 @@ export const ChatContain = (props: any) => {
                     </Grid>
                 </Grid>
             </Grid>
+            {/*MODAL ADMIN IN GROUP ACTIONS */}
+            <Dialog open={openAdminActions} onClose={handleCloseAdminActions}>
+                <DialogTitle>Admin Actions</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Admin: taureli
+                    </DialogContentText>
+                    <DialogActions>
+                    <Button variant="outlined" onClick={handleCloseAdminActions}>Mute</Button>
+                    <Button variant="outlined" onClick={handleCloseAdminActions}>Kick</Button>
+                    <Button variant="outlined" onClick={handleCloseAdminActions}>Ban</Button>
+                    <Button variant="outlined" onClick={handleCloseAdminActions}>Promote</Button>
+                    <Button variant="outlined" onClick={handleCloseAdminActions}>Demote</Button>
+                    <Button variant="contained" onClick={handleCloseAdminActions}>Close</Button>
+                </DialogActions>
+                </DialogContent>
+            </Dialog>
+            {/*MODAL USER IN GROUP ACTIONS */}
+            <Dialog open={openUserActions} onClose={handleCloseUserActions}>
+                <DialogTitle>User Actions</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Do you want to block the user?
+                    </DialogContentText>
+                    <DialogActions>
+                    <Button variant="outlined" onClick={handleCloseUserActions}>Block</Button>
+                    <Button variant="contained" onClick={handleCloseUserActions}>Close</Button>
+                </DialogActions>
+                </DialogContent>
+            </Dialog>
+            {/*MODAL GROUP INFO */}
+            <Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
+                <DialogTitle>Group Info</DialogTitle>
+                <DialogContent>
+                    <DialogContentText>
+                        Admin: taureli
+                    </DialogContentText>
+                    <Divider />
+                    <DialogContentText>
+                        Users
+                    </DialogContentText>
+                    <FixedSizeList
+
+                        height={230}
+                        width={500}
+                        itemSize={46}
+                        itemCount={10}
+                        overscanCount={5}
+                    >
+                        {renderGroupRow}
+                    </FixedSizeList>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseGroupInfo}>Close</Button>
+                </DialogActions>
+            </Dialog>
             {/*MODAL BLOCK USER */}
-            <Dialog open={openB} onClose={handleCloseB}>
+            {/*<Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
                 <DialogTitle>Blocca</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -196,12 +294,12 @@ export const ChatContain = (props: any) => {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseB}>Cancel</Button>
-                    <Button onClick={handleCloseB}>Blocca</Button>
+                    <Button onClick={handleCloseGroupInfo}>Cancel</Button>
+                    <Button onClick={handleCloseGroupInfo}>Blocca</Button>
                 </DialogActions>
-            </Dialog>
+            </Dialog>*/}
             {/*MODAL CREARTE CHANNEL */}
-            <Dialog open={openA} onClose={handleCloseA}>
+            <Dialog open={openCreateGroup} onClose={handleCloseCreateGroup}>
                 <DialogTitle>Create Group</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
@@ -228,13 +326,14 @@ export const ChatContain = (props: any) => {
                     >
                         <option value={"Public"}>Public</option>
                         <option value={"Private"}>Private</option>
+                        <option value={"Protected"}>Protected</option>
                     </NativeSelect>
                     <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                         Add members to your channel group:
                     </DialogContentText>
                     <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
                     <FixedSizeList
-                        
+
                         height={230}
                         width={500}
                         itemSize={46}
@@ -245,8 +344,8 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={handleCloseA}>Cancel</Button>
-                    <Button onClick={handleCloseA}>Create</Button>
+                    <Button onClick={handleCloseCreateGroup}>Cancel</Button>
+                    <Button onClick={handleCloseCreateGroup}>Create</Button>
                 </DialogActions>
             </Dialog>
         </div >
