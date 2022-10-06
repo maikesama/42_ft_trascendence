@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@mui/material/TextField';
 import Divider from '@mui/material/Divider';
-import { MatchEdit, ProfileEdit, SocialEdit } from "./ProfileEdit";
+import {  ProfileEdit, SocialEdit } from "./ProfileEdit";
 
 
 import "./css/ProfileEdit.css"
@@ -29,7 +29,7 @@ export const ProfileContain = (props: any) => {
   }
 
   return (
-    <Grid container spacing={4} style={{marginTop: 25 }}>
+    <Grid container spacing={4} style={{marginTop: 25, maxWidth: '105%' }}>
       <Grid item xs={4} style={colors}>
         General Rank
       </Grid>
@@ -56,8 +56,8 @@ export const ProfileContain = (props: any) => {
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
         <ProfileEdit />
-        <SocialEdit />
-        <MatchEdit />
+        <SocialEdit title="FRIENDS" tot="12" matches={true}/>
+        <SocialEdit title="MATCHES" tot="122"matches={false}/>
       </Grid>
     </Grid>
   );
