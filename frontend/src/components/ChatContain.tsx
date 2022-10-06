@@ -131,12 +131,24 @@ export const ChatContain = (props: any) => {
         );
     }*/
 
-    function renderGroupRow(props: ListChildComponentProps) {
+    function renderGroupRowAdmin(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
             <ListItem style={style} key={index} >
                 <ListItemButton onClick={handleClickOpenUserActions}>
+                    <ListItemText primary={`Item ${index + 1}`} />
+                </ListItemButton>
+            </ListItem>
+        );
+    }
+
+    function renderGroupRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+
+        return (
+            <ListItem style={style} key={index} >
+                <ListItemButton href={`/user/${index + 1}`}>
                     <ListItemText primary={`Item ${index + 1}`} />
                 </ListItemButton>
             </ListItem>
@@ -261,7 +273,7 @@ export const ChatContain = (props: any) => {
             </Dialog>
             {/*MODAL GROUP INFO */}
             <Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
-                <DialogTitle>Group Info</DialogTitle>
+                <DialogTitle>Info</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Admin: taureli
@@ -278,10 +290,11 @@ export const ChatContain = (props: any) => {
                         itemCount={10}
                         overscanCount={5}
                     >
-                        {renderGroupRow}
+                        {renderGroupRowAdmin}
                     </FixedSizeList>
                 </DialogContent>
                 <DialogActions>
+                    <Button onClick={handleCloseGroupInfo}>Lascia</Button>
                     <Button onClick={handleCloseGroupInfo}>Close</Button>
                 </DialogActions>
             </Dialog>
