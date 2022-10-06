@@ -53,11 +53,9 @@ export const ProfileContain = (props: any) => {
         <Divider />
       </Grid>
       {/* Side edit profile */}
-      <Grid item xs={4} style={colors} >
-        <ProfileEdit />
-      </Grid>
       {/* Matches and Friends */}
-      <Grid item xs={8} style={MatchesFriends} justifyContent='space-around'>
+      <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
+        <ProfileEdit />
         <SocialEdit />
         <MatchEdit />
       </Grid>
