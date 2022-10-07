@@ -18,7 +18,11 @@ import ListItemButton from '@mui/material/ListItemButton';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 
 import "./css/ProfileEdit.css"
 import { Input } from '@mui/material';
@@ -32,13 +36,58 @@ const fontColor = {
 
 export const SocialEdit = (props: any) => {
 
+  const [openFriendsList, setOpenFriendsList] = React.useState(false);
+  const [openMatchesList, setOpenMatchesList] = React.useState(false);
+
+  const handleClickOpenFriendsList = () => {
+    setOpenFriendsList(true);
+  };
+
+  const handleCloseFriendsList = () => {
+    setOpenFriendsList(false);
+  };
+
+  const handleClickOpenMatchesList = () => {
+    setOpenMatchesList(true);
+  };
+
+  const handleCloseMatchesList = () => {
+    setOpenMatchesList(false);
+  };
+
+  function renderMatchesRowPreview(props: any) {
+    const { index, style, matches } = props;
+
+    return (
+      <ListItem style={style} key={index} >
+        <Avatar />
+        <ListItemText primary={`Item ${index + 1}`}/>
+        <ListItemText primary={`VS`} />
+        <ListItemText primary={`Item ${index + 1}`} />
+        <Avatar />
+      </ListItem>
+    );
+  }
+
+  function renderSocialRowPreview(props: any) {
+    const { index, style, matches } = props;
+
+    return (
+      <ListItem style={style} key={index} >
+        <Avatar/>
+        <ListItemText primary={`Item ${index + 1}`} />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
+      </ListItem>
+    );
+  }
+
   function renderMatchesRow(props: any) {
     const { index, style, matches } = props;
 
     return (
       <ListItem style={style} key={index} >
         <Avatar />
-        <ListItemText primary={`Item ${index + 1}`} />
+        <ListItemText primary={`Item ${index + 1}`}/>
         <ListItemText primary={`VS`} />
         <ListItemText primary={`Item ${index + 1}`} />
         <Avatar />
@@ -51,13 +100,18 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar />
+        <Avatar/>
         <ListItemText primary={`Item ${index + 1}`} />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
+        <Button variant="outlined">Visit</Button>
+        <Button variant="outlined">Unfriend</Button>
+        <Button variant="contained">Block</Button>
       </ListItem>
     );
   }
-  return (
 
+  return (
+    <div>
     <Card sx={{ minWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -68,7 +122,7 @@ export const SocialEdit = (props: any) => {
           <label style={{ color: "#fff", backgroundColor: 'black', borderRadius: '35px 35px', padding: 6 }}>{props.tot}</label>
         </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlignLast: 'center' }}>
 
           <FixedSizeList
 
@@ -78,15 +132,58 @@ export const SocialEdit = (props: any) => {
             itemCount={5}
             overscanCount={5}
           >
-            {props.matches ? renderSocialRow : renderMatchesRow}
+            {props.matches ? renderSocialRowPreview : renderMatchesRowPreview}
           </FixedSizeList>
         </div>
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button>Explore</Button>
+        <Button onClick={props.matches ? handleClickOpenFriendsList : handleClickOpenMatchesList}>Explore</Button>
       </CardActions>
     </Card>
+    {/*Friends List Modal*/}
+    <Dialog open={openFriendsList} onClose={handleCloseFriendsList}>
+      <DialogTitle textAlign="center">Friends List</DialogTitle>
+      <DialogContent>
+        <div style={{textAlignLast:'center'}}>
+        <FixedSizeList
+          height={400}
+          width={600}
+          itemSize={80}
+          itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
+          overscanCount={5}
+          >
+          {renderSocialRow}
+        </FixedSizeList>
+        </div>
+          <DialogActions>
+          <Button variant="outlined">Refresh</Button>
+          <Button variant="contained" onClick={handleCloseFriendsList}>Close</Button>
+      </DialogActions>
+      </DialogContent>
+    </Dialog>
+    {/*matches List Modal*/}
+    <Dialog open={openMatchesList} onClose={handleCloseMatchesList}>
+      <DialogTitle textAlign="center">Matches List</DialogTitle>
+      <DialogContent>
+      <div style={{textAlignLast:'center'}}>
+        <FixedSizeList
+          height={400}
+          width={300}
+          itemSize={80}
+          itemCount={5} /*Qui deve essere restituito il numero di match completati*/
+          overscanCount={5}
+          >
+          {renderMatchesRow}
+        </FixedSizeList>
+        </div>
+        <DialogActions>
+          <Button variant="outlined">Refresh</Button>
+          <Button variant="contained" onClick={handleCloseMatchesList}>Close</Button>
+        </DialogActions>
+        </DialogContent>
+    </Dialog>
+    </div>
   );
 }
 
