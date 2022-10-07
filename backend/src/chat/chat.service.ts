@@ -183,7 +183,15 @@ export class ChatService{
     
     async muteUser(body: any, userId: number){
         try{
-            // control if muted
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+            if (this.isMuted(body.name, user.idIntra))
+                throw new BadRequestException('User already muted');
+            if (this.isAlreadyIn(body.name, user.idIntra))
+                throw new BadRequestException('User not in channel');
             if (this.isAdmin(body.name, userId)){
                 const channel = await this.prismaService.chat.findUniqueOrThrow({
                     where: {
@@ -339,6 +347,9 @@ export class ChatService{
                     }
                 })
             }
+            else if (channel.type === 'private'){
+                
+            }
             else
             {
                 /// control if invited for private channel
@@ -409,7 +420,7 @@ export class ChatService{
                 },
                 data:{
                     bannedAt: new Date(),
-                    bannedUntil: new Date(new Date().getTime() + body.time*60000)
+                    bannedUntil: new Date(new Date().getTime() + body.time*60000),
                 }
             })
             
@@ -418,4 +429,43 @@ export class ChatService{
             throw new BadRequestException(err)
         }
     }
+
+    async addUser(body: any, userId: number)
+    {
+        try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+            
+        }
+        catch(err)
+        {
+
+        }
+    }
+
+    async addAdmin(body: any, userId: number)
+    {
+        try{
+
+        }
+        catch(err)
+        {
+
+        }
+    }
+
+    async removeAdmin(body: any, userId: number)
+    {
+        try{
+
+        }
+        catch(err)
+        {
+
+        }
+    }
+
 }

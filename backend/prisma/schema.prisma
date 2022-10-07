@@ -29,6 +29,8 @@ model User {
 	friends         Friends[]       @relation(name: "friends")
 	blocked         Blocklist[]     @relation(name: "block")
 	blockedby       Blocklist[]     @relation(name: "blocked")
+	invited			Invited[]		@relation(name: "invited")
+	invitedBy		Invited[]		@relation(name: "invitedBy")
 	partecipant		Partecipant[]
 	messages		Message[]
 }
@@ -37,6 +39,17 @@ model Friends {
 	friendId  	String 			@unique
 	addedAt		DateTime  		@default(now())
 	Friends   	User  			@relation(name: "friends", fields: [friendId], references: [idIntra])
+}
+
+model Invited {
+	invitedId		String
+	invitedById		String
+	type			String //chat or friend
+	invitedBy	User	@relation(name: "invitedBy", fields: [invitedById], references: [idIntra])
+	invited		User	@relation(name: "invited", fields: [invitedId], references: [idIntra])
+
+	@@id([invitedId, invitedById])
+
 }
 
 model Blocklist {
