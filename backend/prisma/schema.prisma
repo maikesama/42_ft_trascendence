@@ -36,9 +36,11 @@ model User {
 }
 
 model Friends {
-	friendId  	String 			@unique
+	friendId		String
+	friendById		String
 	addedAt		DateTime  		@default(now())
-	Friends   	User  			@relation(name: "friends", fields: [friendId], references: [idIntra])
+	friendBy	User	@relation(name: "friendBy", fields: [friendById], references: [idIntra])
+	friend		User	@relation(name: "friend", fields: [friendId], references: [idIntra])
 }
 
 model Invited {
