@@ -38,6 +38,7 @@ export class UserController{
         return await this.userservice.getAllUsers()
     }
 
+    //deve rimuovere dagli amici se ci sei
     @UseGuards(AtGuard)
     @Post('block/:idIntra')
     @Bind(Param('idIntra'))

@@ -44,7 +44,6 @@ model Friends {
 model Invited {
 	invitedId		String
 	invitedById		String
-	type			String //chat or friend
 	invitedBy	User	@relation(name: "invitedBy", fields: [invitedById], references: [idIntra])
 	invited		User	@relation(name: "invited", fields: [invitedId], references: [idIntra])
 

@@ -97,8 +97,13 @@ export class UserService {
 
 	async block(idintra: string, requestId: number)
 	{
-		const me = await this.prisma.user.findUniqueOrThrow({where:{id: requestId}})
-
+		const me = await this.prisma.user.findUniqueOrThrow(
+			{
+				where:{
+					id: requestId
+				}
+			})
+		
 		await this.prisma.blocklist.create(
 			{
 				data:{
