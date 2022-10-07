@@ -6,62 +6,12 @@ import { PrismaService } from 'src/prisma/prisma.service'
 export class GamesService{
     constructor(private prisma: PrismaService) {}
 
-    async isGames(userId: string, GamesId: string) {
+    async createGame(body: any) {
         try{
-            const Gamesship = await this.prisma.games.findUniqueOrThrow({
-                where: {
-                    invitedId_invitedById: { invitedId: GamesId, invitedById: userId }
-                }
-            })
-            if (Gamesship){
-                return true
-            }
-            return false
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    async isInvited(reqIdIntra: string, toAddIdIntra: string){
-        try{
-            const inv = await this.prisma.invited.findUniqueOrThrow({
-                where: {
-                    invitedId_invitedById: { invitedId: toAddIdIntra, invitedById: reqIdIntra }
-                }
-            })
-            if (inv){
-                return true
-            }
-            return false
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    async inviteGames(body: any, userId: number){
-        try{
-            const userToInvite = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            })
-
-            const userRequest = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            
-            if (this.isInvited(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Already invited");
-            if (this.isGames(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Already Games");
-            const createInvitation = await this.prisma.invited.create({
+            const game = await this.prisma.games.create({
                 data: {
-                    invitedId: userToInvite.idIntra,
-                    invitedById: userRequest.idIntra,
+                    user1: body.user1,
+                    user2: body.user2,
                 }
             })
         }
@@ -70,170 +20,76 @@ export class GamesService{
         }
     }
 
-    async removeInvite(body: any, userId: number){
+    async updateGame(body: any) {
         try{
-            const userToInvite = await this.prisma.user.findUniqueOrThrow({
+            const game = await this.prisma.games.update({
                 where: {
-                    idIntra: body.idIntra
-                }
-            })
-
-            const userRequest = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            
-            if (!this.isInvited(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Not invited");
-            if (this.isGames(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Already Games");
-            const createInvitation = await this.prisma.invited.delete({
-                where: {
-                    invitedId: userToInvite.idIntra,
-                    invitedById: userRequest.idIntra,
-                }
-            })
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    async acceptInvite(body: any, userId: number){
-        try{
-            const invitedMe = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            })
-            const Me = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            if (this.isGames(Me.idIntra, invitedMe.idIntra))
-                throw new BadRequestException("Already accepted");
-            if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
-                throw new BadRequestException("Not invited");
-
-            //controllo se vengono eseguite entrambre altrimenti reserver error
-            const inviteAccept = await this.prisma.invited.delete({
-                where:{
-                    invitedId: Me.idIntra,
-                    invitedById: invitedMe.idIntra,
-                }
-            })
-
-            const GamesshipCreation = await this.prisma.games.create({
+                    idGame: body.idGame,
+                    endedAt : null,
+                    scoreP1 : 0,
+                    scoreP2 : 0,
+                    winner : null,
+                    loser: null,
+                    status: "waiting",
+                },
                 data: {
-                    GamesId: Me.idIntra,
-                    GamesById: invitedMe.idIntra,
+                    endedAt: new Date(),
+                    winner: body.winner,
+                    loser: body.loser,
+                    scoreP1: body.scoreP1,
+                    scoreP2: body.scoreP2,
+                    status: "ended",
                 }
             })
+
+            const infoWinner = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.winner
+                },
+                select: {
+                    rank: true,
+                    win: true,
+                    winRow: true,
+                }
+            })
+
+            const infoLooser = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.looser
+                },
+                select: {
+                    rank: true,
+                    loss: true,
+                    winRow: true,
+                }
+            })
+
+            const winner = await this.prisma.user.update({
+                where: {
+                    idIntra: body.winner
+                },
+                data: {
+                    rank: infoWinner.rank + 10,
+                    win: infoWinner.win + 1,
+                    winRow: infoWinner.winRow + 1,
+                }
+            })
+
+            const looser = await this.prisma.user.update({
+                where: {
+                    idIntra: body.winner
+                },
+                data: {
+                    rank: infoLooser.rank - 10,
+                    loss: infoLooser.loss + 1,
+                    winRow: 0,
+                }
+            })
+            return game;
         }
         catch(e){
             throw new BadRequestException(e)
         }
     }
 
-    async declineInvite(body: any, userId: number)
-    {
-        try{
-            const invitedMe = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            })
-            const Me = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            if (this.isGames(Me.idIntra, invitedMe.idIntra))
-                throw new BadRequestException("Already accepted");
-            if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
-                throw new BadRequestException("Not invited");
-
-            const inviteDecline = await this.prisma.invited.delete({
-                where:{
-                    invitedId: Me.idIntra,
-                    invitedById: invitedMe.idIntra,
-                }
-            })
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    async getGamess(body: any, userId: number){
-        try{
-            const user = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            const Gamess = await this.prisma.games.findMany({
-                where: {
-                    GamesById: user.idIntra
-                }
-            })
-            return Gamess
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    //controllare la searchGames se funziona
-    async searchGames(body: any, userId: number){
-        try{
-            const user = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            const Gamess = await this.prisma.games.findMany({
-                where: {
-                    GamesById: user.idIntra
-                }
-            })
-            const Games = await this.prisma.games.findUniqueOrThrow({
-                where: {
-                    GamesId: body.idIntra
-                }
-            })
-            return Games;
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
-
-    async removeGames(body: any, userId: number){
-        try{
-            const user = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-            const Games = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            })
-            if (!this.isGames(user.idIntra, Games.idIntra))
-                throw new BadRequestException("Not Games");
-            const remove = await this.prisma.games.delete({
-                where: {
-                    GamesId: user.idIntra,
-                    GamesById: Games.idIntra,
-                }
-            })
-        }
-        catch(e){
-            throw new BadRequestException(e)
-        }
-    }
 }

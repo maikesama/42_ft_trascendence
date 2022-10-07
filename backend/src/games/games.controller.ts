@@ -8,9 +8,17 @@ export class GamesController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Post('inviteGames')
-    async inviteGames(@Body() body, @Req() req){
+    @Post('createGame')
+    async createGame(@Body() body, @Req() req){
         const user = req.user
-        return await this.GamesService.inviteGames(body, user['sub'])
+        return await this.GamesService.createGame(body)
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('updateGame')
+    async updateGame(@Body() body, @Req() req){
+        const user = req.user
+        return await this.GamesService.updateGame(body)
     }
 }

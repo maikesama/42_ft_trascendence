@@ -22,7 +22,8 @@ model User {
 	createdAt		DateTime  		@default(now())
 	twoFa           Boolean         @default(false)
 	otpSecret       String          @default("")
-	otpUrl          String          @default("")  
+	otpUrl          String          @default("")
+	winRow			Int				@default(0) // Vittorie di fila
 	win             Int             @default(0)
 	loss            Int             @default(0)
 	rank            Int             @default(1000)
@@ -72,7 +73,7 @@ model Games {
 	user2                 String          
 	scoreP1               Int             	@default(0) 
 	scoreP2               Int            	@default(0)
-	status				  Boolean		  	@default(true)  
+	status				  String		  	@default("waiting")
 	winner                String?
 	loser				  String?
 }
