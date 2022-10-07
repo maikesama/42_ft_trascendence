@@ -80,15 +80,12 @@ model Partecipant{
 	idChat		Int
 	user		User			@relation(fields: [idIntra], references: [idIntra])
 	chat		Chat			@relation(fields: [idChat], references: [id])
-	muted		Boolean			@default(false)
 	admin		Boolean			@default(false)
-	banned		Boolean			@default(false)
 	joinedAt	DateTime  		@default(now())
 	mutedAt		DateTime?
-	bannedTime	DateTime?
 	mutedUntil	DateTime?
 	bannedAt	DateTime?
-	adminAt		DateTime?
+	bannedUntil	DateTime?
 
 
 	@@id([idIntra, idChat])

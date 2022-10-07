@@ -185,12 +185,12 @@ export class ChatService{
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: body.idIntra
                 }
             })
             if (this.isMuted(body.name, user.idIntra))
                 throw new BadRequestException('User already muted');
-            if (this.isAlreadyIn(body.name, user.idIntra))
+            if (!this.isAlreadyIn(body.name, user.idIntra))
                 throw new BadRequestException('User not in channel');
             if (this.isAdmin(body.name, userId)){
                 const channel = await this.prismaService.chat.findUniqueOrThrow({
@@ -348,16 +348,90 @@ export class ChatService{
                 })
             }
             else if (channel.type === 'private'){
+                let invited = channel.invited;
                 
-            }
-            else
-            {
-                /// control if invited for private channel
-                throw new BadRequestException('Channel is private')
+                const found = invited.find(element => element === user.idIntra);
+            
+                if (!found)
+                    throw new BadRequestException('Not invited');
+                    
+                const partecipant = await this.prismaService.partecipant.create({
+                    data: {
+                        idChat: channel.id,
+                        idIntra: user.idIntra,
+                    }
+                })
+                
             }
         }
         catch(err){
             throw new BadRequestException(err)
+        }
+    }
+
+    async unMuteUser(body: any, userId: number){
+        try{
+            if (!this.isAdmin(body.name, userId)){
+                throw new BadRequestException('You are not an admin')
+            }
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                }
+            })
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+            if (!this.isMuted(body.name, user.idIntra))
+                throw   new BadRequestException('User is not muted');
+            const partecipant = await this.prismaService.partecipant.update({
+                where: {
+                    idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
+                },
+                data: {
+                    mutedAt: null,
+                    mutedUntil: null
+                }
+            })
+            
+        }
+        catch(err){
+            throw new BadRequestException(err);
+        }
+    }
+
+    async unBanUser(body: any, userId: number){
+        try{
+            if (!this.isAdmin(body.name, userId)){
+                throw new BadRequestException('You are not an admin')
+            }
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                }
+            })
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+            if (!this.isBanned(body.name, user.idIntra))
+                throw   new BadRequestException('User is not muted');
+            const partecipant = await this.prismaService.partecipant.update({
+                where: {
+                    idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
+                },
+                data: {
+                    bannedAt: null,
+                    bannedUntil: null,
+                }
+            })
+            
+        }
+        catch(err){
+            throw new BadRequestException(err);
         }
     }
 
@@ -399,10 +473,12 @@ export class ChatService{
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: body.idIntra
                 }
             })
             
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('User is not admin');
             if (!this.isAlreadyIn(body.name, user.idIntra))
                 throw new BadRequestException('User is not in the channel');
             if (this.isBanned(body.name, user.idIntra))
@@ -432,10 +508,26 @@ export class ChatService{
 
     async addUser(body: any, userId: number)
     {
-        try{
+        try{    
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: body.idIntra
+                }
+            })
+
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('User is not admin');
+            
+            const channel = await this.prismaService.chat.findFirstOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+
+            const partecipant = await this.prismaService.partecipant.create({
+                data: {
+                    idChat: channel.id,
+                    idIntra: user.idIntra,
                 }
             })
             
@@ -449,22 +541,83 @@ export class ChatService{
     async addAdmin(body: any, userId: number)
     {
         try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                }
+            })
 
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('User is not an admin');
+            
+            const channel = await this.prismaService.chat.findFirstOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+
+            const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                },
+            })
+            if (!partecipant.admin)
+            {
+                await this.prismaService.partecipant.update({
+                    where: {
+                        idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                    },
+                    data:{
+                        admin: true,
+                    }
+                })
+            }
+            
         }
         catch(err)
         {
-
+            throw new BadRequestException(err);
         }
     }
 
     async removeAdmin(body: any, userId: number)
     {
         try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
 
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('User is not an admin');
+            
+            const channel = await this.prismaService.chat.findFirstOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+
+            const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                },
+            })
+            if (partecipant.admin)
+            {
+                await this.prismaService.partecipant.update({
+                    where: {
+                        idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                    },
+                    data:{
+                        admin: false,
+                    }
+                })
+            }
         }
         catch(err)
         {
-
+            throw new BadRequestException(err);
         }
     }
 

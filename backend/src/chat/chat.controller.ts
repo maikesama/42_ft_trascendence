@@ -47,7 +47,7 @@ export class ChatController{
     @Post('unmuteUser')
     async unmuteUser(@Body() body, @Req() req){
         const user = req.user
-        return await this.chatService.unmuteUser(body, user['sub'])
+        return await this.chatService.unMuteUser(body, user['sub'])
     }
 
     @UseGuards(AtGuard)
@@ -64,7 +64,7 @@ export class ChatController{
     @Post('unbanUser')
     async unbanUser(@Body() body, @Req() req){
         const user = req.user
-        return await this.chatService.unbanUser(body, user['sub'])
+        return await this.chatService.unBanUser(body, user['sub'])
     }
 
     @UseGuards(AtGuard)
