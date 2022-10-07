@@ -3,17 +3,17 @@ import { PrismaService } from 'src/prisma/prisma.service'
 
 
 @Injectable()
-export class FriendService{
+export class GamesService{
     constructor(private prisma: PrismaService) {}
 
-    async isFriend(userId: string, friendId: string) {
+    async isGames(userId: string, GamesId: string) {
         try{
-            const friendship = await this.prisma.friend.findUniqueOrThrow({
+            const Gamesship = await this.prisma.games.findUniqueOrThrow({
                 where: {
-                    invitedId_invitedById: { invitedId: friendId, invitedById: userId }
+                    invitedId_invitedById: { invitedId: GamesId, invitedById: userId }
                 }
             })
-            if (friendship){
+            if (Gamesship){
                 return true
             }
             return false
@@ -40,7 +40,7 @@ export class FriendService{
         }
     }
 
-    async inviteFriend(body: any, userId: number){
+    async inviteGames(body: any, userId: number){
         try{
             const userToInvite = await this.prisma.user.findUniqueOrThrow({
                 where: {
@@ -56,8 +56,8 @@ export class FriendService{
             
             if (this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new BadRequestException("Already invited");
-            if (this.isFriend(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Already friend");
+            if (this.isGames(userRequest.idIntra, userToInvite.idIntra))
+                throw new BadRequestException("Already Games");
             const createInvitation = await this.prisma.invited.create({
                 data: {
                     invitedId: userToInvite.idIntra,
@@ -86,8 +86,8 @@ export class FriendService{
             
             if (!this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new BadRequestException("Not invited");
-            if (this.isFriend(userRequest.idIntra, userToInvite.idIntra))
-                throw new BadRequestException("Already friend");
+            if (this.isGames(userRequest.idIntra, userToInvite.idIntra))
+                throw new BadRequestException("Already Games");
             const createInvitation = await this.prisma.invited.delete({
                 where: {
                     invitedId: userToInvite.idIntra,
@@ -112,7 +112,7 @@ export class FriendService{
                     id: userId
                 }
             })
-            if (this.isFriend(Me.idIntra, invitedMe.idIntra))
+            if (this.isGames(Me.idIntra, invitedMe.idIntra))
                 throw new BadRequestException("Already accepted");
             if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
                 throw new BadRequestException("Not invited");
@@ -125,10 +125,10 @@ export class FriendService{
                 }
             })
 
-            const friendshipCreation = await this.prisma.friend.create({
+            const GamesshipCreation = await this.prisma.games.create({
                 data: {
-                    friendId: Me.idIntra,
-                    friendById: invitedMe.idIntra,
+                    GamesId: Me.idIntra,
+                    GamesById: invitedMe.idIntra,
                 }
             })
         }
@@ -150,7 +150,7 @@ export class FriendService{
                     id: userId
                 }
             })
-            if (this.isFriend(Me.idIntra, invitedMe.idIntra))
+            if (this.isGames(Me.idIntra, invitedMe.idIntra))
                 throw new BadRequestException("Already accepted");
             if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
                 throw new BadRequestException("Not invited");
@@ -167,68 +167,68 @@ export class FriendService{
         }
     }
 
-    async getFriends(body: any, userId: number){
+    async getGamess(body: any, userId: number){
         try{
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
-            const friends = await this.prisma.friend.findMany({
+            const Gamess = await this.prisma.games.findMany({
                 where: {
-                    friendById: user.idIntra
+                    GamesById: user.idIntra
                 }
             })
-            return friends
+            return Gamess
         }
         catch(e){
             throw new BadRequestException(e)
         }
     }
 
-    //controllare la searchFriend se funziona
-    async searchFriend(body: any, userId: number){
+    //controllare la searchGames se funziona
+    async searchGames(body: any, userId: number){
         try{
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
-            const friends = await this.prisma.friend.findMany({
+            const Gamess = await this.prisma.games.findMany({
                 where: {
-                    friendById: user.idIntra
+                    GamesById: user.idIntra
                 }
             })
-            const friend = await this.prisma.friend.findUniqueOrThrow({
+            const Games = await this.prisma.games.findUniqueOrThrow({
                 where: {
-                    friendId: body.idIntra
+                    GamesId: body.idIntra
                 }
             })
-            return friend;
+            return Games;
         }
         catch(e){
             throw new BadRequestException(e)
         }
     }
 
-    async removeFriend(body: any, userId: number){
+    async removeGames(body: any, userId: number){
         try{
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
-            const friend = await this.prisma.user.findUniqueOrThrow({
+            const Games = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.idIntra
                 }
             })
-            if (!this.isFriend(user.idIntra, friend.idIntra))
-                throw new BadRequestException("Not friend");
-            const remove = await this.prisma.friend.delete({
+            if (!this.isGames(user.idIntra, Games.idIntra))
+                throw new BadRequestException("Not Games");
+            const remove = await this.prisma.games.delete({
                 where: {
-                    friendId: user.idIntra,
-                    friendById: friend.idIntra,
+                    GamesId: user.idIntra,
+                    GamesById: Games.idIntra,
                 }
             })
         }

@@ -41,6 +41,7 @@ model Friends {
 	addedAt		DateTime  		@default(now())
 	friendBy	User	@relation(name: "friendBy", fields: [friendById], references: [idIntra])
 	friend		User	@relation(name: "friend", fields: [friendId], references: [idIntra])
+	@@id([friendId, friendById])
 }
 
 model Invited {
