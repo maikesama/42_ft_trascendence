@@ -21,4 +21,28 @@ export class GamesController{
         const user = req.user
         return await this.GamesService.updateGame(body)
     }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getLeaderboard')
+    async getLeaderboard(@Body() body, @Req() req){
+        const user = req.user
+        return await this.GamesService.getLeaderboard(body)
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getWinner')
+    async getWinner(@Body() body, @Req() req){
+        const user = req.user
+        return await this.GamesService.getWinner(body)
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getLooser')
+    async getLooser(@Body() body, @Req() req){
+        const user = req.user
+        return await this.GamesService.getLooser(body)
+    }
 }
