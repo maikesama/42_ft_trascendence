@@ -278,18 +278,7 @@ export class ChatService{
                         name: body.name
                     }
                 })
-                if(!body.time)
-                {
-                    const partecipant = await this.prismaService.partecipant.update({
-                        where: {
-                            idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
-                        },
-                        data: {
-                            muted: true
-                        }
-                    })
-                }
-                else{
+                if (body.time){
                     const partecipant = await this.prismaService.partecipant.update({
                         where: {
                             idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
@@ -297,6 +286,18 @@ export class ChatService{
                         data: {
                             mutedAt: new Date(),
                             mutedUntil: new Date(new Date().getTime() + body.time*60000)
+                        }
+                    })
+                }
+                else if (!body.time || body.time <= new Date())
+                {
+                    const partecipant = await this.prismaService.partecipant.update({
+                        where: {
+                            idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
+                        },
+                        data: {
+                            mutedAt: new Date(),
+                            mutedUntil: new Date(new Date().getTime() + 60 * 60000 * 24 * 365 * 100) // 100 years
                         }
                     })
                 }
@@ -599,16 +600,29 @@ export class ChatService{
                 }
             })
             
-            const partecipant = await this.prismaService.partecipant.update({
-                where: {
-                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
-                },
-                data:{
-                    bannedAt: new Date(),
-                    bannedUntil: new Date(new Date().getTime() + body.time*60000),
-                }
-            })
-            
+            if (body.time){
+                const partecipant = await this.prismaService.partecipant.update({
+                    where: {
+                        idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
+                    },
+                    data: {
+                        bannedAt: new Date(),
+                        bannedUntil: new Date(new Date().getTime() + body.time*60000),
+                    }
+                })
+            }
+            else if (!body.time || body.time <= new Date())
+            {
+                const partecipant = await this.prismaService.partecipant.update({
+                    where: {
+                        idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
+                    },
+                    data: {
+                        bannedAt: new Date(),
+                        bannedUntil: new Date(new Date().getTime() + 60 * 60000 * 24 * 365 * 100) // 100 years
+                    }
+                })
+            }
         }
         catch(err){
             throw new BadRequestException(err)

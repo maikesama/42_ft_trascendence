@@ -2,7 +2,7 @@ import { Controller, Post, Body, Req, UseGuards, HttpCode, Get } from '@nestjs/c
 import { AtGuard } from 'src/auth/guards';
 import { GamesService } from './games.service';
 
-@Controller('Games')
+@Controller('games')
 export class GamesController{
     constructor(private GamesService: GamesService){}
 
@@ -40,9 +40,9 @@ export class GamesController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('getLooser')
-    async getLooser(@Body() body, @Req() req){
+    @Get('getLoser')
+    async getLoser(@Body() body, @Req() req){
         const user = req.user
-        return await this.GamesService.getLooser(body)
+        return await this.GamesService.getLoser(body)
     }
 }

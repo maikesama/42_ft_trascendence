@@ -58,7 +58,7 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get('turn-on-2fa')
+    @Post('turn-on-2fa')
     async turnOn2fa(@Req() req)
     {
         const user = req.user
@@ -67,7 +67,7 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get('turn-off-2fa')
+    @Post('turn-off-2fa')
     async turnOff2fa(@Req() req)
     {
         const user = req.user

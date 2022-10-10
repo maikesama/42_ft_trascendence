@@ -53,26 +53,5 @@ export class AuthController{
 		// 	await this.twoFaService.turnOnTwoFa(body.id);
 		// }
 	
-
-		@UseGuards(AtGuard)
-		@Get('user')
-		async user(@Req() req) {
-			const user = await this.prisma.user.findMany({
-				
-				// include: {
-				// 	chat           : true,
-				// 	partecipant    : true,
-				// 	friends		   : true,
-				// 	blocked        : true,
-				// 	blockedby      : true,
-				// }
-			});
-
-			// delete user.otpSecret;
-			// delete user.otpUrl;
-			// delete user.twoFa;
-
-			return user;
-		}
 }
 
