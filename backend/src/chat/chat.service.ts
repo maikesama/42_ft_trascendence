@@ -392,7 +392,9 @@ export class ChatService{
         {
             if (!(body.type === 'public') && !(body.type === 'private') && !(body.type === 'protected'))
                 throw new BadRequestException('Type must be public, private or protected')
-            if (this.isAdmin(body.name, userId)){
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('You are not an admin')
+            if (body.type !== 'protected'){
                 const chan = await this.prismaService.chat.update({
                     where: {
                         name: body.name
@@ -402,8 +404,16 @@ export class ChatService{
                     }
                 })
             }
-            else{
-                throw new BadRequestException('You are not an admin')
+            else if (body.type === 'protected'){
+                const chan = await this.prismaService.chat.update({
+                    where: {
+                        name: body.name
+                    },
+                    data: {
+                        type: body.type
+                        password: body.password
+                    }
+                })
             }
         }
         catch(err){

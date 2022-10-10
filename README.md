@@ -31,7 +31,7 @@
     * POST /joinChannel // entra in un canale ( body con name del canale e password se protected)
     * POST /leaveChannel // esce da un canale ( body con name del canale)
     * POST /changePassword // cambia la password di un canale ( body con name del canale e password)
-    * POST /changeVisibility // cambia la visibilità di un canale ( body con name del canale e type)
+    * POST /changeVisibility // cambia la visibilità di un canale ( body con name del canale e type e password se protected)
     * POST /addUser // aggiunge un utente a un canale ( body con name del canale e idIntra del destinatario)
     * POST /removeUser // rimuove un utente da un canale ( body con name del canale e idIntra del destinatario)
     * POST /addAdmin // aggiunge un admin a un canale ( body con name del canale e idIntra del destinatario)
