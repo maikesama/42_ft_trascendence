@@ -23,3 +23,11 @@
     color: black;
     font-size: 700;
 }
+
+.matchLossResult{
+    color: #f30000;
+}
+
+.matchWinResult{
+    color: #00e200;
+}

@@ -23,10 +23,15 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
+import BlockIcon from '@mui/icons-material/Block';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 
 import "./css/ProfileEdit.css"
 import { Input } from '@mui/material';
 import { match } from 'assert';
+import { render } from 'react-dom';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -59,12 +64,12 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem style={style} key={index} >
-        <Avatar style={{border: "2px solid green"}}/>
-        <ListItemText primary={`You`} />
-        <ListItemText primary={`VS`} />
-        <ListItemText primary={`Item ${index + 1}`} />
-        <Avatar style={{border: "2px solid red"}}/>
+      <ListItem button style={style} key={index} >
+        <Avatar />
+        <ListItemText className="matchLossResult" primary={`You`} />
+        <ListItemText className="matchLossResult" primary={`3 - 5`} />
+        <ListItemText className="matchLossResult" primary={`Item ${index + 1}`} />
+        <Avatar />
       </ListItem>
     );
   }
@@ -73,7 +78,7 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem style={style} key={index} >
+      <ListItem style={style} key={index}>
         <Avatar />
         <ListItemText primary={`Item ${index + 1}`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -85,15 +90,13 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem style={style} key={index} >
-        <Avatar style={{border: "2px solid green"}}/>
-        <ListItemText primary={`You`} />
-        <ListItemText primary={`VS`} />
-        <ListItemText primary={`Item ${index + 1}`} />
-        <Avatar style={{border: "2px solid red"}}/>
-        <Divider variant="middle"/>
-        <Button variant="outlined" size='small'>Match Info</Button>
-      </ListItem>
+        <ListItem button className="matchResult" style={style} key={index}>
+          <Avatar sx={{ width: 56, height: 56 }} />
+          <ListItemText className="matchLossResult" primary={`You`} />
+          <ListItemText className="matchLossResult" primary={`3 - 5`} />
+          <ListItemText className="matchLossResult" primary={`Item ${index + 1}`} />
+          <Avatar sx={{ width: 56, height: 56 }} />
+        </ListItem>
     );
   }
 
@@ -103,12 +106,12 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar />
-        <ListItemText primary={`Item`} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"/>
-        <Divider variant="middle"/>
-        <Button variant="outlined" size='small'>Visit</Button>
-        <Button variant="outlined" size='small' style={{color: '#fc0000', borderColor: '#fc0000'}}>Unfriend</Button>
-        <Button variant="contained" size='small' style={{backgroundColor: '#fc0000', borderColor: '#fc0000'}}>Block</Button>
+        <ListItemText button primary={`Item`} />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Divider variant="middle" />
+        <IconButton aria-label="watch" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
