@@ -15,14 +15,6 @@ export class ChatController{
         return await this.chatService.newChannel(body, user['sub'])
     }
 
-    // @UseGuards(AtGuard)
-    // @HttpCode(200)
-    // @Post('destroyChannel')
-    // async destroyChannel(@Body() body, @Req() req){
-    //     const user = req.user
-    //     return await this.chatService.destroyChannel(body, user['sub'])
-    // }
-
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('newDm')
@@ -96,6 +88,14 @@ export class ChatController{
     async changePassword(@Body() body, @Req() req){
         const user = req.user
         return await this.chatService.changePassword(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('changeVisibility')
+    async changeVisibility(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.changeVisibility(body, user['sub'])
     }
 
     @UseGuards(AtGuard)

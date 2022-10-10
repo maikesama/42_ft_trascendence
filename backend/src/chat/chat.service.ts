@@ -386,6 +386,30 @@ export class ChatService{
         }
     }
 
+    async changeVisibility(body: any, userId: number){
+        try
+        {
+            if (!(body.type === 'public') && !(body.type === 'private') && !(body.type === 'protected'))
+                throw new BadRequestException('Type must be public, private or protected')
+            if (this.isAdmin(body.name, userId)){
+                const chan = await this.prismaService.chat.update({
+                    where: {
+                        name: body.name
+                    },
+                    data: {
+                        type: body.type
+                    }
+                })
+            }
+            else{
+                throw new BadRequestException('You are not an admin')
+            }
+        }
+        catch(err){
+            throw new BadRequestException(err)
+        }
+    }
+
     async joinChannel(body: any, userId: number){
         
         try{
