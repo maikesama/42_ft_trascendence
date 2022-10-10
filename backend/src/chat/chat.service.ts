@@ -127,6 +127,86 @@ export class ChatService{
         }
     }
 
+    async lastAdminLeft(body: any, userId: number){
+        try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+
+            const admins = await this.prismaService.partecipant.findMany({
+                where: {
+                    idChat: body.idChat,
+                    admin: true,
+                    idIntra: {
+                        not: user.idIntra
+                    }
+                }
+            })
+
+            if (admins.length === 0){
+                return true
+            }
+            else{
+                return false
+            }
+        }
+        catch(err){
+            throw new BadRequestException(err)
+        }
+    }
+
+    async destroyChannel(body: any, userId: number){
+        try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+
+            if (channel){
+                const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
+                    where: {
+                        idChat_idIntra: {
+                            idChat: channel.id,
+                            idIntra: user.idIntra
+                        }
+                    }
+                })
+
+                if (partecipant.admin){
+                    await this.prismaService.partecipant.deleteMany({
+                        where: {
+                            idChat: channel.id
+                        }
+                    })
+
+                    await this.prismaService.chat.delete({
+                        where: {
+                            id: channel.id
+                        }
+                    })
+                }
+                else{
+                    throw new BadRequestException('You are not admin')
+                }
+            }
+            else{
+                throw new BadRequestException('Channel does not exist')
+            }
+        }
+        catch(err){
+            throw new BadRequestException(err)
+        }
+    }
+
     async isBanned(name: string, idIntra: string){
 
         try{
@@ -461,6 +541,11 @@ export class ChatService{
                     idIntra: user.idIntra,
                 }
             })
+
+            if (this.lastAdminLeft(body.name, user.id))
+            {
+                await this.destroyChannel(body.name, userId);
+            }
             
         }
         catch(err){
