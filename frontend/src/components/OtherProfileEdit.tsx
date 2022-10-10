@@ -25,6 +25,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
+import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
@@ -67,7 +68,7 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem button style={style} key={index} >
         <Avatar />
-        <ListItemText className="matchLossResult" primary={`You`} />
+        <ListItemText className="matchLossResult" primary={`User`} />
         <ListItemText className="matchLossResult" primary={`3 - 5`} />
         <ListItemText className="matchLossResult" primary={`Adversary`} />
         <Avatar />
@@ -79,7 +80,7 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem style={style} key={index}>
+      <ListItem className="friendPreview" style={style} key={index}>
         <Avatar />
         <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -91,13 +92,13 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem button className="matchResult" style={style} key={index}>
-        <Avatar sx={{ width: 56, height: 56 }} />
-        <ListItemText className="matchLossResult" primary={`You`} />
-        <ListItemText className="matchLossResult" primary={`3 - 5`} />
-        <ListItemText className="matchLossResult" primary={`Adversary`} />
-        <Avatar sx={{ width: 56, height: 56 }} />
-      </ListItem>
+        <ListItem button className="matchResult" style={style} key={index}>
+          <Avatar sx={{ width: 56, height: 56 }} />
+          <ListItemText className="matchLossResult" primary={`User`} />
+          <ListItemText className="matchLossResult" primary={`3 - 5`} />
+          <ListItemText className="matchLossResult" primary={`Adversary`} />
+          <Avatar sx={{ width: 56, height: 56 }} />
+        </ListItem>
     );
   }
 
@@ -107,12 +108,10 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar />
-        <ListItemText primary={`Friend`} />
+        <ListItemText primary={`Friend`}/>
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <Divider variant="middle" />
         <IconButton aria-label="watch" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
@@ -142,7 +141,7 @@ export const SocialEdit = (props: any) => {
               {props.matches ? renderSocialRowPreview : renderMatchesRowPreview}
             </FixedSizeList>
           </div>
-          <Divider/>
+        <Divider/>
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           <Button onClick={props.matches ? handleClickOpenFriendsList : handleClickOpenMatchesList}>Explore</Button>
@@ -209,7 +208,7 @@ export const ProfileEdit = (props: any) => {
         <CardMedia
           component="img"
           height="380"
-          image="https://cdn.intra.42.fr/users/liafigli.jpeg"
+          image="https://cdn.intra.42.fr/users/taureli.jpeg"
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
@@ -223,9 +222,6 @@ export const ProfileEdit = (props: any) => {
             Nickname:
           </Typography>
           <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
-          <Button sx={{ color: 'black' }} onClick={handleNick}>
-            <EditIcon />
-          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -234,9 +230,6 @@ export const ProfileEdit = (props: any) => {
             Username:
           </Typography>
           <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -245,14 +238,13 @@ export const ProfileEdit = (props: any) => {
             Score:
           </Typography>
           <TextField id="txtNick" placeholder="224" variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
         </div>
 
       </CardContent>
-      <CardActions sx={{ justifyContent: 'center' }}>
-        <Button>Save</Button>
+      <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
+        <IconButton aria-label="block" size="small" ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="addfriend" size="small" style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </CardActions>
     </Card>
   );
