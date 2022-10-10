@@ -647,6 +647,42 @@ export class ChatService{
         }
     }
 
+    async removeUser(body: any, userId: number)
+    {
+        try{    
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                }
+            })
+
+            if (!this.isAdmin(body.name, userId))
+                throw new BadRequestException('User is not admin');
+            
+            const channel = await this.prismaService.chat.findFirstOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+
+            await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                }
+            })
+
+            await this.prismaService.partecipant.delete({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                }
+            })
+        }
+        catch(err)
+        {
+            throw new BadRequestException(err)
+        }
+    }
+
     async addAdmin(body: any, userId: number)
     {
         try{

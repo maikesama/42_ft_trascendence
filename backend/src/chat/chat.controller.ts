@@ -108,6 +108,14 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('removeUser')
+    async removeUser(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.removeUser(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('addAdmin')
     async addAdmin(@Body() body, @Req() req){
         const user = req.user
