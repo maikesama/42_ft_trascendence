@@ -30,10 +30,6 @@ let UserController = class UserController {
         const user = req.user;
         return await this.userservice.getProfile(user['sub']);
     }
-    async getUserProfile(idIntra, req) {
-        const user = req.user;
-        return await this.userservice.getUserProfile(idIntra, user['sub']);
-    }
     async getAllUsers() {
         return await this.userservice.getAllUsers();
     }
@@ -60,11 +56,11 @@ let UserController = class UserController {
     }
     async changeusername(body, req) {
         const user = req.user;
-        return await this.userservice.changepp(body, user['sub']);
+        return await this.userservice.changeUserName(body, user['sub']);
     }
-    async getUserChat(req) {
+    async getUserProfile(idIntra, req) {
         const user = req.user;
-        return await this.userservice.getChats(user['sub']);
+        return await this.userservice.getUserProfile(idIntra, user['sub']);
     }
 };
 __decorate([
@@ -75,15 +71,6 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "getMe", null);
-__decorate([
-    (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Get)(':idIntra'),
-    (0, common_1.Bind)((0, common_1.Param)('idIntra')),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], UserController.prototype, "getUserProfile", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.Get)('all'),
@@ -145,12 +132,13 @@ __decorate([
 ], UserController.prototype, "changeusername", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Post)('getUserChat'),
-    __param(0, (0, common_1.Req)()),
+    (0, common_1.Get)(':idIntra'),
+    (0, common_1.Bind)((0, common_1.Param)('idIntra')),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
+    __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
-], UserController.prototype, "getUserChat", null);
+], UserController.prototype, "getUserProfile", null);
 UserController = __decorate([
     (0, common_1.Controller)('user'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

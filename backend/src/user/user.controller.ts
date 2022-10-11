@@ -23,15 +23,6 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get(':idIntra')
-    @Bind(Param('idIntra'))
-    async getUserProfile(idIntra, @Req() req)
-    {
-       const user = req.user
-       return await this.userservice.getUserProfile(idIntra, user['sub'])
-    }
-
-    @UseGuards(AtGuard)
     @Get('all')
     async getAllUsers()
     {
@@ -86,15 +77,17 @@ export class UserController{
     @Post('update/username')
     async changeusername(@Body() body, @Req() req)
     {
+        
         const user = req.user
-        return await this.userservice.changepp(body, user['sub'])
+        return await this.userservice.changeUserName(body, user['sub'])
     }
 
     @UseGuards(AtGuard)
-    @Post('getUserChat')
-    async getUserChat(@Req() req)
+    @Get(':idIntra')
+    @Bind(Param('idIntra'))
+    async getUserProfile(idIntra, @Req() req)
     {
-        const user = req.user
-        return await this.userservice.getChats(user['sub'])
+       const user = req.user
+       return await this.userservice.getUserProfile(idIntra, user['sub'])
     }
 }
