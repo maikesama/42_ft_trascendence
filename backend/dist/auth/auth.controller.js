@@ -43,10 +43,6 @@ let AuthController = class AuthController {
         this.twoFaService.verify2fa(body, res)
             .then((e) => { e ? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e; });
     }
-    async user(req) {
-        const user = await this.prisma.user.findMany({});
-        return user;
-    }
 };
 __decorate([
     (0, common_1.Get)(),
@@ -86,14 +82,6 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "verify2fa", null);
-__decorate([
-    (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Get)('user'),
-    __param(0, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object]),
-    __metadata("design:returntype", Promise)
-], AuthController.prototype, "user", null);
 AuthController = __decorate([
     (0, common_1.Controller)('auth'),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService,

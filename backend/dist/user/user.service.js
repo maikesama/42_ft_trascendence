@@ -85,7 +85,11 @@ let UserService = class UserService {
         return user;
     }
     async block(idintra, requestId) {
-        const me = await this.prisma.user.findUniqueOrThrow({ where: { id: requestId } });
+        const me = await this.prisma.user.findUniqueOrThrow({
+            where: {
+                id: requestId
+            }
+        });
         await this.prisma.blocklist.create({
             data: {
                 blockId: idintra,
@@ -148,7 +152,7 @@ let UserService = class UserService {
                 chat: true
             }
         });
-        let rret = await Promise.all(ret.map(async (part) => {
+        let chatsPartecipants = await Promise.all(ret.map(async (part) => {
             let partecipant = await this.prisma.partecipant.findMany({
                 where: {
                     idChat: part.chat.id
@@ -160,7 +164,7 @@ let UserService = class UserService {
             part.partecipant = partecipant;
             return part;
         }));
-        return rret;
+        return chatsPartecipants;
     }
     async showChat(idChat) {
         const chat = await this.prisma.chat.findUnique({

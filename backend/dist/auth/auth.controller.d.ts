@@ -14,5 +14,4 @@ export declare class AuthController {
         QRcode: string;
     }>;
     verify2fa(body: any, res: Response): Promise<void>;
-    user(req: any): Promise<import(".prisma/client").User[]>;
 }

@@ -87,7 +87,7 @@ export class ChatService{
                         data: {
                             name: body.name,
                             type: body.type,
-                            password: body.password,
+                            password: body.password
                         }
                     })}
                 else if (body.type === 'public' || body.type === 'private'){
@@ -174,10 +174,7 @@ export class ChatService{
             if (channel){
                 const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                     where: {
-                        idChat_idIntra: {
-                            idChat: channel.id,
-                            idIntra: user.idIntra
-                        }
+                            idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
                     }
                 })
 
@@ -410,7 +407,7 @@ export class ChatService{
                         name: body.name
                     },
                     data: {
-                        type: body.type
+                        type: body.type,
                         password: body.password
                     }
                 })

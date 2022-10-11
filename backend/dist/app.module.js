@@ -16,6 +16,8 @@ const prisma_service_1 = require("./prisma/prisma.service");
 const microservices_1 = require("@nestjs/microservices");
 const app_gateway_1 = require("./app.gateway");
 const chat_module_1 = require("./chat/chat.module");
+const chat_service_1 = require("./chat/chat.service");
+const friend_service_1 = require("./friend/friend.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -34,8 +36,7 @@ AppModule = __decorate([
             ])
         ],
         controllers: [],
-        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway,
-        ],
+        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway, chat_service_1.ChatService, friend_service_1.FriendService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

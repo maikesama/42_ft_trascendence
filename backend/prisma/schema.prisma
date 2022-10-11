@@ -27,7 +27,8 @@ model User {
 	win             Int             @default(0)
 	loss            Int             @default(0)
 	rank            Int             @default(1000)
-	friends         Friends[]       @relation(name: "friends")
+	friend         Friend[]       @relation(name: "friend")
+	friendBy       Friend[]       @relation(name: "friendBy")
 	blocked         Blocklist[]     @relation(name: "block")
 	blockedby       Blocklist[]     @relation(name: "blocked")
 	invited			Invited[]		@relation(name: "invited")
@@ -36,7 +37,7 @@ model User {
 	messages		Message[]
 }
 
-model Friends {
+model Friend {
 	friendId		String
 	friendById		String
 	addedAt		DateTime  		@default(now())

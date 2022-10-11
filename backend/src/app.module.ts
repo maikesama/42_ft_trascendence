@@ -11,6 +11,8 @@ import * as redisStore from 'cache-manager-redis-store'
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AppGateway } from './app.gateway';
 import { ChatModule } from './chat/chat.module';
+import { ChatService } from './chat/chat.service';
+import { FriendService } from './friend/friend.service';
 
 @Module({
   imports: [
@@ -35,11 +37,11 @@ import { ChatModule } from './chat/chat.module';
     // SessionSerializer
   ],
   controllers: [],
-  providers: [PrismaService, AppGateway, 
+  providers: [PrismaService, AppGateway, ChatService, FriendService ]
   //   {
   //   provide: APP_INTERCEPTOR,
   //   useClass: CacheInterceptor,
   // }
-],
+,
 })
 export class AppModule {}

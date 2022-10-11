@@ -111,7 +111,7 @@ __decorate([
 ], UserController.prototype, "unblockUser", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Get)('turn-on-2fa'),
+    (0, common_1.Post)('turn-on-2fa'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
@@ -119,7 +119,7 @@ __decorate([
 ], UserController.prototype, "turnOn2fa", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.Get)('turn-off-2fa'),
+    (0, common_1.Post)('turn-off-2fa'),
     __param(0, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),

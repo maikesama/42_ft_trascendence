@@ -122,12 +122,6 @@ export class GamesService{
             const game = await this.prisma.games.update({
                 where: {
                     idGame: body.idGame,
-                    endedAt : null,
-                    scoreP1 : 0,
-                    scoreP2 : 0,
-                    winner : null,
-                    loser: null,
-                    status: "waiting",
                 },
                 data: {
                     endedAt: new Date(),

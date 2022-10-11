@@ -6,21 +6,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthModule = void 0;
+exports.GamesModule = void 0;
 const common_1 = require("@nestjs/common");
-const jwt_1 = require("@nestjs/jwt");
-const auth_controller_1 = require("./auth.controller");
-const auth_service_1 = require("./auth.service");
-const strategies_1 = require("./strategies");
-const TwoFA_service_1 = require("./TwoFA/TwoFA.service");
-let AuthModule = class AuthModule {
+const prisma_service_1 = require("../prisma/prisma.service");
+const user_module_1 = require("../user/user.module");
+const games_service_1 = require("./games.service");
+const games_controller_1 = require("./games.controller");
+let GamesModule = class GamesModule {
 };
-AuthModule = __decorate([
+GamesModule = __decorate([
     (0, common_1.Module)({
-        imports: [jwt_1.JwtModule.register({})],
-        controllers: [auth_controller_1.AuthController],
-        providers: [auth_service_1.AuthService, strategies_1.AtStrategy, TwoFA_service_1.TwoFactorAuthenticationService]
+        imports: [user_module_1.UserModule],
+        controllers: [games_controller_1.GamesController],
+        providers: [prisma_service_1.PrismaService, games_service_1.GamesService]
     })
-], AuthModule);
-exports.AuthModule = AuthModule;
-//# sourceMappingURL=auth.module.js.map
+], GamesModule);
+exports.GamesModule = GamesModule;
+//# sourceMappingURL=games.module.js.map

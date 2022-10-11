@@ -23,7 +23,7 @@ export class AppGateway implements OnGatewayInit {
           idIntra_idChat: {idIntra, idChat}
         }
       })
-      return partecipant && !partecipant.muted
+      return partecipant 
     }
     catch(e: any)
     {

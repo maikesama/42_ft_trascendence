@@ -14,9 +14,11 @@ const common_1 = require("@nestjs/common");
 const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const prisma_service_1 = require("./prisma/prisma.service");
+const chat_service_1 = require("./chat/chat.service");
 let AppGateway = class AppGateway {
-    constructor(prisma) {
+    constructor(prisma, chat) {
         this.prisma = prisma;
+        this.chat = chat;
         this.logger = new common_1.Logger('AppGateway');
     }
     afterInit(server) {
@@ -29,7 +31,7 @@ let AppGateway = class AppGateway {
                     idIntra_idChat: { idIntra, idChat }
                 }
             });
-            return partecipant && !partecipant.muted;
+            return partecipant;
         }
         catch (e) {
             return false;
@@ -48,12 +50,39 @@ let AppGateway = class AppGateway {
             return false;
         }
     }
-    async handleMessage(client, message) {
+    async saveMessage(message) {
         try {
-            this.server.to(message.room).emit('msgToClient', message);
+            const newMessage = await this.prisma.message.create({
+                data: {
+                    idChat: message.idChat,
+                    idIntra: message.sender,
+                    message: message.text
+                }
+            });
+            return newMessage;
         }
         catch (e) {
-            console.log("error: ", e.message);
+            return false;
+        }
+    }
+    async handleMessage(client, message) {
+        try {
+            const chat = await this.prisma.chat.findUniqueOrThrow({
+                where: {
+                    id: message.idChat
+                }
+            });
+            if (await this.chat.isMuted(chat.name, message.sender))
+                throw new common_1.BadRequestException("You are muted from this chat");
+            if (await this.chat.isBanned(chat.name, message.sender))
+                throw new common_1.BadRequestException("You are banned from this chat");
+            if (!await this.verifyPartecipant(message.sender, message.idChat))
+                throw new common_1.BadRequestException("You are not partecipant of this chat");
+            await this.saveMessage(message);
+            this.server.to(message.idChat.toString()).emit('msgToClient', message);
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
         }
     }
 };
@@ -69,7 +98,7 @@ __decorate([
 ], AppGateway.prototype, "handleMessage", null);
 AppGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: true }),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, chat_service_1.ChatService])
 ], AppGateway);
 exports.AppGateway = AppGateway;
 //# sourceMappingURL=app.gateway.js.map
