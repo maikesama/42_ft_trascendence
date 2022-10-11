@@ -27,7 +27,52 @@ import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import ListItemButton from '@mui/material/ListItemButton';
+import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
+import SearchIcon from '@mui/icons-material/Search';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
+
+
+const Search = styled('div')(({ theme }) => ({
+    position: 'relative',
+    borderRadius: theme.shape.borderRadius,
+    backgroundColor: "lightgrey",
+    '&:hover': {
+        backgroundColor: "grey",
+    },
+    marginRight: 0,
+    marginLeft: 0,
+    width: '100%',
+    [theme.breakpoints.up('sm')]: {
+        marginLeft: 0,
+        width: 'auto',
+    },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+    padding: theme.spacing(0, 2),
+    height: '100%',
+    position: 'absolute',
+    pointerEvents: 'none',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+    color: 'inherit',
+    '& .MuiInputBase-input': {
+        padding: theme.spacing(1, 1, 1, 0),
+        // vertical padding + font size from searchIcon
+        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+        transition: theme.transitions.create('width'),
+        width: '100%',
+        [theme.breakpoints.up('md')]: {
+            width: '20ch',
+        },
+    },
+}));
 
 const useStyles = makeStyles({
     table: {
@@ -71,6 +116,7 @@ export const ChatContain = (props: any) => {
     }
 
     const [openCreateGroup, setopenCreateGroup] = React.useState(false);
+    const [openJoinGroup, setopenJoinGroup] = React.useState(false);
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
     const [openAdminActions, setopenAdminActions] = React.useState(false);
     const [openUserActions, setopenUserActions] = React.useState(false);
@@ -81,6 +127,14 @@ export const ChatContain = (props: any) => {
 
     const handleCloseCreateGroup = () => {
         setopenCreateGroup(false);
+    };
+
+    const handleClickOpenJoineGroup = () => {
+        setopenJoinGroup(true);
+    };
+
+    const handleCloseJoinGroup = () => {
+        setopenJoinGroup(false);
     };
 
     const handleClickOpenGroupInfo = () => {
@@ -162,6 +216,7 @@ export const ChatContain = (props: any) => {
                     <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenCreateGroup}><GroupAddSharpIcon fontSize="large" /></IconButton>
+                        <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenJoineGroup}><Diversity3OutlinedIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
                     <List>
@@ -241,6 +296,33 @@ export const ChatContain = (props: any) => {
                     </Grid>
                 </Grid>
             </Grid>
+            {/*MODAL JOIN GROUP */}
+            <Dialog open={openJoinGroup} onClose={handleCloseJoinGroup}>
+                <DialogTitle>Join Group</DialogTitle>
+                <DialogContent>
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search>
+                    <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
+                        <FixedSizeList
+
+                            height={230}
+                            width={500}
+                            itemSize={46}
+                            itemCount={10}
+                            overscanCount={5}
+                        >
+                            {renderRow}
+                        </FixedSizeList>
+                    </div>
+                </DialogContent>
+            </Dialog>
             {/*MODAL ADMIN IN GROUP ACTIONS */}
             <Dialog open={openAdminActions} onClose={handleCloseAdminActions}>
                 <DialogTitle>Admin Actions</DialogTitle>
@@ -249,13 +331,13 @@ export const ChatContain = (props: any) => {
                         Admin: taureli
                     </DialogContentText>
                     <DialogActions>
-                    <Button variant="outlined" onClick={handleCloseAdminActions}>Mute</Button>
-                    <Button variant="outlined" onClick={handleCloseAdminActions}>Kick</Button>
-                    <Button variant="outlined" onClick={handleCloseAdminActions}>Ban</Button>
-                    <Button variant="outlined" onClick={handleCloseAdminActions}>Promote</Button>
-                    <Button variant="outlined" onClick={handleCloseAdminActions}>Demote</Button>
-                    <Button variant="contained" onClick={handleCloseAdminActions}>Close</Button>
-                </DialogActions>
+                        <Button variant="outlined" onClick={handleCloseAdminActions}>Mute</Button>
+                        <Button variant="outlined" onClick={handleCloseAdminActions}>Kick</Button>
+                        <Button variant="outlined" onClick={handleCloseAdminActions}>Ban</Button>
+                        <Button variant="outlined" onClick={handleCloseAdminActions}>Promote</Button>
+                        <Button variant="outlined" onClick={handleCloseAdminActions}>Demote</Button>
+                        <Button variant="contained" onClick={handleCloseAdminActions}>Close</Button>
+                    </DialogActions>
                 </DialogContent>
             </Dialog>
             {/*MODAL USER IN GROUP ACTIONS */}
@@ -266,9 +348,9 @@ export const ChatContain = (props: any) => {
                         Do you want to block the user?
                     </DialogContentText>
                     <DialogActions>
-                    <Button variant="outlined" onClick={handleCloseUserActions}>Block</Button>
-                    <Button variant="contained" onClick={handleCloseUserActions}>Close</Button>
-                </DialogActions>
+                        <Button variant="outlined" onClick={handleCloseUserActions}>Block</Button>
+                        <Button variant="contained" onClick={handleCloseUserActions}>Close</Button>
+                    </DialogActions>
                 </DialogContent>
             </Dialog>
             {/*MODAL GROUP INFO */}
@@ -311,7 +393,7 @@ export const ChatContain = (props: any) => {
                     <Button onClick={handleCloseGroupInfo}>Blocca</Button>
                 </DialogActions>
             </Dialog>*/}
-            {/*MODAL CREARTE CHANNEL */}
+            {/*MODAL CREATE CHANNEL */}
             <Dialog open={openCreateGroup} onClose={handleCloseCreateGroup}>
                 <DialogTitle>Create Group</DialogTitle>
                 <DialogContent>
@@ -341,6 +423,18 @@ export const ChatContain = (props: any) => {
                         <option value={"Private"}>Private</option>
                         <option value={"Protected"}>Protected</option>
                     </NativeSelect>
+                    <DialogContentText paddingTop={'10px'}>
+                        Input password:
+                    </DialogContentText>
+                    <TextField
+                        autoFocus
+                        margin="dense"
+                        id="password"
+                        label="Password"
+                        fullWidth
+                        variant="standard"
+                        required
+                    />
                     <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                         Add members to your channel group:
                     </DialogContentText>
