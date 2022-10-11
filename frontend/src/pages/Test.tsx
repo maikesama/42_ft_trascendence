@@ -11,7 +11,7 @@ import {io} from 'socket.io-client';
 
 export const Test = () => {
 
-        const socket = io('ws://localhost:3333');
+        const socket = io('ws://10.11.7.3:3333');
 
         // function createChannel()
         // {
