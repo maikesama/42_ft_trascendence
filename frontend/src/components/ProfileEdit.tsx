@@ -28,23 +28,67 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { styled, alpha } from '@mui/material/styles';
+import InputBase from '@mui/material/InputBase';
+import SearchIcon from '@mui/icons-material/Search';
+import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 
 import "./css/ProfileEdit.css"
 import { Input } from '@mui/material';
 import { match } from 'assert';
 import { render } from 'react-dom';
+import { blue } from '@material-ui/core/colors';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
 }
 
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: "lightgrey",
+  '&:hover': {
+    backgroundColor: "grey",
+  },
+  marginRight: 0,
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: 0,
+    width: 'auto',
+  },
+}));
 
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
 
 export const SocialEdit = (props: any) => {
 
   const [openFriendsList, setOpenFriendsList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
-
+  const [openSearchBar, setOpenSearchBar] = React.useState(false);
+  
   const handleClickOpenFriendsList = () => {
     setOpenFriendsList(true);
   };
@@ -56,11 +100,19 @@ export const SocialEdit = (props: any) => {
   const handleClickOpenMatchesList = () => {
     setOpenMatchesList(true);
   };
-
+  
   const handleCloseMatchesList = () => {
     setOpenMatchesList(false);
   };
 
+  const handleClickOpenSearchBar = () => {
+    setOpenSearchBar(true);
+  };
+
+  const handleCloseSearchBar = () => {
+    setOpenSearchBar(false);
+  };
+  
   function renderMatchesRowPreview(props: any) {
     const { index, style, matches } = props;
 
@@ -110,8 +162,24 @@ export const SocialEdit = (props: any) => {
         <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <Divider variant="middle" />
-        <IconButton aria-label="watch" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+      </ListItem>
+    );
+  }
+
+  function renderSearchRow(props: any) {
+    const { index, style, matches } = props;
+
+    return (
+      <ListItem style={style} key={index} >
+        <Avatar />
+        <ListItemText primary={`Friend`} />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Divider variant="middle" />
+        <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unfriend" size="small" style={{ color: 'green' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
@@ -142,12 +210,43 @@ export const SocialEdit = (props: any) => {
               {props.matches ? renderSocialRowPreview : renderMatchesRowPreview}
             </FixedSizeList>
           </div>
-          <Divider/>
+          <Divider />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
+          {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
           <Button onClick={props.matches ? handleClickOpenFriendsList : handleClickOpenMatchesList}>Explore</Button>
         </CardActions>
       </Card>
+      {/*Search Bar Modal*/}
+      <Dialog open={openSearchBar} onClose={handleCloseSearchBar}>
+        <DialogTitle textAlign="center">Search Friends</DialogTitle>
+        <DialogContent>
+          <Search>
+            <SearchIconWrapper>
+              <SearchIcon />
+            </SearchIconWrapper>
+            <StyledInputBase
+              placeholder="Search…"
+              inputProps={{ 'aria-label': 'search' }}
+            />
+          </Search>
+          <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
+            <FixedSizeList
+              height={400}
+              width={400}
+              itemSize={80}
+              itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
+              overscanCount={5}
+            >
+              {renderSearchRow}
+            </FixedSizeList>
+          </div>
+          <DialogActions style={{ justifyContent: 'center' }}>
+            <Button variant="outlined">Refresh</Button>
+            <Button variant="contained" onClick={handleCloseSearchBar}>Close</Button>
+          </DialogActions>
+        </DialogContent>
+      </Dialog>
       {/*Friends List Modal*/}
       <Dialog open={openFriendsList} onClose={handleCloseFriendsList}>
         <DialogTitle textAlign="center">Friends List</DialogTitle>

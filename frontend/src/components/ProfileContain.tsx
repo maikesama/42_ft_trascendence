@@ -29,9 +29,26 @@ export const ProfileContain = (props: any) => {
   }
 
   return (
-    <Grid container spacing={4} style={{marginTop: 25, maxWidth: '105%' }}>
+    <Grid container spacing={4} style={{paddingTop: 35, margin: 0, maxWidth: '100%', height: '1000px'}}>
       <Grid item xs={4} style={colors}>
+        <Typography 
+            variant="h4"
+            fontSize="25px"
+            noWrap
+            component="a"
+            href=""
+            sx={{
+              mt: 10,
+              display: { xs: 'none', md: 'block' },
+              flexGrow: 1,
+              fontFamily: 'MyWebFont',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none',
+            }}>
         General Rank
+        </Typography>
       </Grid>
       <Grid item xs={4} style={colors}>
         Victories

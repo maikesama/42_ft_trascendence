@@ -242,7 +242,7 @@ export const ProfileEdit = (props: any) => {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
-        <IconButton aria-label="block" size="small" ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="message" size="small" ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="addfriend" size="small" style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </CardActions>
