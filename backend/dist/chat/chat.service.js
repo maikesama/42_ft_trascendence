@@ -12,6 +12,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ChatService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const argon = require("argon2");
 let ChatService = class ChatService {
     constructor(prismaService) {
         this.prismaService = prismaService;
@@ -89,7 +90,7 @@ let ChatService = class ChatService {
                         data: {
                             name: body.name,
                             type: body.type,
-                            password: body.password
+                            password: await argon.hash(body.password)
                         }
                     });
                 }
@@ -208,8 +209,9 @@ let ChatService = class ChatService {
                     idIntra_idChat: { idIntra, idChat }
                 }
             });
-            if (partecipant.bannedUntil && partecipant.bannedUntil > new Date()) {
-                return true;
+            if (partecipant.bannedUntil) {
+                if (partecipant.bannedUntil > new Date())
+                    return true;
             }
             return false;
         }
@@ -344,7 +346,7 @@ let ChatService = class ChatService {
                         name: body.name
                     },
                     data: {
-                        password: body.password
+                        password: await argon.hash(body.password)
                     }
                 });
             }
@@ -373,13 +375,15 @@ let ChatService = class ChatService {
                 });
             }
             else if (body.type === 'protected') {
+                if (!body.password)
+                    throw new common_1.BadRequestException('Password is required');
                 const chan = await this.prismaService.chat.update({
                     where: {
                         name: body.name
                     },
                     data: {
                         type: body.type,
-                        password: body.password
+                        password: await argon.hash(body.password)
                     }
                 });
             }
@@ -397,15 +401,13 @@ let ChatService = class ChatService {
             });
             if (await this.isAlreadyIn(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User is already in the channel');
-            else if (await this.isBanned(body.name, user.idIntra))
-                throw new common_1.BadRequestException('User is Banned');
-            const channel = await this.prismaService.chat.findUnique({
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where: {
                     name: body.name
                 }
             });
             if (channel.type === 'protected') {
-                if (channel.password === body.password) {
+                if (await argon.verify(channel.password, body.password)) {
                     const partecipant = await this.prismaService.partecipant.create({
                         data: {
                             idChat: channel.id,
@@ -519,7 +521,7 @@ let ChatService = class ChatService {
                 throw new common_1.BadRequestException('User is not in the channel');
             else if (await this.isBanned(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User is Banned');
-            const channel = await this.prismaService.chat.findUnique({
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where: {
                     name: body.name
                 }
