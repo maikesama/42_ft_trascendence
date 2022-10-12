@@ -2,20 +2,16 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export declare class GamesService {
     private prisma;
     constructor(prisma: PrismaService);
-    getWinner(body: any): Promise<{
-        rank: number;
-        win: number;
-        winRow: number;
-    }>;
+    getWinner(idUser: number): Promise<import(".prisma/client").User>;
     getLoser(body: any): Promise<{
         rank: number;
-        winRow: number;
         loss: number;
+        winRow: number;
     }>;
     getPlayerProfile(body: any): Promise<{
         rank: number;
-        winRow: number;
         loss: number;
+        winRow: number;
     }>;
     createGame(body: any): Promise<void>;
     updateGame(body: any): Promise<void>;

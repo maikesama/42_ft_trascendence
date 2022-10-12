@@ -66,19 +66,15 @@ export class GamesService{
     //     }
     // }
 
-    async getWinner(body: any){
+    async getWinner(idUser: number){
         try{
-            const infoWinner = await this.prisma.user.findUniqueOrThrow({
+            return await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    idIntra: body.winner
+                    id: idUser
                 },
-                select: {
-                    rank: true,
-                    win: true,
-                    winRow: true,
-                }
+                
             })
-            return infoWinner;
+            
         }
         catch(e){
             throw new BadRequestException(e)
@@ -139,42 +135,56 @@ export class GamesService{
 
     async updateGame(body: any) {
         try{
-            const game = await this.prisma.games.update({
+            const game = await this.prisma.games.findUniqueOrThrow({
                 where: {
-                    idGame: 14,
-                },
-                data: {
-                    endedAt: new Date(),
-                    winner: body.winner,
-                    loser: body.loser,
-                    scoreP1: body.scoreP1,
-                    scoreP2: body.scoreP2,
-                    status: "ended",
+                    idGame: body.idGame
                 }
             })
+            // await this.prisma.games.update({
+            //     where: {
+            //         idGame: game.idGame,
+            //     },
+            //     data: {
+            //         endedAt: new Date(),
+            //         winner: body.winner,
+            //         loser: body.loser,
+            //         scoreP1: body.scoreP1,
+            //         scoreP2: body.scoreP2,
+            //         status: "ended",
+            //     }
+            // })
 
-            const infoWinner = await this.getWinner(body.winner);
+            const winner = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.winner
+                },
+            })
+            
+            const loser = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.loser
 
-            const infoLoser = await this.getLoser(body.loser);
+                },
+            })
 
-            const loser = await this.prisma.user.update({
+           await this.prisma.user.update({
                 where: {
                     idIntra: body.loser
                 },
                 data: {
-                    rank: this.minus(infoLoser.rank ,30),
-                    loss: this.sum(infoLoser.loss , 1),
+                    rank: this.minus(loser.rank ,30),
+                    loss: this.sum(loser.loss , 1),
                     winRow: 0,
                 }
             })
-            const winner = await this.prisma.user.update({
+            await this.prisma.user.update({
                 where: {
                     idIntra: body.winner
                 },
                 data: {
-                    rank: this.sum(infoWinner.rank, 30),
-                    loss: this.sum(infoWinner.win, 1),
-                    winRow: this.sum(infoWinner.winRow, 1),
+                    rank: this.sum(winner.rank, 30),
+                    loss: this.sum(winner.win, 1),
+                    winRow: this.sum(winner.winRow, 1),
                 }
             })
         }
