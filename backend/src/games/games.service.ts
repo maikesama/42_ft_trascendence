@@ -135,24 +135,19 @@ export class GamesService{
 
     async updateGame(body: any) {
         try{
-            const game = await this.prisma.games.findUniqueOrThrow({
+            const game = await this.prisma.games.update({
                 where: {
-                    idGame: body.idGame
+                    idGame: Number(body.idGame),
+                },
+                data: {
+                    endedAt: new Date(),
+                    winner: body.winner,
+                    loser: body.loser,
+                    scoreP1: Number(body.scoreP1),
+                    scoreP2: Number(body.scoreP2),
+                    status: "ended",
                 }
             })
-            // await this.prisma.games.update({
-            //     where: {
-            //         idGame: game.idGame,
-            //     },
-            //     data: {
-            //         endedAt: new Date(),
-            //         winner: body.winner,
-            //         loser: body.loser,
-            //         scoreP1: body.scoreP1,
-            //         scoreP2: body.scoreP2,
-            //         status: "ended",
-            //     }
-            // })
 
             const winner = await this.prisma.user.findUniqueOrThrow({
                 where: {

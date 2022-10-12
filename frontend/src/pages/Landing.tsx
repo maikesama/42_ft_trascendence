@@ -12,7 +12,7 @@ export const Landing = () => {
 		evt.preventDefault();
 
         //home
-		window.location.replace(`http://10.11.10.2:3333/auth`)
+		window.location.replace(`http://10.11.9.3:3333/auth`)
 	}
 
 	return (

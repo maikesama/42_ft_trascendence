@@ -79,9 +79,17 @@ let GamesService = class GamesService {
     }
     async updateGame(body) {
         try {
-            const game = await this.prisma.games.findUniqueOrThrow({
+            const game = await this.prisma.games.update({
                 where: {
-                    idGame: body.idGame
+                    idGame: Number(body.idGame),
+                },
+                data: {
+                    endedAt: new Date(),
+                    winner: body.winner,
+                    loser: body.loser,
+                    scoreP1: Number(body.scoreP1),
+                    scoreP2: Number(body.scoreP2),
+                    status: "ended",
                 }
             });
             const winner = await this.prisma.user.findUniqueOrThrow({
