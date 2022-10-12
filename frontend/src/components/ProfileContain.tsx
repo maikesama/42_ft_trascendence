@@ -24,9 +24,14 @@ import "./css/Navbar.css"
 export const ProfileContain = (props: any) => {
 
   const colors = {
-    color: 'black', backgroundColor: 'white', rankCont: { backgroundImage: `url(${Rank})`, backgroundSize: '50% 100%', backgroundColor: 'white' },
-    victoryCont: { backgroundImage: `url(${Victory})`, backgroundSize: '50% 100%', backgroundColor: 'white' },
-    ladderCont: {backgroundImage: `url(${Ladder})`, backgroundSize: '50% 100%', backgroundColor: 'white'}
+    fontFamily: 'MyWebFont',
+    fontWeight: 'bold',
+    fontSize: '23px',
+    color: 'green',
+    marginTop: -70,
+     backgroundColor: 'white', rankCont: {  backgroundColor: 'white' },
+    victoryCont: {  backgroundColor: 'white' },
+    ladderCont: { backgroundColor: 'white'}
   }
 
   const MatchesFriends = {
@@ -38,14 +43,11 @@ export const ProfileContain = (props: any) => {
     <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1000px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
         <Typography
-          className="pfpChar"
           variant="h4"
           fontSize="25px"
           noWrap
-          component="a"
-          href=""
           sx={{
-            mt: 10,
+            mt: 7,
             display: { xs: 'none', md: 'block' },
             flexGrow: 1,
             fontFamily: 'MyWebFont',
@@ -59,14 +61,11 @@ export const ProfileContain = (props: any) => {
       </Grid>
       <Grid className='victory' item xs={4} style={colors.victoryCont}>
         <Typography
-          className="pfpChar"
           variant="h4"
           fontSize="25px"
           noWrap
-          component="a"
-          href=""
           sx={{
-            mt: 10,
+            mt: 7,
             display: { xs: 'none', md: 'block' },
             flexGrow: 1,
             fontFamily: 'MyWebFont',
@@ -80,14 +79,11 @@ export const ProfileContain = (props: any) => {
       </Grid>
       <Grid className='ladder' item xs={4} style={colors.ladderCont}>
         <Typography
-          className="pfpChar"
           variant="h4"
           fontSize="25px"
           noWrap
-          component="a"
-          href=""
           sx={{
-            mt: 10,
+            mt: 7,
             display: { xs: 'none', md: 'block' },
             flexGrow: 1,
             fontFamily: 'MyWebFont',
@@ -102,15 +98,13 @@ export const ProfileContain = (props: any) => {
       {/* Punti row */}
       <Grid item xs={4} style={colors}>
         12
-        <Divider />
       </Grid>
       <Grid item xs={4} style={colors}>
         34
-        <Divider />
+        
       </Grid>
       <Grid item xs={4} style={colors}>
         18
-        <Divider />
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
