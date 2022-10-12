@@ -34,7 +34,7 @@
     * POST /changeVisibility // cambia la visibilità di un canale ( body con name del canale e type e password se protected)
     * POST /addUser // aggiunge un utente a un canale ( body con name del canale e idIntra del destinatario)
     * POST /removeUser // rimuove un utente da un canale ( body con name del canale e idIntra del destinatario)
-    * POST /addAdmin // aggiunge un admin a un canale ( body con name del canale e idIntra del destinatario)
+    * POST /anewn // aggiunge un admin a un canale ( body con name del canale e idIntra del destinatario)
     * POST /removeAdmin // rimuove un admin da un canale ( body con name del canale e idIntra del destinatario)
 
 * FRIEND (/friend/) :
@@ -58,5 +58,5 @@
     
     
 
-    
+    hackerman42. essere stato qui
 
