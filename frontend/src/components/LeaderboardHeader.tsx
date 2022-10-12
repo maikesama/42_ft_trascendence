@@ -25,24 +25,6 @@ export function LeaderboardHeader(props:any) {
         borderRadius: '50%',
         marginLeft: '-12%',
     }
-    
-    /*const onstatus = props.status;
-    let status;
-
-    if (onstatus && onstatus === "online") {
-        status = (
-        <i style={{fontSize: 8, color: 'green'}} className="bi bi-circle-fill"></i>
-      );
-    } else if (onstatus === "offline") {
-        status = (
-        <i style={{fontSize: 8, color: 'red'}} className="bi bi-circle-fill"></i>
-      );
-    } else {
-        status = (
-        <i style={{fontSize: 8, color: 'grey'}} className="bi bi-circle-fill"></i>
-        );
-    }*/
-      
 
 	return(
     <>
