@@ -39,7 +39,7 @@ let FriendService = class FriendService {
     }
     async isInvited(reqIdIntra, toAddIdIntra) {
         try {
-            const inv = await this.prisma.invited.findUniqueOrThrow({
+            const inv = await this.prisma.invited.findUnique({
                 where: {
                     invitedId_invitedById: { invitedId: toAddIdIntra, invitedById: reqIdIntra }
                 }
@@ -65,9 +65,9 @@ let FriendService = class FriendService {
                     id: userId
                 }
             });
-            if (this.isInvited(userRequest.idIntra, userToInvite.idIntra))
+            if (await this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new common_1.BadRequestException("Already invited");
-            if (this.isFriend(userRequest.idIntra, userToInvite.idIntra))
+            if (await this.isFriend(userRequest.idIntra, userToInvite.idIntra))
                 throw new common_1.BadRequestException("Already friend");
             const createInvitation = await this.prisma.invited.create({
                 data: {
@@ -92,9 +92,9 @@ let FriendService = class FriendService {
                     id: userId
                 }
             });
-            if (!this.isInvited(userRequest.idIntra, userToInvite.idIntra))
+            if (!await this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new common_1.BadRequestException("Not invited");
-            if (this.isFriend(userRequest.idIntra, userToInvite.idIntra))
+            if (await this.isFriend(userRequest.idIntra, userToInvite.idIntra))
                 throw new common_1.BadRequestException("Already friend");
             const createInvitation = await this.prisma.invited.delete({
                 where: {
@@ -118,9 +118,9 @@ let FriendService = class FriendService {
                     id: userId
                 }
             });
-            if (this.isFriend(Me.idIntra, invitedMe.idIntra))
+            if (await this.isFriend(Me.idIntra, invitedMe.idIntra))
                 throw new common_1.BadRequestException("Already accepted");
-            if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
+            if (!await this.isInvited(invitedMe.idIntra, Me.idIntra))
                 throw new common_1.BadRequestException("Not invited");
             const inviteAccept = await this.prisma.invited.delete({
                 where: {
@@ -150,9 +150,9 @@ let FriendService = class FriendService {
                     id: userId
                 }
             });
-            if (this.isFriend(Me.idIntra, invitedMe.idIntra))
+            if (await this.isFriend(Me.idIntra, invitedMe.idIntra))
                 throw new common_1.BadRequestException("Already accepted");
-            if (!this.isInvited(invitedMe.idIntra, Me.idIntra))
+            if (!await this.isInvited(invitedMe.idIntra, Me.idIntra))
                 throw new common_1.BadRequestException("Not invited");
             const inviteDecline = await this.prisma.invited.delete({
                 where: {
@@ -194,7 +194,7 @@ let FriendService = class FriendService {
                     idIntra: body.idIntra
                 }
             });
-            if (!this.isFriend(user.idIntra, friend.idIntra))
+            if (!await this.isFriend(user.idIntra, friend.idIntra))
                 throw new common_1.BadRequestException("Not friend");
             const remove = await this.prisma.friend.delete({
                 where: {

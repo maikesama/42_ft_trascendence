@@ -10,8 +10,16 @@ export declare class UserController {
     constructor(prisma: PrismaService, jwt: JwtService, userservice: UserService, twofa: TwoFactorAuthenticationService);
     getMe(req: any): Promise<import(".prisma/client").User>;
     getAllUsers(): Promise<{
-        id: number;
+        friend: import(".prisma/client").Friend[];
         idIntra: string;
+        friendBy: import(".prisma/client").Friend[];
+        blocked: import(".prisma/client").Blocklist[];
+        blockedby: import(".prisma/client").Blocklist[];
+        invited: import(".prisma/client").Invited[];
+        invitedBy: import(".prisma/client").Invited[];
+        partecipant: import(".prisma/client").Partecipant[];
+        messages: import(".prisma/client").Message[];
+        id: number;
         userName: string;
         email: string;
         tel: string;
@@ -23,14 +31,6 @@ export declare class UserController {
         win: number;
         loss: number;
         rank: number;
-        friend: import(".prisma/client").Friend[];
-        friendBy: import(".prisma/client").Friend[];
-        blocked: import(".prisma/client").Blocklist[];
-        blockedby: import(".prisma/client").Blocklist[];
-        invited: import(".prisma/client").Invited[];
-        invitedBy: import(".prisma/client").Invited[];
-        partecipant: import(".prisma/client").Partecipant[];
-        messages: import(".prisma/client").Message[];
     }[]>;
     blockUser(idIntra: any, req: any): Promise<void>;
     unblockUser(idIntra: any, req: any): Promise<void>;

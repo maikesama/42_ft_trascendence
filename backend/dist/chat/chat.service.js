@@ -687,7 +687,7 @@ let ChatService = class ChatService {
                     id: userId
                 }
             });
-            if (user.idIntra !== body.idIntra)
+            if (user.idIntra === body.idIntra)
                 throw new common_1.BadRequestException("Can't remove yorself");
             if (!await this.isAdmin(body.name, userId))
                 throw new common_1.BadRequestException('User is not an admin');
@@ -704,7 +704,7 @@ let ChatService = class ChatService {
             if (partecipant.admin) {
                 await this.prismaService.partecipant.update({
                     where: {
-                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                        idIntra_idChat: { idIntra: body.idIntra, idChat: channel.id }
                     },
                     data: {
                         admin: false,

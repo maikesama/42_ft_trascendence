@@ -34,11 +34,7 @@ let GamesController = class GamesController {
     }
     async getWinner(body, req) {
         const user = req.user;
-        return await this.GamesService.getWinner(body);
-    }
-    async getLoser(body, req) {
-        const user = req.user;
-        return await this.GamesService.getLoser(body);
+        return await this.GamesService.getPlayerProfile(body);
     }
 };
 __decorate([
@@ -74,23 +70,13 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),
-    (0, common_1.Get)('getWinner'),
+    (0, common_1.Get)('getPlayerProfile'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], GamesController.prototype, "getWinner", null);
-__decorate([
-    (0, common_1.UseGuards)(guards_1.AtGuard),
-    (0, common_1.HttpCode)(200),
-    (0, common_1.Get)('getLoser'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Object, Object]),
-    __metadata("design:returntype", Promise)
-], GamesController.prototype, "getLoser", null);
 GamesController = __decorate([
     (0, common_1.Controller)('games'),
     __metadata("design:paramtypes", [games_service_1.GamesService])

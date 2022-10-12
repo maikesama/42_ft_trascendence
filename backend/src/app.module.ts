@@ -13,6 +13,9 @@ import { AppGateway } from './app.gateway';
 import { ChatModule } from './chat/chat.module';
 import { ChatService } from './chat/chat.service';
 import { FriendService } from './friend/friend.service';
+import { FriendModule } from './friend/friend.module';
+import { GamesModule } from './games/games.module';
+import { GamesService } from './games/games.service';
 
 @Module({
   imports: [
@@ -20,6 +23,8 @@ import { FriendService } from './friend/friend.service';
     UserModule,
     PrismaModule,
     ChatModule,
+    FriendModule,
+    GamesModule,
     // ConfigModule.forRoot({
     //   isGlobal: true
     // }),
@@ -37,7 +42,7 @@ import { FriendService } from './friend/friend.service';
     // SessionSerializer
   ],
   controllers: [],
-  providers: [PrismaService, AppGateway, ChatService, FriendService ]
+  providers: [PrismaService, AppGateway, ChatService, FriendService, GamesService ]
   //   {
   //   provide: APP_INTERCEPTOR,
   //   useClass: CacheInterceptor,

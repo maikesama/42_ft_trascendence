@@ -52,6 +52,24 @@ let GamesService = class GamesService {
             throw new common_1.BadRequestException(e);
         }
     }
+    async getPlayerProfile(body) {
+        try {
+            const player = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                },
+                select: {
+                    rank: true,
+                    loss: true,
+                    winRow: true,
+                }
+            });
+            return player;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
     async createGame(body) {
         try {
             const game = await this.prisma.games.create({
@@ -69,7 +87,7 @@ let GamesService = class GamesService {
         try {
             const game = await this.prisma.games.update({
                 where: {
-                    idGame: body.idGame,
+                    idGame: 14,
                 },
                 data: {
                     endedAt: new Date(),
@@ -87,8 +105,8 @@ let GamesService = class GamesService {
                     idIntra: body.loser
                 },
                 data: {
-                    rank: infoLoser.rank - 30,
-                    loss: infoLoser.loss + 1,
+                    rank: this.minus(infoLoser.rank, 30),
+                    loss: this.sum(infoLoser.loss, 1),
                     winRow: 0,
                 }
             });
@@ -97,15 +115,21 @@ let GamesService = class GamesService {
                     idIntra: body.winner
                 },
                 data: {
-                    rank: infoWinner.rank + 30,
-                    loss: infoWinner.win + 1,
-                    winRow: infoWinner.winRow + 1,
+                    rank: this.sum(infoWinner.rank, 30),
+                    loss: this.sum(infoWinner.win, 1),
+                    winRow: this.sum(infoWinner.winRow, 1),
                 }
             });
         }
         catch (e) {
             throw new common_1.BadRequestException(e);
         }
+    }
+    sum(a, b) {
+        return a + b;
+    }
+    minus(a, b) {
+        return a - b;
     }
     async getLeaderboard(body) {
         try {

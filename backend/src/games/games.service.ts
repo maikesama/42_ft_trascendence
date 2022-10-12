@@ -103,6 +103,26 @@ export class GamesService{
             throw new BadRequestException(e)
         }
     }
+
+    async getPlayerProfile(body: any){
+        try{
+            const player = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    idIntra: body.idIntra
+                },
+                select: {
+                    rank: true,
+                    loss: true,
+                    winRow: true,
+                }
+            })
+            return player;
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
     async createGame(body: any) {
         try{
             const game = await this.prisma.games.create({
@@ -121,7 +141,7 @@ export class GamesService{
         try{
             const game = await this.prisma.games.update({
                 where: {
-                    idGame: body.idGame,
+                    idGame: 14,
                 },
                 data: {
                     endedAt: new Date(),
@@ -142,26 +162,31 @@ export class GamesService{
                     idIntra: body.loser
                 },
                 data: {
-                    rank: infoLoser.rank - 30,
-                    loss: infoLoser.loss + 1,
+                    rank: this.minus(infoLoser.rank ,30),
+                    loss: this.sum(infoLoser.loss , 1),
                     winRow: 0,
                 }
             })
-
             const winner = await this.prisma.user.update({
                 where: {
                     idIntra: body.winner
                 },
                 data: {
-                    rank: infoWinner.rank + 30,
-                    loss: infoWinner.win + 1,
-                    winRow: infoWinner.winRow + 1,
+                    rank: this.sum(infoWinner.rank, 30),
+                    loss: this.sum(infoWinner.win, 1),
+                    winRow: this.sum(infoWinner.winRow, 1),
                 }
             })
         }
         catch(e){
             throw new BadRequestException(e)
         }
+    }
+    sum(a: number, b: number) {
+        return a + b;
+    }
+    minus(a: number, b: number) {
+        return a - b;
     }
     
     async getLeaderboard(body: any){
