@@ -9,13 +9,10 @@ export declare class AuthController {
     constructor(prisma: PrismaService, authservice: AuthService, twoFaService: TwoFactorAuthenticationService);
     login(res: any): any;
     getAuthCode(query: string, res: any): void;
-    status(): {
-        msg: string;
-    };
     logout(res: Response): void;
-    complete2fa(id: any): Promise<{
+    findone(id: any): Promise<{
         QRcode: string;
     }>;
     verify2fa(body: any, res: Response): Promise<void>;
-    turnOn2fa(body: any): Promise<void>;
+    user(req: any): Promise<import(".prisma/client").User[]>;
 }

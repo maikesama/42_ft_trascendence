@@ -1,0 +1,11 @@
+.searchBar{
+    padding-top: 25px;
+    padding-left: 25px;
+    text-align: left;
+}
+
+.searchText{
+    background-color: white;
+    border-radius: 5%;
+    
+}

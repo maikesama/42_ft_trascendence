@@ -2,42 +2,44 @@ version: '3.8'
 
 services:
   
-  frontend:
-    image: "node:16-slim"
-    user: "node"
-    working_dir: /home/node/app
-    volumes:
-      - ./frontend:/home/node/app
-    expose:
-      - "3000"
-    command: sh -c "npm install; npm run build; npm install serve; npx serve -s build"
-    container_name: frontend
-    depends_on:
-      - "backend"
+  # frontend:
+  #   image: "node:16-slim"
+  #   user: "node"
+  #   working_dir: /home/node/app
+  #   volumes:
+  #     - ./frontend:/home/node/app
+  #   expose:
+  #     - "3000"
+  #   command: sh -c "npm install; npm run build; npm install serve; npx serve -s build"
+  #   container_name: frontend
+  #   depends_on:
+  #     - "backend"
 
-  backend:
-    image: "node:16-slim"
-    build: 
-      dockerfile: 'Dockerfile'
-      context: ./backend
-    restart: unless-stopped
-    expose:
-      - "3333"
-    container_name: backend
-    depends_on:
-      - "database"
+  # backend:
+  #   image: "node:16-slim"
+  #   build: 
+  #     dockerfile: 'Dockerfile'
+  #     context: ./backend
+  #   restart: unless-stopped
+  #   expose:
+  #     - "3333"
+  #   container_name: backend
+  #   depends_on:
+  #     - "database"
 
   database:
     image: postgres:13
-    # ports:
-    #   - 5434:5432
-    expose:
-      - "5432"
+    ports:
+      - 5434:5432
+    # expose:
+    #   - "5432"
     container_name: database
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 123
       POSTGRES_DB: nest
+    networks:
+      - trascendecne
   # redis:
   #   image: redis:latest
   #   ports:
@@ -49,19 +51,22 @@ services:
   #     - redis
   #   command: redis-cli -h redis
 
-  proxy:
-    build: ./proxy
-    container_name: proxy
-    ports:
-      - "80:80"
-    expose:
-      - "80"
-    depends_on:
-      - "backend"
-      - "frontend"
+  # proxy:
+  #   build: ./proxy
+  #   container_name: proxy
+  #   ports:
+  #     - "80:80"
+  #   expose:
+  #     - "80"
+  #   depends_on:
+  #     - "backend"
+  #     - "frontend"
 
-volumes:
-  frontend:
-  backend:
-  dev-db:
-  proxy:
+# volumes:
+  # frontend:
+  # backend:
+  # database:
+  # proxy:
+
+networks:
+  trascendecne:

@@ -1,0 +1,37 @@
+
+
+#txtNick{
+    color:black;
+    font-size: bold;
+}
+
+.UploadImageBtn :hover{
+    display: block !important;
+    background-color: white;
+    position: absolute;
+    color: black;
+    padding : 10px;
+    border-radius: 10px;
+  }
+
+.UploadImageTxt{
+    display: none;
+}
+
+.UploadImageTxt:hover{
+    display: block !important;
+    color: black;
+    font-size: 700;
+}
+
+.matchLossResult{
+    color: #f30000;
+}
+
+.matchWinResult{
+    color: #00e200;
+}
+
+.friendPreview{
+    height: 70px;
+}

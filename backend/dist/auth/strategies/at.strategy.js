@@ -16,7 +16,6 @@ const passport_jwt_1 = require("passport-jwt");
 var cookieExtractor = function (req) {
     var token = null;
     if (req && req.cookies) {
-        console.log(req.cookies);
         token = req.cookies['at'];
     }
     return token;

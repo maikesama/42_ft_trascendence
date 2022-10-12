@@ -1,16 +1,25 @@
-import {LeaderboardItem} from '../components/LeaderboardItem'
-import {LeaderboardHeader} from '../components/LeaderboardHeader'
-import {Header} from '../components/Header'
-import background from '../images/bg_room.jpg'
 
+import * as React from 'react';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import { Grid } from '@mui/material';
+import Item from '@mui/material/ListItem';
+
+import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
 
 export const Test = () => {
-	return (
-        <>
-        <Header />
-        <div style={{height:"100vh", backgroundImage: 'url(' + background + ')' ,backgroundSize: 'cover', imageResolution: '100%', position: 'relative'}}>
-.sdfsdfdfsd
-        </div>
-        </>
-	);
+
+        return (
+          <Grid container spacing={3}>
+          <Grid item xs="auto">
+            <Item>variable width content</Item>
+          </Grid>
+          <Grid item xs={6}>
+            <Item>xs=6</Item>
+          </Grid>
+          <Grid item xs>
+            <Item>xs</Item>
+          </Grid>
+        </Grid>
+  );
 }
