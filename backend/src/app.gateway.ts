@@ -1,9 +1,12 @@
-import { Logger } from '@nestjs/common';
+import { Logger, BadRequestException } from '@nestjs/common';
 import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
+import { PrismaService } from './prisma/prisma.service';
+import { ChatService } from './chat/chat.service';
 
-@WebSocketGateway()
+@WebSocketGateway({cors: true})
 export class AppGateway implements OnGatewayInit {
+  constructor(private prisma: PrismaService, private chat: ChatService){}
 
   @WebSocketServer() server: Server;
 
@@ -20,7 +23,7 @@ export class AppGateway implements OnGatewayInit {
           idIntra_idChat: {idIntra, idChat}
         }
       })
-      return partecipant && !partecipant.muted
+      return partecipant 
     }
     catch(e: any)
     {
@@ -43,18 +46,47 @@ export class AppGateway implements OnGatewayInit {
     }
   }
 
-  @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, message:{ sender: string, room: string, message: string} ): void {
+  async saveMessage(message: {sender: string, idChat: number, text: string})
+  {
     try{
-      if (!(await this.verifyPartecipant(client.idIntra, Number(message.room))))
-      return ;
+      const newMessage = await this.prisma.message.create({
+        data: {
+          idChat: message.idChat,
+          idIntra: message.sender,
+          message: message.text
+        }
+      })
+      return newMessage
+    }
+    catch(e: any)
+    {
+      return false
+    }
+  }
 
+  @SubscribeMessage('msgToServer')
+  async handleMessage(client: Socket, message:{ sender: string, idChat: number, text: string} ): Promise<void> {
+    try{
+
+      const chat = await this.prisma.chat.findUniqueOrThrow({
+        where: {
+          id: message.idChat
+        }
+      })
+
+      if (await this.chat.isMuted(chat.name, message.sender))
+        throw new BadRequestException("You are muted from this chat")
+      if (await this.chat.isBanned(chat.name, message.sender))
+        throw new BadRequestException("You are banned from this chat")
+      if (!await this.verifyPartecipant(message.sender, message.idChat)) 
+        throw new BadRequestException("You are not partecipant of this chat")
       //need to save messages and notify other partecipants
 
-      this.server.to(message.room).emit('msgToClient', message)
+      await this.saveMessage(message);
+      this.server.to(message.idChat.toString()).emit('msgToClient', message);
     }
     catch (e) {
-      console.log("error: ", e.message)
+      throw new BadRequestException(e)
     }
 
     

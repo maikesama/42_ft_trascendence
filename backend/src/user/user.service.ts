@@ -10,17 +10,23 @@ export class UserService {
 
 	async getProfile(Id: number)
 	{
-		const user = await this.prisma.user.findUniqueOrThrow({
-			where:{
-				id: Id
-			}
-		})
+		try {
+			const user = await this.prisma.user.findUniqueOrThrow({
+				where:{
+					id: Id
+				}
+			})
+	
+			delete user.otpSecret
+			delete user.otpUrl
+			delete user.twoFa
+	
+			return user
 
-		delete user.otpSecret
-		delete user.otpUrl
-		delete user.twoFa
-
-		return user
+		}
+		catch (e) {
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
 	async getUserProfile(idintra: string, requestedBy: number)
@@ -55,8 +61,9 @@ export class UserService {
 
 	async checkIfBlocked(idintra: string, requestIdIntra: string)
 	{
-		const blocked = await this.prisma.blocklist
-			.findMany({ where: { 
+		try {
+		const blocked = await this.prisma.blocklist.findMany({ 
+			where: { 
 				blockId: idintra,
 				blockedId: idintra } })
 
@@ -68,140 +75,215 @@ export class UserService {
 			bool = blocked.find(block => {
 				return block.blockedId === requestIdIntra})
 
-			if (bool)	return false;
-
+			if (bool)
+				return false;
 			return true
-
+		}
+		catch (e) {
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
+			
 	}
 
 	async getAllUsers()
 	{
-		let allUsers = await this.prisma.user.findMany({})
+		try{
+			let allUsers = await this.prisma.user.findMany({
+				select: {
+					id: true,
+					idIntra: true,
+					userName: true,
+					email: true,
+					tel: true,
+					img: true,
+					firstName: true,
+					lastName: true,
+					createdAt: true,
+					winRow: true,
+					win: true,
+					loss: true,
+					rank: true,
+					friend: true,
+					friendBy: true,
+					blocked: true,
+					blockedby: true,
+					invited: true,
+					invitedBy: true,
+					partecipant: true,
+					messages: true,
+				}
+			})
 
-		allUsers = allUsers.map((user) => this.deleteSecrets(user))
-
-		return allUsers
+			return allUsers
+		}
+		catch (e) {
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
-	deleteSecrets(user : any) {
-        delete user.twoFa;
-        delete user.otpSecret;
-        delete user.otpUrl;
-        return user;
-    }
+	// deleteSecrets(user : any) {
+
+	// 	let usr = user
+    //     delete usr.twoFa;
+    //     delete usr.otpSecret;
+    //     delete usr.otpUrl;
+    //     return user;
+    // }
 
 	async block(idintra: string, requestId: number)
 	{
-		const me = await this.prisma.user.findUniqueOrThrow({where:{id: requestId}})
-
-		await this.prisma.blocklist.create(
-			{
+		try{
+			const me = await this.prisma.user.findUniqueOrThrow(
+				{
+					where:{
+						id: requestId
+					}
+				})
+			if (me.idIntra === idintra)
+				throw new HttpException("You can't block yourself", HttpStatus.BAD_REQUEST)
+			await this.prisma.blocklist.create({
 				data:{
-					blockId: idintra,
-					blockedId: me.idIntra
+					blockId: me.idIntra,
+					blockedId: idintra
 				}
-			}
-		)
+			})
+		}
+		catch(e)
+		{
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
 	async unblock(idintra: string, requestId: number)
 	{
-		const me = await this.prisma.user.findUniqueOrThrow({where:{id: requestId}})
+		try{
+			const me = await this.prisma.user.findUniqueOrThrow({where:{id: requestId}})
 
-		await this.prisma.blocklist.deleteMany(
-			{
+			if (me.idIntra === idintra)
+				throw new HttpException("You can't unblock yourself", HttpStatus.BAD_REQUEST)
+			await this.prisma.blocklist.delete({
 				where:{
-					blockId: idintra,
-					blockedId: me.idIntra
+					blockId_blockedId: { blockId: me.idIntra, blockedId: idintra }
 				}
-			}
-		)
+			})
+		}
+		catch(e)
+		{
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
 	async turnOffTwoFa(Id: number)
 	{
-		await this.prisma.user.update({
-			where: {
-				id: Id
-			},
-			data:{
-				twoFa: false,
-				otpSecret: "",
-				otpUrl: ""
-			}
-		})
+		try{
+			await this.prisma.user.update({
+				where: {
+					id: Id
+				},
+				data:{
+					twoFa: false,
+					otpSecret: "",
+					otpUrl: ""
+				}
+			})
+		}
+		catch(e)
+		{
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
 	async changepp(body, id: number)
 	{
-		await this.prisma.user.update({
-			where:{
-				id: id
-			},
-			data:{
-				img: body.img
-			}
-		})
+		try {
+			await this.prisma.user.update({
+				where:{
+					id: id
+				},
+				data:{
+					img: body.img
+				}
+			})
+		}
+		catch(e)
+		{
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
 	}
 
-	async changeUserName(body, id: number)
+	async changeUserName(body: any, id: number)
 	{
-		await this.prisma.user.update({
-			where:{
-				id: id
-			},
-			data:{
-				userName: body.userName
-			}
-		})
+		try {
+			await this.prisma.user.update({
+				where:{
+					id: id
+				},
+				data:{
+					userName: body.userName
+				}
+			})
+		}
+		catch(e) {
+			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+		}
+		
 	}
 
 	async getChats(id: number)
 	{
-		const user = await this.prisma.user.findUnique({
-			where:{
-				id: id
-			}
-		})
-		const ret = await this.prisma.participant.findMany({
-			where:{
-				idIntra: user.idIntra
-			},
-			include: {
-				chat: true
-			}
-		})
-		
-		let rret = await Promise.all(ret.map(async (part: any)=> {
-			let partecipant = await this.prisma.participant.findMany({
+		try {
+			const user = await this.prisma.user.findUnique({
 				where:{
-					idChat: part.chat.id
-				},
-				include:{
-					user: true, 
+					id: id
 				}
 			})
-			part.partecipant = partecipant
-			return part;
-		}))
-		return rret
+
+			//find chats where user is in
+			const ret = await this.prisma.partecipant.findMany({
+				where:{
+					idIntra: user.idIntra
+				},
+				include: {
+					chat: true
+				}
+			})
+			
+
+			// return all partecipants of each user's chats
+			let chatsPartecipants = await Promise.all(ret.map(async (part: any)=> {
+				let partecipant = await this.prisma.partecipant.findMany({
+					where:{
+						idChat: part.chat.id
+					},
+					include:{
+						user: true, 
+					}
+				})
+				part.partecipant = partecipant
+				return part;
+			}))
+			return chatsPartecipants
+		}
+		catch(e) {
+			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+		}
 	}
 	
 
 	async showChat(idChat : number) {
+		try {
 		    const chat : any = await this.prisma.chat.findUnique({
 			    where: {
 				    id: idChat
 			    },
 			    include: {
-				    participant: true
+				    partecipant: true
 			    }
-
 		    })
-		    chat.participant = await Promise.all(chat.participant.map(async (participant: any) => {
+		    chat.partecipant = await Promise.all(chat.partecipant.map(async (partecipant: any) => {
 		    	let user = await this.prisma.user.findUnique({
 				    where : {
-				    	idIntra : participant.idIntra,
+				    	idIntra : partecipant.idIntra,
 				    },
 				    select : {
 				    	id : true,
@@ -214,4 +296,8 @@ export class UserService {
 		    }))
 		    return chat;
 		}
+		catch(e) {
+			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+		}
+	}
 }

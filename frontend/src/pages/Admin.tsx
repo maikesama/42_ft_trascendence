@@ -26,6 +26,18 @@ import '../font/font.css';
 let logged = false;
 
 export const Admin = () => {
+
+    
+    function richiedi() {
+        axios.get("http://10.11.9.2:3333/auth/user", {
+            responseType: "json",
+        })
+        .then(function (response) {
+            console.log(response.data);
+        });
+}
+    richiedi();
+
     const modality = {
         color : 'white',
         fontFamily: 'MyWebFont'

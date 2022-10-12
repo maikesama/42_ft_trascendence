@@ -7,9 +7,34 @@ export declare class UserService {
     getProfile(Id: number): Promise<import(".prisma/client").User>;
     getUserProfile(idintra: string, requestedBy: number): Promise<import(".prisma/client").User>;
     checkIfBlocked(idintra: string, requestIdIntra: string): Promise<boolean>;
-    getAllUsers(): Promise<import(".prisma/client").User[]>;
-    deleteSecrets(user: any): any;
+    getAllUsers(): Promise<{
+        friend: import(".prisma/client").Friend[];
+        idIntra: string;
+        friendBy: import(".prisma/client").Friend[];
+        blocked: import(".prisma/client").Blocklist[];
+        blockedby: import(".prisma/client").Blocklist[];
+        invited: import(".prisma/client").Invited[];
+        invitedBy: import(".prisma/client").Invited[];
+        partecipant: import(".prisma/client").Partecipant[];
+        messages: import(".prisma/client").Message[];
+        id: number;
+        userName: string;
+        email: string;
+        tel: string;
+        img: string;
+        firstName: string;
+        lastName: string;
+        createdAt: Date;
+        winRow: number;
+        win: number;
+        loss: number;
+        rank: number;
+    }[]>;
     block(idintra: string, requestId: number): Promise<void>;
     unblock(idintra: string, requestId: number): Promise<void>;
     turnOffTwoFa(Id: number): Promise<void>;
+    changepp(body: any, id: number): Promise<void>;
+    changeUserName(body: any, id: number): Promise<void>;
+    getChats(id: number): Promise<any[]>;
+    showChat(idChat: number): Promise<any>;
 }

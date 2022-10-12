@@ -23,21 +23,13 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get(':idIntra')
-    @Bind(Param('idIntra'))
-    async getUserProfile(idIntra, @Req() req)
-    {
-       const user = req.user
-       return await this.userservice.getUserProfile(idIntra, user['sub'])
-    }
-
-    @UseGuards(AtGuard)
     @Get('all')
     async getAllUsers()
     {
         return await this.userservice.getAllUsers()
     }
 
+    //deve rimuovere dagli amici se ci sei
     @UseGuards(AtGuard)
     @Post('block/:idIntra')
     @Bind(Param('idIntra'))
@@ -57,7 +49,7 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get('turn-on-2fa')
+    @Post('turn-on-2fa')
     async turnOn2fa(@Req() req)
     {
         const user = req.user
@@ -66,7 +58,7 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
-    @Get('turn-off-2fa')
+    @Post('turn-off-2fa')
     async turnOff2fa(@Req() req)
     {
         const user = req.user
@@ -85,15 +77,17 @@ export class UserController{
     @Post('update/username')
     async changeusername(@Body() body, @Req() req)
     {
+        
         const user = req.user
-        return await this.userservice.changepp(body, user['sub'])
+        return await this.userservice.changeUserName(body, user['sub'])
     }
 
     @UseGuards(AtGuard)
-    @Post('getUserChat')
-    async getUserChat(@Req() req)
+    @Get(':idIntra')
+    @Bind(Param('idIntra'))
+    async getUserProfile(idIntra, @Req() req)
     {
-        const user = req.user
-        return await this.userservice.getChats(user['sub'])
+       const user = req.user
+       return await this.userservice.getUserProfile(idIntra, user['sub'])
     }
 }

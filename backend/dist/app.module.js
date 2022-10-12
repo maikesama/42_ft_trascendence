@@ -15,6 +15,12 @@ const passport_1 = require("@nestjs/passport");
 const prisma_service_1 = require("./prisma/prisma.service");
 const microservices_1 = require("@nestjs/microservices");
 const app_gateway_1 = require("./app.gateway");
+const chat_module_1 = require("./chat/chat.module");
+const chat_service_1 = require("./chat/chat.service");
+const friend_service_1 = require("./friend/friend.service");
+const friend_module_1 = require("./friend/friend.module");
+const games_module_1 = require("./games/games.module");
+const games_service_1 = require("./games/games.service");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -23,6 +29,9 @@ AppModule = __decorate([
             auth_module_1.AuthModule,
             user_module_1.UserModule,
             prisma_module_1.PrismaModule,
+            chat_module_1.ChatModule,
+            friend_module_1.FriendModule,
+            games_module_1.GamesModule,
             passport_1.PassportModule.register({ session: true }),
             microservices_1.ClientsModule.register([
                 {
@@ -32,8 +41,7 @@ AppModule = __decorate([
             ])
         ],
         controllers: [],
-        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway,
-        ],
+        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway, chat_service_1.ChatService, friend_service_1.FriendService, games_service_1.GamesService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

@@ -10,6 +10,7 @@ var cookieExtractor = function(req) {
 		// if(!token) Will do it when we got 2fa
 		// 	token = req.cookies['2fa-at']
 	}
+
 	return token;
 }
 

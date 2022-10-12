@@ -16,7 +16,7 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=b8678efb904092c69d53edc729861043485a2654aa77b11de732ce0f0f65701a&redirect_uri=http%3A%2F%2F10.11.9.3%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
 
 		//@Public()
@@ -53,26 +53,5 @@ export class AuthController{
 		// 	await this.twoFaService.turnOnTwoFa(body.id);
 		// }
 	
-
-		@UseGuards(AtGuard)
-		@Get('user')
-		async user(@Req() req) {
-			const user = await this.prisma.user.findMany({
-				
-				// include: {
-				// 	chat           : true,
-				// 	participant    : true,
-				// 	friends		   : true,
-				// 	blocked        : true,
-				// 	blockedby      : true,
-				// }
-			});
-
-			// delete user.otpSecret;
-			// delete user.otpUrl;
-			// delete user.twoFa;
-
-			return user;
-		}
 }
 

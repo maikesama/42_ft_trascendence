@@ -101,7 +101,7 @@ let AuthService = class AuthService {
                 email
             }, {
                 secret: process.env.AtSecret,
-                expiresIn: 60
+                expiresIn: 60 * 60 * 24 * 7
             }),
             this.jwtService.signAsync({
                 sub: userId,
