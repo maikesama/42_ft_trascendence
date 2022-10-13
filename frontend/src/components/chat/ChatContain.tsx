@@ -32,47 +32,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
-
-
-const Search = styled('div')(({ theme }) => ({
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: "lightgrey",
-    '&:hover': {
-        backgroundColor: "grey",
-    },
-    marginRight: 0,
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-        marginLeft: 0,
-        width: 'auto',
-    },
-}));
-
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-    padding: theme.spacing(0, 2),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-    color: 'inherit',
-    '& .MuiInputBase-input': {
-        padding: theme.spacing(1, 1, 1, 0),
-        // vertical padding + font size from searchIcon
-        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-        transition: theme.transitions.create('width'),
-        width: '100%',
-        [theme.breakpoints.up('md')]: {
-            width: '20ch',
-        },
-    },
-}));
+import { CreateChannel } from './CreateChannel';
+import { GroupInfo } from './GroupInfo';
+import { AdminGroupActions } from './AdminGroupActions';
+import { JoinGroup } from './JoinGroup';
+import { UserActions } from './UserActions';
 
 const useStyles = makeStyles({
     table: {
@@ -99,9 +63,6 @@ export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     let status;
-    const [pass, setPass] = useState('Public');
-
-    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setPass(e.target.value)
  
     if (onstatus && onstatus === "online") {
         status = (
@@ -162,54 +123,6 @@ export const ChatContain = (props: any) => {
     const handleCloseUserActions = () => {
         setopenUserActions(false);
     };
-
-    function renderRow(props: ListChildComponentProps) {
-        const { index, style } = props;
-
-        return (
-            <ListItem style={style} key={index} >
-                <ListItemButton>
-                    <ListItemText primary={`Item ${index + 1}`} />
-                </ListItemButton>
-            </ListItem>
-        );
-    }
-
-    /*function renderGroupRow(props: ListChildComponentProps) {
-        const { index, style } = props;
-
-        return (
-            <ListItem style={style} key={index} >
-                <ListItemButton onClick={handleClickOpenAdminActions}>
-                    <ListItemText primary={`Item ${index + 1}`} />
-                </ListItemButton>
-            </ListItem>
-        );
-    }*/
-
-    function renderGroupRowAdmin(props: ListChildComponentProps) {
-        const { index, style } = props;
-
-        return (
-            <ListItem style={style} key={index} >
-                <ListItemButton onClick={handleClickOpenUserActions}>
-                    <ListItemText primary={`Item ${index + 1}`} />
-                </ListItemButton>
-            </ListItem>
-        );
-    }
-
-    function renderGroupRow(props: ListChildComponentProps) {
-        const { index, style } = props;
-
-        return (
-            <ListItem style={style} key={index} >
-                <ListItemButton href={`/user/${index + 1}`}>
-                    <ListItemText primary={`Item ${index + 1}`} />
-                </ListItemButton>
-            </ListItem>
-        );
-    }
 
     return (
         <div>
@@ -299,89 +212,15 @@ export const ChatContain = (props: any) => {
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
-            <Dialog open={openJoinGroup} onClose={handleCloseJoinGroup}>
-                <DialogTitle>Join Group</DialogTitle>
-                <DialogContent>
-                    <Search>
-                        <SearchIconWrapper>
-                            <SearchIcon />
-                        </SearchIconWrapper>
-                        <StyledInputBase
-                            placeholder="Search…"
-                            inputProps={{ 'aria-label': 'search' }}
-                        />
-                    </Search>
-                    <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
-                        <FixedSizeList
-
-                            height={230}
-                            width={500}
-                            itemSize={46}
-                            itemCount={10}
-                            overscanCount={5}
-                        >
-                            {renderRow}
-                        </FixedSizeList>
-                    </div>
-                </DialogContent>
-            </Dialog>
+            <JoinGroup status={openJoinGroup} closeStatus={handleCloseJoinGroup}/>
             {/*MODAL ADMIN IN GROUP ACTIONS */}
-            <Dialog open={openAdminActions} onClose={handleCloseAdminActions}>
-                <DialogTitle>Admin Actions</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Admin: taureli
-                    </DialogContentText>
-                    <DialogActions>
-                        <Button variant="outlined" onClick={handleCloseAdminActions}>Mute</Button>
-                        <Button variant="outlined" onClick={handleCloseAdminActions}>Kick</Button>
-                        <Button variant="outlined" onClick={handleCloseAdminActions}>Ban</Button>
-                        <Button variant="outlined" onClick={handleCloseAdminActions}>Promote</Button>
-                        <Button variant="outlined" onClick={handleCloseAdminActions}>Demote</Button>
-                        <Button variant="contained" onClick={handleCloseAdminActions}>Close</Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
-            {/*MODAL USER IN GROUP ACTIONS */}
-            <Dialog open={openUserActions} onClose={handleCloseUserActions}>
-                <DialogTitle>User Actions</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Do you want to block the user?
-                    </DialogContentText>
-                    <DialogActions>
-                        <Button variant="outlined" onClick={handleCloseUserActions}>Block</Button>
-                        <Button variant="contained" onClick={handleCloseUserActions}>Close</Button>
-                    </DialogActions>
-                </DialogContent>
-            </Dialog>
+            <AdminGroupActions status={openAdminActions} closeStatus={handleCloseAdminActions}/>   
             {/*MODAL GROUP INFO */}
-            <Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
-                <DialogTitle>Info</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Admin: taureli
-                    </DialogContentText>
-                    <Divider />
-                    <DialogContentText>
-                        Users
-                    </DialogContentText>
-                    <FixedSizeList
-
-                        height={230}
-                        width={500}
-                        itemSize={46}
-                        itemCount={10}
-                        overscanCount={5}
-                    >
-                        {renderGroupRowAdmin}
-                    </FixedSizeList>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseGroupInfo}>Lascia</Button>
-                    <Button onClick={handleCloseGroupInfo}>Close</Button>
-                </DialogActions>
-            </Dialog>
+            <GroupInfo status={openGroupInfo} closeStatus={handleCloseGroupInfo}/>
+            {/*MODAL CREATE CHANNEL */}
+            <CreateChannel status={openCreateGroup} closeStatus={handleCloseCreateGroup}/>
+            {/*MODAL USER ACTIONS */}
+            <UserActions status={openUserActions} closeStatus={handleCloseUserActions}/>
             {/*MODAL BLOCK USER */}
             {/*<Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
                 <DialogTitle>Blocca</DialogTitle>
@@ -395,72 +234,6 @@ export const ChatContain = (props: any) => {
                     <Button onClick={handleCloseGroupInfo}>Blocca</Button>
                 </DialogActions>
             </Dialog>*/}
-            {/*MODAL CREATE CHANNEL */}
-            <Dialog open={openCreateGroup} onClose={handleCloseCreateGroup}>
-                <DialogTitle>Create Group</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        To create a new group chat, please enter the name of the channel here:
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Group Name"
-                        fullWidth
-                        variant="standard"
-                        required
-                    />
-                    <DialogContentText paddingTop={"10px"}>
-                        Choose the channel's visibility:
-                    </DialogContentText>
-                    <NativeSelect
-                        defaultValue={"Public"}
-                        inputProps={{
-                            name: 'visibility',
-                            id: 'uncontrolled-native',
-                        }}
-                        onChange={handleChangePass}
-                    >
-                        <option value={"Public"}>Public</option>
-                        <option value={"Private"}>Private</option>
-                        <option value={"Protected"}>Protected</option>
-                    </NativeSelect>
-                    {pass === 'Protected' ? <>
-                    <DialogContentText paddingTop={'10px'}>
-                        Input password:
-                    </DialogContentText>
-                    <TextField
-                        autoFocus
-                        margin="dense"
-                        id="password"
-                        label="Password"
-                        fullWidth
-                        variant="standard"
-                        required
-                    />
-                    </>
-                    : <></>}
-                    <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
-                        Add members to your channel group:
-                    </DialogContentText>
-                    <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
-                    <FixedSizeList
-
-                        height={230}
-                        width={500}
-                        itemSize={46}
-                        itemCount={10}
-                        overscanCount={5}
-                    >
-                        {renderRow}
-                    </FixedSizeList>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseCreateGroup}>Cancel</Button>
-                    <Button onClick={handleCloseCreateGroup}>Create</Button>
-                </DialogActions>
-            </Dialog>
         </div >
     );
 }
