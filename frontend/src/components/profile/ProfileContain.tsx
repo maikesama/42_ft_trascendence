@@ -18,8 +18,9 @@ import Victory from '../images/crown.png'
 import Ladder from '../images/crowns.png'
 
 
-import "./css/ProfileEdit.css"
-import "./css/Navbar.css"
+import "../css/ProfileEdit.css"
+import "../css/Navbar.css"
+
 
 export const ProfileContain = (props: any) => {
 

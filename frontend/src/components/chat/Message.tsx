@@ -1,6 +1,6 @@
 import Nav from 'react-bootstrap/Nav';
 import Text from 'react';
-import './css/Navbar.css';
+import '../css/Navbar.css';
 //import icon from 'bootstrap-icons';
 import axios from 'axios'
 import "./css/Message.css"

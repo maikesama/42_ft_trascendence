@@ -2,7 +2,7 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Header} from '../components/Header';
+import {Header} from '../components/generic/Header';
 import { Grid } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
@@ -19,8 +19,8 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import { AdminItem } from "../components/AdminItem";
-import { AdminHeader } from "../components/AdminHeader";
+import { AdminItem } from "../components/admin/AdminItem";
+import { AdminHeader } from "../components/admin/AdminHeader";
 import '../font/font.css';
 
 let logged = false;

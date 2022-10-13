@@ -2,7 +2,7 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Header} from '../components/Header';
+import {Header} from '../components/generic/Header';
 import headerImage from '../images/2.jpg';
 import '../font/font.css';
 import './css/Homepage.css';

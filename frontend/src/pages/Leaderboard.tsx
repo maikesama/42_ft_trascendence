@@ -2,9 +2,9 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-import {Header} from '../components/Header';
-import { LeaderboardHeader } from "../components/LeaderboardHeader";
-import { LeaderboardItem } from "../components/LeaderboardItem";
+import {Header} from '../components/generic/Header';
+import { LeaderboardHeader } from "../components/leaderboard/LeaderboardHeader";
+import { LeaderboardItem } from "../components/leaderboard/LeaderboardItem";
 
 
 import '../font/font.css';

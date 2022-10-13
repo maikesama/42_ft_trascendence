@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -99,8 +99,10 @@ export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     let status;
+    const [pass, setPass] = useState('Public');
 
-
+    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setPass(e.target.value)
+ 
     if (onstatus && onstatus === "online") {
         status = (
             <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -418,11 +420,13 @@ export const ChatContain = (props: any) => {
                             name: 'visibility',
                             id: 'uncontrolled-native',
                         }}
+                        onChange={handleChangePass}
                     >
                         <option value={"Public"}>Public</option>
                         <option value={"Private"}>Private</option>
                         <option value={"Protected"}>Protected</option>
                     </NativeSelect>
+                    {pass === 'Protected' ? <>
                     <DialogContentText paddingTop={'10px'}>
                         Input password:
                     </DialogContentText>
@@ -435,6 +439,8 @@ export const ChatContain = (props: any) => {
                         variant="standard"
                         required
                     />
+                    </>
+                    : <></>}
                     <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                         Add members to your channel group:
                     </DialogContentText>
