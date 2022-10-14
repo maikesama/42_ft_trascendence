@@ -6,8 +6,8 @@ export declare class GamesController {
     updateGame(body: any, req: any): Promise<void>;
     getLeaderboard(body: any, req: any): Promise<import(".prisma/client").User[]>;
     getWinner(body: any, req: any): Promise<{
-        rank: number;
-        loss: number;
         winRow: number;
+        loss: number;
+        rank: number;
     }>;
 }
