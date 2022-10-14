@@ -154,6 +154,10 @@ export const ProfileEdit = (props: any) => {
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
   }
 
+  const fontColor = {
+    style: { color: 'rgb(50, 50, 50)' }
+  }
+
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -161,7 +165,7 @@ export const ProfileEdit = (props: any) => {
         <CardMedia
           component="img"
           height="380"
-          image="https://cdn.intra.42.fr/users/liafigli.jpeg"
+          image={props.img}
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
@@ -174,7 +178,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+          <TextField inputProps={fontColor} id="txtNick" placeholder={props.username} variant="standard" disabled/>
           <Button sx={{ color: 'black' }} onClick={handleNick}>
             <EditIcon />
           </Button>
@@ -185,7 +189,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Username:
           </Typography>
-          <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+          <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
           <Button sx={{ color: 'black', visibility: 'hidden' }} >
             <EditIcon />
           </Button>

@@ -32,10 +32,10 @@ export class GamesController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('getPlayerProfile')
-    async getWinner(@Body() body, @Req() req){
+    @Get('getPlayerRank')
+    async getPlayerProfile(@Body() body, @Req() req){
         const user = req.user
-        return await this.GamesService.getPlayerProfile(body)
+        return await this.GamesService.getPlayerProfile(body, user['sub'])
     }
 
 }

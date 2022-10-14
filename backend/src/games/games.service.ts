@@ -100,19 +100,23 @@ export class GamesService{
         }
     }
 
-    async getPlayerProfile(body: any){
+    async getPlayerProfile(body: any, userId: number){
         try{
             const player = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    idIntra: body.idIntra
+                    id: userId
                 },
-                select: {
-                    rank: true,
-                    loss: true,
-                    winRow: true,
+            
+            })
+            const leaderboard = await this.prisma.user.findMany({
+                orderBy: {
+                    rank: 'desc'
                 }
             })
-            return player;
+            let position = leaderboard.findIndex((user) => user.id === player.id)
+            position += 1
+
+            return position
         }
         catch(e){
             throw new BadRequestException(e)
