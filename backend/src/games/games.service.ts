@@ -182,6 +182,74 @@ export class GamesService{
                     winRow: this.sum(winner.winRow, 1),
                 }
             })
+
+            if (winner.win === 1 && winner.achFirstWin === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achFirstWin: true,
+                    }
+                })
+
+                //emit event to user
+            }
+            if (winner.winRow === 5 && winner.achFiveinRow === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achFiveinRow: true,
+                    }
+                })
+
+                //emit event to user
+            }
+            if (winner.winRow === 10 && winner.achTeninRow === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achTeninRow: true,
+                    }
+                })
+
+                //emit event to user
+            }
+            if (winner.winRow === 20 && winner.achTwentyinRow === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achTwentyinRow: true,
+                    }
+                })
+
+                //emit event to user
+            }
+            if (((game.scoreP2 === 0) || (game.scoreP1 === 0)) && winner.achAce === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achAce: true,
+                    }
+                })
+                //emit event to user
+            }
+
+
+
         }
         catch(e){
             throw new BadRequestException(e)

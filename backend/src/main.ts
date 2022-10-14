@@ -9,6 +9,8 @@ async function bootstrap() {
     origin: [,
       `http://${process.env.HOST}:3333`,
       `http://${process.env.HOST}:3000`,
+      'http://10.11.9.3:3000',
+      'http://10.11.9.3',
       `http://${process.env.HOST}`],
       credentials: true
   })
