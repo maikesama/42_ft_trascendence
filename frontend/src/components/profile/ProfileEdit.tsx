@@ -38,50 +38,15 @@ import { Input } from '@mui/material';
 import { match } from 'assert';
 import { render } from 'react-dom';
 import { blue } from '@material-ui/core/colors';
+import { SearchBar } from './SearchBar';
+import { FriendsList } from './FriendsList';
+import { MatchesList } from './MatchesList';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
 }
 
-const Search = styled('div')(({ theme }) => ({
-  position: 'relative',
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: "lightgrey",
-  '&:hover': {
-    backgroundColor: "grey",
-  },
-  marginRight: 0,
-  marginLeft: 0,
-  width: '100%',
-  [theme.breakpoints.up('sm')]: {
-    marginLeft: 0,
-    width: 'auto',
-  },
-}));
 
-const SearchIconWrapper = styled('div')(({ theme }) => ({
-  padding: theme.spacing(0, 2),
-  height: '100%',
-  position: 'absolute',
-  pointerEvents: 'none',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-}));
-
-const StyledInputBase = styled(InputBase)(({ theme }) => ({
-  color: 'inherit',
-  '& .MuiInputBase-input': {
-    padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: '20ch',
-    },
-  },
-}));
 
 export const SocialEdit = (props: any) => {
 
@@ -139,52 +104,6 @@ export const SocialEdit = (props: any) => {
     );
   }
 
-  function renderMatchesRow(props: any) {
-    const { index, style, matches } = props;
-
-    return (
-      <ListItem button className="matchResult" style={style} key={index}>
-        <Avatar sx={{ width: 56, height: 56 }} />
-        <ListItemText className="matchLossResult" primary={`You`} />
-        <ListItemText className="matchLossResult" primary={`3 - 5`} />
-        <ListItemText className="matchLossResult" primary={`Adversary`} />
-        <Avatar sx={{ width: 56, height: 56 }} />
-      </ListItem>
-    );
-  }
-
-  function renderSocialRow(props: any) {
-    const { index, style, matches } = props;
-
-    return (
-      <ListItem style={style} key={index} >
-        <Avatar />
-        <ListItemText primary={`Friend`} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle" />
-        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
-      </ListItem>
-    );
-  }
-
-  function renderSearchRow(props: any) {
-    const { index, style, matches } = props;
-
-    return (
-      <ListItem style={style} key={index} >
-        <Avatar />
-        <ListItemText primary={`Friend`} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle" />
-        <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="unfriend" size="small" style={{ color: 'green' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
-      </ListItem>
-    );
-  }
-
   return (
     <div>
       <Card sx={{ minWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -218,77 +137,11 @@ export const SocialEdit = (props: any) => {
         </CardActions>
       </Card>
       {/*Search Bar Modal*/}
-      <Dialog open={openSearchBar} onClose={handleCloseSearchBar}>
-        <DialogTitle textAlign="center">Search Friends</DialogTitle>
-        <DialogContent>
-          <Search>
-            <SearchIconWrapper>
-              <SearchIcon />
-            </SearchIconWrapper>
-            <StyledInputBase
-              placeholder="Search…"
-              inputProps={{ 'aria-label': 'search' }}
-            />
-          </Search>
-          <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
-            <FixedSizeList
-              height={400}
-              width={400}
-              itemSize={80}
-              itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
-              overscanCount={5}
-            >
-              {renderSearchRow}
-            </FixedSizeList>
-          </div>
-          <DialogActions style={{ justifyContent: 'center' }}>
-            <Button variant="outlined">Refresh</Button>
-            <Button variant="contained" onClick={handleCloseSearchBar}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar}/>
       {/*Friends List Modal*/}
-      <Dialog open={openFriendsList} onClose={handleCloseFriendsList}>
-        <DialogTitle textAlign="center">Friends List</DialogTitle>
-        <DialogContent>
-          <div style={{ textAlignLast: 'center' }}>
-            <FixedSizeList
-              height={400}
-              width={400}
-              itemSize={80}
-              itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
-              overscanCount={5}
-            >
-              {renderSocialRow}
-            </FixedSizeList>
-          </div>
-          <DialogActions style={{ justifyContent: 'center' }}>
-            <Button variant="outlined">Refresh</Button>
-            <Button variant="contained" onClick={handleCloseFriendsList}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={true}/>
       {/*matches List Modal*/}
-      <Dialog open={openMatchesList} onClose={handleCloseMatchesList}>
-        <DialogTitle textAlign="center">Matches List</DialogTitle>
-        <DialogContent>
-          <div style={{ textAlignLast: 'center' }}>
-            <FixedSizeList
-              height={400}
-              width={400}
-              itemSize={80}
-              itemCount={5} /*Qui deve essere restituito il numero di match completati*/
-              overscanCount={5}
-            >
-              {renderMatchesRow}
-            </FixedSizeList>
-          </div>
-          <DialogActions style={{ justifyContent: 'center' }}>
-            <Button variant="outlined">Refresh</Button>
-            <Button variant="contained" onClick={handleCloseMatchesList}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList}/>
     </div>
   );
 }
