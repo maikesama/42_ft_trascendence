@@ -32,6 +32,8 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
+import {Route, Routes} from 'react-router-dom';
+import { withStyles } from "@material-ui/core/styles";
 
 import "../css/ProfileEdit.css"
 import { Input } from '@mui/material';
@@ -41,6 +43,8 @@ import { blue } from '@material-ui/core/colors';
 import { SearchBar } from './SearchBar';
 import { FriendsList } from './FriendsList';
 import { MatchesList } from './MatchesList';
+import { Link } from 'react-router-dom';
+
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -98,6 +102,9 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index}>
         <Avatar />
+        <Routes>
+          <Route></Route>
+        </Routes>
         <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
       </ListItem>
@@ -139,12 +146,20 @@ export const SocialEdit = (props: any) => {
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar}/>
       {/*Friends List Modal*/}
-      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={true}/>
+      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={false}/>
       {/*matches List Modal*/}
       <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList}/>
     </div>
   );
 }
+const DarkerDisabledTextField = withStyles({
+  root: {
+    marginRight: 8,
+    "& .MuiInputBase-root.Mui-disabled": {
+      color: "rgba(0, 0, 0, 0.38)" // (default alpha is 0.38)
+    }
+  }
+})(TextField);
 
 export const ProfileEdit = (props: any) => {
 
@@ -154,6 +169,7 @@ export const ProfileEdit = (props: any) => {
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
   }
 
+const [disabled, setDisabled] = React.useState(true);
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -174,9 +190,15 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+          <DarkerDisabledTextField
+        disabled={disabled}
+        id="outlined-basic"
+        value={`Disabled = ${disabled}`}
+        variant="standard"
+      />
+          {/*<TextField inputProps={fontColor} id="txtNick" placeholder="liafigli" variant="standard" disabled />*/}
           <Button sx={{ color: 'black' }} onClick={handleNick}>
-            <EditIcon />
+            <EditIcon /> 
           </Button>
         </div>
 
