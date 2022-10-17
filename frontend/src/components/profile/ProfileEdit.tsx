@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useRef, useState, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -148,6 +148,53 @@ export const SocialEdit = (props: any) => {
 
 export const ProfileEdit = (props: any) => {
 
+  const nick = useRef<any>('');
+  const img = useRef<any>('');
+  //const [user, setUser] = useState({} as any);
+
+  const clickSave = async () => {
+    //return console.log(nick.current.value)
+    
+    let url = "http://10.11.10.4:3333/user/update/username";
+
+    
+    try {
+            const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({userName: nick.current.value})
+    });
+            // const json = await response.json();
+            // console.log(json);
+            // setUser(json);
+    } catch (error) {
+            console.log("error", error);
+    }
+    console.log(img.current.value)
+    url = "http://10.11.10.4:3333/user/update/pp";
+
+    
+    try {
+            const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({img: img.current.value})
+    });
+            // const json = await response.json();
+            // console.log(json);
+            // setUser(json);
+    } catch (error) {
+            console.log("error", error);
+    }
+
+  }
+
   function handleNick() {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
@@ -169,7 +216,7 @@ export const ProfileEdit = (props: any) => {
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
-        <input type="file" hidden />
+        <TextField type="file" hidden inputRef={img}/>
       </Button>
 
       <CardContent>
@@ -178,7 +225,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField inputProps={fontColor} id="txtNick" placeholder={props.username} variant="standard" disabled/>
+          <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled/>
           <Button sx={{ color: 'black' }} onClick={handleNick}>
             <EditIcon />
           </Button>
@@ -208,7 +255,7 @@ export const ProfileEdit = (props: any) => {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button>Save</Button>
+        <Button onClick={clickSave}>Save</Button>
       </CardActions>
     </Card>
   );
