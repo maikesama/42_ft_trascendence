@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useRef } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -36,9 +36,8 @@ import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 
-export const BlockedList = (props: any) => 
-{
-    return(
+export const BlockedList = (props: any) => {
+  return (
     <List
       sx={{
         width: '100%',
@@ -51,61 +50,72 @@ export const BlockedList = (props: any) =>
       }}
       subheader={<li />}
     >
-        <li key={`blocked section`}>
-          <ul>
-            <ListSubheader style={{fontSize: 20}}>Blocked users</ListSubheader>
-            {[0, 1, 2].map((item) => (
-              <ListItem key={`blocked`}>
-                <Avatar />
-                <ListItemText primary={`Blocked ${item}`} />
-                <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
-              </ListItem>
-            ))}
-          </ul>
-        </li>
+      <li key={`blocked section`}>
+        <ul>
+          <ListSubheader style={{ fontSize: 20 }}>Blocked users</ListSubheader>
+          {[0, 1, 2].map((item) => (
+            <ListItem key={`blocked`}>
+              <Avatar />
+              <ListItemText primary={`Blocked ${item}`} />
+              <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+            </ListItem>
+          ))}
+        </ul>
+      </li>
     </List>
-    );
+  );
 }
 
 export const FriendsList = (props: any) => {
-    
-    function renderSocialRow(props: any) {
-        const { index, style, matches } = props;
-    
-        return (
-          <ListItem style={style} key={index} >
-            <Avatar />
-            <ListItemText primary={`Friend`} />
-            <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-            <Divider variant="middle" />
-            <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
-            <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-            <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
-          </ListItem>
-        );
-    }
-    
+
+  /*const inputRef = useRef(null);
+
+  const [updated, setUpdated] = useState(null);
+
+  const getUser = () => {
+    //  "inputRef.current.value" is input value
+    setUpdated(inputRef.current.value);
+    console.log(updated);
+  };*/
+  
+  function renderSocialRow(props: any) {
+    const { index, style, matches } = props;
+
     return (
-        <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle textAlign="center">Friends List</DialogTitle>
-            <DialogContent>
-                <div style={{ textAlignLast: 'center' }}>
-                    <FixedSizeList
-                        height={400}
-                        width={400}
-                        itemSize={80}
-                        itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
-                        overscanCount={5}
-                    >
-                        {renderSocialRow}
-                    </FixedSizeList>
-                    {props.blocked ? <><BlockedList/></> : null}
-                </div>
-                <DialogActions style={{ justifyContent: 'center' }}>
-                    <Button variant="outlined">Refresh</Button>
-                    <Button variant="contained" onClick={props.closeStatus}>Close</Button>
-                </DialogActions>
-            </DialogContent>
-        </Dialog>
+      <ListItem style={style} key={index} >
+        <Avatar />
+        <ListItemText  primary={`Friend`}  />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Divider variant="middle" />
+        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+      </ListItem>
     );
+  }
+
+  
+  return (
+    <Dialog open={props.status} onClose={props.closeStatus}>
+      <DialogTitle textAlign="center">Friends List</DialogTitle>
+      <DialogContent>
+        <div style={{ textAlignLast: 'center' }}>
+          <FixedSizeList
+            height={400}
+            width={400}
+            itemSize={80}
+            itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
+            overscanCount={5}
+          >
+            {renderSocialRow}
+          </FixedSizeList>
+          {props.blocked ? <><BlockedList /></> : null}
+        </div>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <Button variant="outlined">Refresh</Button>
+          <Button variant="contained" onClick={props.closeStatus}>Close</Button>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
+  );
 }
