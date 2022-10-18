@@ -57,11 +57,10 @@ export const ProfileContain = (props: any) => {
         const [rank, setRank] = useState({} as any);
 
         useEffect(() => {
-        const url = "http://10.11.10.4:3333/games/getPlayerRank";
 
         const fetchRank = async () => {
         try {
-                const response = await fetch(url, {
+                const response = await fetch('http://10.11.10.4:3333/games/getPlayerRank', {
                 credentials: 'include',
                 headers:{
                 'Content-Type': 'application/json',

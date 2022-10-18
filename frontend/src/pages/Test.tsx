@@ -1,71 +1,68 @@
 import { upload } from "@testing-library/user-event/dist/upload";
-import React from "react";
+import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
 export function Test() {
   const [images, setImages] = React.useState([]);
   const maxNumber = 69;
 
+    const uploadImage = async (imageList: ImageListType) => {
+      console.log(JSON.stringify(imageList[0].dataURL))
+      try {
+        const response = await fetch('http://10.11.10.4:3333/user/update/pp', {
+          method: "POST",
+          credentials: 'include',
+          headers:{
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({dataURL: imageList[0].dataURL}),
+      });
+        const json = await response.json();
+        //console.log(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    
+
+
   const onChange = (
     imageList: ImageListType,
     addUpdateIndex: number[] | undefined
   ) => {
     // data for submit
-    console.log(imageList, addUpdateIndex);
     setImages(imageList as never[]);
-    uploadCristo(imageList);
+    uploadImage(imageList)
   };
 
-  const uploadCristo = async (imageList: ImageListType) => {
-    const formData:any = new FormData();
-    try {
-    formData.append("image", imageList[0].file);
-    const response = await fetch("http://10.11.10.4:3333/user/update/pp", {
-      method: "POST",
-      body: formData,
-    });
-    } catch (error) {
-      console.log("error", error);
-    }
-  };  
+  // const uploadCristo = async () => {
+  //   let x = JSON.stringify(imageList[0].dataURL);
+  //   console.log(x)
+  //   try {
+  //   const response = await fetch("", {
+  //     method: "POST",
+  //     credentials: "include",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+      
+  //   });
+  //   } catch (error) {
+  //     console.log("error", error);
+  //   }
+  // };  
     
-    
+  
 
 
   return (
-    <div className="App">
-      <ImageUploading
-        
-        value={images}
-        onChange={onChange}
-        maxNumber={maxNumber}
-      >
-        {({
-          imageList,
+      <ImageUploading value={images} onChange={onChange}>
+      {({
           onImageUpload,
-          onImageRemoveAll,
-          isDragging,
-          dragProps
         }) => (
           // write your building UI
-          <div className="upload__image-wrapper">
-            <button
-              style={isDragging ? { color: "red" } : undefined}
-              onClick={onImageUpload}
-              {...dragProps}
-            >
-              Click or Drop here
-            </button>
-            &nbsp;
-            <button onClick={onImageRemoveAll}>Remove all images</button>
-            {imageList.map((image, index) => (
-              <div key={index} className="image-item">
-                <img src={image.dataURL} alt="" width="100" />
-              </div>
-            ))}
-          </div>
+            <button onClick={onImageUpload}>Click or Drop here</button>
         )}
       </ImageUploading>
-    </div>
   );
 }

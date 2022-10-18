@@ -68,11 +68,10 @@ export class UserController{
 
     @UseGuards(AtGuard)
     @Post('update/pp')
-    @UseInterceptors(FileInterceptor('img'))
-    async changePP( @Req() req, @UploadedFile() img: Express.Multer.File)
+    async changePP(@Body() body, @Req() req)
     {
         const user = req.user
-        return await this.userservice.changepp(img, user['sub'])
+        return await this.userservice.changepp(body, user['sub'])
     }
 
     @UseGuards(AtGuard)

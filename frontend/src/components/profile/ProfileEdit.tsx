@@ -44,6 +44,8 @@ import { SearchBar } from './SearchBar';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import { Link } from 'react-router-dom';
+import { upload } from "@testing-library/user-event/dist/upload";
+import ImageUploading, { ImageListType } from "react-images-uploading";
 
 
 const fontColor = {
@@ -158,6 +160,8 @@ export const ProfileEdit = (props: any) => {
 
   const nick = useRef<any>('');
   const img = useRef<any>();
+  const [images, setImages] = React.useState([]);
+
   //const [user, setUser] = useState({} as any);
 
   const clickSave = async () => {
@@ -181,27 +185,35 @@ export const ProfileEdit = (props: any) => {
     } catch (error) {
             console.log("error", error);
     }
-    console.log(img.current.value)
-    url = "http://10.11.10.4:3333/user/update/pp";
-
-    
-    try {
-            const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers:{
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({pp: img.current.value})
-    });
-            // const json = await response.json();
-            // console.log(json);
-            // setUser(json);
-    } catch (error) {
-            console.log("error", error);
-    }
-
+    window.location.reload()
   }
+
+  const onChange = (
+    imageList: ImageListType,
+  ) => {
+    // data for submit
+    setImages(imageList as never[]);
+    uploadImage(imageList)
+  };
+
+  const uploadImage = async (imageList: ImageListType) => {
+    console.log(JSON.stringify(imageList[0].dataURL))
+    try {
+      const response = await fetch('http://10.11.10.4:3333/user/update/pp', {
+        method: "POST",
+        credentials: 'include',
+        headers:{
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({dataURL: imageList[0].dataURL}),
+    });
+      const json = await response.json();
+      //console.log(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+    window.location.reload()
+  };
 
   function handleNick() {
     const inputbox = document.getElementById('txtNick');
@@ -216,7 +228,6 @@ export const ProfileEdit = (props: any) => {
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
-      <Button className="UploadImageBtn" component="label" sx={{ width: '100%', height: '380px', padding: 0 }}>
         <CardMedia
           component="img"
           height="380"
@@ -224,8 +235,14 @@ export const ProfileEdit = (props: any) => {
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
-        <TextField type="file" hidden inputRef={img}/>
-      </Button>
+        <ImageUploading value={images} onChange={onChange}>
+        {({
+            onImageUpload,
+          }) => (
+            // write your building UI
+              <button onClick={onImageUpload}>Upload Image</button>
+          )}
+        </ImageUploading>
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -233,7 +250,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled/>
+          <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled/>
           <Button sx={{ color: 'black' }} onClick={handleNick}>
             <EditIcon />
           </Button>

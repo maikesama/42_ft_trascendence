@@ -3,6 +3,7 @@ import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } fr
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
+import * as cache from "cache-manager";
 
 @WebSocketGateway({cors: true})
 export class AppGateway implements OnGatewayInit {
@@ -91,4 +92,13 @@ export class AppGateway implements OnGatewayInit {
 
     
   }
+
+  // @SubscribeMessage('test')
+  // async handleTest(client: Socket, idIntra: string): Promise<void> {
+  // {
+  //   client.join('waitingRoom');
+  //   cache.userSessionCache
+  //   this.userSessionCache.addOrUpdate(userName);
+
+  // }
 }
