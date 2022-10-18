@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const common_1 = require("@nestjs/common");
+const platform_express_1 = require("@nestjs/platform-express");
 const guards_1 = require("../auth/guards");
 const jwt_1 = require("@nestjs/jwt");
 const prisma_service_1 = require("../prisma/prisma.service");
@@ -50,9 +51,9 @@ let UserController = class UserController {
         const user = req.user;
         return await this.userservice.turnOffTwoFa(user['sub']);
     }
-    async changePP(body, req) {
+    async changePP(req, img) {
         const user = req.user;
-        return await this.userservice.changepp(body, user['sub']);
+        return await this.userservice.changepp(img, user['sub']);
     }
     async changeusername(body, req) {
         const user = req.user;
@@ -115,8 +116,9 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.Post)('update/pp'),
-    __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Req)()),
+    (0, common_1.UseInterceptors)((0, platform_express_1.FileInterceptor)('img')),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.UploadedFile)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)

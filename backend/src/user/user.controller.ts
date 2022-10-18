@@ -1,4 +1,5 @@
-import {Controller, Get, UseGuards, Req, Bind, Param, Post, Body} from "@nestjs/common";
+import {Controller, Get, UseGuards, Req, Bind, Param, Post, Body, UseInterceptors, UploadedFile} from "@nestjs/common";
+import { FileInterceptor} from "@nestjs/platform-express"
 import { AtGuard } from "src/auth/guards";
 import {JwtService} from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
@@ -67,10 +68,11 @@ export class UserController{
 
     @UseGuards(AtGuard)
     @Post('update/pp')
-    async changePP(@Body() body, @Req() req)
+    @UseInterceptors(FileInterceptor('img'))
+    async changePP( @Req() req, @UploadedFile() img: Express.Multer.File)
     {
         const user = req.user
-        return await this.userservice.changepp(body, user['sub'])
+        return await this.userservice.changepp(img, user['sub'])
     }
 
     @UseGuards(AtGuard)

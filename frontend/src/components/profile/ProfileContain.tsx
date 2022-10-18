@@ -201,9 +201,8 @@ export const ProfileContain = (props: any) => {
       {/* Side edit profile */}
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
-        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName}/>
         <SocialEdit title="FRIENDS" tot="12" matches={true} />
-        <ProfileEdit />
+        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName}/>
         <SocialEdit title="MATCHES" tot="122" matches={false} />
       </Grid>
     </Grid>
