@@ -161,11 +161,6 @@ export const ProfileEdit = (props: any) => {
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
   }
 
-  function printNick(){
-    const inputbox = document.getElementById('txtNick');
-    inputbox?.setAttribute('disabled', 'true');
-  }
-
   const [disabled, setDisabled] = React.useState(true);
   return (
 
@@ -217,7 +212,7 @@ export const ProfileEdit = (props: any) => {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={printNick}>Save</Button>
+        <Button>Save</Button>
       </CardActions>
     </Card>
   );

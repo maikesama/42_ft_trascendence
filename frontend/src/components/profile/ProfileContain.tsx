@@ -48,13 +48,6 @@ export const ProfileContain = (props: any) => {
     display: 'flex', alignItems: 'center', justifyContents: 'center'
   }
 
-  const [expanded, setExpanded] = React.useState<string | false>(false);
-
-  const handleChange =
-    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
-      setExpanded(isExpanded ? panel : false);
-    };
-
   return (
     <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1100px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
