@@ -37,69 +37,24 @@ import ListSubheader from '@mui/material/ListSubheader';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 
 export const BlockedList = (props: any) => {
-  return (
-    <List
-      sx={{
-        width: '100%',
-        maxWidth: 400,
-        bgcolor: 'background.paper',
-        position: 'relative',
-        overflow: 'auto',
-        maxHeight: 300,
-        '& ul': { padding: 0 },
-      }}
-      subheader={<li />}
-    >
-      <li key={`blocked section`}>
-        <ul>
-          <ListSubheader style={{ fontSize: 20 }}>Blocked users</ListSubheader>
-          {[0, 1, 2].map((item) => (
-            <ListItem key={`blocked`}>
-              <Avatar />
-              <ListItemText primary={`Blocked ${item}`} />
-              <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
-            </ListItem>
-          ))}
-        </ul>
-      </li>
-    </List>
-  );
-}
-
-export const FriendsList = (props: any) => {
-
-  /*const inputRef = useRef(null);
-
-  const [updated, setUpdated] = useState(null);
-
-  const getUser = () => {
-    //  "inputRef.current.value" is input value
-    setUpdated(inputRef.current.value);
-    console.log(updated);
-  };*/
-  
-  function renderSocialRow(props: any) {
+  function renderBlockedRow(props: any) {
     const { index, style, matches } = props;
 
     return (
       <ListItem style={style} key={index} >
         <Avatar />
-        <ListItemText  primary={`Friend`}  />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <ListItemText primary={`Blocked user`} />
         <Divider variant="middle" />
-        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
 
-  
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
-      <DialogTitle textAlign="center">Friends List</DialogTitle>
+      <DialogTitle textAlign="center">Blocked Users</DialogTitle>
       <DialogContent>
-        <div style={{ textAlignLast: 'center' }}>
+        <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
           <FixedSizeList
             height={400}
             width={400}
@@ -107,9 +62,8 @@ export const FriendsList = (props: any) => {
             itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
             overscanCount={5}
           >
-            {renderSocialRow}
+            {renderBlockedRow}
           </FixedSizeList>
-          {props.blocked ? <><BlockedList /></> : null}
         </div>
         <DialogActions style={{ justifyContent: 'center' }}>
           <Button variant="outlined">Refresh</Button>

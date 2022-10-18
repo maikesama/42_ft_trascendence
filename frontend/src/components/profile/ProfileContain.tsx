@@ -168,7 +168,6 @@ export const ProfileContain = (props: any) => {
           fontSize="25px"
           noWrap
           sx={{
-            mt: 1,
             display: { xs: 'none', md: 'block' },
             flexGrow: 1,
             fontFamily: 'MyWebFont',
