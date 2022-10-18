@@ -141,7 +141,7 @@ export const SocialEdit = (props: any) => {
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
-          <Button onClick={props.matches ? handleClickOpenBlockedList : handleClickOpenMatchesList}>Blocked</Button>
+          {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Explore</Button>}
         </CardActions>
       </Card>
       {/*Search Bar Modal*/}
