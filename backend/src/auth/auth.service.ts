@@ -53,7 +53,7 @@ export class AuthService {
 			.then(datiJson => {
 				let ret: UserData = ({
 					idIntra: datiJson.login,
-					userName: `${datiJson.login}_${String(Date.now())}`,
+					userName: datiJson.login,
 					firstName: datiJson.first_name,
 					lastName: datiJson.last_name,
 					img: datiJson.image_url,

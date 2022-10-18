@@ -170,6 +170,8 @@ let UserService = class UserService {
     }
     async changepp(body, id) {
         try {
+            if (!body.img)
+                return;
             await this.prisma.user.update({
                 where: {
                     id: id
@@ -185,6 +187,15 @@ let UserService = class UserService {
     }
     async changeUserName(body, id) {
         try {
+            if (!body.userName)
+                return;
+            const check = await this.prisma.user.findUnique({
+                where: {
+                    userName: body.userName
+                }
+            });
+            if (check)
+                throw new common_2.HttpException("Username already taken", common_2.HttpStatus.BAD_REQUEST);
             await this.prisma.user.update({
                 where: {
                     id: id

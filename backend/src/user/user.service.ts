@@ -196,6 +196,8 @@ export class UserService {
 	async changepp(body, id: number)
 	{
 		try {
+			if(!body.img)
+				return
 			await this.prisma.user.update({
 				where:{
 					id: id
@@ -214,6 +216,17 @@ export class UserService {
 	async changeUserName(body: any, id: number)
 	{
 		try {
+			if(!body.userName)
+				return
+			const check = await this.prisma.user.findUnique({
+				where:{
+					userName: body.userName
+				}
+			})
+			if (check)
+				throw new HttpException("Username already taken", HttpStatus.BAD_REQUEST)
+
+			
 			await this.prisma.user.update({
 				where:{
 					id: id

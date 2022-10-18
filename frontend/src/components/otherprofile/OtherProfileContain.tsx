@@ -15,7 +15,7 @@ import Divider from '@mui/material/Divider';
 import {  ProfileEdit, SocialEdit } from "./OtherProfileEdit";
 
 
-import "./css/ProfileEdit.css"
+import "../css/ProfileEdit.css"
 
 export const ProfileContain = (props: any) => {
 

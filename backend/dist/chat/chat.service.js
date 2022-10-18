@@ -71,6 +71,21 @@ let ChatService = class ChatService {
             throw new common_1.BadRequestException(err);
         }
     }
+    async isChanOwner(idChat, idIntra) {
+        try {
+            const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: { idIntra: idIntra, idChat: idChat }
+                }
+            });
+            if (partecipant.owner)
+                return true;
+            return false;
+        }
+        catch (err) {
+            throw new common_1.BadRequestException(err);
+        }
+    }
     async newChannel(body, userId) {
         try {
             const chan = await this.prismaService.chat.findUnique({
@@ -106,7 +121,7 @@ let ChatService = class ChatService {
                     data: {
                         idChat: channel.id,
                         idIntra: user.idIntra,
-                        admin: true,
+                        owner: true,
                     }
                 });
                 const ret = await Promise.all(body.partecipants.map(async (partecipant) => {
@@ -121,33 +136,6 @@ let ChatService = class ChatService {
             }
             else {
                 throw new common_1.BadRequestException('Channel already exists');
-            }
-        }
-        catch (err) {
-            throw new common_1.BadRequestException(err);
-        }
-    }
-    async lastAdminLeft(body, userId) {
-        try {
-            const user = await this.prismaService.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            });
-            const admins = await this.prismaService.partecipant.findMany({
-                where: {
-                    idChat: body.idChat,
-                    admin: true,
-                    idIntra: {
-                        not: user.idIntra
-                    }
-                }
-            });
-            if (admins.length === 0) {
-                return true;
-            }
-            else {
-                return false;
             }
         }
         catch (err) {
@@ -247,18 +235,23 @@ let ChatService = class ChatService {
                     idIntra: body.idIntra
                 }
             });
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
             if (user.idIntra !== body.idIntra)
                 throw new common_1.BadRequestException("Can't mute yorself");
             if (await this.isMuted(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User already muted');
             if (!await this.isAlreadyIn(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User not in channel');
-            if (await this.isAdmin(body.name, userId)) {
-                const channel = await this.prismaService.chat.findUniqueOrThrow({
-                    where: {
-                        name: body.name
-                    }
-                });
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            });
+            if ((await this.isAdmin(body.name, userId) || await this.isChanOwner(body.name, reqUser.idIntra)) && !await this.isChanOwner(body.name, user.idIntra)) {
                 if (body.time) {
                     const partecipant = await this.prismaService.partecipant.update({
                         where: {
@@ -360,17 +353,23 @@ let ChatService = class ChatService {
     }
     async changeVisibility(body, userId) {
         try {
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
             if (!(body.type === 'public') && !(body.type === 'private') && !(body.type === 'protected'))
                 throw new common_1.BadRequestException('Type must be public, private or protected');
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('You are not an admin');
-            if (body.type !== 'protected') {
+            if (!await this.isChanOwner(body.name, reqUser.idIntra))
+                throw new common_1.BadRequestException('You are not an owner');
+            if ((body.type === 'public') || (body.type === 'private')) {
                 const chan = await this.prismaService.chat.update({
                     where: {
                         name: body.name
                     },
                     data: {
-                        type: body.type
+                        type: body.type,
+                        password: null
                     }
                 });
             }
@@ -399,6 +398,8 @@ let ChatService = class ChatService {
                     id: userId
                 }
             });
+            if (await this.isBanned(body.name, user.idIntra))
+                throw new common_1.BadRequestException('User is Banned');
             if (await this.isAlreadyIn(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User is already in the channel');
             const channel = await this.prismaService.chat.findUniqueOrThrow({
@@ -446,8 +447,13 @@ let ChatService = class ChatService {
     }
     async unMuteUser(body, userId) {
         try {
-            if (!await this.isAdmin(body.name, userId)) {
-                throw new common_1.BadRequestException('You are not an admin');
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)) {
+                throw new common_1.BadRequestException('You are not an admin or owner');
             }
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
@@ -479,8 +485,13 @@ let ChatService = class ChatService {
     }
     async unBanUser(body, userId) {
         try {
-            if (!await this.isAdmin(body.name, userId)) {
-                throw new common_1.BadRequestException('You are not an admin');
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
+            if (!await this.isAdmin(body.name, userId) && !(await this.isChanOwner(body.name, reqUser.idIntra))) {
+                throw new common_1.BadRequestException('Not an admin or owner');
             }
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
@@ -531,7 +542,7 @@ let ChatService = class ChatService {
                     idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
                 }
             });
-            if (await this.lastAdminLeft(body.name, user.id)) {
+            if (await this.isChanOwner(body.name, user.idIntra)) {
                 await this.destroyChannel(body.name, userId);
             }
         }
@@ -548,8 +559,6 @@ let ChatService = class ChatService {
             });
             if (user.idIntra !== body.idIntra)
                 throw new common_1.BadRequestException("Can't ban yorself");
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('User is not admin');
             if (!await this.isAlreadyIn(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User is not in the channel');
             if (await this.isBanned(body.name, user.idIntra))
@@ -559,6 +568,13 @@ let ChatService = class ChatService {
                     name: body.name
                 }
             });
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
+            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)) || await this.isChanOwner(body.name, user.idIntra))
+                throw new common_1.BadRequestException('Not enough rights');
             if (body.time) {
                 const partecipant = await this.prismaService.partecipant.update({
                     where: {
@@ -593,10 +609,15 @@ let ChatService = class ChatService {
                     idIntra: body.idIntra
                 }
             });
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
             if (user.idIntra !== body.idIntra)
                 throw new common_1.BadRequestException("Can't add yorself");
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('User is not admin');
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra))
+                throw new common_1.BadRequestException('not enough rights');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
@@ -620,13 +641,27 @@ let ChatService = class ChatService {
                     idIntra: body.idIntra
                 }
             });
-            if (user.idIntra !== body.idIntra)
-                throw new common_1.BadRequestException("Can't remove yorself");
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('User is not admin');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
+                }
+            });
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
+            if (user.idIntra !== body.idIntra)
+                throw new common_1.BadRequestException("Can't remove yorself");
+            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)))
+                throw new common_1.BadRequestException('Not enough rights');
+            if (await this.isChanOwner(body.name, user.idIntra))
+                throw new common_1.BadRequestException("Can't remove owner");
+            if (await this.isBanned(body.name, user.idIntra))
+                throw new common_1.BadRequestException('User is Banned');
+            const partecipant = await this.prismaService.partecipant.delete({
+                where: {
+                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
                 }
             });
             await this.prismaService.partecipant.findUniqueOrThrow({
@@ -651,10 +686,15 @@ let ChatService = class ChatService {
                     idIntra: body.idIntra
                 }
             });
+            const reqUser = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
             if (user.idIntra !== body.idIntra)
                 throw new common_1.BadRequestException("Can't add yorself");
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('User is not an admin');
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra))
+                throw new common_1.BadRequestException('User is not an admin or owner');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
@@ -689,8 +729,8 @@ let ChatService = class ChatService {
             });
             if (user.idIntra === body.idIntra)
                 throw new common_1.BadRequestException("Can't remove yorself");
-            if (!await this.isAdmin(body.name, userId))
-                throw new common_1.BadRequestException('User is not an admin');
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, user.idIntra))
+                throw new common_1.BadRequestException('Not enough rights');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name

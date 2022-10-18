@@ -16,43 +16,57 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-import "./css/Header.css"
+import "../css/Header.css"
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export function FriendsHeader(props:any){
-    
+export function FriendsItem(props:any) {
     const friendsItem = {
         width: '80%',
-        color: 'white',
+        backgroundColor: '#f5f4f2',
         borderRadius: 8,
         height: 50,
         margin: 'auto',
-        marginTop: 25,
-        marginBottom: -15,
+        marginTop: 15,
         alignItems: 'space-between',
         padding: 5,
-        fontWeight: 'bold'
+
 
     }
 
     const img = {
         width: '40px',
         borderRadius: '50%',
-        marginLeft: '-12%',
     }
+    
+    const onstatus = props.status;
+    let status;
 
+    if (onstatus && onstatus === "online") {
+        status = (
+        <i style={{fontSize: 8, color: 'green'}} className="bi bi-circle-fill"></i>
+      );
+    } else if (onstatus === "offline") {
+        status = (
+        <i style={{fontSize: 8, color: 'red'}} className="bi bi-circle-fill"></i>
+      );
+    } else {
+        status = (
+        <i style={{fontSize: 8, color: 'grey'}} className="bi bi-circle-fill"></i>
+        );
+    }
+      
 
-
-    return(
-        <>
-            <div className='d-flex justify-content-evenly align-items-end' style={friendsItem}>
-            <label style={{marginRight:20}}>{props.id}</label>
+	return(
+    <>
+        <div className='d-flex justify-content-evenly align-items-center' style={friendsItem}>
             
+            <img src={props.image} style={img}/>
             <label>{props.nickname}</label>
             <label>{props.username}</label>
             <label>{props.score}</label>
-            <label>{props.status}</label>
+            <label>{status} {props.status}</label>
         </div>
-        </>
-    )
+    </>
+	)
 }

@@ -46,19 +46,21 @@ let GamesService = class GamesService {
             throw new common_1.BadRequestException(e);
         }
     }
-    async getPlayerProfile(body) {
+    async getPlayerProfile(body, userId) {
         try {
             const player = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    idIntra: body.idIntra
+                    id: userId
                 },
-                select: {
-                    rank: true,
-                    loss: true,
-                    winRow: true,
+            });
+            const leaderboard = await this.prisma.user.findMany({
+                orderBy: {
+                    rank: 'desc'
                 }
             });
-            return player;
+            let position = leaderboard.findIndex((user) => user.id === player.id);
+            position += 1;
+            return position;
         }
         catch (e) {
             throw new common_1.BadRequestException(e);
@@ -122,6 +124,56 @@ let GamesService = class GamesService {
                     winRow: this.sum(winner.winRow, 1),
                 }
             });
+            if (winner.win === 1 && winner.achFirstWin === false) {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achFirstWin: true,
+                    }
+                });
+            }
+            if (winner.winRow === 5 && winner.achFiveinRow === false) {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achFiveinRow: true,
+                    }
+                });
+            }
+            if (winner.winRow === 10 && winner.achTeninRow === false) {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achTeninRow: true,
+                    }
+                });
+            }
+            if (winner.winRow === 20 && winner.achTwentyinRow === false) {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achTwentyinRow: true,
+                    }
+                });
+            }
+            if (((game.scoreP2 === 0) || (game.scoreP1 === 0)) && winner.achAce === false) {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: body.winner
+                    },
+                    data: {
+                        achAce: true,
+                    }
+                });
+            }
         }
         catch (e) {
             throw new common_1.BadRequestException(e);

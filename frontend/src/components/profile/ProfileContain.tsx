@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState, useEffect} from "react";
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -18,10 +18,59 @@ import Victory from '../images/crown.png'
 import Ladder from '../images/crowns.png'
 
 
-import "./css/ProfileEdit.css"
-import "./css/Navbar.css"
+import "../css/ProfileEdit.css"
+import "../css/Navbar.css"
+
 
 export const ProfileContain = (props: any) => {
+
+  const [user, setUser] = useState({} as any);
+
+        useEffect(() => {
+        const url = "http://10.11.10.4:3333/user/me";
+
+        const fetchData = async () => {
+        try {
+                const response = await fetch(url, {
+                credentials: 'include',
+                headers:{
+                'Content-Type': 'application/json',
+                }
+        });
+                const json = await response.json();
+                console.log(json);
+                setUser(json);
+        } catch (error) {
+                console.log("error", error);
+        }
+        };
+
+        fetchData();
+        }, []);
+
+        const [rank, setRank] = useState({} as any);
+
+        useEffect(() => {
+        const url = "http://10.11.10.4:3333/games/getPlayerRank";
+
+        const fetchRank = async () => {
+        try {
+                const response = await fetch(url, {
+                credentials: 'include',
+                headers:{
+                'Content-Type': 'application/json',
+                }
+        });
+                const json = await response.json();
+                console.log(json);
+                setRank(json);
+        } catch (error) {
+                console.log("error", error);
+        }
+        };
+
+        fetchRank();
+        }, []);
 
   const colors = {
     fontFamily: 'MyWebFont',
@@ -97,19 +146,19 @@ export const ProfileContain = (props: any) => {
       </Grid>
       {/* Punti row */}
       <Grid item xs={4} style={colors}>
-        12
+        {JSON.stringify(rank)}
       </Grid>
       <Grid item xs={4} style={colors}>
-        34
+        {user.win}
         
       </Grid>
       <Grid item xs={4} style={colors}>
-        18
+        {user.winRow}
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
-        <ProfileEdit />
+        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName}/>
         <SocialEdit title="FRIENDS" tot="12" matches={true} />
         <SocialEdit title="MATCHES" tot="122" matches={false} />
       </Grid>

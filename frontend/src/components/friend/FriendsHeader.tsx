@@ -16,12 +16,13 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-import "./css/Header.css"
+import "../css/Header.css"
+
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-export function AdminHeader(props:any){
+export function FriendsHeader(props:any){
     
-    const adminItem = {
+    const friendsItem = {
         width: '80%',
         color: 'white',
         borderRadius: 8,
@@ -38,18 +39,20 @@ export function AdminHeader(props:any){
     const img = {
         width: '40px',
         borderRadius: '50%',
+        marginLeft: '-12%',
     }
 
 
 
     return(
         <>
-            <div className='d-flex justify-content-evenly align-items-end' style={adminItem}>
-            <label style={{marginRight:20}}>{props.elem1}</label>
-            <label>{props.elem2}</label>
-            <label>{props.elem3}</label>
-            <label>{props.elem4}</label>
-            <label>{props.elem5}</label>
+            <div className='d-flex justify-content-evenly align-items-end' style={friendsItem}>
+            <label style={{marginRight:20}}>{props.id}</label>
+            
+            <label>{props.nickname}</label>
+            <label>{props.username}</label>
+            <label>{props.score}</label>
+            <label>{props.status}</label>
         </div>
         </>
     )
