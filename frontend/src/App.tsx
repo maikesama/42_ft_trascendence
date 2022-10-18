@@ -28,7 +28,7 @@ function App() {
       <Route path="/matches" element={<Matches />} />
       <Route path="/chat" element={<Chat />} />
       <Route path="/profile" element={<Profile />} />
-      <Route path="/otheruserprofile" element={<OtherUserProfile />} />
+      <Route path="/profile/:id" element={<OtherUserProfile />} />
       <Route path="/admin" element={<Admin />} />
       <Route path="/matches" element={<Matches />} />
       <Route path="/friends" element={<Friends />} />

@@ -104,7 +104,6 @@ export const SocialEdit = (props: any) => {
         <Avatar />
         <ListItemText  primary={`Friend`}  />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
@@ -129,9 +128,9 @@ export const SocialEdit = (props: any) => {
             <FixedSizeList
 
               height={460}
-              width={300}
+              width={310}
               itemSize={90}
-              itemCount={5}
+              itemCount={props.matches ? 12 : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}
@@ -141,7 +140,7 @@ export const SocialEdit = (props: any) => {
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
-          {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Explore</Button>}
+          {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Game History</Button>}
         </CardActions>
       </Card>
       {/*Search Bar Modal*/}
@@ -210,7 +209,7 @@ export const ProfileEdit = (props: any) => {
   }
 
   const fontColor = {
-    style: { color: 'rgb(50, 50, 50)' }
+    style: { color: 'rgb(0, 0, 0)' }
   }
 
   return (
