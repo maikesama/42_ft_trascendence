@@ -41,7 +41,7 @@ import { match } from 'assert';
 import { render } from 'react-dom';
 import { blue } from '@material-ui/core/colors';
 import { SearchBar } from './SearchBar';
-import { FriendsList } from './FriendsList';
+import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import { Link } from 'react-router-dom';
 
@@ -54,16 +54,16 @@ const fontColor = {
 
 export const SocialEdit = (props: any) => {
 
-  const [openFriendsList, setOpenFriendsList] = React.useState(false);
+  const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
 
-  const handleClickOpenFriendsList = () => {
-    setOpenFriendsList(true);
+  const handleClickOpenBlockedList = () => {
+    setOpenBlockedList(true);
   };
 
-  const handleCloseFriendsList = () => {
-    setOpenFriendsList(false);
+  const handleCloseBlockedList = () => {
+    setOpenBlockedList(false);
   };
 
   const handleClickOpenMatchesList = () => {
@@ -96,17 +96,18 @@ export const SocialEdit = (props: any) => {
     );
   }
 
-  function renderSocialRowPreview(props: any) {
+  function renderSocialRow(props: any) {
     const { index, style, matches } = props;
 
     return (
-      <ListItem style={style} key={index}>
+      <ListItem style={style} key={index} >
         <Avatar />
-        <Routes>
-          <Route></Route>
-        </Routes>
-        <ListItemText primary={`Friend`} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
+        <ListItemText  primary={`Friend`}  />
+        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Divider variant="middle" />
+        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
@@ -133,20 +134,20 @@ export const SocialEdit = (props: any) => {
               itemCount={5}
               overscanCount={5}
             >
-              {props.matches ? renderSocialRowPreview : renderMatchesRowPreview}
+              {props.matches ? renderSocialRow : renderMatchesRowPreview}
             </FixedSizeList>
           </div>
           <Divider />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
-          <Button onClick={props.matches ? handleClickOpenFriendsList : handleClickOpenMatchesList}>Explore</Button>
+          <Button onClick={props.matches ? handleClickOpenBlockedList : handleClickOpenMatchesList}>Blocked</Button>
         </CardActions>
       </Card>
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
-      {/*Friends List Modal*/}
-      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={false} />
+      {/*Blocked List Modal*/}
+      <BlockedList status={openBlockedList} closeStatus={handleCloseBlockedList} blocked={false} />
       {/*matches List Modal*/}
       <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList} />
     </div>
