@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -34,6 +34,8 @@ import "../css/ProfileEdit.css"
 import { Input } from '@mui/material';
 import { match } from 'assert';
 import { render } from 'react-dom';
+import { SearchBar } from './SearchBar';
+import { MatchesList } from './MatchesList';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -43,15 +45,16 @@ const fontColor = {
 
 export const SocialEdit = (props: any) => {
 
-  const [openFriendsList, setOpenFriendsList] = React.useState(false);
+  const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
+  const [openSearchBar, setOpenSearchBar] = React.useState(false);
 
-  const handleClickOpenFriendsList = () => {
-    setOpenFriendsList(true);
+  const handleClickOpenBlockedList = () => {
+    setOpenBlockedList(true);
   };
 
-  const handleCloseFriendsList = () => {
-    setOpenFriendsList(false);
+  const handleCloseBlockedList = () => {
+    setOpenBlockedList(false);
   };
 
   const handleClickOpenMatchesList = () => {
@@ -62,43 +65,25 @@ export const SocialEdit = (props: any) => {
     setOpenMatchesList(false);
   };
 
+  const handleClickOpenSearchBar = () => {
+    setOpenSearchBar(true);
+  };
+
+  const handleCloseSearchBar = () => {
+    setOpenSearchBar(false);
+  };
+
   function renderMatchesRowPreview(props: any) {
     const { index, style, matches } = props;
 
     return (
       <ListItem button style={style} key={index} >
         <Avatar />
-        <ListItemText className="matchLossResult" primary={`User`} />
+        <ListItemText className="matchLossResult" primary={`You`} />
         <ListItemText className="matchLossResult" primary={`3 - 5`} />
         <ListItemText className="matchLossResult" primary={`Adversary`} />
         <Avatar />
       </ListItem>
-    );
-  }
-
-  function renderSocialRowPreview(props: any) {
-    const { index, style, matches } = props;
-
-    return (
-      <ListItem className="friendPreview" style={style} key={index}>
-        <Avatar />
-        <ListItemText primary={`Friend`} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
-      </ListItem>
-    );
-  }
-
-  function renderMatchesRow(props: any) {
-    const { index, style, matches } = props;
-
-    return (
-        <ListItem button className="matchResult" style={style} key={index}>
-          <Avatar sx={{ width: 56, height: 56 }} />
-          <ListItemText className="matchLossResult" primary={`User`} />
-          <ListItemText className="matchLossResult" primary={`3 - 5`} />
-          <ListItemText className="matchLossResult" primary={`Adversary`} />
-          <Avatar sx={{ width: 56, height: 56 }} />
-        </ListItem>
     );
   }
 
@@ -108,10 +93,10 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar />
-        <ListItemText primary={`Friend`}/>
+        <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle" />
-        <IconButton aria-label="watch" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        <Divider variant="middle"/>
+        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
@@ -133,72 +118,85 @@ export const SocialEdit = (props: any) => {
             <FixedSizeList
 
               height={460}
-              width={300}
+              width={310}
               itemSize={90}
-              itemCount={5}
+              itemCount={props.matches ? 12 : 5}
               overscanCount={5}
             >
-              {props.matches ? renderSocialRowPreview : renderMatchesRowPreview}
+              {props.matches ? renderSocialRow : renderMatchesRowPreview}
             </FixedSizeList>
           </div>
-        <Divider/>
+          <Divider />
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
-          <Button onClick={props.matches ? handleClickOpenFriendsList : handleClickOpenMatchesList}>Explore</Button>
+          {props.matches ? null : <Button onClick={handleClickOpenMatchesList}>Game History</Button>}
         </CardActions>
       </Card>
-      {/*Friends List Modal*/}
-      <Dialog open={openFriendsList} onClose={handleCloseFriendsList}>
-        <DialogTitle textAlign="center">Friends List</DialogTitle>
-        <DialogContent>
-          <div style={{ textAlignLast: 'center' }}>
-            <FixedSizeList
-              height={400}
-              width={400}
-              itemSize={80}
-              itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
-              overscanCount={5}
-            >
-              {renderSocialRow}
-            </FixedSizeList>
-          </div>
-          <DialogActions style={{ justifyContent: 'center' }}>
-            <Button variant="outlined">Refresh</Button>
-            <Button variant="contained" onClick={handleCloseFriendsList}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      {/*Search Bar Modal*/}
+      <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*matches List Modal*/}
-      <Dialog open={openMatchesList} onClose={handleCloseMatchesList}>
-        <DialogTitle textAlign="center">Matches List</DialogTitle>
-        <DialogContent>
-          <div style={{ textAlignLast: 'center' }}>
-            <FixedSizeList
-              height={400}
-              width={400}
-              itemSize={80}
-              itemCount={5} /*Qui deve essere restituito il numero di match completati*/
-              overscanCount={5}
-            >
-              {renderMatchesRow}
-            </FixedSizeList>
-          </div>
-          <DialogActions style={{ justifyContent: 'center' }}>
-            <Button variant="outlined">Refresh</Button>
-            <Button variant="contained" onClick={handleCloseMatchesList}>Close</Button>
-          </DialogActions>
-        </DialogContent>
-      </Dialog>
+      <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList} />
     </div>
   );
 }
 
 export const ProfileEdit = (props: any) => {
 
+  const nick = useRef<any>('');
+  const img = useRef<any>('');
+  //const [user, setUser] = useState({} as any);
+
+  const clickSave = async () => {
+    //return console.log(nick.current.value)
+
+    let url = "http://10.11.10.4:3333/user/update/username";
+
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName: nick.current.value })
+      });
+      // const json = await response.json();
+      // console.log(json);
+      // setUser(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+    console.log(img.current.value)
+    url = "http://10.11.10.4:3333/user/update/pp";
+
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ img: img.current.value })
+      });
+      // const json = await response.json();
+      // console.log(json);
+      // setUser(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+
+  }
+
   function handleNick() {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+  }
+
+  const fontColor = {
+    style: { color: 'rgb(0, 0, 0)' }
   }
 
   return (
@@ -208,11 +206,11 @@ export const ProfileEdit = (props: any) => {
         <CardMedia
           component="img"
           height="380"
-          image="https://cdn.intra.42.fr/users/taureli.jpeg"
+          image={props.img}
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
-        <input type="file" hidden />
+        <TextField type="file" hidden inputRef={img} />
       </Button>
 
       <CardContent>
@@ -221,7 +219,10 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+          <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
+          <Button sx={{ color: 'black' }} onClick={handleNick}>
+            <EditIcon />
+          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -229,7 +230,10 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Username:
           </Typography>
-          <TextField id="txtNick" placeholder="liafigli" variant="standard" disabled />
+          <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
+          <Button sx={{ color: 'black', visibility: 'hidden' }} >
+            <EditIcon />
+          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -237,7 +241,10 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Score:
           </Typography>
-          <TextField id="txtNick" placeholder="224" variant="standard" disabled />
+          <TextField inputProps={fontColor} id="txtScore" placeholder="224" variant="standard" disabled />
+          <Button sx={{ color: 'black', visibility: 'hidden' }} >
+            <EditIcon />
+          </Button>
         </div>
 
       </CardContent>

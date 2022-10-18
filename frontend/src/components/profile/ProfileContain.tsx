@@ -179,22 +179,22 @@ export const ProfileContain = (props: any) => {
         </Typography>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"1"} title={"Prince of the cluster"} explain={"Win 5 matches in a row"} />
+        <Achievements number={"1"} title={"Prince of the cluster"} explain={"Win 5 matches in a row"} unlocked={true} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} />
+        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} unlocked={false}/>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} />
+        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} unlocked={false}/>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} />
+        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} unlocked={false}/>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} />
+        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} unlocked={true}/>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} />
+        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} unlocked={false}/>
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
