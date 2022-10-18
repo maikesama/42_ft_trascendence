@@ -37,31 +37,39 @@ import ListSubheader from '@mui/material/ListSubheader';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 
 export const BlockedList = (props: any) => {
+  function renderBlockedRow(props: any) {
+    const { index, style, matches } = props;
+
+    return (
+      <ListItem style={style} key={index} >
+        <Avatar />
+        <ListItemText primary={`Blocked user`} />
+        <Divider variant="middle" />
+        <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+      </ListItem>
+    );
+  }
+
   return (
-    <List
-      sx={{
-        width: '100%',
-        maxWidth: 400,
-        bgcolor: 'background.paper',
-        position: 'relative',
-        overflow: 'auto',
-        maxHeight: 300,
-        '& ul': { padding: 0 },
-      }}
-      subheader={<li />}
-    >
-      <li key={`blocked section`}>
-        <ul>
-          <ListSubheader style={{ fontSize: 20 }}>Blocked users</ListSubheader>
-          {[0, 1, 2].map((item) => (
-            <ListItem key={`blocked`}>
-              <Avatar />
-              <ListItemText primary={`Blocked ${item}`} />
-              <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
-            </ListItem>
-          ))}
-        </ul>
-      </li>
-    </List>
+    <Dialog open={props.status} onClose={props.closeStatus}>
+      <DialogTitle textAlign="center">Blocked Users</DialogTitle>
+      <DialogContent>
+        <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
+          <FixedSizeList
+            height={400}
+            width={400}
+            itemSize={80}
+            itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
+            overscanCount={5}
+          >
+            {renderBlockedRow}
+          </FixedSizeList>
+        </div>
+        <DialogActions style={{ justifyContent: 'center' }}>
+          <Button variant="outlined">Refresh</Button>
+          <Button variant="contained" onClick={props.closeStatus}>Close</Button>
+        </DialogActions>
+      </DialogContent>
+    </Dialog>
   );
 }

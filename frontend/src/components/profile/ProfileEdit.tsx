@@ -147,7 +147,7 @@ export const SocialEdit = (props: any) => {
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*Blocked List Modal*/}
-      <BlockedList status={openBlockedList} closeStatus={handleCloseBlockedList} blocked={false} />
+      <BlockedList status={openBlockedList} closeStatus={handleCloseBlockedList} />
       {/*matches List Modal*/}
       <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList} />
     </div>
