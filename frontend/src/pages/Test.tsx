@@ -1,44 +1,71 @@
-import React, { Fragment, useState, useEffect } from 'react';
-import axios from 'axios';
+import { upload } from "@testing-library/user-event/dist/upload";
+import React from "react";
+import ImageUploading, { ImageListType } from "react-images-uploading";
 
-export const Test = () => {
+export function Test() {
+  const [images, setImages] = React.useState([]);
+  const maxNumber = 69;
 
-  type User = {
-    id?: number;
-    name?: string;
+  const onChange = (
+    imageList: ImageListType,
+    addUpdateIndex: number[] | undefined
+  ) => {
+    // data for submit
+    console.log(imageList, addUpdateIndex);
+    setImages(imageList as never[]);
+    uploadCristo(imageList);
   };
 
-  const [user, setUser] = useState({} as User);
+  const uploadCristo = async (imageList: ImageListType) => {
+    const formData:any = new FormData();
+    try {
+    formData.append("image", imageList[0].file);
+    const response = await fetch("http://10.11.10.4:3333/user/update/pp", {
+      method: "POST",
+      body: formData,
+    });
+    } catch (error) {
+      console.log("error", error);
+    }
+  };  
+    
+    
 
-  useEffect(() => {
-    const url = "http://10.11.10.4:3333/user/me";
-
-    const fetchData = async () => {
-      try {
-        const response = await fetch(url, {
-          credentials: 'include',
-          headers:{
-            'Content-Type': 'application/json',
-          }
-      });
-        const json = await response.json();
-        console.log(json);
-        setUser(json);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
-
-    fetchData();
-}, []);
-
-  function getId() {
-    return user?.id;
-  }
 
   return (
-    <div style={{backgroundColor: 'white'}}>
-      {getId()}
+    <div className="App">
+      <ImageUploading
+        
+        value={images}
+        onChange={onChange}
+        maxNumber={maxNumber}
+      >
+        {({
+          imageList,
+          onImageUpload,
+          onImageRemoveAll,
+          isDragging,
+          dragProps
+        }) => (
+          // write your building UI
+          <div className="upload__image-wrapper">
+            <button
+              style={isDragging ? { color: "red" } : undefined}
+              onClick={onImageUpload}
+              {...dragProps}
+            >
+              Click or Drop here
+            </button>
+            &nbsp;
+            <button onClick={onImageRemoveAll}>Remove all images</button>
+            {imageList.map((image, index) => (
+              <div key={index} className="image-item">
+                <img src={image.dataURL} alt="" width="100" />
+              </div>
+            ))}
+          </div>
+        )}
+      </ImageUploading>
     </div>
   );
 }

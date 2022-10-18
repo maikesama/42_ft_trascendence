@@ -156,7 +156,7 @@ export const SocialEdit = (props: any) => {
 export const ProfileEdit = (props: any) => {
 
   const nick = useRef<any>('');
-  const img = useRef<any>('');
+  const img = useRef<any>();
   //const [user, setUser] = useState({} as any);
 
   const clickSave = async () => {
@@ -191,7 +191,7 @@ export const ProfileEdit = (props: any) => {
             headers:{
             'Content-Type': 'application/json',
             },
-            body: JSON.stringify({img: img.current.value})
+            body: JSON.stringify({pp: img.current.value})
     });
             // const json = await response.json();
             // console.log(json);
