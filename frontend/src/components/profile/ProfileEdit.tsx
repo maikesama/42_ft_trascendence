@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React,{useRef, useState, useEffect} from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -155,13 +155,63 @@ export const SocialEdit = (props: any) => {
 
 export const ProfileEdit = (props: any) => {
 
+  const nick = useRef<any>('');
+  const img = useRef<any>('');
+  //const [user, setUser] = useState({} as any);
+
+  const clickSave = async () => {
+    //return console.log(nick.current.value)
+    
+    let url = "http://10.11.10.4:3333/user/update/username";
+
+    
+    try {
+            const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({userName: nick.current.value})
+    });
+            // const json = await response.json();
+            // console.log(json);
+            // setUser(json);
+    } catch (error) {
+            console.log("error", error);
+    }
+    console.log(img.current.value)
+    url = "http://10.11.10.4:3333/user/update/pp";
+
+    
+    try {
+            const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers:{
+            'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({img: img.current.value})
+    });
+            // const json = await response.json();
+            // console.log(json);
+            // setUser(json);
+    } catch (error) {
+            console.log("error", error);
+    }
+
+  }
+
   function handleNick() {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
   }
 
-  const [disabled, setDisabled] = React.useState(true);
+  const fontColor = {
+    style: { color: 'rgb(50, 50, 50)' }
+  }
+
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -169,11 +219,11 @@ export const ProfileEdit = (props: any) => {
         <CardMedia
           component="img"
           height="380"
-          image="https://cdn.intra.42.fr/users/liafigli.jpeg"
+          image={props.img}
           alt=""
         />
         <Typography className="UploadImageTxt">Upload Image</Typography>
-        <input type="file" hidden />
+        <TextField type="file" hidden inputRef={img}/>
       </Button>
 
       <CardContent>
@@ -182,7 +232,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField inputProps={fontColor} id="txtNick" placeholder="liafigli" variant="standard" disabled/>
+          <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled/>
           <Button sx={{ color: 'black' }} onClick={handleNick}>
             <EditIcon />
           </Button>
@@ -193,7 +243,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Username:
           </Typography>
-          <TextField inputProps={fontColor} id="txtNick" placeholder="liafigli" variant="standard" disabled/>
+          <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
           <Button sx={{ color: 'black', visibility: 'hidden' }} >
             <EditIcon />
           </Button>
@@ -212,7 +262,7 @@ export const ProfileEdit = (props: any) => {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
-        <Button>Save</Button>
+        <Button onClick={clickSave}>Save</Button>
       </CardActions>
     </Card>
   );

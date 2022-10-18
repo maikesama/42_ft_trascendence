@@ -8,11 +8,7 @@ export declare class GamesService {
         loss: number;
         rank: number;
     }>;
-    getPlayerProfile(body: any): Promise<{
-        winRow: number;
-        loss: number;
-        rank: number;
-    }>;
+    getPlayerProfile(body: any, userId: number): Promise<number>;
     createGame(body: any): Promise<void>;
     updateGame(body: any): Promise<void>;
     sum(a: number, b: number): number;

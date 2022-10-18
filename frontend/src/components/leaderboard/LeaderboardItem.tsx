@@ -46,10 +46,10 @@ export function LeaderboardItem(props:any) {
 	return(
     <>
         <div className='d-flex justify-content-evenly align-items-center' style={leaderboardItem}>
-            <label style={{marginRight: '34px'}}>1</label>
+            <label style={{marginRight: '34px'}}>{props.index + 1}</label>
             <img src={props.image} style={img}/>
             <label>{props.nickname}</label>
-            <label>{props.guilds}</label>
+            <label>{props.win}</label>
             <label>{props.score}</label>
             <label>{status} {props.status}</label>
         </div>

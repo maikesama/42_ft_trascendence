@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { Fragment, useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -25,6 +25,31 @@ const pages = ['Home', 'Leaderboard', 'Admin', 'Chat'];
 const settings = ['Profile', 'Logout'];
 
 export function Header(props:any) {
+
+  const [user, setUser] = useState({} as any);
+
+  useEffect(() => {
+    const url = "http://10.11.10.4:3333/user/me";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers:{
+            'Content-Type': 'application/json',
+          }
+      });
+        const json = await response.json();
+        console.log(json);
+        setUser(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+}, []);
+
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
 
@@ -158,7 +183,7 @@ export function Header(props:any) {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="https://42.fr/wp-content/uploads/2021/08/42.jpg" sx={{width: 50, height: 50}}/>
+                <Avatar alt="Remy Sharp" src={user.img} sx={{width: 50, height: 50}}/>
               </IconButton>
             </Tooltip>
             <Menu

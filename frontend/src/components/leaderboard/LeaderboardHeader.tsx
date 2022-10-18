@@ -32,7 +32,7 @@ export function LeaderboardHeader(props:any) {
             <label style={{marginRight:20}}>{props.id}</label>
             
             <label>{props.nickname}</label>
-            <label>{props.guilds}</label>
+            <label>{props.win}</label>
             <label>{props.score}</label>
             <label> {props.status}</label>
         </div>

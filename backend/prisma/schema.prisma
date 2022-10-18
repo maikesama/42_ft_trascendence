@@ -90,6 +90,7 @@ model Partecipant{
 	idChat		Int
 	user		User			@relation(fields: [idIntra], references: [idIntra])
 	chat		Chat			@relation(fields: [idChat], references: [id])
+	owner		Boolean			@default(false)
 	admin		Boolean			@default(false)
 	joinedAt	DateTime  		@default(now())
 	mutedAt		DateTime?

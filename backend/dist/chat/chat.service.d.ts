@@ -6,8 +6,8 @@ export declare class ChatService {
         idIntra: String;
     }[]>;
     newDm(body: any, userId: number): Promise<void>;
+    isChanOwner(idChat: number, idIntra: string): Promise<boolean>;
     newChannel(body: any, userId: number): Promise<void>;
-    lastAdminLeft(body: any, userId: number): Promise<boolean>;
     destroyChannel(body: any, userId: number): Promise<void>;
     isBanned(name: string, idIntra: string): Promise<boolean>;
     isMuted(name: string, idIntra: string): Promise<boolean>;

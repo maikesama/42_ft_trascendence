@@ -8,16 +8,8 @@ export declare class UserService {
     getUserProfile(idintra: string, requestedBy: number): Promise<import(".prisma/client").User>;
     checkIfBlocked(idintra: string, requestIdIntra: string): Promise<boolean>;
     getAllUsers(): Promise<{
-        friend: import(".prisma/client").Friend[];
-        idIntra: string;
-        friendBy: import(".prisma/client").Friend[];
-        blocked: import(".prisma/client").Blocklist[];
-        blockedby: import(".prisma/client").Blocklist[];
-        invited: import(".prisma/client").Invited[];
-        invitedBy: import(".prisma/client").Invited[];
-        partecipant: import(".prisma/client").Partecipant[];
-        messages: import(".prisma/client").Message[];
         id: number;
+        idIntra: string;
         userName: string;
         email: string;
         tel: string;
@@ -29,6 +21,14 @@ export declare class UserService {
         win: number;
         loss: number;
         rank: number;
+        friend: import(".prisma/client").Friend[];
+        friendBy: import(".prisma/client").Friend[];
+        blocked: import(".prisma/client").Blocklist[];
+        blockedby: import(".prisma/client").Blocklist[];
+        invited: import(".prisma/client").Invited[];
+        invitedBy: import(".prisma/client").Invited[];
+        partecipant: import(".prisma/client").Partecipant[];
+        messages: import(".prisma/client").Message[];
     }[]>;
     block(idintra: string, requestId: number): Promise<void>;
     unblock(idintra: string, requestId: number): Promise<void>;
