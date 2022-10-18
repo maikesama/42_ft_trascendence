@@ -1,3 +1,4 @@
+/// <reference types="multer" />
 import { JwtService } from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "./user.service";
@@ -36,7 +37,7 @@ export declare class UserController {
     unblockUser(idIntra: any, req: any): Promise<void>;
     turnOn2fa(req: any): Promise<void>;
     turnOff2fa(req: any): Promise<void>;
-    changePP(body: any, req: any): Promise<void>;
+    changePP(req: any, img: Express.Multer.File): Promise<void>;
     changeusername(body: any, req: any): Promise<void>;
     getUserProfile(idIntra: any, req: any): Promise<import(".prisma/client").User>;
 }

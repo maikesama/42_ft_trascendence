@@ -168,16 +168,17 @@ let UserService = class UserService {
             throw new common_2.HttpException(e, common_2.HttpStatus.NOT_FOUND);
         }
     }
-    async changepp(body, id) {
+    async changepp(img, id) {
         try {
-            if (!body.img)
+            console.log(img);
+            if (!img)
                 return;
             await this.prisma.user.update({
                 where: {
                     id: id
                 },
                 data: {
-                    img: body.img
+                    img: img
                 }
             });
         }

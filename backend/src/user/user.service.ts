@@ -193,17 +193,18 @@ export class UserService {
 		}
 	}
 
-	async changepp(body, id: number)
+	async changepp(img, id: number)
 	{
 		try {
-			if(!body.img)
+			console.log(img)
+			if(!img)
 				return
 			await this.prisma.user.update({
 				where:{
 					id: id
 				},
 				data:{
-					img: body.img
+					img: img
 				}
 			})
 		}
