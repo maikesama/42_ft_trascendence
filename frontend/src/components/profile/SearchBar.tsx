@@ -74,7 +74,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const SearchBar = (props: any) => {
-    //console.log(props.closeStatus);
     function renderSearchRow(props: any) {
         const { index, style, matches } = props;
 

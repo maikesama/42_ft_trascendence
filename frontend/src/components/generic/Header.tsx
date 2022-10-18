@@ -16,6 +16,7 @@ import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid'; // Grid version 1
 import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
+import {BlockedList} from '../profile/FriendsList'
 import "../css/Header.css"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -204,7 +205,7 @@ export function Header(props:any) {
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu} >
                   <Link href={setting.toLowerCase()} style={{textDecoration: 'none', color: 'white'}}>
-                  <Typography textAlign="center">{setting}</Typography>
+                    <Typography textAlign="center">{setting}</Typography>
                   </Link>
                 </MenuItem>
               ))}

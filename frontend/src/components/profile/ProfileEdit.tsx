@@ -32,6 +32,8 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
+import { Route, Routes } from 'react-router-dom';
+import { withStyles } from "@material-ui/core/styles";
 
 import "../css/ProfileEdit.css"
 import { Input } from '@mui/material';
@@ -41,9 +43,11 @@ import { blue } from '@material-ui/core/colors';
 import { SearchBar } from './SearchBar';
 import { FriendsList } from './FriendsList';
 import { MatchesList } from './MatchesList';
+import { Link } from 'react-router-dom';
+
 
 const fontColor = {
-  style: { color: 'rgb(50, 50, 50)' }
+  style: { WebkitTextFillColor: "rgba(0,0,0)" }
 }
 
 
@@ -53,7 +57,7 @@ export const SocialEdit = (props: any) => {
   const [openFriendsList, setOpenFriendsList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
-  
+
   const handleClickOpenFriendsList = () => {
     setOpenFriendsList(true);
   };
@@ -65,7 +69,7 @@ export const SocialEdit = (props: any) => {
   const handleClickOpenMatchesList = () => {
     setOpenMatchesList(true);
   };
-  
+
   const handleCloseMatchesList = () => {
     setOpenMatchesList(false);
   };
@@ -77,7 +81,7 @@ export const SocialEdit = (props: any) => {
   const handleCloseSearchBar = () => {
     setOpenSearchBar(false);
   };
-  
+
   function renderMatchesRowPreview(props: any) {
     const { index, style, matches } = props;
 
@@ -98,6 +102,9 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index}>
         <Avatar />
+        <Routes>
+          <Route></Route>
+        </Routes>
         <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
       </ListItem>
@@ -137,11 +144,11 @@ export const SocialEdit = (props: any) => {
         </CardActions>
       </Card>
       {/*Search Bar Modal*/}
-      <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar}/>
+      <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*Friends List Modal*/}
-      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={true}/>
+      <FriendsList status={openFriendsList} closeStatus={handleCloseFriendsList} blocked={false} />
       {/*matches List Modal*/}
-      <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList}/>
+      <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList} />
     </div>
   );
 }
@@ -247,7 +254,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Score:
           </Typography>
-          <TextField id="txtNick" placeholder="224" variant="standard" disabled />
+          <TextField inputProps={fontColor} id="txtScore" placeholder="224" variant="standard" disabled />
           <Button sx={{ color: 'black', visibility: 'hidden' }} >
             <EditIcon />
           </Button>
