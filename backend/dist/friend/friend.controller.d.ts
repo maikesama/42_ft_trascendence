@@ -6,6 +6,10 @@ export declare class FriendController {
     acceptInvite(body: any, req: any): Promise<void>;
     declineInvite(body: any, req: any): Promise<void>;
     removeInvite(body: any, req: any): Promise<void>;
-    getFriends(body: any, req: any): Promise<import(".prisma/client").Friend[]>;
+    getFriends(body: any, req: any): Promise<{
+        idIntra: string;
+        userName: string;
+        img: string;
+    }[]>;
     removeFriend(body: any, req: any): Promise<void>;
 }

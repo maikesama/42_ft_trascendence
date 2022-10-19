@@ -8,6 +8,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppGateway = void 0;
 const common_1 = require("@nestjs/common");
@@ -20,6 +23,10 @@ let AppGateway = class AppGateway {
         this.prisma = prisma;
         this.chat = chat;
         this.logger = new common_1.Logger('AppGateway');
+        this.clientToUser = {};
+    }
+    OnConnect(socket) {
+        this.logger.log(`Client connected: ${socket.id}`);
     }
     afterInit(server) {
         this.logger.log('initialized');
@@ -65,6 +72,13 @@ let AppGateway = class AppGateway {
             return false;
         }
     }
+    identify(name, clientId) {
+        this.clientToUser[clientId] = name;
+        return Object.values(this.clientToUser);
+    }
+    getClientName(clientId) {
+        return this.clientToUser[clientId];
+    }
     async handleMessage(client, message) {
         try {
             const chat = await this.prisma.chat.findUniqueOrThrow({
@@ -85,6 +99,26 @@ let AppGateway = class AppGateway {
             throw new common_1.BadRequestException(e);
         }
     }
+    async findAllMessages(client, idChat) {
+        try {
+            const messages = await this.prisma.message.findMany({
+                where: {
+                    idChat: idChat
+                }
+            });
+            return messages;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
+    async handleJoin(client, message) {
+        return this.identify(message.sender, client.id);
+    }
+    async handleTyping(isTyping, client, idChat) {
+        const name = await this.getClientName(client.id);
+        client.broadcast.emit('typing', { isTyping, name });
+    }
 };
 __decorate([
     (0, websockets_1.WebSocketServer)(),
@@ -96,6 +130,26 @@ __decorate([
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
     __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleMessage", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('findAllMessages'),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Number]),
+    __metadata("design:returntype", Promise)
+], AppGateway.prototype, "findAllMessages", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('joinChat'),
+    __param(0, (0, websockets_1.ConnectedSocket)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
+    __metadata("design:returntype", Promise)
+], AppGateway.prototype, "handleJoin", null);
+__decorate([
+    (0, websockets_1.SubscribeMessage)('typing'),
+    __param(0, (0, websockets_1.MessageBody)('isTyping')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Boolean, socket_io_1.Socket, Number]),
+    __metadata("design:returntype", Promise)
+], AppGateway.prototype, "handleTyping", null);
 AppGateway = __decorate([
     (0, websockets_1.WebSocketGateway)({ cors: true }),
     __metadata("design:paramtypes", [prisma_service_1.PrismaService, chat_service_1.ChatService])
