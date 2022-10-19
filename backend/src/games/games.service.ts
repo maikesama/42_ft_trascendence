@@ -288,4 +288,61 @@ export class GamesService{
             throw new BadRequestException(e)
         }
     }
+
+    async getGameHistory(body: any, userId: number){
+    
+        try{
+            const user = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                },
+            })
+            const gameHistory = await this.prisma.games.findMany({
+                where: {
+                    OR: [
+                        {
+                            user1: user.idIntra
+                        },
+                        {
+                            user2: user.idIntra
+                        }
+                    ]
+                },
+                orderBy: {
+                    startedAt: 'desc'
+                }
+            })
+
+            const gameHistoryplusimg = await Promise.all(gameHistory.map(async (game) => {
+                const userToGetImg1 = await this.prisma.user.findUniqueOrThrow({
+                    where: {
+                        idIntra: game.user1
+                    },
+                    select: {
+                        img: true
+                    }
+                })
+
+                const userToGetImg2 = await this.prisma.user.findUniqueOrThrow({
+                    where: {
+                        idIntra: game.user2
+                    },
+                    select: {
+                        img: true
+                    }
+                })
+
+                return {
+                    ...game,
+                    img1: userToGetImg1.img,
+                    img2: userToGetImg2.img
+                }
+            }))
+
+            return gameHistoryplusimg
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
 }

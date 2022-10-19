@@ -203,6 +203,53 @@ let GamesService = class GamesService {
             throw new common_1.BadRequestException(e);
         }
     }
+    async getGameHistory(body, userId) {
+        try {
+            const user = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                },
+            });
+            const gameHistory = await this.prisma.games.findMany({
+                where: {
+                    OR: [
+                        {
+                            user1: user.idIntra
+                        },
+                        {
+                            user2: user.idIntra
+                        }
+                    ]
+                },
+                orderBy: {
+                    startedAt: 'desc'
+                }
+            });
+            const gameHistoryplusimg = await Promise.all(gameHistory.map(async (game) => {
+                const userToGetImg1 = await this.prisma.user.findUniqueOrThrow({
+                    where: {
+                        idIntra: game.user1
+                    },
+                    select: {
+                        img: true
+                    }
+                });
+                const userToGetImg2 = await this.prisma.user.findUniqueOrThrow({
+                    where: {
+                        idIntra: game.user2
+                    },
+                    select: {
+                        img: true
+                    }
+                });
+                return Object.assign(Object.assign({}, game), { img1: userToGetImg1.img, img2: userToGetImg2.img });
+            }));
+            return gameHistoryplusimg;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
 };
 GamesService = __decorate([
     (0, common_1.Injectable)(),

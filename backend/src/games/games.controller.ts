@@ -38,4 +38,12 @@ export class GamesController{
         return await this.GamesService.getPlayerProfile(body, user['sub'])
     }
 
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getHistory')
+    async getGameHistory(@Body() body, @Req() req){
+        const user = req.user
+        return await this.GamesService.getGameHistory(body, user['sub'])
+    }
+
 }

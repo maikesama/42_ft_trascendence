@@ -1,15 +1,16 @@
-import { OnGatewayInit } from '@nestjs/websockets';
+import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
-export declare class AppGateway implements OnGatewayInit {
+export declare class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private prisma;
     private chat;
     constructor(prisma: PrismaService, chat: ChatService);
     server: Server;
     private logger;
-    OnConnect(socket: Socket): void;
     afterInit(server: any): void;
+    handleConnection(client: Socket, ...args: any[]): void;
+    handleDisconnect(client: Socket): void;
     verifyPartecipant(idIntra: string, idChat: number): Promise<false | import(".prisma/client").Partecipant>;
     isChatAdmin(idIntra: string, idChat: number): Promise<boolean>;
     saveMessage(message: {

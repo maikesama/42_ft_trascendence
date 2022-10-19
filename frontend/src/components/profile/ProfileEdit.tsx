@@ -86,6 +86,55 @@ export const SocialEdit = (props: any) => {
     fetchData();
   }, []);
 
+  const [user, setUser] = useState({} as any);
+
+  useEffect(() => {
+    const url = "http://10.11.10.4:3333/user/me";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        const json = await response.json();
+        console.log(json);
+        setUser(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [games, setGames] = useState({} as any);
+
+  useEffect(() => {
+    const url = "http://10.11.10.4:3333/games/getHistory";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        const json = await response.json();
+        console.log(json);
+        setGames(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
   };
@@ -115,12 +164,13 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem button style={style} key={index} >
+
+        <Avatar src={user.img} />
+        <ListItemText className="matchLossResult" primary={games[index]?.user1} />
+        <ListItemText className="matchLossResult" primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP1} />
+        <ListItemText className="matchLossResult" primary={games[index]?.user2} />
         <Avatar />
-        
-        <ListItemText className="matchLossResult" primary={`You`} />
-        <ListItemText className="matchLossResult" primary={`3 - 5`} />
-        <ListItemText className="matchLossResult" primary={`Adversary`} />
-        <Avatar />
+
       </ListItem>
     );
   }
@@ -130,8 +180,8 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar src={friends[index].img}/>
-        <ListItemText primary={(friends[index].idIntra)}/>
+        <Avatar src={friends[index]?.img} />
+        <ListItemText primary={(friends[index]?.idIntra)} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
@@ -158,7 +208,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? 2 : 5}
+              itemCount={props.matches ? 2 : 1}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}

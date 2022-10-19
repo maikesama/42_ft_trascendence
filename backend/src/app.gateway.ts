@@ -1,23 +1,31 @@
 import { Logger, BadRequestException } from '@nestjs/common';
-import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
 
 @WebSocketGateway({cors: true})
-export class AppGateway implements OnGatewayInit {
+export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private prisma: PrismaService, private chat: ChatService){}
-
+  
   @WebSocketServer() server: Server;
-
+  
   private logger: Logger = new Logger('AppGateway')
-
-  OnConnect(socket: Socket){
-    this.logger.log(`Client connected: ${socket.id}`)
-  }
-
+  
   afterInit(server: any) {
     this.logger.log('initialized')
+  }
+  
+  handleConnection(client: Socket, ...args: any[]) {
+    const sockets = this.server.sockets.sockets
+    this.logger.log(`Client connected: ${client.id}`)
+    this.logger.log(`Total clients: ${sockets.size}`)
+  }
+
+  handleDisconnect(client: Socket) {
+    const sockets = this.server.sockets.sockets
+    this.logger.log(`Client disconnected: ${client.id}`)
+    this.logger.log(`Total clients: ${sockets.size}`)
   }
 
   async verifyPartecipant(idIntra: string, idChat: number) {
@@ -136,6 +144,7 @@ export class AppGateway implements OnGatewayInit {
       const name = await this.getClientName(client.id)
 
       client.broadcast.emit('typing', {isTyping, name})
+
   }
 
 }

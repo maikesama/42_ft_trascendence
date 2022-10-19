@@ -25,11 +25,18 @@ let AppGateway = class AppGateway {
         this.logger = new common_1.Logger('AppGateway');
         this.clientToUser = {};
     }
-    OnConnect(socket) {
-        this.logger.log(`Client connected: ${socket.id}`);
-    }
     afterInit(server) {
         this.logger.log('initialized');
+    }
+    handleConnection(client, ...args) {
+        const sockets = this.server.sockets.sockets;
+        this.logger.log(`Client connected: ${client.id}`);
+        this.logger.log(`Total clients: ${sockets.size}`);
+    }
+    handleDisconnect(client) {
+        const sockets = this.server.sockets.sockets;
+        this.logger.log(`Client disconnected: ${client.id}`);
+        this.logger.log(`Total clients: ${sockets.size}`);
     }
     async verifyPartecipant(idIntra, idChat) {
         try {
