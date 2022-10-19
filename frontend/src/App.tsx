@@ -14,6 +14,7 @@ import { Profile } from './pages/Profile';
 import { OtherUserProfile } from './pages/OtherUserProfile';
 import { Admin } from './pages/Admin';
 import { Test } from './pages/Test';
+import { Landing2 } from './pages/Landing2';
 
 //<Route path="*" element={<Error404 />} />
 
@@ -23,6 +24,7 @@ function App() {
     <div className="App">
     <Routes>
       <Route path="/" element={<Landing />}/>
+      <Route path="/landing2" element={<Landing2 />}/>
       <Route path='/home' element={<Homepage />}/>
       <Route path="/leaderboard" element={<Leaderboard />} />
       <Route path="/matches" element={<Matches />} />

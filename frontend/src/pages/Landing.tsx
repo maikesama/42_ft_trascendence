@@ -2,7 +2,8 @@
 import axios from "axios";
 import React from "react";
 import { Form } from "react-bootstrap";
-
+import Background from "../images/backLanding.jpg"
+import './css/Homepage.css';
 
 let logged = false;
 
@@ -16,15 +17,15 @@ export const Landing = () => {
 
 	return (
 		<>
-			<section className="vh-100" style={{backgroundColor: '#9A616D'}}>
+			<section className="vh-100" id="back" style={{backgroundColor: '#282c34'}}>
             <div className="container py-5 h-100">
                 <div className="row d-flex justify-content-center align-items-center h-100">
                 <div className="col col-xl-10">
                     <div className="card" style={{borderRadius: '1rem'}}>
                     <div className="row g-0">
                         <div className="col-md-6 col-lg-5 d-none d-md-block">
-                        <img src="https://img.freepik.com/free-vector/access-control-system-abstract-concept_335657-3180.jpg?w=1380&t=st=1662554718~exp=1662555318~hmac=d1f6a6ae7626fabc810c71eb771dc9742d6b721985d99dc2704bb8de8de3c97f"
-                            alt="login form" className="img-fluid" style={{borderRadius: '1rem 0 0 1rem', objectFit: 'cover'}} />
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/42_Logo.svg/2048px-42_Logo.svg.png"
+                            alt="login form" className="img-fluid" style={{borderRadius: '1rem 0 0 1rem', objectFit: 'cover', maxHeight: '80%', maxWidth: '80%', marginTop: '42px'}} />
                         </div>
                         <div className="col-md-6 col-lg-7 d-flex align-items-center">
                         <div className="card-body p-4 p-lg-5 text-black">
