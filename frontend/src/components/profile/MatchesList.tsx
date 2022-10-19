@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -34,16 +34,75 @@ import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 
 export const MatchesList = (props: any) => {
+
+    const [games, setGames] = useState({} as any);
+
+    useEffect(() => {
+        const url = "http://10.11.10.4:3333/games/getHistory";
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const json = await response.json();
+                console.log(json);
+                setGames(json);
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    const [user, setUser] = useState({} as any);
+
+    useEffect(() => {
+        const url = "http://10.11.10.4:3333/user/me";
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const json = await response.json();
+                console.log(json);
+                setUser(json);
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     function renderMatchesRow(props: any) {
         const { index, style, matches } = props;
 
         return (
-            <ListItem button className="matchResult" style={style} key={index}>
-                <Avatar sx={{ width: 56, height: 56 }} />
-                <ListItemText className="matchLossResult" primary={`You`} />
-                <ListItemText className="matchLossResult" primary={`3 - 5`} />
-                <ListItemText className="matchLossResult" primary={`Adversary`} />
-                <Avatar sx={{ width: 56, height: 56 }} />
+            <ListItem button style={style} key={index} >
+                {games[index]?.user1 === user?.idIntra ? <>
+                    <Avatar src={games[index]?.img1} />
+                    <ListItemText primary={games[index]?.user1} />
+                    <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+                    <ListItemText primary={games[index]?.user2} />
+                    <Avatar src={games[index]?.img2} /> </> :
+                    <>
+                        <Avatar src={games[index]?.img2} />
+                        <ListItemText primary={games[index]?.user2} />
+                        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+                        <ListItemText primary={games[index]?.user1} />
+                        <Avatar src={games[index]?.img1} />
+                    </>
+                }
+
             </ListItem>
         );
     }
@@ -57,7 +116,7 @@ export const MatchesList = (props: any) => {
                         height={400}
                         width={400}
                         itemSize={80}
-                        itemCount={5} /*Qui deve essere restituito il numero di match completati*/
+                        itemCount={Object.values(games).length} /*Qui deve essere restituito il numero di match completati*/
                         overscanCount={5}
                     >
                         {renderMatchesRow}

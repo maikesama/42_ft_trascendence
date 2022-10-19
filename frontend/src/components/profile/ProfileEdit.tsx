@@ -164,12 +164,20 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem button style={style} key={index} >
-
-        <Avatar src={user.img} />
-        <ListItemText className="matchLossResult" primary={games[index]?.user1} />
-        <ListItemText className="matchLossResult" primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP1} />
-        <ListItemText className="matchLossResult" primary={games[index]?.user2} />
-        <Avatar />
+        {games[index]?.user1 === user?.idIntra ? <>
+        <Avatar src={games[index]?.img1} />
+        <ListItemText primary={games[index]?.user1} />
+        <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+        <ListItemText primary={games[index]?.user2} />
+        <Avatar src={games[index]?.img2}/> </> : 
+        <>
+        <Avatar src={games[index]?.img2} />
+        <ListItemText primary={games[index]?.user2} />
+        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+        <ListItemText primary={games[index]?.user1} />
+        <Avatar src={games[index]?.img1}/>
+        </>
+      }
 
       </ListItem>
     );
@@ -208,7 +216,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? 2 : 1}
+              itemCount={props.matches ? Object.values(friends).length % 5  : Object.values(games).length % 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}
