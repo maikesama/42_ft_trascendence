@@ -174,9 +174,34 @@ let FriendService = class FriendService {
             const friends = await this.prisma.friend.findMany({
                 where: {
                     friendById: user.idIntra
+                },
+                select: {
+                    friendId: true
                 }
             });
-            return friends;
+            const friends2 = await this.prisma.friend.findMany({
+                where: {
+                    friendId: user.idIntra
+                },
+                select: {
+                    friendById: true
+                }
+            });
+            const allFriends = friends.map((friend) => friend.friendId).concat(friends2.map((friend) => friend.friendById));
+            const allFriendsInfo = allFriends.map(async (friend) => {
+                const friendInfo = await this.prisma.user.findUnique({
+                    where: {
+                        idIntra: friend
+                    },
+                    select: {
+                        idIntra: true,
+                        userName: true,
+                        img: true,
+                    }
+                });
+                return friendInfo;
+            });
+            return Promise.all(allFriendsInfo);
         }
         catch (e) {
             throw new common_1.BadRequestException(e);

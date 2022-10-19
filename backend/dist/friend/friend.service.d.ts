@@ -8,6 +8,10 @@ export declare class FriendService {
     removeInvite(body: any, userId: number): Promise<void>;
     acceptInvite(body: any, userId: number): Promise<void>;
     declineInvite(body: any, userId: number): Promise<void>;
-    getFriends(body: any, userId: number): Promise<import(".prisma/client").Friend[]>;
+    getFriends(body: any, userId: number): Promise<{
+        idIntra: string;
+        userName: string;
+        img: string;
+    }[]>;
     removeFriend(body: any, userId: number): Promise<void>;
 }

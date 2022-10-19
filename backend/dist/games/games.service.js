@@ -120,7 +120,7 @@ let GamesService = class GamesService {
                 },
                 data: {
                     rank: this.sum(winner.rank, 30),
-                    loss: this.sum(winner.win, 1),
+                    win: this.sum(winner.win, 1),
                     winRow: this.sum(winner.winRow, 1),
                 }
             });

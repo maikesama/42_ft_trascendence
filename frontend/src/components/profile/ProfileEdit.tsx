@@ -1,4 +1,4 @@
-import React,{useRef, useState, useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -60,6 +60,32 @@ export const SocialEdit = (props: any) => {
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
 
+
+  const [friends, setFriends] = useState({} as any);
+
+  useEffect(() => {
+    const url = "http://10.11.10.4:3333/friend/getFriends";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        const json = await response.json();
+        //console.log(json);
+        setFriends(json);
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
   };
@@ -90,6 +116,7 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem button style={style} key={index} >
         <Avatar />
+        
         <ListItemText className="matchLossResult" primary={`You`} />
         <ListItemText className="matchLossResult" primary={`3 - 5`} />
         <ListItemText className="matchLossResult" primary={`Adversary`} />
@@ -103,8 +130,8 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar />
-        <ListItemText  primary={`Friend`}  />
+        <Avatar src={friends[index].img}/>
+        <ListItemText primary={(friends[index].idIntra)}/>
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
@@ -122,7 +149,6 @@ export const SocialEdit = (props: any) => {
             <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
               {props.title}
             </Typography>
-            <label style={{ color: "#fff", backgroundColor: 'black', borderRadius: '35px 35px', padding: 6 }}>{props.tot}</label>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlignLast: 'center' }}>
@@ -132,7 +158,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? 12 : 5}
+              itemCount={props.matches ? 2 : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}
@@ -165,24 +191,24 @@ export const ProfileEdit = (props: any) => {
 
   const clickSave = async () => {
     //return console.log(nick.current.value)
-    
+
     let url = "http://10.11.10.4:3333/user/update/username";
 
-    
+
     try {
-            const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers:{
-            'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({userName: nick.current.value})
-    });
-            // const json = await response.json();
-            // console.log(json);
-            // setUser(json);
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ userName: nick.current.value })
+      });
+      // const json = await response.json();
+      // console.log(json);
+      // setUser(json);
     } catch (error) {
-            console.log("error", error);
+      console.log("error", error);
     }
     window.location.reload()
   }
@@ -201,11 +227,11 @@ export const ProfileEdit = (props: any) => {
       const response = await fetch('http://10.11.10.4:3333/user/update/pp', {
         method: "POST",
         credentials: 'include',
-        headers:{
+        headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({dataURL: imageList[0].dataURL}),
-    });
+        body: JSON.stringify({ dataURL: imageList[0].dataURL }),
+      });
       const json = await response.json();
       //console.log(json);
     } catch (error) {
@@ -227,21 +253,21 @@ export const ProfileEdit = (props: any) => {
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
-        <CardMedia
-          component="img"
-          height="380"
-          image={props.img}
-          alt=""
-        />
-        <Typography className="UploadImageTxt">Upload Image</Typography>
-        <ImageUploading value={images} onChange={onChange}>
+      <CardMedia
+        component="img"
+        height="380"
+        image={props.img}
+        alt=""
+      />
+      <Typography className="UploadImageTxt">Upload Image</Typography>
+      <ImageUploading value={images} onChange={onChange}>
         {({
-            onImageUpload,
-          }) => (
-            // write your building UI
-              <button onClick={onImageUpload}>Upload Image</button>
-          )}
-        </ImageUploading>
+          onImageUpload,
+        }) => (
+          // write your building UI
+          <button onClick={onImageUpload}>Upload Image</button>
+        )}
+      </ImageUploading>
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -249,7 +275,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Nickname:
           </Typography>
-          <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled/>
+          <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
           <Button sx={{ color: 'black' }} onClick={handleNick}>
             <EditIcon />
           </Button>

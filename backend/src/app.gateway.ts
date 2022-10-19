@@ -1,9 +1,8 @@
 import { Logger, BadRequestException } from '@nestjs/common';
-import { OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
+import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
-import * as cache from "cache-manager";
 
 @WebSocketGateway({cors: true})
 export class AppGateway implements OnGatewayInit {
@@ -12,6 +11,10 @@ export class AppGateway implements OnGatewayInit {
   @WebSocketServer() server: Server;
 
   private logger: Logger = new Logger('AppGateway')
+
+  OnConnect(socket: Socket){
+    this.logger.log(`Client connected: ${socket.id}`)
+  }
 
   afterInit(server: any) {
     this.logger.log('initialized')
@@ -65,6 +68,18 @@ export class AppGateway implements OnGatewayInit {
     }
   }
 
+  clientToUser = {}
+
+  identify(name: string, clientId: string){
+    this.clientToUser[clientId] = name
+
+    return Object.values(this.clientToUser)
+  }
+
+  getClientName(clientId: string){
+    return this.clientToUser[clientId]
+  }
+
   @SubscribeMessage('msgToServer')
   async handleMessage(client: Socket, message:{ sender: string, idChat: number, text: string} ): Promise<void> {
     try{
@@ -93,12 +108,34 @@ export class AppGateway implements OnGatewayInit {
     
   }
 
-  // @SubscribeMessage('test')
-  // async handleTest(client: Socket, idIntra: string): Promise<void> {
-  // {
-  //   client.join('waitingRoom');
-  //   cache.userSessionCache
-  //   this.userSessionCache.addOrUpdate(userName);
+  @SubscribeMessage('findAllMessages')
+  async findAllMessages(client: Socket, idChat: number) {
+    try{
+      const messages = await this.prisma.message.findMany({
+        where: {
+          idChat: idChat
+        }
+      })
+      //client.emit('allMessages', messages)
+      return messages
+    }
+    catch (e) {
+      throw new BadRequestException(e)
+    }
+  
+  }
 
-  // }
+  @SubscribeMessage('joinChat')
+  async handleJoin(@ConnectedSocket() client: Socket,message:{ sender: string, idChat: number, text: string}) {
+  
+    return this.identify(message.sender, client.id)
+  }
+
+  @SubscribeMessage('typing')
+  async handleTyping(@MessageBody('isTyping') isTyping: boolean ,client: Socket, idChat: number) {
+      const name = await this.getClientName(client.id)
+
+      client.broadcast.emit('typing', {isTyping, name})
+  }
+
 }
