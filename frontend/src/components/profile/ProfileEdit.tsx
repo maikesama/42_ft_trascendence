@@ -75,16 +75,34 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        //console.log(json);
+        console.log(json);
         setFriends(json);
-        //console.log(json.friends)
       } catch (error) {
         console.log("error", error);
       }
     };
-
     fetchData();
   }, []);
+
+  async function block() {
+    console.log('block')
+    const url = "http://10.11.10.4:3333/user/block/mpaci";
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const json = await response.json();
+      console.log(json);
+      window.location.reload();
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
 
   const [user, setUser] = useState({} as any);
 
@@ -100,7 +118,6 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
         setUser(json);
       } catch (error) {
         console.log("error", error);
@@ -124,7 +141,6 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
         setGames(json);
       } catch (error) {
         console.log("error", error);
@@ -193,7 +209,7 @@ export const SocialEdit = (props: any) => {
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={block}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }

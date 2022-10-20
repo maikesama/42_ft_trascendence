@@ -53,6 +53,54 @@ let FriendService = class FriendService {
             throw new common_1.BadRequestException(e);
         }
     }
+    async getInvitedByMe(userId) {
+        try {
+            const me = await this.prisma.user.findUnique({
+                where: { id: userId },
+                include: {
+                    invited: {
+                        include: {
+                            invited: true
+                        }
+                    }
+                }
+            });
+            const InvitedInfo = me.invited.map((invited) => {
+                return {
+                    idIntra: invited.invited.idIntra,
+                    img: invited.invited.img,
+                };
+            });
+            return InvitedInfo;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
+    async getInvited(userId) {
+        try {
+            const me = await this.prisma.user.findUnique({
+                where: { id: userId },
+                include: {
+                    invitedBy: {
+                        include: {
+                            invitedBy: true
+                        }
+                    }
+                }
+            });
+            const invitedByInfo = me.invitedBy.map((invitedBy) => {
+                return {
+                    idIntra: invitedBy.invitedBy.idIntra,
+                    img: invitedBy.invitedBy.img,
+                };
+            });
+            return invitedByInfo;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
     async inviteFriend(body, userId) {
         try {
             const userToInvite = await this.prisma.user.findUniqueOrThrow({

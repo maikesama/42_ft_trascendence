@@ -115,7 +115,6 @@ export const SearchBar = (props: any) => {
                     </FixedSizeList>
                 </div>
                 <DialogActions style={{ justifyContent: 'center' }}>
-                    <Button variant="outlined">Refresh</Button>
                     <Button variant="contained" onClick={props.closeStatus}>Close</Button>
                 </DialogActions>
             </DialogContent>

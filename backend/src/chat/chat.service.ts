@@ -8,16 +8,85 @@ export class ChatService{
 
     constructor(private prismaService: PrismaService){}
 
+    async getChannels(userId: number){
+        try{
+            const channels = await this.prismaService.chat.findMany({
+                where: {
+                    OR: [
+                        {
+                            type: 'public'
+                        },
+                        {
+                            type: 'protected'
+                        }
+                    ]
+                }
+            })
+            const chanInfo = await channels.map(async(channel: any) => {
+                return {
+
+                    name: channel.name,
+                    type: channel.type,
+                    id: channel.id,
+
+                }})
+
+            return chanInfo
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
+    async getChatUsers(body, userId: number){
+        try{
+            const chat = await this.prismaService.chat.findUnique({
+                where: {
+                    id: body.chatId
+                },
+                include: {
+                        partecipant : true
+                }
+            })
+
+            const users = await chat.partecipant.map(async(user: any) => {
+                const userInfo = await this.prismaService.user.findUnique({
+                    where: {
+                        idIntra: user.idIntra
+                    },
+                    select: {
+                        idIntra: true,
+                        img: true,
+                    }
+                })
+                return {   
+                    idIntra: userInfo.idIntra,
+                    img: userInfo.img,
+                }
+            })
+            
+            
+
+            return users
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+                    
+
 
     async searchUser(body: any, userId: number){
         try{
+            if (body.initials === '')
+                return []
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
 
-            const users: {idIntra: String}[] = await this.prismaService.user.findMany({
+            const users: {idIntra: String, img: String}[] = await this.prismaService.user.findMany({
                 where: {
                     idIntra: {
                         not: user.idIntra,
@@ -25,6 +94,7 @@ export class ChatService{
                     }},
                 select: {
                         idIntra: true,
+                        img: true
                     }
             })
 

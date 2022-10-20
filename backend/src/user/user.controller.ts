@@ -84,6 +84,14 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
+    @Get('getBlocked')
+    async getBlocked(@Req() req)
+    {
+       const user = req.user
+       return await this.userservice.getBlocked(user['sub'])
+    }
+
+    @UseGuards(AtGuard)
     @Get(':idIntra')
     @Bind(Param('idIntra'))
     async getUserProfile(idIntra, @Req() req)
@@ -91,4 +99,6 @@ export class UserController{
        const user = req.user
        return await this.userservice.getUserProfile(idIntra, user['sub'])
     }
+
+
 }

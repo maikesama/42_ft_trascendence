@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -37,15 +37,61 @@ import ListSubheader from '@mui/material/ListSubheader';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 
 export const BlockedList = (props: any) => {
+
+  const [blocked, setBlocked] = useState({} as any);
+
+  useEffect(() => {
+    const url = "http://10.11.10.4:3333/user/getBlocked";
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
+        });
+        const json = await response.json();
+        console.log(json);
+        setBlocked(json);
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  async function unblock() {
+    console.log('unblock')
+    const url = "http://10.11.10.4:3333/user/unblock/mpaci";
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+      const json = await response.json();
+      console.log(json);
+      window.location.reload();
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
   function renderBlockedRow(props: any) {
     const { index, style, matches } = props;
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar />
-        <ListItemText primary={`Blocked user`} />
+        <Avatar src={blocked[index]?.img} />
+        <ListItemText primary={blocked[index]?.idIntra} />
         <Divider variant="middle" />
-        <IconButton aria-label="unblock" size="small" style={{ color: 'green' }}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unblock" size="small" style={{ color: 'green' }} onClick={unblock}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
@@ -59,14 +105,13 @@ export const BlockedList = (props: any) => {
             height={400}
             width={400}
             itemSize={80}
-            itemCount={5} /*Qui deve essere restituito il numero di bloccati nella lista*/
+            itemCount={Object.values(blocked).length} /*Qui deve essere restituito il numero di bloccati nella lista*/
             overscanCount={5}
           >
             {renderBlockedRow}
           </FixedSizeList>
         </div>
         <DialogActions style={{ justifyContent: 'center' }}>
-          <Button variant="outlined">Refresh</Button>
           <Button variant="contained" onClick={props.closeStatus}>Close</Button>
         </DialogActions>
       </DialogContent>

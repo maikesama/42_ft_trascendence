@@ -46,6 +46,22 @@ export class FriendController{
         return await this.friendService.getFriends(body, user['sub'])
     }
 
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getInvite')
+    async getInvite(@Req() req){
+        const user = req.user
+        return await this.friendService.getInvited(user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getInvitedByMe')
+    async getInvitedByMe(@Req() req){
+        const user = req.user
+        return await this.friendService.getInvitedByMe(user['sub'])
+    }
     // @UseGuards(AtGuard)
     // @HttpCode(200)
     // @Get('searchFriend')

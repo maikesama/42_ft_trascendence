@@ -58,6 +58,10 @@ let UserController = class UserController {
         const user = req.user;
         return await this.userservice.changeUserName(body, user['sub']);
     }
+    async getBlocked(req) {
+        const user = req.user;
+        return await this.userservice.getBlocked(user['sub']);
+    }
     async getUserProfile(idIntra, req) {
         const user = req.user;
         return await this.userservice.getUserProfile(idIntra, user['sub']);
@@ -130,6 +134,14 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "changeusername", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Get)('getBlocked'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "getBlocked", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.Get)(':idIntra'),

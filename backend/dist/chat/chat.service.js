@@ -17,8 +17,68 @@ let ChatService = class ChatService {
     constructor(prismaService) {
         this.prismaService = prismaService;
     }
+    async getChannels(userId) {
+        try {
+            const channels = await this.prismaService.chat.findMany({
+                where: {
+                    OR: [
+                        {
+                            type: 'public'
+                        },
+                        {
+                            type: 'protected'
+                        }
+                    ]
+                }
+            });
+            const chanInfo = await channels.map(async (channel) => {
+                return {
+                    name: channel.name,
+                    type: channel.type,
+                    id: channel.id,
+                };
+            });
+            return chanInfo;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
+    async getChatUsers(body, userId) {
+        try {
+            const chat = await this.prismaService.chat.findUnique({
+                where: {
+                    id: body.chatId
+                },
+                include: {
+                    partecipant: true
+                }
+            });
+            const users = await chat.partecipant.map(async (user) => {
+                const userInfo = await this.prismaService.user.findUnique({
+                    where: {
+                        idIntra: user.idIntra
+                    },
+                    select: {
+                        idIntra: true,
+                        img: true,
+                    }
+                });
+                return {
+                    idIntra: userInfo.idIntra,
+                    img: userInfo.img,
+                };
+            });
+            return users;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
     async searchUser(body, userId) {
         try {
+            if (body.initials === '')
+                return [];
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -33,6 +93,7 @@ let ChatService = class ChatService {
                 },
                 select: {
                     idIntra: true,
+                    img: true
                 }
             });
             return users;

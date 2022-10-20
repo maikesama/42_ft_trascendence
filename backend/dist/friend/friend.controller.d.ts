@@ -8,7 +8,15 @@ export declare class FriendController {
     removeInvite(body: any, req: any): Promise<void>;
     getFriends(body: any, req: any): Promise<{
         idIntra: string;
+        img: string;
         userName: string;
+    }[]>;
+    getInvite(req: any): Promise<{
+        idIntra: string;
+        img: string;
+    }[]>;
+    getInvitedByMe(req: any): Promise<{
+        idIntra: string;
         img: string;
     }[]>;
     removeFriend(body: any, req: any): Promise<void>;

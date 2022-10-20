@@ -26,7 +26,7 @@ export class ChatController{
     // search user by initials letters - see jquery ajax frontend
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('searchUser')
+    @Post('searchUser')
     async searchUser(@Body() body, @Req() req){
         const user = req.user
         return await this.chatService.searchUser(body, user['sub'])
@@ -130,4 +130,19 @@ export class ChatController{
         return await this.chatService.removeAdmin(body, user['sub'])
     }
 
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getChannels')
+    async getChannels(@Req() req){
+        const user = req.user
+        return await this.chatService.getChannels(user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getChatUsers')
+    async getChatUsers(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getChatUsers(body, user['sub'])
+    }
 }

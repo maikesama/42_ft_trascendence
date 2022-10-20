@@ -40,6 +40,14 @@ let FriendController = class FriendController {
         const user = req.user;
         return await this.friendService.getFriends(body, user['sub']);
     }
+    async getInvite(req) {
+        const user = req.user;
+        return await this.friendService.getInvited(user['sub']);
+    }
+    async getInvitedByMe(req) {
+        const user = req.user;
+        return await this.friendService.getInvitedByMe(user['sub']);
+    }
     async removeFriend(body, req) {
         const user = req.user;
         return await this.friendService.removeFriend(body, user['sub']);
@@ -95,6 +103,24 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], FriendController.prototype, "getFriends", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)('getInvite'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FriendController.prototype, "getInvite", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)('getInvitedByMe'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], FriendController.prototype, "getInvitedByMe", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -74,13 +74,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const SearchBar = (props: any) => {
+
+    const [search, setSearch] = useState({} as any);
+    const initials = useRef<any>('');
+
+    async function searchUser() {
+        const url = "http://10.11.10.4:3333/chat/searchUser";
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ initials: initials.current.value }),
+            });
+            const json = await response.json();
+            console.log(json);
+            setSearch(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
     function renderSearchRow(props: any) {
         const { index, style, matches } = props;
 
         return (
             <ListItem style={style} key={index} >
-                <Avatar />
-                <ListItemText primary={`Friend`} />
+                <Avatar src={search[index]?.img}/>
+                <ListItemText primary={search[index]?.idIntra} />
                 <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
                 <Divider variant="middle" />
                 <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
@@ -99,6 +122,8 @@ export const SearchBar = (props: any) => {
                         <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
+                        inputRef={initials}
+                        onChange={searchUser}
                         placeholder="Search…"
                         inputProps={{ 'aria-label': 'search' }}
                     />
@@ -108,14 +133,13 @@ export const SearchBar = (props: any) => {
                         height={400}
                         width={400}
                         itemSize={80}
-                        itemCount={5} /*Qui deve essere restituito il numero di amici nella lista*/
+                        itemCount={Object.values(search).length % 5} /*Qui deve essere restituito il numero di amici nella lista*/
                         overscanCount={5}
                     >
                         {renderSearchRow}
                     </FixedSizeList>
                 </div>
                 <DialogActions style={{ justifyContent: 'center' }}>
-                    <Button variant="outlined">Refresh</Button>
                     <Button variant="contained" onClick={props.closeStatus}>Close</Button>
                 </DialogActions>
             </DialogContent>

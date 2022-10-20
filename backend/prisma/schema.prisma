@@ -55,6 +55,7 @@ model Friend {
 model Invited {
 	invitedId		String
 	invitedById		String
+	type			String @default("friend")
 	invitedBy	User	@relation(name: "invitedBy", fields: [invitedById], references: [idIntra])
 	invited		User	@relation(name: "invited", fields: [invitedId], references: [idIntra])
 

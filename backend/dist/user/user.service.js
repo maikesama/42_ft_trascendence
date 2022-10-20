@@ -19,6 +19,30 @@ let UserService = class UserService {
         this.prisma = prisma;
         this.jwtService = jwtService;
     }
+    async getBlocked(userId) {
+        try {
+            const user = await this.prisma.user.findUnique({
+                where: { id: userId },
+                include: {
+                    blocked: {
+                        include: {
+                            blocked: true
+                        }
+                    }
+                }
+            });
+            const blockedInfo = user.blocked.map((b) => {
+                return {
+                    idIntra: b.blocked.idIntra,
+                    img: b.blocked.img,
+                };
+            });
+            return blockedInfo;
+        }
+        catch (e) {
+            throw new common_2.HttpException(e, common_2.HttpStatus.BAD_REQUEST);
+        }
+    }
     async getProfile(Id) {
         try {
             const user = await this.prisma.user.findUniqueOrThrow({
@@ -131,6 +155,36 @@ let UserService = class UserService {
                     blockedId: idintra
                 }
             });
+            const friended = await this.prisma.friend.findMany({
+                where: {
+                    OR: [
+                        {
+                            friendId: me.idIntra,
+                            friendById: idintra
+                        },
+                        {
+                            friendId: idintra,
+                            friendById: me.idIntra
+                        },
+                    ]
+                }
+            });
+            if (friended.length > 0) {
+                await this.prisma.friend.deleteMany({
+                    where: {
+                        OR: [
+                            {
+                                friendId: me.idIntra,
+                                friendById: idintra
+                            },
+                            {
+                                friendId: idintra,
+                                friendById: me.idIntra
+                            },
+                        ]
+                    }
+                });
+            }
         }
         catch (e) {
             throw new common_2.HttpException(e, common_2.HttpStatus.NOT_FOUND);

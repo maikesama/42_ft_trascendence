@@ -4,16 +4,23 @@ export declare class UserService {
     private prisma;
     private jwtService;
     constructor(prisma: PrismaService, jwtService: JwtService);
+    getBlocked(userId: number): Promise<{
+        idIntra: string;
+        img: string;
+    }[]>;
     getProfile(Id: number): Promise<import(".prisma/client").User>;
     getUserProfile(idintra: string, requestedBy: number): Promise<import(".prisma/client").User>;
     checkIfBlocked(idintra: string, requestIdIntra: string): Promise<boolean>;
     getAllUsers(): Promise<{
-        id: number;
+        blocked: import(".prisma/client").Blocklist[];
+        friend: import(".prisma/client").Friend[];
+        friendBy: import(".prisma/client").Friend[];
         idIntra: string;
+        img: string;
+        id: number;
         userName: string;
         email: string;
         tel: string;
-        img: string;
         firstName: string;
         lastName: string;
         createdAt: Date;
@@ -21,9 +28,6 @@ export declare class UserService {
         win: number;
         loss: number;
         rank: number;
-        friend: import(".prisma/client").Friend[];
-        friendBy: import(".prisma/client").Friend[];
-        blocked: import(".prisma/client").Blocklist[];
         blockedby: import(".prisma/client").Blocklist[];
         invited: import(".prisma/client").Invited[];
         invitedBy: import(".prisma/client").Invited[];

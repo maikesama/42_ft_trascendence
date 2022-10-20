@@ -80,6 +80,14 @@ let ChatController = class ChatController {
         const user = req.user;
         return await this.chatService.removeAdmin(body, user['sub']);
     }
+    async getChannels(req) {
+        const user = req.user;
+        return await this.chatService.getChannels(user['sub']);
+    }
+    async getChatUsers(body, req) {
+        const user = req.user;
+        return await this.chatService.getChatUsers(body, user['sub']);
+    }
 };
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
@@ -104,7 +112,7 @@ __decorate([
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),
-    (0, common_1.Get)('searchUser'),
+    (0, common_1.Post)('searchUser'),
     __param(0, (0, common_1.Body)()),
     __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
@@ -231,6 +239,25 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "removeAdmin", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)('getChannels'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getChannels", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Get)('getChatUsers'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getChatUsers", null);
 ChatController = __decorate([
     (0, common_1.Controller)('chat'),
     __metadata("design:paramtypes", [chat_service_1.ChatService])
