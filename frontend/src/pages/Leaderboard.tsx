@@ -16,7 +16,7 @@ export const Leaderboard = () => {
         const [user, setUser] = useState({} as any);
 
         useEffect(() => {
-        const url = "http://10.11.10.4:3333/games/getLeaderboard";
+        const url = "http://10.11.11.3:3333/games/getLeaderboard";
 
         const fetchData = async () => {
         try {

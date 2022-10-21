@@ -80,7 +80,7 @@ export class ChatService{
         try{
             if (body.initials === '')
                 return []
-            const user = await this.prismaService.user.findUniqueOrThrow({
+            const me = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
@@ -89,7 +89,7 @@ export class ChatService{
             const users: {idIntra: String, img: String}[] = await this.prismaService.user.findMany({
                 where: {
                     idIntra: {
-                        not: user.idIntra,
+                        not: me.idIntra,
                         startsWith: body.initials,
                     }},
                 select: {
@@ -98,7 +98,28 @@ export class ChatService{
                     }
             })
 
-            return users
+            const removeBlocked = await users.map(async(user: any) => {
+                const blocked = await this.prismaService.blocklist.findMany({
+                    where: {
+                        OR: [
+                            {
+                                blockId: user.idIntra,
+                                blockedId: me.idIntra
+                            },
+                            {
+                                blockId: me.idIntra,
+                                blockedId: user.idIntra
+                            }
+                        ]
+                    }
+                })
+                if (blocked.length === 0)
+                    return user
+            })
+
+            const ret = await Promise.all(removeBlocked);
+            if (ret)
+                return ret;
         }
         catch(err){
             throw new BadRequestException(err)

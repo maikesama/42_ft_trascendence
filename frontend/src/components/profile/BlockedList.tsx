@@ -41,7 +41,7 @@ export const BlockedList = (props: any) => {
   const [blocked, setBlocked] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://10.11.10.4:3333/user/getBlocked";
+    const url = `http://10.11.11.3:3333/user/getBlocked`;
 
     const fetchData = async () => {
       try {
@@ -64,8 +64,8 @@ export const BlockedList = (props: any) => {
   }, []);
 
   async function unblock() {
-    console.log('unblock')
-    const url = "http://10.11.10.4:3333/user/unblock/mpaci";
+    const idIntra = await document.getElementById('idIntra')?.innerText;
+    const url = `http://10.11.11.3:3333/user/unblock/${idIntra}`;
 
     try {
       const response = await fetch(url, {
@@ -75,8 +75,6 @@ export const BlockedList = (props: any) => {
           'Content-Type': 'application/json',
         }
       });
-      const json = await response.json();
-      console.log(json);
       window.location.reload();
     } catch (error) {
       console.log("error", error);
@@ -89,7 +87,7 @@ export const BlockedList = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar src={blocked[index]?.img} />
-        <ListItemText primary={blocked[index]?.idIntra} />
+        <ListItemText id="idIntra" primary={blocked[index]?.idIntra} />
         <Divider variant="middle" />
         <IconButton aria-label="unblock" size="small" style={{ color: 'green' }} onClick={unblock}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
       </ListItem>

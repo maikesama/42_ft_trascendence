@@ -38,7 +38,7 @@ export const MatchesList = (props: any) => {
     const [games, setGames] = useState({} as any);
 
     useEffect(() => {
-        const url = "http://10.11.10.4:3333/games/getHistory";
+        const url = "http://10.11.11.3:3333/games/getHistory";
 
         const fetchData = async () => {
             try {
@@ -62,7 +62,7 @@ export const MatchesList = (props: any) => {
     const [user, setUser] = useState({} as any);
 
     useEffect(() => {
-        const url = "http://10.11.10.4:3333/user/me";
+        const url = "http://10.11.11.3:3333/user/me";
 
         const fetchData = async () => {
             try {

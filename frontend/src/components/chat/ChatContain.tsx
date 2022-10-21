@@ -133,6 +133,29 @@ export const ChatContain = (props: any) => {
         setChatView(param);
     }
 
+    const [friends, setFriends] = useState({} as any);
+
+    React.useEffect(() => {
+        const url = "http://10.11.11.3:3333/friend/getFriends";
+
+        const fetchData = async () => {
+        try {
+            const response = await fetch(url, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+            });
+            const json = await response.json();
+            console.log(json);
+            setFriends(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+        };
+        fetchData();
+    }, []);
+
     function renderSocialRow(props: any) {
         const { index, style, matches } = props;
     
@@ -159,7 +182,7 @@ export const ChatContain = (props: any) => {
                         height={460}
                         width={310}
                         itemSize={90}
-                        itemCount={props.matches ? Object.values(friends).length % 5 : Object.values(games).length % 5}
+                        itemCount={Object.values(friends).length}
                         overscanCount={5}
                     >
                         {renderSocialRow}

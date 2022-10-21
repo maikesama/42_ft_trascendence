@@ -4,10 +4,7 @@ export declare class ChatController {
     constructor(chatService: ChatService);
     newChannel(body: any, req: any): Promise<void>;
     newDm(body: any, req: any): Promise<void>;
-    searchUser(body: any, req: any): Promise<{
-        idIntra: String;
-        img: String;
-    }[]>;
+    searchUser(body: any, req: any): Promise<any[]>;
     muteUser(body: any, req: any): Promise<void>;
     unmuteUser(body: any, req: any): Promise<void>;
     banUser(body: any, req: any): Promise<void>;

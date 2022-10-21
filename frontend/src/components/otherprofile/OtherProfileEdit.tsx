@@ -149,7 +149,7 @@ export const ProfileEdit = (props: any) => {
   const clickSave = async () => {
     //return console.log(nick.current.value)
 
-    let url = "http://10.11.10.4:3333/user/update/username";
+    let url = "http://10.11.11.3:3333/user/update/username";
 
 
     try {
@@ -168,7 +168,7 @@ export const ProfileEdit = (props: any) => {
       console.log("error", error);
     }
     console.log(img.current.value)
-    url = "http://10.11.10.4:3333/user/update/pp";
+    url = "http://10.11.11.3:3333/user/update/pp";
 
 
     try {

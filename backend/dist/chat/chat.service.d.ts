@@ -11,10 +11,7 @@ export declare class ChatService {
         idIntra: string;
         img: string;
     }>[]>;
-    searchUser(body: any, userId: number): Promise<{
-        idIntra: String;
-        img: String;
-    }[]>;
+    searchUser(body: any, userId: number): Promise<any[]>;
     newDm(body: any, userId: number): Promise<void>;
     isChanOwner(idChat: number, idIntra: string): Promise<boolean>;
     newChannel(body: any, userId: number): Promise<void>;
