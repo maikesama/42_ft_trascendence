@@ -160,7 +160,7 @@ export const ChatContain = (props: any) => {
         const { index, style, matches } = props;
     
         return (
-          <ListItem style={style} key={index} >
+          <ListItem button style={style} key={index} onClick={event => changeChat('DM')}>
             <Avatar src={friends[index]?.img} />
             <ListItemText primary={(friends[index]?.idIntra)} />
           </ListItem>
