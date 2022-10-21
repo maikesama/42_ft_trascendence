@@ -78,7 +78,7 @@ export const DM = (props: any) => {
 					<ListItemIcon>
 						<Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
 					</ListItemIcon>
-					<ListItemText className="userNameChat" primary="Lorenzo"></ListItemText>
+					<ListItemText className="userNameChat" primary={props.intraId}></ListItemText>
 				</ListItem>
 				<Divider />
 				<ListItem key="1">

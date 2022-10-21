@@ -87,6 +87,7 @@ export const ChatContain = (props: any) => {
     const [openAdminActions, setopenAdminActions] = React.useState(false);
     const [openUserActions, setopenUserActions] = React.useState(false);
     const [chatView, setChatView] = useState('Blank');
+    const [userNameIntra, setUserIntra] = useState('');
 
 
     const handleClickOpenCreateGroup = () => {
@@ -129,8 +130,9 @@ export const ChatContain = (props: any) => {
         setopenUserActions(false);
     };
 
-    const changeChat = (param: React.SetStateAction<string>) => {
+    const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>) => {
         setChatView(param);
+        setUserIntra(name)
     }
 
     const [friends, setFriends] = useState({} as any);
@@ -160,7 +162,7 @@ export const ChatContain = (props: any) => {
         const { index, style, matches } = props;
     
         return (
-          <ListItem button style={style} key={index} onClick={event => changeChat('DM')}>
+          <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.idIntra)}>
             <Avatar src={friends[index]?.img} />
             <ListItemText primary={(friends[index]?.idIntra)} />
           </ListItem>
@@ -212,7 +214,7 @@ export const ChatContain = (props: any) => {
                     </List>*/}
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM /> : <Channel />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM intraId = {userNameIntra} /> : <Channel />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
