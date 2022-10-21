@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -37,6 +37,9 @@ import { GroupInfo } from './GroupInfo';
 import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
+import { Blank } from './Blank';
+import { DM } from './DM';
+import { Channel } from './Channel';
 
 const useStyles = makeStyles({
     table: {
@@ -63,7 +66,7 @@ export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     let status;
- 
+
     if (onstatus && onstatus === "online") {
         status = (
             <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -83,6 +86,8 @@ export const ChatContain = (props: any) => {
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
     const [openAdminActions, setopenAdminActions] = React.useState(false);
     const [openUserActions, setopenUserActions] = React.useState(false);
+    const [chatView, setChatView] = useState('Blank');
+
 
     const handleClickOpenCreateGroup = () => {
         setopenCreateGroup(true);
@@ -124,6 +129,21 @@ export const ChatContain = (props: any) => {
         setopenUserActions(false);
     };
 
+    const changeChat = (param: React.SetStateAction<string>) => {
+        setChatView(param);
+    }
+
+    function renderSocialRow(props: any) {
+        const { index, style, matches } = props;
+    
+        return (
+          <ListItem style={style} key={index} >
+            <Avatar src={friends[index]?.img} />
+            <ListItemText primary={(friends[index]?.idIntra)} />
+          </ListItem>
+        );
+      }
+
     return (
         <div>
             <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
@@ -134,16 +154,25 @@ export const ChatContain = (props: any) => {
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenJoineGroup}><Diversity3OutlinedIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
-                    <List>
-                        <ListItem button key="RemySharp">
+                    <FixedSizeList
+
+                        height={460}
+                        width={310}
+                        itemSize={90}
+                        itemCount={props.matches ? Object.values(friends).length % 5 : Object.values(games).length % 5}
+                        overscanCount={5}
+                    >
+                        {renderSocialRow}
+                    </FixedSizeList>
+                    {/*<List>
+                        <ListItem button key="RemySharp" onClick={event => changeChat('DM')}>
                             <ListItemIcon>
                                 <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
                             </ListItemIcon>
                             <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                            <ListItemText secondary="online" ></ListItemText>
                         </ListItem>
                         <Divider />
-                        <ListItem button key="Alice">
+                        <ListItem button key="Alice" onClick={event => changeChat('Channel')}>
                             <ListItemIcon>
                                 <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
                             </ListItemIcon>
@@ -157,83 +186,22 @@ export const ChatContain = (props: any) => {
                             <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
                         </ListItem>
                         <Divider />
-                    </List>
+                    </List>*/}
                 </Grid>
                 <Grid item xs={9}>
-                    <List className={classes.messageArea}>
-                        <ListItem button key="" onClick={handleClickOpenGroupInfo}>
-                            <ListItemIcon>
-                                <Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                            </ListItemIcon>
-                            <ListItemText className="userNameChat" primary="Lorenzo"></ListItemText>
-                            <ListItem>{status}</ListItem>
-                        </ListItem>
-                        <Divider />
-                        <ListItem key="1">
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText primary="Hey man, What's up ?"></ListItemText>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText secondary="09:30"></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                        <ListItem key="2">
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText primary="Hey, Iam Good! What about you ?" ></ListItemText>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText secondary="09:31"></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                        <ListItem key="3">
-                            <Grid container>
-                                <Grid item xs={12}>
-                                    <ListItemText primary="Cool. i am good, let's catch up!"></ListItemText>
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <ListItemText secondary="10:30"></ListItemText>
-                                </Grid>
-                            </Grid>
-                        </ListItem>
-                    </List>
-                    <Divider />
-                    <Grid container style={{ padding: '20px' }}>
-                        <Grid item xs={11}>
-                            <TextField id="outlined-basic-email" label="Type Something" fullWidth />
-                        </Grid>
-                        <Grid xs={1} >
-                            <Fab color="primary" aria-label="add"><SendIcon /></Fab>
-                        </Grid>
-                    </Grid>
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM /> : <Channel />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
-            <JoinGroup status={openJoinGroup} closeStatus={handleCloseJoinGroup}/>
+            <JoinGroup status={openJoinGroup} closeStatus={handleCloseJoinGroup} />
             {/*MODAL ADMIN IN GROUP ACTIONS */}
-            <AdminGroupActions status={openAdminActions} closeStatus={handleCloseAdminActions}/>   
+            <AdminGroupActions status={openAdminActions} closeStatus={handleCloseAdminActions} />
             {/*MODAL GROUP INFO */}
-            <GroupInfo status={openGroupInfo} closeStatus={handleCloseGroupInfo}/>
+            <GroupInfo status={openGroupInfo} closeStatus={handleCloseGroupInfo} />
             {/*MODAL CREATE CHANNEL */}
-            <CreateChannel status={openCreateGroup} closeStatus={handleCloseCreateGroup}/>
+            <CreateChannel status={openCreateGroup} closeStatus={handleCloseCreateGroup} />
             {/*MODAL USER ACTIONS */}
-            <UserActions status={openUserActions} closeStatus={handleCloseUserActions}/>
-            {/*MODAL BLOCK USER */}
-            {/*<Dialog open={openGroupInfo} onClose={handleCloseGroupInfo}>
-                <DialogTitle>Blocca</DialogTitle>
-                <DialogContent>
-                    <DialogContentText>
-                        Sei sicuro di voler bloccare questo utente?
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleCloseGroupInfo}>Cancel</Button>
-                    <Button onClick={handleCloseGroupInfo}>Blocca</Button>
-                </DialogActions>
-            </Dialog>*/}
+            <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
         </div >
     );
 }
