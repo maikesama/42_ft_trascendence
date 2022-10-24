@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -88,6 +88,7 @@ export const ChatContain = (props: any) => {
     const [openUserActions, setopenUserActions] = React.useState(false);
     const [chatView, setChatView] = useState('Blank');
     const [userNameIntra, setUserIntra] = useState('');
+    const [userImg, setUserImg] = useState('');
 
 
     const handleClickOpenCreateGroup = () => {
@@ -130,9 +131,10 @@ export const ChatContain = (props: any) => {
         setopenUserActions(false);
     };
 
-    const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>) => {
+    const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, img: React.SetStateAction<string>) => {
         setChatView(param);
-        setUserIntra(name)
+        setUserIntra(name);
+        setUserImg(img);
     }
 
     const [friends, setFriends] = useState({} as any);
@@ -158,11 +160,33 @@ export const ChatContain = (props: any) => {
         fetchData();
     }, []);
 
+    const [search, setSearch] = useState({} as any);
+    const initials = useRef<any>('');
+
+    async function searchUser() {
+        const url = `http://10.11.11.3:3333/chat/searchUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ initials: initials.current.value }),
+            });
+            const json = await response.json();
+            console.log(json);
+            setSearch(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+    
     function renderSocialRow(props: any) {
         const { index, style} = props;
     
         return (
-          <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.idIntra)}>
+          <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.userName, friends[index]?.img)}>
             <Avatar src={friends[index]?.img} />
             <Divider variant='middle'/>
             <Typography variant='h6'>{(friends[index]?.userName)}</Typography>
@@ -175,7 +199,7 @@ export const ChatContain = (props: any) => {
             <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
                     <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
-                        <TextField className="searchBar" id="outlined-basic-email" label="Search" variant="outlined" fullWidth />
+                        <TextField className="searchBar" inputRef={initials} id="outlined-basic-email" label="Search" variant="outlined" fullWidth onChange={searchUser}/>
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenCreateGroup}><GroupAddSharpIcon fontSize="large" /></IconButton>
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenJoineGroup}><Diversity3OutlinedIcon fontSize="large" /></IconButton>
                     </Grid>
@@ -183,7 +207,7 @@ export const ChatContain = (props: any) => {
                     <FixedSizeList
 
                         height={460}
-                        width={310}
+                        width='full'
                         itemSize={90}
                         itemCount={Object.values(friends).length}
                         overscanCount={5}
@@ -192,7 +216,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM intraId = {userNameIntra} /> : <Channel />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra = {userNameIntra} img = {userImg}/> : <Channel />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

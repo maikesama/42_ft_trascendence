@@ -275,7 +275,7 @@ export const SocialEdit = (props: any) => {
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
-          {props.matches ? <Button onClick={handleClickOpenInvited}>Invited</Button> : null}
+          {props.matches ? <Button onClick={handleClickOpenInvited}>Invites</Button> : null}
           {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Game History</Button>}
         </CardActions>
       </Card>

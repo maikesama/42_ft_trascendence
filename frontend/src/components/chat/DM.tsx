@@ -37,6 +37,7 @@ import { GroupInfo } from './GroupInfo';
 import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 
 const useStyles = makeStyles({
 	table: {
@@ -74,11 +75,12 @@ export const DM = (props: any) => {
 	return (
 		<>
 			<List className={classes.messageArea}>
-				<ListItem button key="" onClick={handleClickOpenUserActions}>
-					<ListItemIcon>
-						<Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
+				<ListItem key="">
+					<ListItemIcon onClick={handleClickOpenUserActions}>
+						<Avatar alt="Lorenzo" src={props.img} style={{width: '60px', height: '60px'}}/>
 					</ListItemIcon>
-					<ListItemText className="userNameChat" primary={props.intraId}></ListItemText>
+					<Typography variant='h5' className="userNameChat" onClick={handleClickOpenUserActions} style={{width: '150px', marginLeft: '50px'}}>{props.idIntra}</Typography>
+					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				<Divider />
 				<ListItem key="1">
