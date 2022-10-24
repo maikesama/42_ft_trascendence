@@ -101,8 +101,8 @@ export const SearchBar = (props: any) => {
 
         const { index, style, matches } = props;
 
-        async function block() {
-            const idIntra = await document.getElementById('idIntra')?.innerText;
+        async function block(index: any) {
+            const idIntra = await search[index]?.idIntra;
             const url = `http://10.11.11.3:3333/user/block/${idIntra}`;
 
             try {
@@ -119,9 +119,32 @@ export const SearchBar = (props: any) => {
             }
         }
 
-        async function addFriend() {
-            const idIntra = await document.getElementById('idIntra')?.innerText;
-            const url = `http://10.11.11.3:3333/friend/`;
+        async function addInviteFriend(index: any) {
+            const idIntra = await search[index]?.idIntra;
+            const url = `http://10.11.11.3:3333/friend/inviteFriend`;
+
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({idIntra: idIntra}),
+                }).then((response) => {
+                    if (response.status === 400) {
+                        alert("You already have a pending request with this user");
+                    }
+                });
+                window.location.reload();
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+
+        async function removeInviteFriend(index: any) {
+            const idIntra = await search[index]?.idIntra;
+            const url = `http://10.11.11.3:3333/friend/removeInvite/`;
 
             try {
                 const response = await fetch(url, {
@@ -137,15 +160,19 @@ export const SearchBar = (props: any) => {
                 console.log("error", error);
             }
         }
+
+        const test = true;
+
         return (
             <ListItem style={style} key={index} >
                 {search[index]?.img ? <><Avatar src={search[index]?.img} />
-                <ListItemText id="idIntra" primary={search[index]?.idIntra} />
+                <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
                 <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
                 <Divider variant="middle" />
                 <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-                <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
-                <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={block}><BlockIcon fontSize="large" /></IconButton> </>: null}
+                { !(search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> :
+                 <IconButton aria-label="removefriend" size="small" style={{ color: 'green' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>}
+                <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton> </>: null}
                 
             </ListItem>
         );

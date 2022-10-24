@@ -35,13 +35,15 @@ import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import List from '@mui/material/List';
 import ListSubheader from '@mui/material/ListSubheader';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
+import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 
-export const BlockedList = (props: any) => {
+export const InvitedList = (props: any) => {
 
-  const [blocked, setBlocked] = useState({} as any);
+  const [invited, setInvited] = useState({} as any);
 
   useEffect(() => {
-    const url = `http://10.11.11.3:3333/user/getBlocked`;
+    const url = `http://10.11.11.3:3333/friend/getInvite`;
 
     const fetchData = async () => {
       try {
@@ -53,8 +55,8 @@ export const BlockedList = (props: any) => {
         });
         const json = await response.json();
         console.log(json);
-        setBlocked(json);
-        //window.location.reload();
+        setInvited(json);
+        // setInvited(json);
         //console.log(json.friends)
       } catch (error) {
         console.log("error", error);
@@ -64,50 +66,92 @@ export const BlockedList = (props: any) => {
     fetchData();
   }, []);
 
-  async function unblock(index: any) {
-    const idIntra = await blocked[index]?.idIntra;
-    const url = `http://10.11.11.3:3333/user/unblock/${idIntra}`;
+  
+  async function acceptInvite(index: any)
+  {
+    const url = `http://10.11.11.3:3333/friend/acceptInvite`;
+    const idIntra = await invited[index]?.idIntra;
 
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        }
-      });
-      window.location.reload();
-    } catch (error) {
-      console.log("error", error);
-    }
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idIntra: idIntra,
+          })
+        });
+        //const json = await response.json();
+        //console.log(json);
+        window.location.reload();
+        // setInvited(json);
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
   }
 
-  function renderBlockedRow(props: any) {
+  async function declineInvite(index: any)
+  {
+    const url = `http://10.11.11.3:3333/friend/declineInvite`;
+    const idIntra = await invited[index]?.idIntra;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            idIntra: idIntra,
+          })
+        });
+        //const json = await response.json();
+        //console.log(json);
+        window.location.reload();
+        // setInvited(json);
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }
+
+  function renderInvitesRow(props: any) {
     const { index, style, matches } = props;
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar src={blocked[index]?.img} />
-        <ListItemText id="idIntraBlock" primary={blocked[index]?.idIntra} />
+        <Avatar src={invited[index]?.img} />
+        <ListItemText id="idIntraInvite" primary={invited[index]?.idIntra} />
         <Divider variant="middle" />
-        <IconButton aria-label="unblock" size="small" style={{ color: 'green' }} onClick={() => unblock(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="acceptInvite" size="small" style={{ color: 'green' }} onClick={() => acceptInvite(index)}><CheckCircleOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="declineInvite" size="small" style={{ color: 'red' }} onClick={() => declineInvite(index)}><CancelOutlinedIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
 
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
-      <DialogTitle textAlign="center">Blocked Users</DialogTitle>
+      <DialogTitle textAlign="center">Invited Users</DialogTitle>
       <DialogContent>
         <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
           <FixedSizeList
             height={400}
             width={400}
             itemSize={80}
-            itemCount={Object.values(blocked).length} /*Qui deve essere restituito il numero di bloccati nella lista*/
+            itemCount={Object.values(invited).length} /*Qui deve essere restituito il numero di bloccati nella lista*/
             overscanCount={5}
           >
-            {renderBlockedRow}
+            {renderInvitesRow}
           </FixedSizeList>
         </div>
         <DialogActions style={{ justifyContent: 'center' }}>

@@ -21,7 +21,7 @@ import "../css/Header.css"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const pages = ['Home', 'Leaderboard', 'Admin', 'Chat'];
+const pages = ['Home', 'Leaderboard', 'Chat'];
 const settings = ['Profile', 'Logout'];
 
 export function Header(props:any) {

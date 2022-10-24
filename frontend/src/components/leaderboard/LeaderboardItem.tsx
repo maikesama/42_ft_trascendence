@@ -21,6 +21,7 @@ export function LeaderboardItem(props:any) {
 
     const img = {
         width: '40px',
+        height: '40px',
         borderRadius: '50%',
         marginLeft: '-13%',
     }
