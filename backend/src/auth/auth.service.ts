@@ -88,7 +88,7 @@ export class AuthService {
 				{
 					const tokens = await this.generateJwtTokens(user.id, user.email);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
-					res.redirect(`http://${process.env.HOST}:3000/home`)
+					res.redirect(`http://${process.env.HOST}:3000/middleware`)
 				}
 			})
 		}
