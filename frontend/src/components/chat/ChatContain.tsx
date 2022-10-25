@@ -164,6 +164,7 @@ export const ChatContain = (props: any) => {
         return (
           <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.idIntra)}>
             <Avatar src={friends[index]?.img} />
+            <Divider variant='middle'/>
             <ListItemText primary={(friends[index]?.idIntra)} />
           </ListItem>
         );
@@ -189,29 +190,6 @@ export const ChatContain = (props: any) => {
                     >
                         {renderSocialRow}
                     </FixedSizeList>
-                    {/*<List>
-                        <ListItem button key="RemySharp" onClick={event => changeChat('DM')}>
-                            <ListItemIcon>
-                                <Avatar alt="Remy Sharp" src="https://material-ui.com/static/images/avatar/1.jpg" />
-                            </ListItemIcon>
-                            <ListItemText primary="Remy Sharp">Remy Sharp</ListItemText>
-                        </ListItem>
-                        <Divider />
-                        <ListItem button key="Alice" onClick={event => changeChat('Channel')}>
-                            <ListItemIcon>
-                                <Avatar alt="Alice" src="https://material-ui.com/static/images/avatar/3.jpg" />
-                            </ListItemIcon>
-                            <ListItemText primary="Alice">Alice</ListItemText>
-                        </ListItem>
-                        <Divider />
-                        <ListItem button key="CindyBaker">
-                            <ListItemIcon>
-                                <Avatar alt="Cindy Baker" src="https://material-ui.com/static/images/avatar/2.jpg" />
-                            </ListItemIcon>
-                            <ListItemText primary="Cindy Baker">Cindy Baker</ListItemText>
-                        </ListItem>
-                        <Divider />
-                    </List>*/}
                 </Grid>
                 <Grid item xs={9}>
                     {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM intraId = {userNameIntra} /> : <Channel />}
