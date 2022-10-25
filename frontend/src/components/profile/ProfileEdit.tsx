@@ -41,6 +41,7 @@ import { match } from 'assert';
 import { render } from 'react-dom';
 import { blue } from '@material-ui/core/colors';
 import { SearchBar } from './SearchBar';
+import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import { Link } from 'react-router-dom';
@@ -59,6 +60,7 @@ export const SocialEdit = (props: any) => {
   const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
+  const [openInvited, setOpenInvited] = React.useState(false);
 
 
   const [friends, setFriends] = useState({} as any);
@@ -84,9 +86,9 @@ export const SocialEdit = (props: any) => {
     fetchData();
   }, []);
 
-  async function block() {
-    console.log('block')
-    const url = "http://10.11.11.3:3333/user/block/mpaci";
+  async function block(index: any) {
+    const idIntra = await friends[index]?.idIntra;
+    const url = `http://10.11.11.3:3333/user/block/${idIntra}`;
 
     try {
       const response = await fetch(url, {
@@ -96,8 +98,31 @@ export const SocialEdit = (props: any) => {
           'Content-Type': 'application/json',
         }
       });
-      const json = await response.json();
-      console.log(json);
+      //const json = await response.json();
+      //console.log(json);
+      window.location.reload();
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  async function unfriend(index: any) {
+    const idIntra = await friends[index]?.idIntra;
+    const url = `http://10.11.11.3:3333/friend/removeFriend`;
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          idIntra: idIntra
+        })
+      });
+      //const json = await response.json();
+      //console.log(json);
       window.location.reload();
     } catch (error) {
       console.log("error", error);
@@ -175,6 +200,14 @@ export const SocialEdit = (props: any) => {
     setOpenSearchBar(false);
   };
 
+  const handleClickOpenInvited = () => {
+    setOpenInvited(true);
+  };
+
+  const handleClickCloseInvited = () => {
+    setOpenInvited(false);
+  };
+
   function renderMatchesRowPreview(props: any) {
     const { index, style, matches } = props;
 
@@ -205,11 +238,11 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar src={friends[index]?.img} />
-        <ListItemText primary={(friends[index]?.idIntra)} />
+        <ListItemText  id="idIntraFriend" primary={(friends[index]?.idIntra)}/>
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={block}><BlockIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
@@ -242,9 +275,11 @@ export const SocialEdit = (props: any) => {
         </CardContent>
         <CardActions sx={{ justifyContent: 'center' }}>
           {props.matches ? <Button onClick={handleClickOpenSearchBar}>Add friend</Button> : null}
+          {props.matches ? <Button onClick={handleClickOpenInvited}>Invites</Button> : null}
           {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Game History</Button>}
         </CardActions>
       </Card>
+      <InvitedList  status={openInvited} closeStatus={handleClickCloseInvited}/>
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*Blocked List Modal*/}
@@ -371,7 +406,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Score:
           </Typography>
-          <TextField inputProps={fontColor} id="txtScore" placeholder="224" variant="standard" disabled />
+          <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
           <Button sx={{ color: 'black', visibility: 'hidden' }} >
             <EditIcon />
           </Button>

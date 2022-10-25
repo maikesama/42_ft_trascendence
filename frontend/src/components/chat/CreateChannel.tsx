@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -35,14 +35,41 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 
 export const CreateChannel = (props: any) => {
     
-    const [pass, setPass] = useState('Public');
+    const name = useRef<any>('');
+    const [type, setType] = useState('Public');
+    const pass = useRef<any>('');
+
+    async function createChannel() {
+        console.log(name.current.value);
+        console.log(type.toLowerCase())
+        console.log(pass.current.value);
+        const url = `http://10.11.11.3:3333/chat/newChannel`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ 
+                    name: name.current.value,
+                    type: type.toLowerCase(),
+                    pass: pass.current.value, }),
+            });
+            const json = await response.json();
+            console.log(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
     // const [openCreateGroup, setopenCreateGroup] = React.useState(false);
     
     // const handleCloseCreateGroup = () => {
     //     setopenCreateGroup(false);
     // };
 
-    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setPass(e.target.value)
+    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setType(e.target.value)
 
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;
@@ -64,6 +91,7 @@ export const CreateChannel = (props: any) => {
                     To create a new group chat, please enter the name of the channel here:
                 </DialogContentText>
                 <TextField
+                    inputRef={name}
                     autoFocus
                     margin="dense"
                     id="name"
@@ -87,11 +115,12 @@ export const CreateChannel = (props: any) => {
                     <option value={"Private"}>Private</option>
                     <option value={"Protected"}>Protected</option>
                 </NativeSelect>
-                {pass === 'Protected' ? <>
+                {type === 'Protected' ? <>
                     <DialogContentText paddingTop={'10px'}>
                         Input password:
                     </DialogContentText>
                     <TextField
+                        inputRef={pass}
                         autoFocus
                         margin="dense"
                         id="password"
@@ -119,7 +148,7 @@ export const CreateChannel = (props: any) => {
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.closeStatus}>Cancel</Button>
-                <Button onClick={props.closeStatus}>Create</Button>
+                <Button onClick={createChannel}>Create</Button>
             </DialogActions>
         </Dialog>
     );

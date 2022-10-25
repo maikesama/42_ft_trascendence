@@ -8,19 +8,16 @@ export class FriendService{
 
     async isFriend(userId: string, friendId: string) {
         try{
-            const friendship1 = await this.prisma.friend.findUnique({
+            const friendship = await this.prisma.friend.findMany({
                 where: {
-                    friendId_friendById: { friendId: friendId, friendById: userId }
+                    OR: [
+                        {friendId: userId, friendById: friendId},
+                        {friendId: friendId, friendById: userId}
+                    ]
                 }
             })
-            const friendship2 = await this.prisma.friend.findUnique({
-                where: {
-                    friendId_friendById: { friendId: userId, friendById: friendId }
-                }
-            })
-            if (friendship1 || friendship2){
+            if (friendship.length > 0)
                 return true
-            }
             return false
         }
         catch(e){
@@ -72,22 +69,25 @@ export class FriendService{
     async getInvited(userId: number){
         try{
             const me = await this.prisma.user.findUnique({
-                where: { id: userId },
+                where: { id: userId },})
+
+            const invites = await this.prisma.invited.findMany({
+                where: {
+                    invitedId: me.idIntra
+                },
                 include: {
-                    invitedBy: {
-                        include: {
-                            invitedBy: true
-                        }
-                    }
+                    invitedBy: true
                 }
             })
 
-            const invitedByInfo = me.invitedBy.map((invitedBy) => {
+            const invitedByInfo = invites.map((user) => {
                 return {
-                    idIntra: invitedBy.invitedBy.idIntra,
-                    img: invitedBy.invitedBy.img,
+                    idIntra: user.invitedBy.idIntra,
+                    img: user.invitedBy.img,
                 }
             })
+
+            
             return invitedByInfo
         }
         catch(e){
@@ -100,6 +100,8 @@ export class FriendService{
 
     async inviteFriend(body: any, userId: number){
         try{
+
+            
             const userToInvite = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.idIntra
@@ -308,9 +310,18 @@ export class FriendService{
             })
             if (!await this.isFriend(user.idIntra, friend.idIntra))
                 throw new BadRequestException("Not friend");
-            const remove = await this.prisma.friend.delete({
+            const remove = await this.prisma.friend.deleteMany({
                 where: {
-                    friendId_friendById: { friendId: user.idIntra, friendById: friend.idIntra }
+                    OR: [
+                        {
+                            friendById: user.idIntra,
+                            friendId: friend.idIntra
+                        },
+                        {
+                            friendById: friend.idIntra,
+                            friendId: user.idIntra
+                        }
+                    ]
                 }
             })
         }

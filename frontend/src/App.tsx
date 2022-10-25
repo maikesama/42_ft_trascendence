@@ -12,7 +12,6 @@ import { Friends } from './pages/Friends';
 import { Chat } from './pages/Chat';
 import { Profile } from './pages/Profile';
 import { OtherUserProfile } from './pages/OtherUserProfile';
-import { Admin } from './pages/Admin';
 import { Test } from './pages/Test';
 import { Middleware } from './pages/Middleware';
 
@@ -31,7 +30,6 @@ function App() {
       <Route path="/chat" element={<Chat />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/profile/*" element={<OtherUserProfile />} />
-      <Route path="/admin" element={<Admin />} />
       <Route path="/matches" element={<Matches />} />
       <Route path="/friends" element={<Friends />} />
       <Route path="/test" element={<Test />} />

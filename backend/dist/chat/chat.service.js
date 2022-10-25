@@ -96,7 +96,24 @@ let ChatService = class ChatService {
                     img: true
                 }
             });
-            const removeBlocked = await users.map(async (user) => {
+            const addInvetedRet = await users.map(async (user) => {
+                const invited = await this.prismaService.invited.findUnique({
+                    where: {
+                        invitedId_invitedById: {
+                            invitedId: user.idIntra,
+                            invitedById: me.idIntra
+                        }
+                    }
+                });
+                const ret = {
+                    idIntra: user.idIntra,
+                    img: user.img,
+                    invited: invited ? true : false
+                };
+                return ret;
+            });
+            const tmp = await Promise.all(addInvetedRet);
+            const removeBlocked = await tmp.map(async (user) => {
                 const blocked = await this.prismaService.blocklist.findMany({
                     where: {
                         OR: [

@@ -60,3 +60,11 @@
 
     hackerman42. essere stato qui
 
+    
+
+    ## Site waifu (/waifu/):
+        https://media.tenor.com/0znANC2b_OkAAAAM/kitagawa-marin.gif
+    ## Site Da Chief (/bestWaifu/):
+        https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif
+    
+

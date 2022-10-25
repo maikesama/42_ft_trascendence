@@ -98,7 +98,32 @@ export class ChatService{
                     }
             })
 
-            const removeBlocked = await users.map(async(user: any) => {
+
+            
+            const addInvetedRet = await users.map(async(user: any) => {
+                const invited = await this.prismaService.invited.findUnique({
+                    where: {
+                        invitedId_invitedById: {
+                            
+                            invitedId: user.idIntra,
+                            invitedById: me.idIntra
+                        }
+                    }
+                })
+                
+                const ret = {
+                    idIntra: user.idIntra,
+                    img: user.img,
+                    invited: invited ? true : false
+                }
+                return ret
+            })
+            
+            const tmp = await Promise.all(addInvetedRet)
+
+            
+
+            const removeBlocked = await tmp.map(async(user: any) => {
                 const blocked = await this.prismaService.blocklist.findMany({
                     where: {
                         OR: [
@@ -116,8 +141,12 @@ export class ChatService{
                 if (blocked.length === 0)
                     return user
             })
+            
 
             const ret = await Promise.all(removeBlocked);
+            
+
+            
             if (ret)
                 return ret;
         }

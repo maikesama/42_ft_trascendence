@@ -62,14 +62,7 @@ export class FriendController{
         const user = req.user
         return await this.friendService.getInvitedByMe(user['sub'])
     }
-    // @UseGuards(AtGuard)
-    // @HttpCode(200)
-    // @Get('searchFriend')
-    // async searchFriend(@Body() body, @Req() req){
-    //     const user = req.user
-    //     return await this.friendService.searchFriend(body, user['sub'])
-    // }
-
+    
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('removeFriend')
