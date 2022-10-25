@@ -19,11 +19,16 @@ let ChatService = class ChatService {
     }
     async getChannels(userId) {
         try {
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                },
+            });
             const channels = await this.prismaService.chat.findMany({
                 where: {
                     OR: [
                         {
-                            type: 'public'
+                            type: 'public',
                         },
                         {
                             type: 'protected'
@@ -38,7 +43,19 @@ let ChatService = class ChatService {
                     id: channel.id,
                 };
             });
-            return chanInfo;
+            const ret = await chanInfo.map(async (channel) => {
+                const partecipant = await this.prismaService.partecipant.findUnique({
+                    where: {
+                        idIntra_idChat: {
+                            idIntra: user.idIntra,
+                            idChat: channel.id,
+                        }
+                    }
+                });
+                if (!partecipant)
+                    return channel;
+            });
+            return ret;
         }
         catch (e) {
             throw new common_1.BadRequestException(e);
@@ -46,30 +63,25 @@ let ChatService = class ChatService {
     }
     async getChatUsers(body, userId) {
         try {
-            const chat = await this.prismaService.chat.findUnique({
+            const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
-                    id: body.chatId
+                    id: userId
                 },
                 include: {
                     partecipant: true
                 }
             });
-            const users = await chat.partecipant.map(async (user) => {
-                const userInfo = await this.prismaService.user.findUnique({
+            const chats = await user.partecipant.map(async (partecipant) => {
+                const chat = await this.prismaService.chat.findUnique({
                     where: {
-                        idIntra: user.idIntra
-                    },
-                    select: {
-                        idIntra: true,
-                        img: true,
+                        id: partecipant.idChat
                     }
                 });
-                return {
-                    idIntra: userInfo.idIntra,
-                    img: userInfo.img,
-                };
+                if (chat.dm === 'channel')
+                    return chat;
             });
-            return users;
+            const ret = await Promise.all(chats);
+            return ret;
         }
         catch (e) {
             throw new common_1.BadRequestException(e);
@@ -239,6 +251,8 @@ let ChatService = class ChatService {
                     name: body.name
                 }
             });
+            if (body.name === '')
+                throw new common_1.BadRequestException('name is empty');
             if (!chan) {
                 const user = await this.prismaService.user.findUniqueOrThrow({
                     where: {
@@ -275,7 +289,7 @@ let ChatService = class ChatService {
                         const part = await this.prismaService.partecipant.create({
                             data: {
                                 idChat: channel.id,
-                                idIntra: partecipant.idIntra,
+                                idIntra: partecipant,
                             }
                         });
                         return part;

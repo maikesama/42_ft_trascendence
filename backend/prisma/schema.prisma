@@ -106,7 +106,8 @@ model Partecipant{
 model Chat {
 	id					Int			@unique @default(autoincrement())
 	name				String		@unique
-	type				String	@default("public")
+	dm					String		@default("channel")
+	type				String		@default("public")
 	password			String?
 	partecipant			Partecipant[]
 	invited				String[]

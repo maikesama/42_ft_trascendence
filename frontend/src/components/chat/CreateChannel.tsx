@@ -59,7 +59,8 @@ export const CreateChannel = (props: any) => {
                 body: JSON.stringify({
                     name: name.current.value,
                     type: type.toLowerCase(),
-                    password: pwd
+                    password: pwd,
+                    partecipants: userGroup
                 }),
             });
             window.location.reload()
@@ -96,20 +97,28 @@ export const CreateChannel = (props: any) => {
 
     const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setType(e.target.value)
 
-    const [checked, setChecked] = React.useState([1]);
+    const [userGroup, setUserGroup] = React.useState([] as any);
 
-    const handleToggle = (value: number) => () => {
-        const currentIndex = checked.indexOf(value);
-        const newChecked = [...checked];
+    const handleToggle = (index: number, init: boolean) => () => {
+        let value;
+
+        if (!init)
+            value = friends[index]?.idIntra;
+        else
+            value = search[index]?.idIntra;
+        const currentIndex = userGroup.indexOf(index);
+        const newChecked = [...userGroup];
+        const newUserGroup = [...userGroup];
 
         if (currentIndex === -1) {
-            newChecked.push(value);
+            newChecked.push(index);
+            newUserGroup.push(value);
         } else {
             newChecked.splice(currentIndex, 1);
+            newUserGroup.splice(currentIndex, 1);
         }
 
-        setChecked(newChecked);
-        console.log(newChecked)
+        setUserGroup(newUserGroup);
     };
 
     function friendsRow(props: ListChildComponentProps) {
@@ -117,11 +126,11 @@ export const CreateChannel = (props: any) => {
         return (
             <ListItem key={index}>
 
-                <ListItemButton role={undefined} onClick={handleToggle(index)} dense style={{ minWidth: '100%' }}>
+                <ListItemButton role={undefined} onClick={handleToggle(index, false)} dense style={{ minWidth: '100%' }}>
                     <ListItemIcon>
                         <Checkbox
                             edge="start"
-                            checked={checked.indexOf(index) !== -1}
+                            checked={userGroup.find((e: string) => e === friends[index]?.idIntra) !== undefined}
                             tabIndex={-1}
                             disableRipple
                             inputProps={{ 'aria-labelledby': '1' }}
@@ -130,10 +139,54 @@ export const CreateChannel = (props: any) => {
                     <Avatar src={'https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif'} style={{ marginRight: 20 }} />
                     <ListItemText id={`${index}`} primary={`${friends[index]?.idIntra} `} />
 
+                </ListItemButton>
+            </ListItem>
+        );
+    }
+
+    function searchRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+        return (
+            <ListItem key={index}>
+
+                <ListItemButton role={undefined} onClick={handleToggle(index, true)} dense style={{ minWidth: '100%' }}>
+                    <ListItemIcon>
+                        <Checkbox
+                            edge="start"
+                            checked={userGroup.find((e: string) => e === search[index]?.idIntra) !== undefined}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': '1' }}
+                        />
+                    </ListItemIcon>
+                    <Avatar src={'https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif'} style={{ marginRight: 20 }} />
+                    <ListItemText id={`${index}`} primary={`${search[index]?.idIntra} `} />
 
                 </ListItemButton>
             </ListItem>
         );
+    }
+
+    const [search, setSearch] = useState({} as any);
+    const initials = useRef<any>('');
+
+    async function searchUser() {
+        const url = `http://10.11.11.3:3333/chat/searchUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ initials: initials.current.value }),
+            });
+            const json = await response.json();
+            console.log(json);
+            setSearch(json);
+        } catch (error) {
+            console.log("error", error);
+        }
     }
 
     return (
@@ -187,18 +240,30 @@ export const CreateChannel = (props: any) => {
                 <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                     Add members to your channel group:
                 </DialogContentText>
-                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
-
+                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>
+                {initials.current.value == 0 || initials.current.value == null ? <>
                 <FixedSizeList
 
                     height={230}
                     width={500}
                     itemSize={46}
                     itemCount={Object.values(friends).length}
-                    overscanCount={2}
+                    overscanCount={5}
                 >
                     {friendsRow}
+                </FixedSizeList></> : <>
+                <FixedSizeList
+
+                    height={230}
+                    width={500}
+                    itemSize={46}
+                    itemCount={Object.values(search).length}
+                    overscanCount={5}
+                >
+                    {searchRow}
                 </FixedSizeList>
+                
+                </>}
             </DialogContent>
             <DialogActions>
                 <Button onClick={props.closeStatus}>Cancel</Button>

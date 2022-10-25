@@ -2,15 +2,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export declare class ChatService {
     private prismaService;
     constructor(prismaService: PrismaService);
-    getChannels(userId: number): Promise<Promise<{
-        name: any;
-        type: any;
-        id: any;
-    }>[]>;
-    getChatUsers(body: any, userId: number): Promise<Promise<{
-        idIntra: string;
-        img: string;
-    }>[]>;
+    getChannels(userId: number): Promise<Promise<any>[]>;
+    getChatUsers(body: any, userId: number): Promise<import(".prisma/client").Chat[]>;
     searchUser(body: any, userId: number): Promise<any[]>;
     newDm(body: any, userId: number): Promise<void>;
     isChanOwner(idChat: number, idIntra: string): Promise<boolean>;

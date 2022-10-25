@@ -28,13 +28,6 @@ export declare class ChatController {
     removeUser(body: any, req: any): Promise<void>;
     addAdmin(body: any, req: any): Promise<void>;
     removeAdmin(body: any, req: any): Promise<void>;
-    getChannels(req: any): Promise<Promise<{
-        name: any;
-        type: any;
-        id: any;
-    }>[]>;
-    getChatUsers(body: any, req: any): Promise<Promise<{
-        idIntra: string;
-        img: string;
-    }>[]>;
+    getChannels(req: any): Promise<Promise<any>[]>;
+    getChatUsers(body: any, req: any): Promise<import(".prisma/client").Chat[]>;
 }
