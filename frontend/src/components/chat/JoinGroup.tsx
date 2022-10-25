@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -77,13 +77,36 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const JoinGroup = (props: any) => {
     
+    const [chats, setChats] = React.useState({} as any);
+
+    React.useEffect(() => {
+        const url = "http://10.11.11.3:3333/chat/getChannels";
+
+        const fetchData = async () => {
+        try {
+            const response = await fetch(url, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+            });
+            const json = await response.json();
+            console.log(json);
+            setChats(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+        };
+        fetchData();
+    }, []);
+
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
             <ListItem style={style} key={index} >
                 <ListItemButton>
-                    <ListItemText primary={`Item ${index + 1}`} />
+                    <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
             </ListItem>
         );
@@ -105,10 +128,10 @@ export const JoinGroup = (props: any) => {
                 <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
                     <FixedSizeList
 
-                        height={230}
+                        height={360}
                         width={500}
-                        itemSize={46}
-                        itemCount={10}
+                        itemSize={70}
+                        itemCount={Object.values(chats).length}
                         overscanCount={5}
                     >
                         {renderRow}

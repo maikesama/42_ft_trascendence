@@ -29,27 +29,25 @@ export class ChatService{
             })
 
             const chanInfo = await channels.map(async(channel: any) => {
-                return {
-
-                    name: channel.name,
-                    type: channel.type,
-                    id: channel.id,
-
-                }})
-
-            const ret = await chanInfo.map(async(channel: any) => {
                 const partecipant = await this.prismaService.partecipant.findUnique({
                     where: {
                         idIntra_idChat: {
                             idIntra: user.idIntra,
-                            idChat: channel.id,
+                            idChat: channel.id
                         }
                     }
                 })
                 if (!partecipant)
-                    return channel
+                    return {
+
+                        name: channel.name,
+                        type: channel.type,
+                        id: channel.id,
+
+                    }
             })
 
+            const ret = await (await Promise.all(chanInfo)).filter((el: any) => el !== undefined)
             return ret
         }
         catch(e){
@@ -333,6 +331,39 @@ export class ChatService{
             throw new BadRequestException(err)
         }
     }
+
+    async getUserPrivilegeInfo(body, userId: number)
+    {
+        try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                },
+            })
+
+            const part = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                },
+                select: {
+                    owner: true,
+                    admin: true
+                }
+            })
+
+            return part
+        }
+        catch(err){
+            throw new BadRequestException(err)
+        }
+    }
+
 
     async destroyChannel(body: any, userId: number){
         try{

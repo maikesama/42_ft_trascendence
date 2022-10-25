@@ -241,7 +241,7 @@ export const ChatContain = (props: any) => {
                     <Divider />
                     <h4>DM</h4>
                     <FixedSizeList
-                        height={Object.values(friends).length == 0 ? 90 : ((Object.values(friends).length % 5) * 90) }
+                        height={Object.values(friends).length == 0 ? 90 :  Object.values(friends).length > 5 ? 450 : ((Object.values(friends).length % 5) * 90) }
                         width='full'
                         itemSize={90}
                         itemCount={Object.values(friends).length}
@@ -253,7 +253,7 @@ export const ChatContain = (props: any) => {
                     <h4>Channels</h4>
                     <FixedSizeList
 
-                        height={Object.values(chats).length == 0 ? 90 : ((Object.values(chats).length % 5) * 90)}
+                        height={(Object.values(chats).length == 0 ? 90 :  Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length % 5) * 90) )}
                         width='full'
                         itemSize={90}
                         itemCount={Object.values(chats).length}
@@ -263,7 +263,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra = {userNameIntra} img = {userImg}/> : <Channel />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra = {userNameIntra} img = {userImg}/> : <Channel name = {userNameIntra} img = {userImg}/>}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

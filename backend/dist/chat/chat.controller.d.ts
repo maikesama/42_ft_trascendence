@@ -3,6 +3,10 @@ export declare class ChatController {
     private chatService;
     constructor(chatService: ChatService);
     newChannel(body: any, req: any): Promise<void>;
+    getUserPrivilegeInfo(body: any, req: any): Promise<{
+        owner: boolean;
+        admin: boolean;
+    }>;
     newDm(body: any, req: any): Promise<void>;
     searchUser(body: any, req: any): Promise<any[]>;
     searchGeneral(body: any, req: any): Promise<any[] | {
@@ -28,6 +32,10 @@ export declare class ChatController {
     removeUser(body: any, req: any): Promise<void>;
     addAdmin(body: any, req: any): Promise<void>;
     removeAdmin(body: any, req: any): Promise<void>;
-    getChannels(req: any): Promise<Promise<any>[]>;
+    getChannels(req: any): Promise<{
+        name: any;
+        type: any;
+        id: any;
+    }[]>;
     getChatUsers(body: any, req: any): Promise<import(".prisma/client").Chat[]>;
 }

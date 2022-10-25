@@ -37,24 +37,22 @@ let ChatService = class ChatService {
                 }
             });
             const chanInfo = await channels.map(async (channel) => {
-                return {
-                    name: channel.name,
-                    type: channel.type,
-                    id: channel.id,
-                };
-            });
-            const ret = await chanInfo.map(async (channel) => {
                 const partecipant = await this.prismaService.partecipant.findUnique({
                     where: {
                         idIntra_idChat: {
                             idIntra: user.idIntra,
-                            idChat: channel.id,
+                            idChat: channel.id
                         }
                     }
                 });
                 if (!partecipant)
-                    return channel;
+                    return {
+                        name: channel.name,
+                        type: channel.type,
+                        id: channel.id,
+                    };
             });
+            const ret = await (await Promise.all(chanInfo)).filter((el) => el !== undefined);
             return ret;
         }
         catch (e) {
@@ -302,6 +300,33 @@ let ChatService = class ChatService {
         }
         catch (err) {
             console.log(err);
+            throw new common_1.BadRequestException(err);
+        }
+    }
+    async getUserPrivilegeInfo(body, userId) {
+        try {
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            });
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                },
+            });
+            const part = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                },
+                select: {
+                    owner: true,
+                    admin: true
+                }
+            });
+            return part;
+        }
+        catch (err) {
             throw new common_1.BadRequestException(err);
         }
     }

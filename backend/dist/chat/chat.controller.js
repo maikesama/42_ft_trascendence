@@ -24,6 +24,10 @@ let ChatController = class ChatController {
         const user = req.user;
         return await this.chatService.newChannel(body, user['sub']);
     }
+    async getUserPrivilegeInfo(body, req) {
+        const user = req.user;
+        return await this.chatService.getUserPrivilegeInfo(body, user['sub']);
+    }
     async newDm(body, req) {
         const user = req.user;
         return await this.chatService.newDm(body, user['sub']);
@@ -103,6 +107,16 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "newChannel", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('getUserPrivilegeInfo'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getUserPrivilegeInfo", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),

@@ -2,7 +2,11 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export declare class ChatService {
     private prismaService;
     constructor(prismaService: PrismaService);
-    getChannels(userId: number): Promise<Promise<any>[]>;
+    getChannels(userId: number): Promise<{
+        name: any;
+        type: any;
+        id: any;
+    }[]>;
     getChatUsers(body: any, userId: number): Promise<import(".prisma/client").Chat[]>;
     searchUser(body: any, userId: number): Promise<any[]>;
     newDm(body: any, userId: number): Promise<void>;
@@ -19,6 +23,10 @@ export declare class ChatService {
         }[];
     }>;
     newChannel(body: any, userId: number): Promise<void>;
+    getUserPrivilegeInfo(body: any, userId: number): Promise<{
+        owner: boolean;
+        admin: boolean;
+    }>;
     destroyChannel(body: any, userId: number): Promise<void>;
     isBanned(name: string, idIntra: string): Promise<boolean>;
     isMuted(name: string, idIntra: string): Promise<boolean>;

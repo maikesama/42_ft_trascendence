@@ -136,7 +136,7 @@ export const CreateChannel = (props: any) => {
                             inputProps={{ 'aria-labelledby': '1' }}
                         />
                     </ListItemIcon>
-                    <Avatar src={'https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif'} style={{ marginRight: 20 }} />
+                    <Avatar src={friends[index]?.img} style={{ marginRight: 20 }} />
                     <ListItemText id={`${index}`} primary={`${friends[index]?.idIntra} `} />
 
                 </ListItemButton>
@@ -159,7 +159,7 @@ export const CreateChannel = (props: any) => {
                             inputProps={{ 'aria-labelledby': '1' }}
                         />
                     </ListItemIcon>
-                    <Avatar src={'https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif'} style={{ marginRight: 20 }} />
+                    <Avatar src={search[index]?.img} style={{ marginRight: 20 }} />
                     <ListItemText id={`${index}`} primary={`${search[index]?.idIntra} `} />
 
                 </ListItemButton>
@@ -244,9 +244,9 @@ export const CreateChannel = (props: any) => {
                 {initials.current.value == 0 || initials.current.value == null ? <>
                 <FixedSizeList
 
-                    height={230}
+                    height={Object.values(friends).length * 90}
                     width={500}
-                    itemSize={46}
+                    itemSize={60}
                     itemCount={Object.values(friends).length}
                     overscanCount={5}
                 >

@@ -50,6 +50,12 @@ export const Channel = (props: any) => {
     const classes = useStyles();
 
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
+    const [permission, setPermission] = useState({} as any);
+    const [openAdminActions, setopenAdminActions] = React.useState(false);
+
+    const handleClickChannelInfo = (props: any) => {
+        setChannelInfo(props);
+    }
 
     const handleClickOpenGroupInfo = () => {
         setopenGroupInfo(true);
@@ -58,14 +64,44 @@ export const Channel = (props: any) => {
     const handleCloseGroupInfo = () => {
         setopenGroupInfo(false);
     };
+
+    const handleClickOpenAdminActions = () => {
+        setopenAdminActions(true);
+    };
+
+    const handleCloseAdminActions = () => {
+        setopenAdminActions(false);
+    };
+
+
+    async function clickChannelInfo(name: string) {
+        const url = `http://10.11.11.3:3333/chat/getUserPrivilegeInfo`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name }),
+            });
+            const json = await response.json();
+            console.log(json);
+            setPermission(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+        //permission === 'owner' || permission === '' ? handleClickOpenAdminActions : handleClickOpenGroupInfo
+    }
+
     return (
         <>
             <List className={classes.messageArea}>
-                <ListItem button key="" onClick={handleClickOpenGroupInfo}>
+                <ListItem button key="" >
                     <ListItemIcon>
-                        <Avatar alt="Lorenzo" src="https://material-ui.com/static/images/avatar/1.jpg" />
+                        <Avatar alt="Lorenzo" src={props.img} />
                     </ListItemIcon>
-                    <ListItemText className="userNameChat" primary="Lorenzo"></ListItemText>
+                    <Typography variant='h5' className="groupNameChat" onClick={clickChannelInfo(props.name)} style={{width: '150px', marginLeft: '50px'}}>{props.name}</Typography>
                 </ListItem>
                 <Divider />
                 <ListItem key="1">
@@ -110,6 +146,8 @@ export const Channel = (props: any) => {
             </Grid>
             {/*MODAL GROUP INFO */}
             <GroupInfo status={openGroupInfo} closeStatus={handleCloseGroupInfo} />
+            {/*MODAL ADMIN INFO */}
+            <AdminGroupActions status={} closeStatus={}/>
         </>
     );
 }
