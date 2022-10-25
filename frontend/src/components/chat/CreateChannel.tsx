@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -32,17 +32,22 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import Checkbox from '@mui/material/Checkbox';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import { FriendsCheckList } from './FriendsCheckList';
 
 export const CreateChannel = (props: any) => {
-    
+
     const name = useRef<any>('');
-    const [type, setType] = useState('Public');
     const pass = useRef<any>('');
+    const [type, setType] = useState('Public');
 
     async function createChannel() {
-        console.log(name.current.value);
-        console.log(type.toLowerCase())
-        console.log(pass.current.value);
+        let pwd = "";
+
+        if (pass.current.value)
+            pwd = pass.current.value;
         const url = `http://10.11.11.3:3333/chat/newChannel`;
         try {
             const response = await fetch(url, {
@@ -51,38 +56,86 @@ export const CreateChannel = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ 
+                body: JSON.stringify({
                     name: name.current.value,
                     type: type.toLowerCase(),
-                    pass: pass.current.value, }),
+                    password: pwd
+                }),
             });
-            const json = await response.json();
-            console.log(json);
+            window.location.reload()
+            //const json = await response.json();
+            //console.log(json);
         } catch (error) {
             console.log("error", error);
         }
     }
 
-    // const [openCreateGroup, setopenCreateGroup] = React.useState(false);
-    
-    // const handleCloseCreateGroup = () => {
-    //     setopenCreateGroup(false);
-    // };
+    const [friends, setFriends] = useState({} as any);
+
+    React.useEffect(() => {
+        const url = "http://10.11.11.3:3333/friend/getFriends";
+
+        const fetchData = async () => {
+        try {
+            const response = await fetch(url, {
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+            });
+            const json = await response.json();
+            console.log(json);
+            setFriends(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+        };
+        fetchData();
+    }, []);
+
 
     const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setType(e.target.value)
 
-    function renderRow(props: ListChildComponentProps) {
-        const { index, style } = props;
+    const [checked, setChecked] = React.useState([1]);
 
+    const handleToggle = (value: number) => () => {
+        const currentIndex = checked.indexOf(value);
+        const newChecked = [...checked];
+
+        if (currentIndex === -1) {
+            newChecked.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+        }
+
+        setChecked(newChecked);
+        console.log(newChecked)
+    };
+
+    function friendsRow(props: ListChildComponentProps) {
+        const { index, style } = props;
         return (
-            <ListItem style={style} key={index} >
-                <ListItemButton>
-                    <ListItemText primary={`Item ${index + 1}`} />
+            <ListItem key={index}>
+
+                <ListItemButton role={undefined} onClick={handleToggle(index)} dense style={{ minWidth: '100%' }}>
+                    <ListItemIcon>
+                        <Checkbox
+                            edge="start"
+                            checked={checked.indexOf(index) !== -1}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': '1' }}
+                        />
+                    </ListItemIcon>
+                    <Avatar src={'https://i.pinimg.com/originals/b1/66/54/b16654e9bba75793266ed61d9a70693e.gif'} style={{ marginRight: 20 }} />
+                    <ListItemText id={`${index}`} primary={`${friends[index]?.idIntra} `} />
+
+
                 </ListItemButton>
             </ListItem>
         );
     }
-    
+
     return (
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Create Group</DialogTitle>
@@ -135,15 +188,16 @@ export const CreateChannel = (props: any) => {
                     Add members to your channel group:
                 </DialogContentText>
                 <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth />
+
                 <FixedSizeList
 
                     height={230}
                     width={500}
                     itemSize={46}
-                    itemCount={10}
-                    overscanCount={5}
+                    itemCount={Object.values(friends).length}
+                    overscanCount={2}
                 >
-                    {renderRow}
+                    {friendsRow}
                 </FixedSizeList>
             </DialogContent>
             <DialogActions>

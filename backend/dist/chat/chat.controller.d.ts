@@ -5,6 +5,17 @@ export declare class ChatController {
     newChannel(body: any, req: any): Promise<void>;
     newDm(body: any, req: any): Promise<void>;
     searchUser(body: any, req: any): Promise<any[]>;
+    searchGeneral(body: any, req: any): Promise<any[] | {
+        users: {
+            idIntra: string;
+            img: string;
+        }[];
+        channels: {
+            name: string;
+            type: string;
+            id: number;
+        }[];
+    }>;
     muteUser(body: any, req: any): Promise<void>;
     unmuteUser(body: any, req: any): Promise<void>;
     banUser(body: any, req: any): Promise<void>;

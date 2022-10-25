@@ -32,6 +32,10 @@ let ChatController = class ChatController {
         const user = req.user;
         return await this.chatService.searchUser(body, user['sub']);
     }
+    async searchGeneral(body, req) {
+        const user = req.user;
+        return await this.chatService.searchGeneral(body, user['sub']);
+    }
     async muteUser(body, req) {
         const user = req.user;
         return await this.chatService.muteUser(body, user['sub']);
@@ -119,6 +123,16 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "searchUser", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('searchGeneral'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "searchGeneral", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),

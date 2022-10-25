@@ -14,6 +14,17 @@ export declare class ChatService {
     searchUser(body: any, userId: number): Promise<any[]>;
     newDm(body: any, userId: number): Promise<void>;
     isChanOwner(idChat: number, idIntra: string): Promise<boolean>;
+    searchGeneral(body: any, userId: number): Promise<any[] | {
+        users: {
+            idIntra: string;
+            img: string;
+        }[];
+        channels: {
+            name: string;
+            type: string;
+            id: number;
+        }[];
+    }>;
     newChannel(body: any, userId: number): Promise<void>;
     destroyChannel(body: any, userId: number): Promise<void>;
     isBanned(name: string, idIntra: string): Promise<boolean>;

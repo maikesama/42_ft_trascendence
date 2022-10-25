@@ -34,6 +34,14 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('searchGeneral')
+    async searchGeneral(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.searchGeneral(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('muteUser')
     async muteUser(@Body() body, @Req() req){
         const user = req.user
@@ -129,6 +137,8 @@ export class ChatController{
         const user = req.user
         return await this.chatService.removeAdmin(body, user['sub'])
     }
+
+
 
     @UseGuards(AtGuard)
     @HttpCode(200)

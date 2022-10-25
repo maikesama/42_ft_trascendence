@@ -184,6 +184,54 @@ let ChatService = class ChatService {
             throw new common_1.BadRequestException(err);
         }
     }
+    async searchGeneral(body, userId) {
+        try {
+            if (body.initials === '')
+                return [];
+            const users = await this.prismaService.user.findMany({
+                where: {
+                    idIntra: {
+                        startsWith: body.initials,
+                    }
+                },
+                select: {
+                    idIntra: true,
+                    img: true
+                }
+            });
+            const channels = await this.prismaService.chat.findMany({
+                where: {
+                    OR: [
+                        {
+                            name: {
+                                startsWith: body.initials,
+                            },
+                            type: 'public'
+                        },
+                        {
+                            name: {
+                                startsWith: body.initials,
+                            },
+                            type: 'protected'
+                        }
+                    ]
+                },
+                select: {
+                    name: true,
+                    type: true,
+                    id: true,
+                }
+            });
+            const ret = {
+                users: users,
+                channels: channels
+            };
+            return ret;
+        }
+        catch (err) {
+            throw new common_1.BadRequestException(err);
+        }
+    }
     async newChannel(body, userId) {
         try {
             const chan = await this.prismaService.chat.findUnique({
@@ -222,21 +270,24 @@ let ChatService = class ChatService {
                         owner: true,
                     }
                 });
-                const ret = await Promise.all(body.partecipants.map(async (partecipant) => {
-                    const part = await this.prismaService.partecipant.create({
-                        data: {
-                            idChat: channel.id,
-                            idIntra: partecipant.idIntra,
-                        }
-                    });
-                    return part;
-                }));
+                if (body.partecipants && body.partecipants.length > 0) {
+                    await Promise.all(body.partecipants.map(async (partecipant) => {
+                        const part = await this.prismaService.partecipant.create({
+                            data: {
+                                idChat: channel.id,
+                                idIntra: partecipant.idIntra,
+                            }
+                        });
+                        return part;
+                    }));
+                }
             }
             else {
                 throw new common_1.BadRequestException('Channel already exists');
             }
         }
         catch (err) {
+            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }
