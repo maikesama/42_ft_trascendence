@@ -35,7 +35,10 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { UserActions } from './UserActions';
 
 export const GroupInfo = (props: any) => {
-    
+
+    const [partecipants, setPartecipants] = useState({} as any);
+
+
     const [openUserActions, setopenUserActions] = React.useState(false);
     const handleClickOpenUserActions = () => {
         setopenUserActions(true);
@@ -45,13 +48,39 @@ export const GroupInfo = (props: any) => {
         setopenUserActions(false);
     };
 
+    React.useEffect(() => {
+        const url = "http://10.11.11.3:3333/chat/getChanUsers";
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: props.channelName }),
+                });
+                const json = await response.json();
+                console.log(json);
+                setPartecipants(json);
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+        fetchData();
+    }, []);
+
     function renderGroupRow(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
             <ListItem style={style} key={index} >
                 <ListItemButton href={`/user/${index + 1}`}>
-                    <ListItemText primary={`Item ${index + 1}`} />
+                    <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
+                    <Divider variant='middle' />
+                    <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'}/>
+                    <Divider />
                 </ListItemButton>
             </ListItem>
         );
@@ -59,11 +88,11 @@ export const GroupInfo = (props: any) => {
 
     return (
         <>
-        <Dialog open={props.status} onClose={props.closeStatus}>
+            <Dialog open={props.status} onClose={props.closeStatus}>
                 <DialogTitle>Info</DialogTitle>
                 <DialogContent>
                     <DialogContentText>
-                        Admin: taurel
+                        Your are {props.user}
                     </DialogContentText>
                     <Divider />
                     <DialogContentText>
@@ -74,18 +103,18 @@ export const GroupInfo = (props: any) => {
                         height={230}
                         width={500}
                         itemSize={46}
-                        itemCount={10}
+                        itemCount={Object.values(partecipants).length}
                         overscanCount={5}
                     >
                         {renderGroupRow}
                     </FixedSizeList>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.closeStatus}>Lascia</Button>
+                    <Button onClick={props.closeStatus}>Leave</Button>
                     <Button onClick={props.closeStatus}>Close</Button>
                 </DialogActions>
             </Dialog>
-            <UserActions status={openUserActions} closeStatus={handleCloseUserActions}/>
+            <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
         </>
     );
 }

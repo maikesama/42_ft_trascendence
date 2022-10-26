@@ -92,6 +92,10 @@ let ChatController = class ChatController {
         const user = req.user;
         return await this.chatService.getChannels(user['sub']);
     }
+    async getChanUsers(body, req) {
+        const user = req.user;
+        return await this.chatService.getChanUsers(body, user['sub']);
+    }
     async getChatUsers(body, req) {
         const user = req.user;
         return await this.chatService.getChatUsers(body, user['sub']);
@@ -276,6 +280,16 @@ __decorate([
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "getChannels", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('getChanUsers'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getChanUsers", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),

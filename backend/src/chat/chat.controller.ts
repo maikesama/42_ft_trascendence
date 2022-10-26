@@ -156,6 +156,17 @@ export class ChatController{
         return await this.chatService.getChannels(user['sub'])
     }
 
+    //get all partecipants in channel 
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('getChanUsers')
+    async getChanUsers(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getChanUsers(body, user['sub'])
+    }
+
+
+    // get my chats
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Get('getChatUsers')

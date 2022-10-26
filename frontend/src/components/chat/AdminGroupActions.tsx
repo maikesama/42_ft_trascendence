@@ -35,45 +35,78 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { CreateChannel } from './CreateChannel';
 import { GroupInfo } from './GroupInfo';
 
-function renderGroupRowAdmin(props: ListChildComponentProps) {
-    const { index, style } = props;
-
-    return (
-        <ListItem style={style} key={index} >
-            <ListItemButton>
-                <ListItemText primary={`Item ${index + 1}`} />
-            </ListItemButton>
-        </ListItem>
-    );
-}
 
 export const AdminGroupActions = (props: any) => {
+
+    const [partecipants, setPartecipants] = useState({} as any);
+
+    React.useEffect(() => {
+        const url = "http://10.11.11.3:3333/chat/getChanUsers";
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: "POST",
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: props.channelName }),
+                });
+                const json = await response.json();
+                console.log(json);
+                setPartecipants(json);
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+        fetchData();
+    }, []);
+
+    console.log(partecipants);
+
+    function renderGroupRowAdmin(props: ListChildComponentProps) {
+        const { index, style } = props;
+
+        return (
+            <ListItem style={style} key={index} >
+                <ListItemButton>
+                    <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
+                    <Divider variant='middle'/>
+                    <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'}/>
+                    <Divider />
+                </ListItemButton>
+            </ListItem>
+        );
+    }
+
     return (
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Admin Actions</DialogTitle>
             <DialogContent>
                 <DialogContentText>
-                    Admin: taureli
+                    You are {props.user}
                 </DialogContentText>
                 <FixedSizeList
 
-                        height={230}
-                        width={500}
-                        itemSize={46}
-                        itemCount={10}
-                        overscanCount={5}
-                    >
-                        {renderGroupRowAdmin}
-                    </FixedSizeList>
+                    height={230}
+                    width={500}
+                    itemSize={46}
+                    itemCount={Object.values(partecipants).length}
+                    overscanCount={5}
+                >
+                    {renderGroupRowAdmin}
+                </FixedSizeList>
                 <DialogActions>
-                    <Button variant="outlined" onClick={props.closeStatus}>Mute</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Kick</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Ban</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Promote</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Demote</Button>
+                    <Button variant="outlined" onClick={props.closeStatus}>Muted</Button>
+                    <Button variant="outlined" onClick={props.closeStatus}>Banned</Button>
                     <Button variant="contained" onClick={props.closeStatus}>Close</Button>
+                    <Button variant="outlined" onClick={props.closeStatus} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                 </DialogActions>
             </DialogContent>
         </Dialog>
     );
 }
+
+//<Button variant="outlined" onClick={props.closeStatus}>Promote</Button>
+//<Button variant="outlined" onClick={props.closeStatus}>Demote</Button>

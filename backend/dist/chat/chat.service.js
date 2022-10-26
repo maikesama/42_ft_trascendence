@@ -59,6 +59,37 @@ let ChatService = class ChatService {
             throw new common_1.BadRequestException(e);
         }
     }
+    async getChanUsers(body, userId) {
+        try {
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                },
+                include: {
+                    partecipant: true
+                }
+            });
+            const ret = await channel.partecipant.map(async (part) => {
+                const user = await this.prismaService.user.findUnique({
+                    where: {
+                        idIntra: part.idIntra
+                    }
+                });
+                return {
+                    idIntra: part.idIntra,
+                    userName: user.userName,
+                    img: user.img,
+                    owner: part.owner,
+                    admin: part.admin
+                };
+            });
+            const ret2 = await Promise.all(ret);
+            return ret2;
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
     async getChatUsers(body, userId) {
         try {
             const user = await this.prismaService.user.findUniqueOrThrow({

@@ -21,7 +21,7 @@ import "../css/Header.css"
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const pages = ['Home', 'Leaderboard', 'Chat'];
+const pages = ['Home', 'Leaderboard','Profile', 'Chat'];
 const settings = ['Profile', 'Logout'];
 
 export function Header(props:any) {
@@ -123,8 +123,6 @@ export function Header(props:any) {
             variant="h4"
             fontSize="25px"
             noWrap
-            component="a"
-            href=""
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -146,8 +144,6 @@ export function Header(props:any) {
             variant="h4"
             fontSize="35px"
             noWrap
-            component="a"
-            href=""
             sx={{
               mt: 10,
               display: { xs: 'none', md: 'block' },

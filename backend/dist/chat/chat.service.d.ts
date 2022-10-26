@@ -7,6 +7,13 @@ export declare class ChatService {
         type: any;
         id: any;
     }[]>;
+    getChanUsers(body: any, userId: number): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+        owner: any;
+        admin: any;
+    }[]>;
     getChatUsers(body: any, userId: number): Promise<import(".prisma/client").Chat[]>;
     searchUser(body: any, userId: number): Promise<any[]>;
     newDm(body: any, userId: number): Promise<void>;
