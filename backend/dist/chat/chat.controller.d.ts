@@ -38,11 +38,17 @@ export declare class ChatController {
         id: any;
     }[]>;
     getChanUsers(body: any, req: any): Promise<{
-        idIntra: any;
-        userName: string;
-        img: string;
-        owner: any;
-        admin: any;
-    }[]>;
+        me: {
+            owner: boolean;
+            admin: boolean;
+        };
+        partecipants: {
+            idIntra: any;
+            userName: string;
+            img: string;
+            owner: any;
+            admin: any;
+        }[];
+    }>;
     getChatUsers(body: any, req: any): Promise<import(".prisma/client").Chat[]>;
 }

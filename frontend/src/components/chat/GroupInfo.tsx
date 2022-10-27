@@ -36,7 +36,7 @@ import { UserActions } from './UserActions';
 
 export const GroupInfo = (props: any) => {
 
-    const [partecipants, setPartecipants] = useState({} as any);
+    const partecipants = props.partecipants;
 
 
     const [openUserActions, setopenUserActions] = React.useState(false);
@@ -48,28 +48,7 @@ export const GroupInfo = (props: any) => {
         setopenUserActions(false);
     };
 
-    React.useEffect(() => {
-        const url = "http://10.11.11.3:3333/chat/getChanUsers";
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url, {
-                    method: "POST",
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ name: props.channelName }),
-                });
-                const json = await response.json();
-                console.log(json);
-                setPartecipants(json);
-            } catch (error) {
-                console.log("error", error);
-            }
-        };
-        fetchData();
-    }, []);
+    
 
     function renderGroupRow(props: ListChildComponentProps) {
         const { index, style } = props;
@@ -103,7 +82,7 @@ export const GroupInfo = (props: any) => {
                         height={230}
                         width={500}
                         itemSize={46}
-                        itemCount={Object.values(partecipants).length}
+                        itemCount={partecipants?.length}
                         overscanCount={5}
                     >
                         {renderGroupRow}

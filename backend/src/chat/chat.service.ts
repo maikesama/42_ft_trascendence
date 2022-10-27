@@ -58,6 +58,12 @@ export class ChatService{
     async getChanUsers(body, userId: number)
     {
         try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    id: userId
+                }
+            })
+            
             const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where:
                 {
@@ -67,6 +73,16 @@ export class ChatService{
                     partecipant: true
                 }
             });
+
+            const part = await this.prismaService.partecipant.findUniqueOrThrow({
+                where: {
+                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                },
+                select: {
+                    owner: true,
+                    admin: true
+                }
+            })
 
             const ret = await channel.partecipant.map(async (part: any) => {
 
@@ -87,8 +103,15 @@ export class ChatService{
 
             const ret2 = await Promise.all(ret)
 
+            const ret3 = {
+                me: {
+                    owner: part.owner,
+                    admin: part.admin
+                },
+                partecipants: ret2
+            }
 
-            return ret2;
+            return ret3;
         }
         catch(e: any){
             throw  new BadRequestException(e)

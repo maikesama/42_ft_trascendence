@@ -50,9 +50,12 @@ export const Channel = (props: any) => {
     const classes = useStyles();
 
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
-    const [permission, setPermission] = useState({} as any);
+    const partecipants = props.partecipants;
+    const permission = props.permission;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
 
+
+    
     const handleClickOpenGroupInfo = () => {
         setopenGroupInfo(true);
     };
@@ -70,43 +73,19 @@ export const Channel = (props: any) => {
     };
 
 
-    async function chanInfo(name: string){
-        await clickChannelInfo(name);
+    async function chanInfo(){
         if (permission?.owner || permission?.admin)
             handleClickOpenAdminActions();
         else
             handleClickOpenGroupInfo();
     }
 
-    async function clickChannelInfo(name: string) {
-        const url = `http://10.11.11.3:3333/chat/getUserPrivilegeInfo`;
-        try {
-            const response = await fetch(url, {
-                method: 'POST',
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ name: name }),
-            })
-            const json = await response.json();
-            console.log(json);
-
-            setPermission(json);
-            console.log('gesy' + JSON.stringify(json));
-
-        } catch (error) {
-            console.log("error", error);
-        }
-
-    }
-
     return (
         <>
             <List className={classes.messageArea}>
-                <ListItem button key="" onClick={() => chanInfo(props.name)}>
+                <ListItem button key="" onClick={chanInfo}>
                     <ListItemIcon>
-                        <Avatar alt="Lorenzo" src={props.img} />
+                        <Avatar src={props.img} />
                     </ListItemIcon>
                     <Typography variant='h5' className="groupNameChat" style={{ width: '150px', marginLeft: '50px' }}>{props.name}</Typography>
                 </ListItem>
@@ -152,9 +131,9 @@ export const Channel = (props: any) => {
                 </Grid>
             </Grid>
             {/*MODAL GROUP INFO */}
-            <GroupInfo status={openGroupInfo} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} closeStatus={handleCloseGroupInfo} channelName={props.name} />
+            <GroupInfo status={openGroupInfo} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseGroupInfo} channelName={props.name} />
             {/*MODAL ADMIN INFO */}
-            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} closeStatus={handleCloseAdminActions} channelName={props.name} />
+            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseAdminActions} channelName={props.name} />
         </>
     );
 }

@@ -132,6 +132,9 @@ export const ChatContain = (props: any) => {
     };
 
     const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, img: React.SetStateAction<string>) => {
+        if (param != 'Blank' && param != 'DM') {
+            clickChannelInfo(String(name));
+        }
         setChatView(param);
         setUserIntra(name);
         setUserImg(img);
@@ -182,6 +185,31 @@ export const ChatContain = (props: any) => {
         };
         fetchData();
     }, []);
+
+    const [permission, setPermission] = useState({} as any);
+    const [partecipants, setPartecipants] = useState({} as any);
+
+    async function clickChannelInfo(name: string) {
+        const url = `http://10.11.11.3:3333/chat/getChanUsers`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: name }),
+            })
+            const json = await response.json();
+
+            setPermission(json.me);
+            setPartecipants(json.partecipants);
+
+        } catch (error) {
+            console.log("error", error);
+        }
+
+    }
 
     const [search, setSearch] = useState({} as any);
     const initials = useRef<any>('');
@@ -252,7 +280,7 @@ export const ChatContain = (props: any) => {
                     <Divider />
                     <h4>Channels</h4>
                     <FixedSizeList
-
+                        
                         height={(Object.values(chats).length == 0 ? 90 :  Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length % 5) * 90) )}
                         width='full'
                         itemSize={90}
@@ -263,7 +291,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra = {userNameIntra} img = {userImg}/> : <Channel name = {userNameIntra} img = {userImg}/>}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra = {userNameIntra} img = {userImg}/> : <Channel permission={permission} partecipants={partecipants} name = {userNameIntra} img = {userImg}/>}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
