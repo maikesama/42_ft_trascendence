@@ -390,7 +390,7 @@ export class ChatService{
             }    
         }
         catch(err){
-            console.log(err)
+            
             throw new BadRequestException(err)
         }
     }
@@ -427,47 +427,25 @@ export class ChatService{
     }
 
 
-    async destroyChannel(body: any, userId: number){
+    async destroyChannel(name: string){
         try{
-            const user = await this.prismaService.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            })
-
             const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where: {
-                    name: body.name
+                    name: name
+                }
+            })
+            
+            await this.prismaService.partecipant.deleteMany({
+                where: {
+                    idChat: channel.id
                 }
             })
 
-            if (channel){
-                const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
-                    where: {
-                            idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
-                    }
-                })
-
-                if (partecipant.admin){
-                    await this.prismaService.partecipant.deleteMany({
-                        where: {
-                            idChat: channel.id
-                        }
-                    })
-
-                    await this.prismaService.chat.delete({
-                        where: {
-                            id: channel.id
-                        }
-                    })
+            await this.prismaService.chat.delete({
+                where: {
+                    id: channel.id
                 }
-                else{
-                    throw new BadRequestException('You are not admin')
-                }
-            }
-            else{
-                throw new BadRequestException('Channel does not exist')
-            }
+            })
         }
         catch(err){
             throw new BadRequestException(err)
@@ -477,6 +455,7 @@ export class ChatService{
     async isBanned(name: string, idIntra: string){
 
         try{
+
             const channel = await this.prismaService.chat.findUnique({
                 where: {
                     name: name
@@ -489,6 +468,8 @@ export class ChatService{
                 }
             })
 
+            if (!partecipant)
+                return false
             if (partecipant.bannedUntil ){
                 if (partecipant.bannedUntil > new Date())
                     return true
@@ -710,6 +691,7 @@ export class ChatService{
     async joinChannel(body: any, userId: number){
         
         try{
+            console.log(body.password)
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -766,6 +748,7 @@ export class ChatService{
             }
         }
         catch(err){
+            console.log(err)
             throw new BadRequestException(err)
         }
     }
@@ -854,7 +837,6 @@ export class ChatService{
     async leaveChannel(body: any, userId: number){
         
         try{
-            //console.log(userId)
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -874,19 +856,23 @@ export class ChatService{
             })
                 
                 
-            const partecipant = await this.prismaService.partecipant.delete({
+            if (await this.isChanOwner(channel.id, user.idIntra))
+            {
+                await this.prismaService.partecipant.delete({
+                    where: {
+                        idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                    }
+                })
+                await this.destroyChannel(body.name);
+            }
+            else{
+
+            await this.prismaService.partecipant.delete({
                 where: {
                     idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
                 }
-            })
-
-            
-
-            if (await this.isChanOwner(body.name, user.idIntra))
-            {
-                await this.destroyChannel(body.name, userId);
+            })   
             }
-            
         }
         catch(err){
             

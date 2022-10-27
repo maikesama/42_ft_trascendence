@@ -40,7 +40,7 @@ export declare class ChatService {
         owner: boolean;
         admin: boolean;
     }>;
-    destroyChannel(body: any, userId: number): Promise<void>;
+    destroyChannel(name: string): Promise<void>;
     isBanned(name: string, idIntra: string): Promise<boolean>;
     isMuted(name: string, idIntra: string): Promise<boolean>;
     muteUser(body: any, userId: number): Promise<void>;

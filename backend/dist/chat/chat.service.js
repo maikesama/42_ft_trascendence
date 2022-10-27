@@ -351,7 +351,6 @@ let ChatService = class ChatService {
             }
         }
         catch (err) {
-            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }
@@ -382,43 +381,23 @@ let ChatService = class ChatService {
             throw new common_1.BadRequestException(err);
         }
     }
-    async destroyChannel(body, userId) {
+    async destroyChannel(name) {
         try {
-            const user = await this.prismaService.user.findUniqueOrThrow({
-                where: {
-                    id: userId
-                }
-            });
             const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where: {
-                    name: body.name
+                    name: name
                 }
             });
-            if (channel) {
-                const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
-                    where: {
-                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                    }
-                });
-                if (partecipant.admin) {
-                    await this.prismaService.partecipant.deleteMany({
-                        where: {
-                            idChat: channel.id
-                        }
-                    });
-                    await this.prismaService.chat.delete({
-                        where: {
-                            id: channel.id
-                        }
-                    });
+            await this.prismaService.partecipant.deleteMany({
+                where: {
+                    idChat: channel.id
                 }
-                else {
-                    throw new common_1.BadRequestException('You are not admin');
+            });
+            await this.prismaService.chat.delete({
+                where: {
+                    id: channel.id
                 }
-            }
-            else {
-                throw new common_1.BadRequestException('Channel does not exist');
-            }
+            });
         }
         catch (err) {
             throw new common_1.BadRequestException(err);
@@ -437,6 +416,8 @@ let ChatService = class ChatService {
                     idIntra_idChat: { idIntra, idChat }
                 }
             });
+            if (!partecipant)
+                return false;
             if (partecipant.bannedUntil) {
                 if (partecipant.bannedUntil > new Date())
                     return true;
@@ -633,6 +614,7 @@ let ChatService = class ChatService {
     }
     async joinChannel(body, userId) {
         try {
+            console.log(body.password);
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -682,6 +664,7 @@ let ChatService = class ChatService {
             }
         }
         catch (err) {
+            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }
@@ -777,13 +760,20 @@ let ChatService = class ChatService {
                     name: body.name
                 }
             });
-            const partecipant = await this.prismaService.partecipant.delete({
-                where: {
-                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                }
-            });
-            if (await this.isChanOwner(body.name, user.idIntra)) {
-                await this.destroyChannel(body.name, userId);
+            if (await this.isChanOwner(channel.id, user.idIntra)) {
+                await this.prismaService.partecipant.delete({
+                    where: {
+                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                    }
+                });
+                await this.destroyChannel(body.name);
+            }
+            else {
+                await this.prismaService.partecipant.delete({
+                    where: {
+                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                    }
+                });
             }
         }
         catch (err) {

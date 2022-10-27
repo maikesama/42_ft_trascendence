@@ -187,9 +187,9 @@ export const SearchBar = (props: any) => {
                         <SearchIcon />
                     </SearchIconWrapper>
                     <StyledInputBase
+                        placeholder="Search…"
                         inputRef={initials}
                         onChange={searchUser}
-                        placeholder="Search…"
                         inputProps={{ 'aria-label': 'search' }}
                     />
                 </Search>

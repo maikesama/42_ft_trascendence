@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -78,8 +78,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 export const JoinGroup = (props: any) => {
     
     const [chats, setChats] = React.useState({} as any);
+    const [join, setJoin] = React.useState(-1);
+    const pass = useRef<any>('');
 
     React.useEffect(() => {
+        
         const url = "http://10.11.11.3:3333/chat/getChannels";
 
         const fetchData = async () => {
@@ -100,15 +103,49 @@ export const JoinGroup = (props: any) => {
         fetchData();
     }, []);
 
+
+    async function joinChannel(name : string) {
+        let pwd = "";
+
+        if (pass.current.value)
+            pwd = pass.current.value;
+        const url = `http://10.11.11.3:3333/chat/joinChannel`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({name: name, password: pwd})
+            });
+            window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+    
+    function handleJoin()
+    {
+        console.log("pass: " + pass.current.value )
+       
+    }
+
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
+            <>
             <ListItem style={style} key={index} >
                 <ListItemButton>
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
-            </ListItem>
+                <TextField onChange={handleJoin} inputRef={pass} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
+                <Button color="primary" onClick={() => joinChannel(chats[index]?.name)}>Join</Button>
+            </ListItem>   
+            
+            </>
         );
     }
 

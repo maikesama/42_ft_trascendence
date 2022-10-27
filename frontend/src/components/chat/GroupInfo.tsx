@@ -48,14 +48,30 @@ export const GroupInfo = (props: any) => {
         setopenUserActions(false);
     };
 
-    
+    async function leaveChannel() {
+        const url = `http://10.11.11.3:3333/chat/leaveChannel`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName }),
+            })
+           window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
+
+    }
 
     function renderGroupRow(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
             <ListItem style={style} key={index} >
-                <ListItemButton href={`/user/${index + 1}`}>
+                <ListItemButton href={`/user/${partecipants[index]?.idIntra}`}>
                     <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
                     <Divider variant='middle' />
                     <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'}/>
@@ -65,23 +81,26 @@ export const GroupInfo = (props: any) => {
         );
     }
 
+    const closeX = {
+       backgroundColor: 'white', color: 'red', marginLeft: '85%',fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
+    }
+
     return (
         <>
             <Dialog open={props.status} onClose={props.closeStatus}>
-                <DialogTitle>Info</DialogTitle>
+                <DialogTitle>Info <button style={closeX} onClick={props.closeStatus}>X</button> </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Your are {props.user}
                     </DialogContentText>
                     <Divider />
-                    <DialogContentText>
-                        Users
-                    </DialogContentText>
+                    
                     <FixedSizeList
-
-                        height={230}
+                        
+                        style={{marginTop: 20}}
+                        height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
                         width={500}
-                        itemSize={46}
+                        itemSize={60}
                         itemCount={partecipants?.length}
                         overscanCount={5}
                     >
@@ -89,8 +108,7 @@ export const GroupInfo = (props: any) => {
                     </FixedSizeList>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.closeStatus}>Leave</Button>
-                    <Button onClick={props.closeStatus}>Close</Button>
+                    <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red', marginBottom: '3%', marginRight: '5%' }}>Leave</Button>
                 </DialogActions>
             </Dialog>
             <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
