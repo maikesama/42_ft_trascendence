@@ -1,4 +1,3 @@
-import { upload } from "@testing-library/user-event/dist/upload";
 import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
@@ -18,7 +17,7 @@ export function Test() {
           body: JSON.stringify({dataURL: imageList[0].dataURL}),
       });
         const json = await response.json();
-        //console.log(json);
+        console.log(json);
       } catch (error) {
         console.log("error", error);
       }

@@ -1,7 +1,4 @@
-
-import axios from "axios";
 import React, {useState, useEffect} from "react";
-import { Form } from "react-bootstrap";
 import {Header} from '../components/generic/Header';
 import { LeaderboardHeader } from "../components/leaderboard/LeaderboardHeader";
 import { LeaderboardItem } from "../components/leaderboard/LeaderboardItem";

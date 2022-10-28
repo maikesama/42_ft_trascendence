@@ -1,8 +1,4 @@
-import Nav from 'react-bootstrap/Nav';
-import Text from 'react';
 import '../css/Navbar.css';
-import { flexbox } from '@mui/system';
-import { autocompleteClasses } from '@mui/material';
 
 export function LeaderboardItem(props:any) {
   
