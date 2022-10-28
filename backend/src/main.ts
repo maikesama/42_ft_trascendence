@@ -14,12 +14,12 @@ async function bootstrap() {
       `http://${process.env.HOST}`],
       credentials: true
   })
-  // const microservice = app.connectMicroservice({
-  //   transport : Transport.TCP,
-  //   port: 3333,
-  //       });
+  const microservice = app.connectMicroservice({
+    transport : Transport.TCP,
+    port: 3333,
+        });
   app.use(cookieParser());
-  // await app.startAllMicroservices()
+  await app.startAllMicroservices().then(() => console.log('Microservice is listening'));
   await app.listen(3333);
 }
 bootstrap();

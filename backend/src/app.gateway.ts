@@ -1,12 +1,17 @@
-import { Logger, BadRequestException } from '@nestjs/common';
+import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
+import { AtGuard } from './auth/guards';
+import { Cache, caching } from 'cache-manager';
+import { SessionService } from './sessionHandler/session.service';
 
-@WebSocketGateway({cors: true})
+@WebSocketGateway({transports: ['websocket'] ,cors: true})
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
-  constructor(private prisma: PrismaService, private chat: ChatService){}
+  constructor(private prisma: PrismaService, private chat: ChatService, @Inject(CACHE_MANAGER) private cacheManager : Cache, private sessionService: SessionService){
+    this.sessionService = new SessionService(this.cacheManager);
+  }
   
   @WebSocketServer() server: Server;
   
@@ -15,17 +20,66 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   afterInit(server: any) {
     this.logger.log('initialized')
   }
-  
-  handleConnection(client: Socket, ...args: any[]) {
-    const sockets = this.server.sockets.sockets
+
+  OnGatewayConnection(client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`)
-    this.logger.log(`Total clients: ${sockets.size}`)
+  }
+
+  OnGatewayDisconnect(client: Socket) {
+    this.logger.log(`Client disconnected: ${client.id}`)
+  }
+
+  OnGatewayInit(server: any) {
+    this.logger.log('initialized')
+  }
+  
+  
+  @UseGuards(AtGuard)
+  async handleConnection(client: Socket,  @Req() req, ...args: any[]) {
+    try
+    {
+      const user = req.user;
+      const me = await this.prisma.user.findUniqueOrThrow({
+        where: {
+          id: user['sub']
+        },
+      })
+      let session = await this.sessionService.findSession(me.idIntra);
+      if (session && session.status !== 'offline') {
+        client.emit('alreadyLoggedIn', 'Already logged in');
+        client.to(session.socketId).emit('alreadyLoggedIn', 'Already logged in');
+        return ;
+      }
+      else {
+        await this.sessionService.saveSession(me.idIntra, {
+          status: 'online',
+          socketId: client.id
+        });
+        (client as any).idIntra = me.idIntra;
+        console.log((client as any).idIntra)
+        let chats = await this.prisma.partecipant.findMany({
+          where: {
+            idIntra: me.idIntra
+          },
+        });
+        await Promise.all(chats.map(async (chat) => {
+          client.join(chat.idChat.toString());
+        }))
+      }
+
+    }
+    catch(e: any)
+    {
+      throw new BadRequestException(e)
+    }
   }
 
   handleDisconnect(client: Socket) {
-    const sockets = this.server.sockets.sockets
-    this.logger.log(`Client disconnected: ${client.id}`)
-    this.logger.log(`Total clients: ${sockets.size}`)
+    this.sessionService.saveSession((client as any).idIntra, {
+          status: "offline",
+          socketId: client.id
+      });
+      this.server.sockets.emit("offline", client.handshake.query.auth)
   }
 
   async verifyPartecipant(idIntra: string, idChat: number) {

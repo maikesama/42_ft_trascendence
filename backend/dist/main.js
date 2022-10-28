@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const core_1 = require("@nestjs/core");
 const app_module_1 = require("./app.module");
 const cookieParser = require("cookie-parser");
+const microservices_1 = require("@nestjs/microservices");
 async function bootstrap() {
     const app = await core_1.NestFactory.create(app_module_1.AppModule);
     app.enableCors({
@@ -14,7 +15,12 @@ async function bootstrap() {
             `http://${process.env.HOST}`],
         credentials: true
     });
+    const microservice = app.connectMicroservice({
+        transport: microservices_1.Transport.TCP,
+        port: 3333,
+    });
     app.use(cookieParser());
+    await app.startAllMicroservices().then(() => console.log('Microservice is listening'));
     await app.listen(3333);
 }
 bootstrap();
