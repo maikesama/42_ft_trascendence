@@ -1,27 +1,7 @@
 import React, {useState, useEffect} from 'react';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import profilePic from '../images/bg_room.jpg'
 import Grid from '@material-ui/core/Grid';
-import EditIcon from '@mui/icons-material/Edit';
-import IconButton from '@mui/material/IconButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import TextField from '@mui/material/TextField';
-import Divider from '@mui/material/Divider';
 import { ProfileEdit, SocialEdit } from "./OtherProfileEdit";
-import Rank from '../images/rank.png'
-import Victory from '../images/crown.png'
-import Ladder from '../images/crowns.png'
-import Avatar from '@mui/material/Avatar';
-import Accordion from '@mui/material/Accordion';
-import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 
 import "../css/ProfileEdit.css"
 import "../css/Navbar.css"

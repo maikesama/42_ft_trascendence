@@ -12,11 +12,8 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
-import AdbIcon from '@mui/icons-material/Adb';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import Grid from '@mui/material/Grid'; // Grid version 1
-import Grid2 from '@mui/material/Unstable_Grid2'; // Grid version 2
-import {BlockedList} from '../profile/BlockedList'
+import Grid from '@mui/material/Grid';
 import "../css/Header.css"
 
 import 'bootstrap/dist/css/bootstrap.min.css';

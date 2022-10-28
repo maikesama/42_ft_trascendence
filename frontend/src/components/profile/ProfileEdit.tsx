@@ -5,47 +5,23 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import profilePic from '../images/bg_room.jpg'
-import Grid from '@material-ui/core/Grid';
 import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import StepLabel from '@mui/material/StepLabel';
-import ListItemButton from '@mui/material/ListItemButton';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
 import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
-import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
-import SearchIcon from '@mui/icons-material/Search';
-import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
-import { Route, Routes } from 'react-router-dom';
-import { withStyles } from "@material-ui/core/styles";
 
 import "../css/ProfileEdit.css"
-import { Input } from '@mui/material';
-import { match } from 'assert';
-import { render } from 'react-dom';
-import { blue } from '@material-ui/core/colors';
 import { SearchBar } from './SearchBar';
 import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
-import { Link } from 'react-router-dom';
-import { upload } from "@testing-library/user-event/dist/upload";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 
 

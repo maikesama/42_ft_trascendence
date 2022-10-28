@@ -1,44 +1,28 @@
-import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
+import React, { useState, useEffect } from 'react';
 import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Avatar from '@material-ui/core/Avatar';
-import Fab from '@material-ui/core/Fab';
-import SendIcon from '@material-ui/icons/Send';
 import Button from '@mui/material/Button';
-import { FormatAlignJustify } from '@material-ui/icons';
-import { AlignHorizontalLeft } from '@mui/icons-material';
-import { IconButton } from '@mui/material';
-import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import FormControl from '@mui/material/FormControl';
-import NativeSelect from '@mui/material/NativeSelect';
-import ListItemButton from '@mui/material/ListItemButton';
-import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
-import SearchIcon from '@mui/icons-material/Search';
-import { styled, alpha } from '@mui/material/styles';
-import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import { CreateChannel } from './CreateChannel';
-import { GroupInfo } from './GroupInfo';
+import Radio from '@mui/material/Radio';
 
 
 export const AdminGroupActions = (props: any) => {
 
     const partecipants = props.partecipants;
+    const [selectedName, setSelectedName] = React.useState('');
+    const [searchView, setSearchView] = useState('');
+    const [mySelf, setMySelf] = useState({} as any);
+
+    const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedName(event.target.value);
+    };
 
     async function leaveChannel() {
         const url = `http://10.11.11.3:3333/chat/leaveChannel`;
@@ -51,36 +35,101 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ name: props.channelName }),
             })
-           window.location.reload();
+            window.location.reload();
         } catch (error) {
             console.log("error", error);
         }
 
     }
 
-    function renderGroupRowAdmin(props: ListChildComponentProps) {
-        const { index, style } = props;
+    async function kick() {
+        const url = `http://10.11.11.3:3333/chat/removeUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+            })
+            window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
 
+    }
+
+    useEffect(() => {
+        const url = "http://10.11.11.3:3333/user/me";
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                });
+                const json = await response.json();
+                console.log(json);
+                setMySelf(json);
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
+    function renderGroupRowAdmin(props: any) {
+        const { index, style} = props;
+        
         return (
             <ListItem style={style} key={index} >
-                <ListItemButton>
-                    <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
-                    <Divider variant='middle' />
-                    <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'} />
-                    <Divider />
-                </ListItemButton>
+                <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
+                <Divider variant='middle' />
+                <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'} />
+                <Divider />
+                
+                {partecipants[index]?.idIntra === mySelf.idIntra || partecipants[index]?.owner ? <>
+                <Radio
+                    disabled
+                    checked={selectedName === partecipants[index]?.userName}
+                    onChange={handleChange}
+                    value={partecipants[index]?.idIntra}
+                    name="radio-buttons"
+                    inputProps={{ 'aria-label': 'A' }}
+                />
+                </> : 
+                <Radio
+                    checked={selectedName === partecipants[index]?.userName}
+                    onChange={handleChange}
+                    value={partecipants[index]?.idIntra}
+                    name="radio-buttons"
+                    inputProps={{ 'aria-label': 'A' }}
+                />
+                }
+                
             </ListItem>
         );
     }
 
     const closeX = {
-        backgroundColor: 'white', color: 'red', marginLeft: '67%',fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
+        backgroundColor: 'white', color: 'red', marginLeft: '67%', fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
     }
+
+    function closeFunction() {
+        props.closeStatus();
+        setSelectedName('');
+    }
+
+    
 
     return (
         <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle>Admin Actions<button style={closeX} onClick={props.closeStatus}>X</button> </DialogTitle>
-            
+            <DialogTitle>Admin Actions<button style={closeX} onClick={closeFunction}>X</button> </DialogTitle>
+
             <DialogContent>
                 <DialogContentText>
                     You are {props.user}
@@ -96,10 +145,19 @@ export const AdminGroupActions = (props: any) => {
                     {renderGroupRowAdmin}
                 </FixedSizeList>
                 <DialogActions>
-                    <Button variant="outlined" onClick={props.closeStatus} style={{ border: '2px solid green', color: 'green'}}>Add User</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Muted</Button>
-                    <Button variant="outlined" onClick={props.closeStatus}>Banned</Button>
-                    <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
+                    {selectedName === '' ?
+                        <>
+                            <Button variant="outlined" onClick={props.closeStatus} style={{ border: '2px solid green', color: 'green' }}>Add User</Button>
+                            <Button variant="outlined" onClick={props.closeStatus}>Muted</Button>
+                            <Button variant="outlined" onClick={props.closeStatus}>Banned</Button>
+                            <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
+                        </> :
+                        <>
+                            <Button variant="outlined" onClick={props.closeStatus} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
+                            <Button variant="outlined" onClick={props.closeStatus}>Mute</Button>
+                            <Button variant="outlined" onClick={props.closeStatus}>Ban</Button>
+                            <Button variant="outlined" onClick={kick}>Kick</Button>
+                        </>}
                 </DialogActions>
             </DialogContent>
         </Dialog>

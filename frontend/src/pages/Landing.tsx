@@ -1,8 +1,3 @@
-
-import axios from "axios";
-import React from "react";
-import { Form } from "react-bootstrap";
-import Background from "../images/backLanding.jpg"
 import './css/Homepage.css';
 
 let logged = false;

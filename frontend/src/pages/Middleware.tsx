@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import Avatar from "@mui/material/Avatar";
 import TextField from "@mui/material/TextField";
 import './css/Homepage.css';
-import { upload } from "@testing-library/user-event/dist/upload";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Typography from '@mui/material/Typography';
 

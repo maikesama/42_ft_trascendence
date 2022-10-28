@@ -90,7 +90,7 @@ export const SearchBar = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            console.log(json);
+            console.log("ciao :"  + JSON.stringify(json));
             setSearch(json);
         } catch (error) {
             console.log("error", error);
@@ -162,16 +162,16 @@ export const SearchBar = (props: any) => {
         }
 
         const test = true;
-
         return (
             <ListItem style={style} key={index} >
                 {search[index]?.img ? <><Avatar src={search[index]?.img} />
                 <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
                 <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
                 <Divider variant="middle" />
+                {console.log("test " + search[index]?.invited)}
                 <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-                { !(search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> :
-                 <IconButton aria-label="removefriend" size="small" style={{ color: 'green' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>}
+                { (!(search[index]?.invited) && !(search[index]?.invited)) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> :
+                 <IconButton aria-label="removefriend" size="small" style={{ color: 'red' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>}
                 <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton> </>: null}
                 
             </ListItem>

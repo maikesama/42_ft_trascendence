@@ -8,8 +8,8 @@ export declare class FriendController {
     removeInvite(body: any, req: any): Promise<void>;
     getFriends(body: any, req: any): Promise<{
         idIntra: string;
-        img: string;
         userName: string;
+        img: string;
     }[]>;
     getInvite(req: any): Promise<{
         idIntra: string;

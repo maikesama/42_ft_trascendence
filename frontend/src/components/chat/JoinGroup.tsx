@@ -110,7 +110,6 @@ export const JoinGroup = (props: any) => {
         if (pass.current.value)
             pwd = pass.current.value;
         const url = `http://10.11.11.3:3333/chat/joinChannel`;
-
         try {
             const response = await fetch(url, {
                 method: 'POST',

@@ -14,16 +14,16 @@ export declare class UserService {
     getAllUsers(): Promise<{
         id: number;
         partecipant: import(".prisma/client").Partecipant[];
+        idIntra: string;
+        userName: string;
+        img: string;
         friend: import(".prisma/client").Friend[];
         friendBy: import(".prisma/client").Friend[];
         blocked: import(".prisma/client").Blocklist[];
         blockedby: import(".prisma/client").Blocklist[];
         invited: import(".prisma/client").Invited[];
         invitedBy: import(".prisma/client").Invited[];
-        idIntra: string;
-        img: string;
         messages: import(".prisma/client").Message[];
-        userName: string;
         email: string;
         tel: string;
         firstName: string;
