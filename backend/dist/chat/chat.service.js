@@ -170,7 +170,7 @@ let ChatService = class ChatService {
                 const ret = {
                     idIntra: user.idIntra,
                     img: user.img,
-                    invited: invited ? true : false
+                    invited: invited ? true : false,
                 };
                 return ret;
             });
@@ -614,7 +614,6 @@ let ChatService = class ChatService {
     }
     async joinChannel(body, userId) {
         try {
-            console.log(body.password);
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -664,7 +663,6 @@ let ChatService = class ChatService {
             }
         }
         catch (err) {
-            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }
@@ -883,17 +881,12 @@ let ChatService = class ChatService {
             });
             if (user.idIntra !== body.idIntra)
                 throw new common_1.BadRequestException("Can't remove yorself");
-            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)))
+            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra)))
                 throw new common_1.BadRequestException('Not enough rights');
-            if (await this.isChanOwner(body.name, user.idIntra))
+            if (await this.isChanOwner(channel.id, user.idIntra))
                 throw new common_1.BadRequestException("Can't remove owner");
             if (await this.isBanned(body.name, user.idIntra))
                 throw new common_1.BadRequestException('User is Banned');
-            const partecipant = await this.prismaService.partecipant.delete({
-                where: {
-                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                }
-            });
             await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
                     idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }

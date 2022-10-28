@@ -18,8 +18,8 @@ export declare class FriendService {
     declineInvite(body: any, userId: number): Promise<void>;
     getFriends(body: any, userId: number): Promise<{
         idIntra: string;
-        img: string;
         userName: string;
+        img: string;
     }[]>;
     removeFriend(body: any, userId: number): Promise<void>;
 }
