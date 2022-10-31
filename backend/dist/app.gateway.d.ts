@@ -2,14 +2,21 @@ import { OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
+import { Cache } from 'cache-manager';
+import { SessionService } from './sessionHandler/session.service';
 export declare class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
     private prisma;
     private chat;
-    constructor(prisma: PrismaService, chat: ChatService);
+    private cacheManager;
+    private sessionService;
+    constructor(prisma: PrismaService, chat: ChatService, cacheManager: Cache, sessionService: SessionService);
     server: Server;
     private logger;
     afterInit(server: any): void;
-    handleConnection(client: Socket, ...args: any[]): void;
+    OnGatewayConnection(client: Socket, ...args: any[]): void;
+    OnGatewayDisconnect(client: Socket): void;
+    OnGatewayInit(server: any): void;
+    handleConnection(client: Socket, req: any, ...args: any[]): Promise<void>;
     handleDisconnect(client: Socket): void;
     verifyPartecipant(idIntra: string, idChat: number): Promise<false | import(".prisma/client").Partecipant>;
     isChatAdmin(idIntra: string, idChat: number): Promise<boolean>;

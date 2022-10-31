@@ -11,8 +11,8 @@ const common_1 = require("@nestjs/common");
 const auth_module_1 = require("./auth/auth.module");
 const user_module_1 = require("./user/user.module");
 const prisma_module_1 = require("./prisma/prisma.module");
-const passport_1 = require("@nestjs/passport");
 const prisma_service_1 = require("./prisma/prisma.service");
+const redisStore = require("cache-manager-redis-store");
 const microservices_1 = require("@nestjs/microservices");
 const app_gateway_1 = require("./app.gateway");
 const chat_module_1 = require("./chat/chat.module");
@@ -21,6 +21,8 @@ const friend_service_1 = require("./friend/friend.service");
 const friend_module_1 = require("./friend/friend.module");
 const games_module_1 = require("./games/games.module");
 const games_service_1 = require("./games/games.service");
+const session_service_1 = require("./sessionHandler/session.service");
+const session_module_1 = require("./sessionHandler/session.module");
 let AppModule = class AppModule {
 };
 AppModule = __decorate([
@@ -32,16 +34,21 @@ AppModule = __decorate([
             chat_module_1.ChatModule,
             friend_module_1.FriendModule,
             games_module_1.GamesModule,
-            passport_1.PassportModule.register({ session: true }),
+            session_module_1.SessionModule,
             microservices_1.ClientsModule.register([
                 {
                     name: "NOTIFICATION_SERVICE",
                     transport: microservices_1.Transport.TCP
                 }
-            ])
+            ]),
+            common_1.CacheModule.register({
+                store: redisStore,
+                host: 'rediStatus',
+                port: 6379
+            }),
         ],
         controllers: [],
-        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway, chat_service_1.ChatService, friend_service_1.FriendService, games_service_1.GamesService],
+        providers: [prisma_service_1.PrismaService, app_gateway_1.AppGateway, chat_service_1.ChatService, friend_service_1.FriendService, games_service_1.GamesService, session_service_1.SessionService],
     })
 ], AppModule);
 exports.AppModule = AppModule;

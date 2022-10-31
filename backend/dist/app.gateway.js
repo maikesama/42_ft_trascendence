@@ -18,25 +18,71 @@ const websockets_1 = require("@nestjs/websockets");
 const socket_io_1 = require("socket.io");
 const prisma_service_1 = require("./prisma/prisma.service");
 const chat_service_1 = require("./chat/chat.service");
+const guards_1 = require("./auth/guards");
+const session_service_1 = require("./sessionHandler/session.service");
 let AppGateway = class AppGateway {
-    constructor(prisma, chat) {
+    constructor(prisma, chat, cacheManager, sessionService) {
         this.prisma = prisma;
         this.chat = chat;
+        this.cacheManager = cacheManager;
+        this.sessionService = sessionService;
         this.logger = new common_1.Logger('AppGateway');
         this.clientToUser = {};
+        this.sessionService = new session_service_1.SessionService(this.cacheManager);
     }
     afterInit(server) {
         this.logger.log('initialized');
     }
-    handleConnection(client, ...args) {
-        const sockets = this.server.sockets.sockets;
+    OnGatewayConnection(client, ...args) {
         this.logger.log(`Client connected: ${client.id}`);
-        this.logger.log(`Total clients: ${sockets.size}`);
+    }
+    OnGatewayDisconnect(client) {
+        this.logger.log(`Client disconnected: ${client.id}`);
+    }
+    OnGatewayInit(server) {
+        this.logger.log('initialized');
+    }
+    async handleConnection(client, req, ...args) {
+        try {
+            const user = req.user;
+            const me = await this.prisma.user.findUniqueOrThrow({
+                where: {
+                    id: user['sub']
+                },
+            });
+            let session = await this.sessionService.findSession(me.idIntra);
+            if (session && session.status !== 'offline') {
+                client.emit('alreadyLoggedIn', 'Already logged in');
+                client.to(session.socketId).emit('alreadyLoggedIn', 'Already logged in');
+                return;
+            }
+            else {
+                await this.sessionService.saveSession(me.idIntra, {
+                    status: 'online',
+                    socketId: client.id
+                });
+                client.idIntra = me.idIntra;
+                console.log(client.idIntra);
+                let chats = await this.prisma.partecipant.findMany({
+                    where: {
+                        idIntra: me.idIntra
+                    },
+                });
+                await Promise.all(chats.map(async (chat) => {
+                    client.join(chat.idChat.toString());
+                }));
+            }
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
     }
     handleDisconnect(client) {
-        const sockets = this.server.sockets.sockets;
-        this.logger.log(`Client disconnected: ${client.id}`);
-        this.logger.log(`Total clients: ${sockets.size}`);
+        this.sessionService.saveSession(client.idIntra, {
+            status: "offline",
+            socketId: client.id
+        });
+        this.server.sockets.emit("offline", client.handshake.query.auth);
     }
     async verifyPartecipant(idIntra, idChat) {
         try {
@@ -132,6 +178,13 @@ __decorate([
     __metadata("design:type", socket_io_1.Server)
 ], AppGateway.prototype, "server", void 0);
 __decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [socket_io_1.Socket, Object, Object]),
+    __metadata("design:returntype", Promise)
+], AppGateway.prototype, "handleConnection", null);
+__decorate([
     (0, websockets_1.SubscribeMessage)('msgToServer'),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [socket_io_1.Socket, Object]),
@@ -158,8 +211,9 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AppGateway.prototype, "handleTyping", null);
 AppGateway = __decorate([
-    (0, websockets_1.WebSocketGateway)({ cors: true }),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService, chat_service_1.ChatService])
+    (0, websockets_1.WebSocketGateway)({ transports: ['websocket'], cors: true }),
+    __param(2, (0, common_1.Inject)(common_1.CACHE_MANAGER)),
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService, chat_service_1.ChatService, Object, session_service_1.SessionService])
 ], AppGateway);
 exports.AppGateway = AppGateway;
 //# sourceMappingURL=app.gateway.js.map
