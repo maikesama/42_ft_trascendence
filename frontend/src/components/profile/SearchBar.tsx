@@ -79,7 +79,7 @@ export const SearchBar = (props: any) => {
     const initials = useRef<any>('');
 
     async function searchUser() {
-        const url = `http://10.11.11.3:3333/chat/searchUser`;
+        const url = `http://localhost:3333/chat/searchUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -103,7 +103,7 @@ export const SearchBar = (props: any) => {
 
         async function block(index: any) {
             const idIntra = await search[index]?.idIntra;
-            const url = `http://10.11.11.3:3333/user/block/${idIntra}`;
+            const url = `http://localhost:3333/user/block/${idIntra}`;
 
             try {
                 const response = await fetch(url, {
@@ -121,7 +121,7 @@ export const SearchBar = (props: any) => {
 
         async function addInviteFriend(index: any) {
             const idIntra = await search[index]?.idIntra;
-            const url = `http://10.11.11.3:3333/friend/inviteFriend`;
+            const url = `http://localhost:3333/friend/inviteFriend`;
 
             try {
                 const response = await fetch(url, {
@@ -144,7 +144,7 @@ export const SearchBar = (props: any) => {
 
         async function removeInviteFriend(index: any) {
             const idIntra = await search[index]?.idIntra;
-            const url = `http://10.11.11.3:3333/friend/removeInvite/`;
+            const url = `http://localhost:3333/friend/removeInvite/`;
 
             try {
                 const response = await fetch(url, {

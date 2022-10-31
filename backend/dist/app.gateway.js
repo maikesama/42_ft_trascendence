@@ -59,7 +59,7 @@ let AppGateway = class AppGateway {
             else {
                 await this.sessionService.saveSession(me.idIntra, {
                     status: 'online',
-                    socketId: client.id
+                    socketId: client.id,
                 });
                 client.idIntra = me.idIntra;
                 console.log(client.idIntra);

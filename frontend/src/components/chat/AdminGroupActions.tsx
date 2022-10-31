@@ -25,7 +25,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     async function leaveChannel() {
-        const url = `http://10.11.11.3:3333/chat/leaveChannel`;
+        const url = `http://localhost:3333/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -43,7 +43,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function kick() {
-        const url = `http://10.11.11.3:3333/chat/removeUser`;
+        const url = `http://localhost:3333/chat/removeUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -61,7 +61,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     useEffect(() => {
-        const url = "http://10.11.11.3:3333/user/me";
+        const url = "http://localhost:3333/user/me";
 
         const fetchData = async () => {
             try {
