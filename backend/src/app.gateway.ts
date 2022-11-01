@@ -53,7 +53,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       else {
         await this.sessionService.saveSession(me.idIntra, {
           status: 'online',
-          socketId: client.id
+          socketId: client.id,
         });
         (client as any).idIntra = me.idIntra;
         console.log((client as any).idIntra)

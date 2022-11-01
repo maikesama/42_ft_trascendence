@@ -12,13 +12,13 @@ export const Middleware = () => {
     async function logFunction(evt: any) {
         evt.preventDefault();
 
-        window.location.replace(`http://10.11.11.3:3000/home`)
+        window.location.replace(`http://localhost:3000/home`)
     }
 
     const [user, setUser] = useState({} as any);
 
     useEffect(() => {
-        const url = "http://10.11.11.3:3333/user/me";
+        const url = "http://localhost:3333/user/me";
 
         const fetchData = async () => {
             try {
@@ -48,7 +48,7 @@ export const Middleware = () => {
     const clickSave = async () => {
         //return console.log(nick.current.value)
 
-        let url = "http://10.11.11.3:3333/user/update/username";
+        let url = "http://localhost:3333/user/update/username";
 
 
         try {
@@ -90,7 +90,7 @@ export const Middleware = () => {
     const uploadImage = async (imageList: ImageListType) => {
         console.log(JSON.stringify(imageList[0].dataURL))
         try {
-            const response = await fetch('http://10.11.11.3:3333/user/update/pp', {
+            const response = await fetch('http://localhost:3333/user/update/pp', {
                 method: "POST",
                 credentials: 'include',
                 headers: {

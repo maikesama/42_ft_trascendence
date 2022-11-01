@@ -49,7 +49,7 @@ export const GroupInfo = (props: any) => {
     };
 
     async function leaveChannel() {
-        const url = `http://10.11.11.3:3333/chat/leaveChannel`;
+        const url = `http://localhost:3333/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
