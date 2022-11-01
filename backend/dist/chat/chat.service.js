@@ -119,6 +119,36 @@ let ChatService = class ChatService {
             throw new common_1.BadRequestException(e);
         }
     }
+    async getAdmin(body, userId) {
+        try {
+            const chan = await this.prismaService.chat.findUnique({
+                where: {
+                    name: body.name
+                },
+                include: {
+                    partecipant: true,
+                }
+            });
+            const ret = await chan.partecipant.map(async (partecipant) => {
+                if (partecipant.admin !== null && partecipant.admin === true) {
+                    const user = await this.prismaService.user.findUnique({
+                        where: {
+                            idIntra: partecipant.idIntra
+                        }
+                    });
+                    return {
+                        idIntra: partecipant.idIntra,
+                        userName: user.userName,
+                        img: user.img,
+                    };
+                }
+            });
+            return (await Promise.all(ret)).filter((el) => el !== undefined);
+        }
+        catch (e) {
+            throw new common_1.BadRequestException(e);
+        }
+    }
     async getChanUsers(body, userId) {
         try {
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -986,15 +1016,15 @@ let ChatService = class ChatService {
                     id: userId
                 }
             });
-            if (user.idIntra !== body.idIntra)
-                throw new common_1.BadRequestException("Can't add yorself");
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra))
-                throw new common_1.BadRequestException('User is not an admin or owner');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
                 }
             });
+            if (user.idIntra !== body.idIntra)
+                throw new common_1.BadRequestException("Can't add yorself");
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra))
+                throw new common_1.BadRequestException('User is not an admin or owner');
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
                     idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
@@ -1012,30 +1042,33 @@ let ChatService = class ChatService {
             }
         }
         catch (err) {
+            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }
     async removeAdmin(body, userId) {
+        console.log(JSON.stringify(body));
         try {
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             });
-            if (user.idIntra === body.idIntra)
-                throw new common_1.BadRequestException("Can't remove yorself");
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, user.idIntra))
-                throw new common_1.BadRequestException('Not enough rights');
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
                 }
             });
+            if (user.idIntra === body.idIntra)
+                throw new common_1.BadRequestException("Can't remove yorself");
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, user.idIntra))
+                throw new common_1.BadRequestException('Not enough rights');
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
-                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                    idIntra_idChat: { idIntra: body.idIntra, idChat: channel.id }
                 },
             });
+            console.log(partecipant);
             if (partecipant.admin) {
                 await this.prismaService.partecipant.update({
                     where: {
@@ -1048,6 +1081,7 @@ let ChatService = class ChatService {
             }
         }
         catch (err) {
+            console.log(err);
             throw new common_1.BadRequestException(err);
         }
     }

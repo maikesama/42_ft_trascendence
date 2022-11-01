@@ -125,6 +125,41 @@ export class ChatService{
         }
     }
 
+    async getAdmin(body, userId: string)
+    {
+        try{
+            const chan = await this.prismaService.chat.findUnique({
+                where: {
+                    name: body.name
+                },
+                include: {
+                    partecipant: true,
+                }
+            })
+
+            const ret = await chan.partecipant.map(async (partecipant: any) => {
+                if (partecipant.admin !== null && partecipant.admin === true)
+                {
+                    const user = await this.prismaService.user.findUnique({
+                        where: {
+                            idIntra: partecipant.idIntra
+                        }
+                    })
+                    return {
+                        idIntra: partecipant.idIntra,
+                        userName: user.userName,
+                        img: user.img,
+                    }
+                }
+            }
+            )
+            return (await Promise.all(ret)).filter((el: any) => el !== undefined)
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
     async getChanUsers(body, userId: number)
     {
         try{
@@ -1135,16 +1170,16 @@ export class ChatService{
                 }
             })
             
-            if (user.idIntra !== body.idIntra)
-                throw new BadRequestException("Can't add yorself")
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra))
-                throw new BadRequestException('User is not an admin or owner');
-            
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
                 }
             })
+            if (user.idIntra !== body.idIntra)
+                throw new BadRequestException("Can't add yorself")
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra))
+                throw new BadRequestException('User is not an admin or owner');
+            
 
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
@@ -1166,12 +1201,14 @@ export class ChatService{
         }
         catch(err)
         {
+            console.log(err)
             throw new BadRequestException(err);
         }
     }
 
     async removeAdmin(body: any, userId: number)
     {
+        console.log(JSON.stringify(body))
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
@@ -1179,23 +1216,24 @@ export class ChatService{
                 }
             })
 
-
-            if (user.idIntra === body.idIntra)
-                throw new BadRequestException("Can't remove yorself")
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, user.idIntra))
-                throw new BadRequestException('Not enough rights');
-            
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
                 }
             })
 
+            if (user.idIntra === body.idIntra)
+                throw new BadRequestException("Can't remove yorself")
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, user.idIntra))
+                throw new BadRequestException('Not enough rights');
+            
+
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
-                    idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
+                    idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
                 },
             })
+            console.log(partecipant)
             if (partecipant.admin)
             {
                 await this.prismaService.partecipant.update({
@@ -1210,6 +1248,7 @@ export class ChatService{
         }
         catch(err)
         {
+            console.log(err)
             throw new BadRequestException(err);
         }
     }

@@ -35,6 +35,11 @@ export declare class ChatController {
         userName: string;
         img: string;
     }[]>;
+    getAdmin(body: any, req: any): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
     leaveChannel(body: any, req: any): Promise<void>;
     changePassword(body: any, req: any): Promise<void>;
     changeVisibility(body: any, req: any): Promise<void>;

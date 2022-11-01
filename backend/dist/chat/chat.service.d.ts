@@ -17,6 +17,11 @@ export declare class ChatService {
         userName: string;
         img: string;
     }[]>;
+    getAdmin(body: any, userId: string): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
     getChanUsers(body: any, userId: number): Promise<{
         me: {
             owner: boolean;

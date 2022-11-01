@@ -108,6 +108,14 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('getAdmin')
+    async getAdmin(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getAdmin(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('leaveChannel')
     async leaveChannel(@Body() body, @Req() req){
         const user = req.user

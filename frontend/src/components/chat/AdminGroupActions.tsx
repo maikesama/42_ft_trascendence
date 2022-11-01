@@ -40,6 +40,7 @@ export const AdminGroupActions = (props: any) => {
     const [search, setSearch] = useState({} as any);
     const [userGroup, setUserGroup] = React.useState([] as any);
     const initials = useRef<any>('');
+    const [promoted, setPromoted] = useState({} as any);
 
     const handleChange = (event: any) => {
         console.log(event.target.value)
@@ -123,7 +124,6 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function ban() {
-        console.log(bantime.current.value)
         const url = `http://10.11.11.3:3333/chat/banUser`;
         try {
             const response = await fetch(url, {
@@ -200,6 +200,26 @@ export const AdminGroupActions = (props: any) => {
 
     }
 
+    async function getAdmin() {
+        const url = `http://10.11.11.3:3333/chat/getAdmin`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName }),
+            })
+            const data = await response.json();
+            console.log(data)
+            setPromoted(data);
+        } catch (error) {
+            console.log("error", error);
+        }
+
+    }
+
     async function unBan(index: any) {
         const idIntra = await banned[index]?.idIntra;
         const url = `http://10.11.11.3:3333/chat/unbanUser`;
@@ -222,6 +242,44 @@ export const AdminGroupActions = (props: any) => {
       async function unMute(index: any) {
         const idIntra = await muted[index]?.idIntra;
         const url = `http://10.11.11.3:3333/chat/unmuteUser`;
+    
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+          });
+          window.location.reload();
+        } catch (error) {
+          console.log("error", error);
+        }
+      }
+
+      async function promote(index: any) {
+        const idIntra = await muted[index]?.idIntra;
+        const url = `http://10.11.11.3:3333/chat/addAdmin`;
+    
+        try {
+          const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+          });
+          window.location.reload();
+        } catch (error) {
+          console.log("error", error);
+        }
+      }
+
+      async function demote(index: any) {
+        const idIntra = await promoted[index]?.idIntra;
+        const url = `http://10.11.11.3:3333/chat/removeAdmin`;
     
         try {
           const response = await fetch(url, {
@@ -325,6 +383,21 @@ export const AdminGroupActions = (props: any) => {
         );
     }
 
+    function PromotedUserItem(props: any) {
+        const { index, style} = props;
+        console.log('promoted', promoted);
+        let isMuted = promoted[index]?.muted ? " [ muted ]" : "";
+        //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
+        return (
+            <ListItem style={style} key={index} >
+                <Avatar src={promoted[index]?.img} style={{marginRight: 10}}/>
+                <ListItemText id="idIntraBlock" primary={promoted[index]?.idIntra} />
+                <Divider variant="middle" />
+                <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => demote(index)} fontSize="large" /></IconButton>
+            </ListItem>
+        );
+    }
+
     const closeX = {
         backgroundColor: 'white', color: 'red', marginLeft: '67%', fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
     }
@@ -341,6 +414,8 @@ export const AdminGroupActions = (props: any) => {
             await getBanned();
         else if (type === "MutedList")
             await getMuted();
+        else if (type === "PromotedList")
+            await getAdmin();
         else
             ;
         
@@ -458,6 +533,19 @@ export const AdminGroupActions = (props: any) => {
                 >
                 {searchRow}
                 </FixedSizeList>
+                </> : clickLists === "PromotedList" ? <>
+                <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
+                    Promoted List
+                </DialogContentText>
+                <FixedSizeList
+                height={230}
+                width={500}
+                itemSize={46}
+                itemCount={Object.values(promoted).length}
+                overscanCount={5}
+                >
+                {PromotedUserItem}
+                </FixedSizeList>
                 </> : null}
                 {banButton ? <>
                 <Typography>Quanti minuti vuoi bannarlo?</Typography>
@@ -476,12 +564,13 @@ export const AdminGroupActions = (props: any) => {
                     {selectedName === '' && clickLists === '' ?
                         <>
                             <Button variant="outlined" onClick={() => Lists("AddUser")} style={{ border: '2px solid green', color: 'green' }}>Add User</Button>
+                            <Button variant="outlined" onClick={() => Lists("PromotedList")}>Promoted</Button>
                             <Button variant="outlined" onClick={() => Lists("MutedList")}>Muted</Button>
                             <Button variant="outlined" onClick={() => Lists("BannedList")}>Banned</Button>
                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                         </> : clickLists === '' ?
                         <>
-                            <Button variant="outlined" onClick={props.closeStatus} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
+                            <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
                             <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
                             <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
                             <Button variant="outlined" onClick={props.closeStatus}>Kick</Button>
