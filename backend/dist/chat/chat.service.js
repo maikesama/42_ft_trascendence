@@ -901,30 +901,33 @@ let ChatService = class ChatService {
     }
     async addUser(body, userId) {
         try {
-            const user = await this.prismaService.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            });
+            console.log(JSON.stringify(body));
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             });
-            if (user.idIntra !== body.idIntra)
-                throw new common_1.BadRequestException("Can't add yorself");
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra))
-                throw new common_1.BadRequestException('not enough rights');
-            const channel = await this.prismaService.chat.findFirstOrThrow({
-                where: {
-                    name: body.name
-                }
-            });
-            const partecipant = await this.prismaService.partecipant.create({
-                data: {
-                    idChat: channel.id,
-                    idIntra: user.idIntra,
-                }
+            body.idIntra.map(async (idIntra) => {
+                const user = await this.prismaService.user.findUniqueOrThrow({
+                    where: {
+                        idIntra: idIntra
+                    }
+                });
+                const channel = await this.prismaService.chat.findFirstOrThrow({
+                    where: {
+                        name: body.name
+                    }
+                });
+                if (user.idIntra !== idIntra)
+                    throw new common_1.BadRequestException("Can't add yorself");
+                if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra))
+                    throw new common_1.BadRequestException('not enough rights');
+                const partecipant = await this.prismaService.partecipant.create({
+                    data: {
+                        idChat: channel.id,
+                        idIntra: user.idIntra,
+                    }
+                });
             });
         }
         catch (err) {

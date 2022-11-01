@@ -19,6 +19,9 @@ import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import Radio from '@mui/material/Radio';
 import IconButton from '@mui/material/IconButton';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import Checkbox from '@mui/material/Checkbox';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -34,6 +37,9 @@ export const AdminGroupActions = (props: any) => {
     const [banButton, setBanButton] = useState(false);
     const [muteButton, setMuteButton] = useState(false);
     const [clickLists, setClickLists] = React.useState("");
+    const [search, setSearch] = useState({} as any);
+    const [userGroup, setUserGroup] = React.useState([] as any);
+    const initials = useRef<any>('');
 
     const handleChange = (event: any) => {
         console.log(event.target.value)
@@ -42,6 +48,25 @@ export const AdminGroupActions = (props: any) => {
         else
             setSelectedName(event.target.value);
     };
+
+    async function searchUser() {
+        const url = `http://10.11.11.3:3333/chat/searchUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ initials: initials.current.value }),
+            });
+            const json = await response.json();
+            console.log(json);
+            setSearch(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
 
     async function leaveChannel() {
         const url = `http://10.11.11.3:3333/chat/leaveChannel`;
@@ -71,6 +96,24 @@ export const AdminGroupActions = (props: any) => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+            })
+            window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
+
+    }
+
+    async function addUsers() {
+        const url = `http://10.11.11.3:3333/chat/addUser`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: userGroup }),
             })
             window.location.reload();
         } catch (error) {
@@ -310,6 +353,48 @@ export const AdminGroupActions = (props: any) => {
         setMuteButton(false);
     }
 
+    const handleToggle = (index: number, init: boolean) => () => {
+        let value;
+
+        
+        value = search[index]?.idIntra;
+        const currentIndex = userGroup.indexOf(index);
+        const newChecked = [...userGroup];
+        const newUserGroup = [...userGroup];
+
+        if (currentIndex === -1) {
+            newChecked.push(index);
+            newUserGroup.push(value);
+        } else {
+            newChecked.splice(currentIndex, 1);
+            newUserGroup.splice(currentIndex, 1);
+        }
+
+        setUserGroup(newUserGroup);
+    };
+
+    function searchRow(props: ListChildComponentProps) {
+        const { index, style } = props;
+        return (
+            <ListItem key={index}>
+
+                <ListItemButton role={undefined} onClick={handleToggle(index, true)} dense style={{ minWidth: '100%' }}>
+                    <ListItemIcon>
+                        <Checkbox
+                            edge="start"
+                            checked={userGroup.find((e: string) => e === search[index]?.idIntra) !== undefined}
+                            tabIndex={-1}
+                            disableRipple
+                            inputProps={{ 'aria-labelledby': '1' }}
+                        />
+                    </ListItemIcon>
+                    <Avatar src={search[index]?.img} style={{ marginRight: 20 }} />
+                    <ListItemText id={`${index}`} primary={`${search[index]?.idIntra} `} />
+
+                </ListItemButton>
+            </ListItem>
+        );
+    }
 
     return (
         <Dialog open={props.status} onClose={props.closeStatus}>
@@ -360,22 +445,21 @@ export const AdminGroupActions = (props: any) => {
                     {MutedUserItem}
                 </FixedSizeList>
                 </> : clickLists === "AddUser" ? <>
-                <DialogContentText>
-                    Add an User
+                <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
+                    Add members to your channel group:
                 </DialogContentText>
+                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>
                 <FixedSizeList
-                    style={{ marginTop: 20 }}
-                    height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
-                    width={500}
-                    itemSize={60}
-                    itemCount={partecipants?.length}
-                    overscanCount={5}
+                height={230}
+                width={500}
+                itemSize={46}
+                itemCount={Object.values(search).length}
+                overscanCount={5}
                 >
-                    {renderGroupRowAdmin}
+                {searchRow}
                 </FixedSizeList>
                 </> : null}
-                {
-                banButton ? <>
+                {banButton ? <>
                 <Typography>Quanti minuti vuoi bannarlo?</Typography>
                 <TextField style={{width:250}} inputRef={bantime} type="number" InputProps={{inputProps: { max: 100, min: 10 }}} label="Minutes"/>
                 <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
@@ -401,10 +485,17 @@ export const AdminGroupActions = (props: any) => {
                             <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
                             <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
                             <Button variant="outlined" onClick={props.closeStatus}>Kick</Button>
-                        </> : clickLists !== "" ?
+                        </> : clickLists === "AddUser" ?
+                        <>
+                            <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
+                            <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
+                        </> 
+                        : clickLists !== "" ?
                         <>
                             <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
-                        </> : null}
+                        </> 
+                        : null}
+
                 </DialogActions>
                 </>}
             </DialogContent>

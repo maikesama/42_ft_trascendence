@@ -1032,28 +1032,31 @@ export class ChatService{
 
     async addUser(body: any, userId: number)
     {
-        try{    
-            const user = await this.prismaService.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.idIntra
-                }
-            })
+        try{
+            console.log(JSON.stringify(body))
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
 
-            if (user.idIntra !== body.idIntra)
-                throw new BadRequestException("Can't add yorself")
-            if (!await this.isAdmin(body.name, userId) && ! await this.isChanOwner(body.name, reqUser.idIntra))
-                throw new BadRequestException('not enough rights');
-            
+            body.idIntra.map(async (idIntra: string) => {
+
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: idIntra
+                }
+            })
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     name: body.name
                 }
             })
+            if (user.idIntra !== idIntra)
+                throw new BadRequestException("Can't add yorself")
+            if (!await this.isAdmin(body.name, userId) && ! await this.isChanOwner(channel.id, reqUser.idIntra))
+                throw new BadRequestException('not enough rights');
+            
 
             const partecipant = await this.prismaService.partecipant.create({
                 data: {
@@ -1061,7 +1064,7 @@ export class ChatService{
                     idIntra: user.idIntra,
                 }
             })
-            
+        })
         }
         catch(err)
         {

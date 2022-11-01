@@ -265,6 +265,7 @@ export const CreateChannel = (props: any) => {
                 
                 </>}
             </DialogContent>
+            
             <DialogActions>
                 <Button onClick={props.closeStatus}>Cancel</Button>
                 <Button onClick={createChannel}>Create</Button>
