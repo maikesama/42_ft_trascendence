@@ -42,6 +42,18 @@ let AuthService = class AuthService {
             this.getToken(data.access_token, res);
         });
     }
+    async checkUsername(username) {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                userName: username
+            }
+        });
+        if (user) {
+            username = username + Math.floor(Math.random() * 10004);
+            return this.checkUsername(username);
+        }
+        return username;
+    }
     async getToken(token, res) {
         let first = false;
         try {
@@ -52,10 +64,10 @@ let AuthService = class AuthService {
                 }
             })
                 .then(response => response.json())
-                .then(datiJson => {
+                .then(async (datiJson) => {
                 let ret = ({
                     idIntra: datiJson.login,
-                    userName: datiJson.login,
+                    userName: await this.checkUsername(datiJson.login),
                     firstName: datiJson.first_name,
                     lastName: datiJson.last_name,
                     img: datiJson.image_url,

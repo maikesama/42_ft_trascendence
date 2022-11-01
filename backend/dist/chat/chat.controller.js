@@ -60,6 +60,14 @@ let ChatController = class ChatController {
         const user = req.user;
         return await this.chatService.joinChannel(body, user['sub']);
     }
+    async getBanned(body, req) {
+        const user = req.user;
+        return await this.chatService.getBanned(body, user['sub']);
+    }
+    async getMuted(body, req) {
+        const user = req.user;
+        return await this.chatService.getMuted(body, user['sub']);
+    }
     async leaveChannel(body, req) {
         const user = req.user;
         return await this.chatService.leaveChannel(body, user['sub']);
@@ -201,6 +209,26 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], ChatController.prototype, "joinChannel", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('getBanned'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getBanned", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.HttpCode)(200),
+    (0, common_1.Post)('getMuted'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], ChatController.prototype, "getMuted", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.HttpCode)(200),

@@ -335,9 +335,25 @@ export const ProfileEdit = (props: any) => {
     style: { color: 'rgb(0, 0, 0)' }
   }
 
+
+async function deleteImg() {
+  const url = `http://10.11.11.3:3333/user/delete/pp`;
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+      })
+      window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
+
+}
+  
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
+      
       <CardMedia
         component="img"
         height="380"
@@ -345,6 +361,7 @@ export const ProfileEdit = (props: any) => {
         alt=""
       />
       <Typography className="UploadImageTxt">Upload Image</Typography>
+      
       <ImageUploading value={images} onChange={onChange}>
         {({
           onImageUpload,
@@ -353,6 +370,7 @@ export const ProfileEdit = (props: any) => {
           <button onClick={onImageUpload}>Upload Image</button>
         )}
       </ImageUploading>
+      <button onClick={deleteImg}>X</button>
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

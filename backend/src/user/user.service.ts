@@ -273,6 +273,24 @@ export class UserService {
 		}
 	}
 
+	async deletepp(body, id: number)
+	{
+		try {
+			await this.prisma.user.update({
+				where:{
+					id: id
+				},
+				data:{
+					img: process.env.DEFAULTIMG
+				}
+			})
+		}
+		catch(e)
+		{
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
+	}
+
 	async changeUserName(body: any, id: number)
 	{
 		try {

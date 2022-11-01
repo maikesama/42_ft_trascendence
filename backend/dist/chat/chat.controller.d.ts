@@ -25,6 +25,16 @@ export declare class ChatController {
     banUser(body: any, req: any): Promise<void>;
     unbanUser(body: any, req: any): Promise<void>;
     joinChannel(body: any, req: any): Promise<void>;
+    getBanned(body: any, req: any): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
+    getMuted(body: any, req: any): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
     leaveChannel(body: any, req: any): Promise<void>;
     changePassword(body: any, req: any): Promise<void>;
     changeVisibility(body: any, req: any): Promise<void>;
@@ -48,6 +58,8 @@ export declare class ChatController {
             img: string;
             owner: any;
             admin: any;
+            mutedUntil: any;
+            muted: boolean;
         }[];
     }>;
     getChatUsers(body: any, req: any): Promise<import(".prisma/client").Chat[]>;

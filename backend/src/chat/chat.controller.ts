@@ -92,6 +92,22 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('getBanned')
+    async getBanned(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getBanned(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('getMuted')
+    async getMuted(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getMuted(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('leaveChannel')
     async leaveChannel(@Body() body, @Req() req){
         const user = req.user

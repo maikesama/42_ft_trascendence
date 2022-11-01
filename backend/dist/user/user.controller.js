@@ -54,6 +54,10 @@ let UserController = class UserController {
         const user = req.user;
         return await this.userservice.changepp(body, user['sub']);
     }
+    async deletePP(body, req) {
+        const user = req.user;
+        return await this.userservice.deletepp(body, user['sub']);
+    }
     async changeusername(body, req) {
         const user = req.user;
         return await this.userservice.changeUserName(body, user['sub']);
@@ -125,6 +129,15 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UserController.prototype, "changePP", null);
+__decorate([
+    (0, common_1.UseGuards)(guards_1.AtGuard),
+    (0, common_1.Post)('delete/pp'),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UserController.prototype, "deletePP", null);
 __decorate([
     (0, common_1.UseGuards)(guards_1.AtGuard),
     (0, common_1.Post)('update/username'),

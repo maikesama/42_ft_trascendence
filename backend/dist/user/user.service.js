@@ -239,6 +239,21 @@ let UserService = class UserService {
             throw new common_2.HttpException(e, common_2.HttpStatus.NOT_FOUND);
         }
     }
+    async deletepp(body, id) {
+        try {
+            await this.prisma.user.update({
+                where: {
+                    id: id
+                },
+                data: {
+                    img: process.env.DEFAULTIMG
+                }
+            });
+        }
+        catch (e) {
+            throw new common_2.HttpException(e, common_2.HttpStatus.NOT_FOUND);
+        }
+    }
     async changeUserName(body, id) {
         try {
             if (!body.userName)

@@ -39,6 +39,18 @@ export class AuthService {
 	})
 }
 
+	async checkUsername(username: string){
+		const user = await this.prisma.user.findUnique({
+			where: {
+				userName: username
+			}
+		})
+		if(user){
+			username = username + Math.floor(Math.random() * 10004)
+			return this.checkUsername(username)
+		}
+		return username
+	}
 
 	private async getToken(token: string, @Res() res) {
 		let first = false;
@@ -50,10 +62,10 @@ export class AuthService {
 				}
 			})
 			.then(response => response.json())
-			.then(datiJson => {
+			.then(async datiJson => {
 				let ret: UserData = ({
 					idIntra: datiJson.login,
-					userName: datiJson.login,
+					userName: await this.checkUsername(datiJson.login),
 					firstName: datiJson.first_name,
 					lastName: datiJson.last_name,
 					img: datiJson.image_url,

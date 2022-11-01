@@ -7,6 +7,16 @@ export declare class ChatService {
         type: any;
         id: any;
     }[]>;
+    getBanned(body: any, userId: string): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
+    getMuted(body: any, userId: string): Promise<{
+        idIntra: any;
+        userName: string;
+        img: string;
+    }[]>;
     getChanUsers(body: any, userId: number): Promise<{
         me: {
             owner: boolean;
@@ -18,6 +28,8 @@ export declare class ChatService {
             img: string;
             owner: any;
             admin: any;
+            mutedUntil: any;
+            muted: boolean;
         }[];
     }>;
     getChatUsers(body: any, userId: number): Promise<import(".prisma/client").Chat[]>;

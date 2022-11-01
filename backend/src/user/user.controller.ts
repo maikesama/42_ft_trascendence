@@ -75,6 +75,14 @@ export class UserController{
     }
 
     @UseGuards(AtGuard)
+    @Post('delete/pp')
+    async deletePP(@Body() body, @Req() req)
+    {
+        const user = req.user
+        return await this.userservice.deletepp(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
     @Post('update/username')
     async changeusername(@Body() body, @Req() req)
     {

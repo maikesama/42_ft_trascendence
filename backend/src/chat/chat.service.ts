@@ -55,6 +55,76 @@ export class ChatService{
         }
     }
 
+    async getBanned(body, userId: string)
+    {
+        try{
+            const chan = await this.prismaService.chat.findUnique({
+                where: {
+                    name: body.name
+                },
+                include: {
+                    partecipant: true
+                }
+            })
+
+            const ret = await chan.partecipant.map(async (partecipant: any) => {
+                if (partecipant.bannedUntil !== null && partecipant.bannedUntil > new Date())
+                {
+                    const user = await this.prismaService.user.findUnique({
+                        where: {
+                            idIntra: partecipant.idIntra
+                        }
+                    })
+                    return {
+                        idIntra: partecipant.idIntra,
+                        userName: user.userName,
+                        img: user.img,
+                    }
+                }
+            }
+            )
+            return (await Promise.all(ret)).filter((el: any) => el !== undefined)
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
+    async getMuted(body, userId: string)
+    {
+        try{
+            const chan = await this.prismaService.chat.findUnique({
+                where: {
+                    name: body.name
+                },
+                include: {
+                    partecipant: true
+                }
+            })
+
+            const ret = await chan.partecipant.map(async (partecipant: any) => {
+                if (partecipant.mutedUntil !== null && partecipant.mutedUntil > new Date())
+                {
+                    const user = await this.prismaService.user.findUnique({
+                        where: {
+                            idIntra: partecipant.idIntra
+                        }
+                    })
+                    return {
+                        idIntra: partecipant.idIntra,
+                        userName: user.userName,
+                        img: user.img,
+                    }
+                }
+            }
+            )
+            return (await Promise.all(ret)).filter((el: any) => el !== undefined)
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
     async getChanUsers(body, userId: number)
     {
         try{
@@ -85,23 +155,27 @@ export class ChatService{
             })
 
             const ret = await channel.partecipant.map(async (part: any) => {
-
-                const user = await this.prismaService.user.findUnique({
-                    where:
-                    {
-                        idIntra: part.idIntra
+                if (part.bannedUntil === null || part.bannedUntil < new Date())
+                {
+                    const user = await this.prismaService.user.findUnique({
+                        where:
+                        {
+                            idIntra: part.idIntra,
+                        }
+                    })
+                    return {
+                        idIntra: part.idIntra,
+                        userName: user.userName,
+                        img: user.img,
+                        owner: part.owner,
+                        admin: part.admin,
+                        mutedUntil: part.mutedUntil,
+                        muted: await this.isMuted(body.name, part.idIntra)
                     }
-                })
-                return {
-                    idIntra: part.idIntra,
-                    userName: user.userName,
-                    img: user.img,
-                    owner: part.owner,
-                    admin: part.admin
-                }
+                } 
             });
 
-            const ret2 = await Promise.all(ret)
+            const ret2 = await (await Promise.all(ret)).filter((el: any) => el !== undefined)
 
             const ret3 = {
                 me: {
@@ -130,16 +204,19 @@ export class ChatService{
             })
 
             const chats = await user.partecipant.map(async(partecipant: any) => {
-                const chat = await this.prismaService.chat.findUnique({
-                    where: {
-                        id: partecipant.idChat
-                    }
-                })
-                if (chat.dm === 'channel')
-                    return chat
+                if (partecipant.bannedUntil === null || partecipant.bannedUntil < new Date())
+                {
+                    const chat = await this.prismaService.chat.findUnique({
+                        where: {
+                            id: partecipant.idChat
+                        }
+                    })
+                    if (chat.dm === 'channel')
+                        return chat
+                }
             })
 
-            const ret = await Promise.all(chats)
+            const ret = await (await Promise.all(chats)).filter((el: any) => el !== undefined)
             return ret
         }
         catch(e){
@@ -546,7 +623,7 @@ export class ChatService{
                         name: body.name
                     }
                 })
-            if ((await this.isAdmin(body.name, userId) || await this.isChanOwner(body.name, reqUser.idIntra)) && !await this.isChanOwner(body.name, user.idIntra)){
+            if ((await this.isAdmin(body.name, userId) || await this.isChanOwner(channel.id, reqUser.idIntra)) && !await this.isChanOwner(channel.id, user.idIntra)){
 
                 if (body.time){
                     const partecipant = await this.prismaService.partecipant.update({
@@ -766,13 +843,19 @@ export class ChatService{
 
     async unMuteUser(body: any, userId: number){
         try{
+            
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
 
-            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)){
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+            if (!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra)){
                 throw new BadRequestException('You are not an admin or owner')
             }
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -782,11 +865,7 @@ export class ChatService{
             })
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't unmute yorself")
-            const channel = await this.prismaService.chat.findUniqueOrThrow({
-                where: {
-                    name: body.name
-                }
-            })
+           
             if (!await this.isMuted(body.name, user.idIntra))
                 throw   new BadRequestException('User is not muted');
             const partecipant = await this.prismaService.partecipant.update({
@@ -801,6 +880,7 @@ export class ChatService{
             
         }
         catch(err){
+            console.log(err)
             throw new BadRequestException(err);
         }
     }
@@ -812,7 +892,12 @@ export class ChatService{
                     id: userId
                 }
             })
-            if (!await this.isAdmin(body.name, userId) && !(await this.isChanOwner(body.name, reqUser.idIntra))){
+            const channel = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                }
+            })
+            if (!await this.isAdmin(body.name, userId) && !(await this.isChanOwner(channel.id, reqUser.idIntra))){
                 throw new BadRequestException('Not an admin or owner')
             }
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -822,11 +907,7 @@ export class ChatService{
             })
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't unban yorself")
-            const channel = await this.prismaService.chat.findUniqueOrThrow({
-                where: {
-                    name: body.name
-                }
-            })
+           
             if (!await this.isBanned(body.name, user.idIntra))
                 throw   new BadRequestException('User is not muted');
             const partecipant = await this.prismaService.partecipant.update({
@@ -841,6 +922,7 @@ export class ChatService{
             
         }
         catch(err){
+            console.log(err)
             throw new BadRequestException(err);
         }
     }
@@ -915,7 +997,7 @@ export class ChatService{
                     id: userId
                 }
             })
-            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(body.name, reqUser.idIntra)) || await this.isChanOwner(body.name, user.idIntra))
+            if ((!await this.isAdmin(body.name, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra)) || await this.isChanOwner(channel.id, user.idIntra))
                 throw new BadRequestException('Not enough rights');
             if (body.time){
                 const partecipant = await this.prismaService.partecipant.update({
@@ -928,8 +1010,9 @@ export class ChatService{
                     }
                 })
             }
-            else if (!body.time || body.time <= new Date())
+            else if (!body.time || body.time === undefined || body.time <= new Date())
             {
+                
                 const partecipant = await this.prismaService.partecipant.update({
                     where: {
                         idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
@@ -942,6 +1025,7 @@ export class ChatService{
             }
         }
         catch(err){
+            console.log(err)
             throw new BadRequestException(err)
         }
     }
