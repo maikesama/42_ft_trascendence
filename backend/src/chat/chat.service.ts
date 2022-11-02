@@ -691,11 +691,11 @@ export class ChatService{
         }
     }
 
-    async isAlreadyIn(name: string, idIntra: string){
+    async isAlreadyIn(chatname: string, idIntra: string){
         try{
             const channel = await this.prismaService.chat.findUnique({
                 where: {
-                    name: name
+                    name: chatname
                 }
             })
             const idChat = channel.id
@@ -1066,12 +1066,12 @@ export class ChatService{
     async searchUserToAdd(body: any, userId: number){
         try{
             const ret = await this.searchUser(body, userId)
-            const realRet = ret.filter(async (user) => {
-                if (await !this.isAlreadyIn(body.name, user.idIntra))
+            const realRet = ret.map(async (user) => {
+                if ((await this.isAlreadyIn(body.name, user.idIntra)) === false)
                     return user
-            }
-            )
-            return (await Promise.all(realRet)).filter((user) => user !== undefined)
+            })
+            const real = (await Promise.all(realRet)).filter((user) => user !== undefined)
+            return real
         }
         catch(err){
             throw new BadRequestException(err)
@@ -1081,13 +1081,13 @@ export class ChatService{
     async addUser(body: any, userId: number)
     {
         try{
-            console.log(JSON.stringify(body))
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
 
+            body.idIntra =  [...new Set(body.idIntra)];
             body.idIntra.map(async (idIntra: string) => {
 
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -1124,6 +1124,7 @@ export class ChatService{
 
     async removeUser(body: any, userId: number)
     {
+
         try{    
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {

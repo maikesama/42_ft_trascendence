@@ -22,6 +22,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -57,7 +58,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     async function searchUser() {
-        const url = `http://10.11.11.3:3333/chat/searchUser`;
+        const url = `http://10.11.11.3:3333/chat/searchUserToAdd`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -65,7 +66,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ initials: initials.current.value }),
+                body: JSON.stringify({ initials: initials.current.value, name: props.channelName }),
             });
             const json = await response.json();
             console.log(json);
@@ -435,23 +436,42 @@ export const AdminGroupActions = (props: any) => {
     }
 
     const handleToggle = (index: number, init: boolean) => () => {
+        // let value;
+
+        // value = search[index]?.idIntra;
+        // const currentIndex = userGroup.includes(value);
+        // //const currentIndex = userGroup.indexOf(index);
+        
+        // const newChecked = [...userGroup];
+        // const newUserGroup = [...userGroup];
+
+        // console.log(currentIndex)
+        // if (currentIndex === false) {
+        //     newChecked.push(index);
+        //     newUserGroup.push(value);
+        //     console.log('newUserGroup', newUserGroup);
+        // } else {
+        //     console.log('currentIndex', currentIndex);
+        //     newChecked.splice(currentIndex, 1);
+        //     newUserGroup.splice(currentIndex, 1);
+        // }
+
+        // setUserGroup(newUserGroup);
+
         let value;
 
-        
         value = search[index]?.idIntra;
-        const currentIndex = userGroup.indexOf(index);
-        const newChecked = [...userGroup];
-        const newUserGroup = [...userGroup];
+        const newGroup = [...userGroup];
+        const exist = userGroup.includes(value);
 
-        if (currentIndex === -1) {
-            newChecked.push(index);
-            newUserGroup.push(value);
+        if (exist === false) {
+            newGroup.push(value);
         } else {
-            newChecked.splice(currentIndex, 1);
-            newUserGroup.splice(currentIndex, 1);
+            const index = newGroup.indexOf(value);
+            newGroup.splice(index, 1);
         }
-
-        setUserGroup(newUserGroup);
+        setUserGroup(newGroup);
+        console.log('newGroup', newGroup);
     };
 
     function searchRow(props: ListChildComponentProps) {
@@ -577,7 +597,7 @@ export const AdminGroupActions = (props: any) => {
                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                         </> : clickLists === '' ?
                         <>
-                            <Button variant="outlined" /*onClick={() => window.location.assign("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                            <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
                             {selectedNamePower === "user" ?  <>
 
                             <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
@@ -585,7 +605,7 @@ export const AdminGroupActions = (props: any) => {
                             </>: null}
                             <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
                             <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
-                            <Button variant="outlined" onClick={props.closeStatus}>Kick</Button>
+                            <Button variant="outlined" onClick={kick}>Kick</Button>
                         </> : clickLists === "AddUser" ?
                         <>
                             <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
