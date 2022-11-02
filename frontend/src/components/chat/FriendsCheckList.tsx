@@ -56,7 +56,7 @@ export const FriendsCheckList = (props: any) => {
     const [friends, setFriends] = useState({} as any);
 
     useEffect(() => {
-        const url = "http://localhost:3333/friend/getFriends";
+        const url = `http://localhost/api/friend/getFriends`;
 
         const fetchData = async () => {
             try {

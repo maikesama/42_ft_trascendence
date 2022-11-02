@@ -16,9 +16,8 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=http%3A%2F%2F${process.env.HOST}%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
-
 		//@Public()
 		@Get('42/callback')
 		getAuthCode(@Query('code') query: string, @Res() res) {
@@ -30,7 +29,7 @@ export class AuthController{
 		@Get('logout')
 		logout(@Res() res: Response) {
 			res.clearCookie('at');
-        	res.redirect(`http://${process.env.HOST}:3000/`);
+        	res.redirect(`http://${process.env.HOST}/`);
 		}
 
 		@Get('2fa/:id')
@@ -39,19 +38,19 @@ export class AuthController{
 			let x = await this.twoFaService.complete2fa(id)
 				return {QRcode : x}
 		}
-		
-			
+
+
 
 		@Post('verify2fa')
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
-				.then((e) => {e? res.redirect(`http://${process.env.HOST}:3000/`) : res.redirect(`http://${process.env.HOST}:3000/`); return e})
+				.then((e) => {e? res.redirect(`http://${process.env.HOST}/`) : res.redirect(`http://${process.env.HOST}/`); return e})
 		}
 
 		// @Post('turn-on-2fa')
 		// async turnOn2fa(@Body() body) {
 		// 	await this.twoFaService.turnOnTwoFa(body.id);
 		// }
-	
+
 }
 

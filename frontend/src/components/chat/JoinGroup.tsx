@@ -76,14 +76,14 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const JoinGroup = (props: any) => {
-    
+
     const [chats, setChats] = React.useState({} as any);
     const [join, setJoin] = React.useState(-1);
     const pass = useRef<any>('');
 
     React.useEffect(() => {
-        
-        const url = "http://localhost:3333/chat/getChannels";
+
+        const url = `http://localhost/api/chat/getChannels`;
 
         const fetchData = async () => {
         try {
@@ -109,7 +109,7 @@ export const JoinGroup = (props: any) => {
 
         if (pass.current.value)
             pwd = pass.current.value;
-        const url = `http://localhost:3333/chat/joinChannel`;
+        const url = `http://localhost/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -124,11 +124,11 @@ export const JoinGroup = (props: any) => {
             console.log("error", error);
         }
     }
-    
+
     function handleJoin()
     {
         console.log("pass: " + pass.current.value )
-       
+
     }
 
     function renderRow(props: ListChildComponentProps) {
@@ -142,8 +142,8 @@ export const JoinGroup = (props: any) => {
                 </ListItemButton>
                 <TextField onChange={handleJoin} inputRef={pass} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
                 <Button color="primary" onClick={() => joinChannel(chats[index]?.name)}>Join</Button>
-            </ListItem>   
-            
+            </ListItem>
+
             </>
         );
     }

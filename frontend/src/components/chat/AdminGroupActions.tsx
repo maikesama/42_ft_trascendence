@@ -58,7 +58,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     async function searchUser() {
-        const url = `http://localhost:3333/chat/searchUserToAdd`;
+        const url = `http://localhost/api/chat/searchUserToAdd`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -77,7 +77,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function leaveChannel() {
-        const url = `http://localhost:3333/chat/leaveChannel`;
+        const url = `http://localhost/api/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -95,7 +95,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function kick() {
-        const url = `http://localhost:3333/chat/removeUser`;
+        const url = `http://localhost/api/chat/removeUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -113,7 +113,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function addUsers() {
-        const url = `http://localhost:3333/chat/addUser`;
+        const url = `http://localhost/api/chat/addUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -131,7 +131,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function ban() {
-        const url = `http://localhost:3333/chat/banUser`;
+        const url = `http://localhost/api/chat/banUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -149,7 +149,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function mute() {
-        const url = `http://localhost:3333/chat/muteUser`;
+        const url = `http://localhost/api/chat/muteUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -167,7 +167,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getBanned() {
-        const url = `http://localhost:3333/chat/getBanned`;
+        const url = `http://localhost/api/chat/getBanned`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -188,7 +188,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getMuted() {
-        const url = `http://localhost:3333/chat/getMuted`;
+        const url = `http://localhost/api/chat/getMuted`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -208,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getAdmin() {
-        const url = `http://localhost:3333/chat/getAdmin`;
+        const url = `http://localhost/api/chat/getAdmin`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -229,8 +229,8 @@ export const AdminGroupActions = (props: any) => {
 
     async function unBan(index: any) {
         const idIntra = await banned[index]?.idIntra;
-        const url = `http://localhost:3333/chat/unbanUser`;
-    
+        const url = `http://localhost/api/chat/unbanUser`;
+
         try {
           const response = await fetch(url, {
             method: 'POST',
@@ -248,8 +248,8 @@ export const AdminGroupActions = (props: any) => {
 
       async function unMute(index: any) {
         const idIntra = await muted[index]?.idIntra;
-        const url = `http://localhost:3333/chat/unmuteUser`;
-    
+        const url = `http://localhost/api/chat/unmuteUser`;
+
         try {
           const response = await fetch(url, {
             method: 'POST',
@@ -267,8 +267,8 @@ export const AdminGroupActions = (props: any) => {
 
       async function promote(index: any) {
         const idIntra = await muted[index]?.idIntra;
-        const url = `http://localhost:3333/chat/addAdmin`;
-    
+        const url = `http://localhost/api/chat/addAdmin`;
+
         try {
           const response = await fetch(url, {
             method: 'POST',
@@ -286,8 +286,8 @@ export const AdminGroupActions = (props: any) => {
 
       async function demote(index: any) {
         const idIntra = await promoted[index]?.idIntra;
-        const url = `http://localhost:3333/chat/removeAdmin`;
-    
+        const url = `http://localhost/api/chat/removeAdmin`;
+
         try {
           const response = await fetch(url, {
             method: 'POST',
@@ -304,7 +304,7 @@ export const AdminGroupActions = (props: any) => {
       }
 
     useEffect(() => {
-        const url = "http://localhost:3333/user/me";
+        const url = `http://localhost/api/user/me`;
 
         const fetchData = async () => {
             try {
@@ -336,7 +336,7 @@ export const AdminGroupActions = (props: any) => {
                 <Divider variant='middle' />
                 <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? `Owner` : partecipants[index]?.admin === true ? `Admin` : `User ${isMuted}`} />
                 <Divider />
-                
+
                 {partecipants[index]?.idIntra === mySelf.idIntra || partecipants[index]?.owner ? <>
                 <Radio
                     disabled
@@ -346,7 +346,7 @@ export const AdminGroupActions = (props: any) => {
                     name="radio-buttons"
                     inputProps={{ 'aria-label': 'A' }}
                 />
-                </> : 
+                </> :
                 <Radio
                     checked={selectedName === partecipants[index]?.idIntra}
                     onClick={handleChange}
@@ -355,7 +355,7 @@ export const AdminGroupActions = (props: any) => {
                     inputProps={{ 'aria-label': 'A' }}
                 />
                 }
-                
+
             </ListItem>
         );
     }
@@ -425,8 +425,8 @@ export const AdminGroupActions = (props: any) => {
             await getAdmin();
         else
             ;
-        
-        
+
+
     }
 
     function back() {
@@ -493,7 +493,7 @@ export const AdminGroupActions = (props: any) => {
                     itemCount={partecipants?.length}
                     overscanCount={5}
                 >
-                 
+
                     {renderGroupRowAdmin}
                 </FixedSizeList>
                 </> : clickLists === "BannedList" ? <>
@@ -557,7 +557,7 @@ export const AdminGroupActions = (props: any) => {
                 <TextField style={{width:250}} inputRef={bantime} type="number" InputProps={{inputProps: { max: 100, min: 10 }}} label="Minutes"/>
                 <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
                 <Button variant="outlined" onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
-                </> : 
+                </> :
                 muteButton ? <>
                 <Typography>Quanti minuti vuoi mutarlo?</Typography>
                 <TextField style={{width:250}} inputRef={mutetime} type="number" InputProps={{inputProps: { max: 100, min: 10 }}} label="Minutes"/>
@@ -579,7 +579,7 @@ export const AdminGroupActions = (props: any) => {
                             {selectedNamePower === "user" ?  <>
 
                             <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
-                            
+
                             </>: null}
                             <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
                             <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
@@ -588,11 +588,11 @@ export const AdminGroupActions = (props: any) => {
                         <>
                             <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
                             <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
-                        </> 
+                        </>
                         : clickLists !== "" ?
                         <>
                             <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
-                        </> 
+                        </>
                         : null}
 
                 </DialogActions>

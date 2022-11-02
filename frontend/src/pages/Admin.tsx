@@ -14,9 +14,9 @@ let logged = false;
 
 export const Admin = () => {
 
-    
+
     function richiedi() {
-        axios.get("http://10.11.9.2:3333/auth/user", {
+        axios.get("http://10.11.9.2/api/auth/user", {
             responseType: "json",
         })
         .then(function (response) {
@@ -34,7 +34,7 @@ export const Admin = () => {
         color : 'trasparent',
         textDecoration: 'none'
     }
-    
+
     const darkTheme = createTheme({
         palette: {
           mode: 'dark',

@@ -48,7 +48,7 @@ export const CreateChannel = (props: any) => {
 
         if (pass.current.value)
             pwd = pass.current.value;
-        const url = `http://localhost:3333/chat/newChannel`;
+        const url = `http://localhost/api/chat/newChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -74,7 +74,7 @@ export const CreateChannel = (props: any) => {
     const [friends, setFriends] = useState({} as any);
 
     React.useEffect(() => {
-        const url = "http://localhost:3333/friend/getFriends";
+        const url = `http://localhost/api/friend/getFriends`;
 
         const fetchData = async () => {
         try {
@@ -169,7 +169,7 @@ export const CreateChannel = (props: any) => {
     const initials = useRef<any>('');
 
     async function searchUser() {
-        const url = `http://localhost:3333/chat/searchUser`;
+        const url = `http://localhost/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -260,10 +260,10 @@ export const CreateChannel = (props: any) => {
                 >
                     {searchRow}
                 </FixedSizeList>
-                
+
                 </>}
             </DialogContent>
-            
+
             <DialogActions>
                 <Button onClick={props.closeStatus}>Cancel</Button>
                 <Button onClick={createChannel}>Create</Button>

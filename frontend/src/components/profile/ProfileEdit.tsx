@@ -42,7 +42,7 @@ export const SocialEdit = (props: any) => {
   const [friends, setFriends] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://localhost:3333/friend/getFriends";
+    const url = `http://localhost/api/friend/getFriends`;
 
     const fetchData = async () => {
       try {
@@ -64,7 +64,7 @@ export const SocialEdit = (props: any) => {
 
   async function block(index: any) {
     const idIntra = await friends[index]?.idIntra;
-    const url = `http://localhost:3333/user/block/${idIntra}`;
+    const url = `http://localhost/api/user/block/${idIntra}`;
 
     try {
       const response = await fetch(url, {
@@ -84,7 +84,7 @@ export const SocialEdit = (props: any) => {
 
   async function unfriend(index: any) {
     const idIntra = await friends[index]?.idIntra;
-    const url = `http://localhost:3333/friend/removeFriend`;
+    const url = `http://localhost/api/friend/removeFriend`;
 
     try {
       const response = await fetch(url, {
@@ -108,7 +108,7 @@ export const SocialEdit = (props: any) => {
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://localhost:3333/user/me";
+    const url = `http://localhost/api/user/me`;
 
     const fetchData = async () => {
       try {
@@ -131,7 +131,7 @@ export const SocialEdit = (props: any) => {
   const [games, setGames] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://localhost:3333/games/getHistory";
+    const url = `http://localhost/api/games/getHistory`;
 
     const fetchData = async () => {
       try {
@@ -194,7 +194,7 @@ export const SocialEdit = (props: any) => {
         <ListItemText primary={games[index]?.user1} />
         <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
         <ListItemText primary={games[index]?.user2} />
-        <Avatar src={games[index]?.img2}/> </> : 
+        <Avatar src={games[index]?.img2}/> </> :
         <>
         <Avatar src={games[index]?.img2} />
         <ListItemText primary={games[index]?.user2} />
@@ -277,7 +277,7 @@ export const ProfileEdit = (props: any) => {
   const clickSave = async () => {
     //return console.log(nick.current.value)
 
-    let url = "http://localhost:3333/user/update/username";
+    let url = `http://localhost/api/user/update/username`;
 
 
     try {
@@ -309,7 +309,7 @@ export const ProfileEdit = (props: any) => {
   const uploadImage = async (imageList: ImageListType) => {
     console.log(JSON.stringify(imageList[0].dataURL))
     try {
-      const response = await fetch('http://localhost:3333/user/update/pp', {
+      const response = await fetch(`http://localhost/api/user/update/pp`, {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -337,7 +337,7 @@ export const ProfileEdit = (props: any) => {
 
 
 async function deleteImg() {
-  const url = `http://localhost:3333/user/delete/pp`;
+  const url = `http://localhost/api/user/delete/pp`;
   try {
       const response = await fetch(url, {
           method: 'POST',
@@ -349,11 +349,11 @@ async function deleteImg() {
   }
 
 }
-  
+
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
-      
+
       <CardMedia
         component="img"
         height="380"
@@ -361,7 +361,7 @@ async function deleteImg() {
         alt=""
       />
       <Typography className="UploadImageTxt">Upload Image</Typography>
-      
+
       <ImageUploading value={images} onChange={onChange}>
         {({
           onImageUpload,

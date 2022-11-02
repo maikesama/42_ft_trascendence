@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
-console.log(process.env.HOST4444)
+console.log(process.env.REACT_APP_HOST_URI)
 export function Test() {
   const [images, setImages] = React.useState([]);
   const maxNumber = 69;
@@ -8,7 +8,7 @@ export function Test() {
     const uploadImage = async (imageList: ImageListType) => {
       console.log(JSON.stringify(imageList[0].dataURL))
       try {
-        const response = await fetch('http://localhost:3333/user/update/pp', {
+        const response = await fetch(`http://localhost/api/user/update/pp`, {
           method: "POST",
           credentials: 'include',
           headers:{
@@ -22,7 +22,7 @@ export function Test() {
         console.log("error", error);
       }
     };
-    
+
 
 
   const onChange = (
@@ -44,19 +44,19 @@ export function Test() {
   //     headers: {
   //       "Content-Type": "application/json",
   //     },
-      
+
   //   });
   //   } catch (error) {
   //     console.log("error", error);
   //   }
-  // };  
-    
-  
+  // };
 
-  console.log(process.env.REACT_APP_HOST4444)
-  console.log(process.env.REACT_APP_HOST4444)
+
+
+  console.log(process.env.REACT_APP_HOST_URI)
+  console.log(process.env.REACT_APP_HOST_URI)
   return (
-    
+
       <ImageUploading value={images} onChange={onChange}>
       {({
           onImageUpload,

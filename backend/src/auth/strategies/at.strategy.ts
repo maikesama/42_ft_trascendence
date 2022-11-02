@@ -7,7 +7,7 @@ var cookieExtractor = function(req) {
 	var token = null;
 	if (req)
 	{
-	  // console.log(req);
+	//   console.log(req);
 	  if (req.cookies && req.cookies['at'])
 	  {
 		token = req.cookies['at'];
@@ -34,7 +34,7 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt')
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
 			secretOrKey: process.env.AtSecret
-			
+
 		});
 	}
 

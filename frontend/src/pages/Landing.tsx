@@ -7,7 +7,7 @@ export const Landing = () => {
 	async function logFunction(evt: any) {
 		evt.preventDefault();
 
-		window.location.replace(`http://localhost:3333/auth`)
+		window.location.replace(`http://localhost/api/auth`)
 	}
 
 	return (

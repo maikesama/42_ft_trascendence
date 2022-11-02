@@ -9,11 +9,11 @@ import '../font/font.css';
 let logged = false;
 
 export const Leaderboard = () => {
-        
+
         const [user, setUser] = useState({} as any);
 
         useEffect(() => {
-        const url = "http://localhost:3333/games/getLeaderboard";
+        const url = `http://localhost/api/games/getLeaderboard`;
 
         const fetchData = async () => {
         try {

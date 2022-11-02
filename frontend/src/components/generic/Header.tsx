@@ -26,7 +26,7 @@ export function Header(props:any) {
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://localhost:3333/user/me";
+    const url = `http://localhost/api/user/me`;
 
     const fetchData = async () => {
       try {
@@ -78,7 +78,7 @@ export function Header(props:any) {
     <ThemeProvider theme={darkTheme}>
     <AppBar position="static" style={{height: 180, justifyContent: 'center', alignItems: 'center'}}>
       <Container maxWidth="xl">
-        <Toolbar disableGutters> 
+        <Toolbar disableGutters>
         {/*-----------------MOBILE-----------------*/}
         <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
             <IconButton

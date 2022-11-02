@@ -49,7 +49,7 @@ export const GroupInfo = (props: any) => {
     };
 
     async function leaveChannel() {
-        const url = `http://localhost:3333/chat/leaveChannel`;
+        const url = `http://localhost/api/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -94,9 +94,9 @@ export const GroupInfo = (props: any) => {
                         Your are {props.user}
                     </DialogContentText>
                     <Divider />
-                    
+
                     <FixedSizeList
-                        
+
                         style={{marginTop: 20}}
                         height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
                         width={500}

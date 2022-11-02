@@ -26,12 +26,12 @@ export class AuthService {
 			client_id: process.env.CLIENT_ID,
 			client_secret: process.env.CLIENT_SECRET,
 			code: query,
-			redirect_uri: `http://${process.env.HOST}:3333/auth/42/callback`,
+			redirect_uri: `http://${process.env.HOST}/api/auth/42/callback`,
 		}), {
 		method: 'POST',
 		headers:{
 			'Content-Type': 'application/json'
-		}, 
+		},
 	})
 	.then(response =>  response.json())
 	.then(data =>{
@@ -70,7 +70,7 @@ export class AuthService {
 					lastName: datiJson.last_name,
 					img: datiJson.image_url,
 					email: datiJson.email,
-					
+
 					//campus: datiJson.campus[0].name,
 
 				});
@@ -83,9 +83,9 @@ export class AuthService {
 						where:{
 							idIntra: ret.idIntra,
 						},
-					
+
 					})
-					
+
 				}
 				catch(e)
 				{
@@ -100,7 +100,7 @@ export class AuthService {
 				{
 					const tokens = await this.generateJwtTokens(user.id, user.email);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
-					res.redirect(`http://${process.env.HOST}:3000/middleware`)
+					res.redirect(`http://${process.env.HOST}/middleware`)
 				}
 			})
 		}

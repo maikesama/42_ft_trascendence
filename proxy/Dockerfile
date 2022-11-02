@@ -1,5 +1,5 @@
-FROM nginx
+FROM nginx:1.21.3-alpine
 
 COPY ./nginx.conf /etc/nginx/conf.d/default.conf
 
-ENTRYPOINT ["/usr/sbin/nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
