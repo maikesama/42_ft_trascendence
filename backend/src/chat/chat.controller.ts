@@ -25,6 +25,16 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('searchUserToAdd')
+    async searchUserToAdd(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.searchUserToAdd(body, user['sub'])
+    }
+
+
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('newDm')
     async newDm(@Body() body, @Req() req){
         const user = req.user

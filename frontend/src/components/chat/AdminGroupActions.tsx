@@ -30,6 +30,7 @@ export const AdminGroupActions = (props: any) => {
     const bantime = useRef<any>('');
     const mutetime = useRef<any>('');
     const [selectedName, setSelectedName] = React.useState('');
+    const [selectedNamePower, setSelectedNamePower] = React.useState('');
     const [searchView, setSearchView] = useState('');
     const [mySelf, setMySelf] = useState({} as any);
     const [banned, setBanned] = useState({} as any);
@@ -43,11 +44,16 @@ export const AdminGroupActions = (props: any) => {
     const [promoted, setPromoted] = useState({} as any);
 
     const handleChange = (event: any) => {
-        console.log(event.target.value)
         if (event.target.value === selectedName)
             setSelectedName('');
         else
             setSelectedName(event.target.value);
+
+        const user = partecipants.find((user: any) => user.idIntra === event.target.value);
+
+        if (user) {
+            setSelectedNamePower(user.admin ? 'admin' : 'user');
+        }
     };
 
     async function searchUser() {
@@ -450,6 +456,7 @@ export const AdminGroupActions = (props: any) => {
 
     function searchRow(props: ListChildComponentProps) {
         const { index, style } = props;
+        console.log('search', search);
         return (
             <ListItem key={index}>
 
@@ -570,7 +577,12 @@ export const AdminGroupActions = (props: any) => {
                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                         </> : clickLists === '' ?
                         <>
+                            <Button variant="outlined" /*onClick={() => window.location.assign("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                            {selectedNamePower === "user" ?  <>
+
                             <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
+                            
+                            </>: null}
                             <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
                             <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
                             <Button variant="outlined" onClick={props.closeStatus}>Kick</Button>

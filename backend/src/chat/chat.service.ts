@@ -258,8 +258,6 @@ export class ChatService{
             throw new BadRequestException(e)
         }
     }
-                    
-
 
     async searchUser(body: any, userId: number){
         try{
@@ -1065,6 +1063,21 @@ export class ChatService{
         }
     }
 
+    async searchUserToAdd(body: any, userId: number){
+        try{
+            const ret = await this.searchUser(body, userId)
+            const realRet = ret.filter(async (user) => {
+                if (await !this.isAlreadyIn(body.name, user.idIntra))
+                    return user
+            }
+            )
+            return (await Promise.all(realRet)).filter((user) => user !== undefined)
+        }
+        catch(err){
+            throw new BadRequestException(err)
+        }
+    }
+
     async addUser(body: any, userId: number)
     {
         try{
@@ -1091,6 +1104,8 @@ export class ChatService{
                 throw new BadRequestException("Can't add yorself")
             if (!await this.isAdmin(body.name, userId) && ! await this.isChanOwner(channel.id, reqUser.idIntra))
                 throw new BadRequestException('not enough rights');
+            if (await this.isAlreadyIn(body.name, user.idIntra))
+                throw new BadRequestException('User is already in the channel');
             
 
             const partecipant = await this.prismaService.partecipant.create({

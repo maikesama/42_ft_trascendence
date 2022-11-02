@@ -93,30 +93,21 @@ export const Channel = (props: any) => {
                 <ListItem key="1">
                     <Grid container>
                         <Grid item xs={12}>
-                            <ListItemText primary="Hey man, What's up ?"></ListItemText>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="09:30"></ListItemText>
+                            <ListItemText primary="Hey man, What's up ?" secondary="09:30"></ListItemText>
                         </Grid>
                     </Grid>
                 </ListItem>
                 <ListItem key="2">
-                    <Grid container>
+                    <Grid container justifyContent="flex-end">
                         <Grid item xs={12}>
-                            <ListItemText primary="Hey, Iam Good! What about you ?" ></ListItemText>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="09:31"></ListItemText>
+                            <ListItemText style={{marginRight: '100px'}} primary="Hey, Iam Good! What about you ?" secondary="09:31"></ListItemText>
                         </Grid>
                     </Grid>
                 </ListItem>
                 <ListItem key="3">
                     <Grid container>
                         <Grid item xs={12}>
-                            <ListItemText primary="Cool. i am good, let's catch up!"></ListItemText>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <ListItemText secondary="10:30"></ListItemText>
+                            <ListItemText primary="Cool. i am good, let's catch up!" secondary="10:30"></ListItemText>
                         </Grid>
                     </Grid>
                 </ListItem>
