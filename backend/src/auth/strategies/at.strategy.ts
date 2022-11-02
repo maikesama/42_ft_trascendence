@@ -5,12 +5,25 @@ import { ExtractJwt, Strategy } from 'passport-jwt'
 var cookieExtractor = function(req) {
 
 	var token = null;
-	if (req && req.cookies) {
+	if (req)
+	{
+	  // console.log(req);
+	  if (req.cookies && req.cookies['at'])
+	  {
 		token = req.cookies['at'];
-		// if(!token) Will do it when we got 2fa
-		// 	token = req.cookies['2fa-at']
+	  }
+	  else if (req.handshake && req.handshake.headers && req.handshake.headers.cookie ||
+		req.headers && req.headers.cookie)
+	  {
+		var cookies = (req.handshake) ? req.handshake.headers.cookie :req.headers.cookie;
+		cookies = cookies.split(';');
+		cookies.forEach(function (cookie) {
+		  var parts = cookie.split('=');
+		  if (parts[0].trim() === 'at')
+			token = parts[1].trim();
+		});
+	  }
 	}
-
 	return token;
 }
 

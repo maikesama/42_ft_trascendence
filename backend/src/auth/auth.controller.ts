@@ -16,7 +16,7 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=u-s4t2ud-34edee7bd7b6dc3653d1f6f581080472c1458d579fde7ba23e6617d9995dc49b&redirect_uri=http%3A%2F%2F10.11.11.3%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=http%3A%2F%2F${process.env.HOST}%3A3333%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
 
 		//@Public()

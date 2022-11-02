@@ -14,7 +14,7 @@ export const ProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
 
         useEffect(() => {
-        const url = "http://10.11.11.3:3333/user/me";
+        const url = "http://localhost:3333/user/me";
 
         const fetchData = async () => {
         try {
@@ -41,7 +41,7 @@ export const ProfileContain = (props: any) => {
 
         const fetchRank = async () => {
         try {
-                const response = await fetch('http://10.11.11.3:3333/games/getPlayerRank', {
+                const response = await fetch('http://localhost:3333/games/getPlayerRank', {
                 credentials: 'include',
                 headers:{
                 'Content-Type': 'application/json',

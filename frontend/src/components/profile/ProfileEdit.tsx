@@ -42,7 +42,7 @@ export const SocialEdit = (props: any) => {
   const [friends, setFriends] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://10.11.11.3:3333/friend/getFriends";
+    const url = "http://localhost:3333/friend/getFriends";
 
     const fetchData = async () => {
       try {
@@ -64,7 +64,7 @@ export const SocialEdit = (props: any) => {
 
   async function block(index: any) {
     const idIntra = await friends[index]?.idIntra;
-    const url = `http://10.11.11.3:3333/user/block/${idIntra}`;
+    const url = `http://localhost:3333/user/block/${idIntra}`;
 
     try {
       const response = await fetch(url, {
@@ -84,7 +84,7 @@ export const SocialEdit = (props: any) => {
 
   async function unfriend(index: any) {
     const idIntra = await friends[index]?.idIntra;
-    const url = `http://10.11.11.3:3333/friend/removeFriend`;
+    const url = `http://localhost:3333/friend/removeFriend`;
 
     try {
       const response = await fetch(url, {
@@ -108,7 +108,7 @@ export const SocialEdit = (props: any) => {
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://10.11.11.3:3333/user/me";
+    const url = "http://localhost:3333/user/me";
 
     const fetchData = async () => {
       try {
@@ -131,7 +131,7 @@ export const SocialEdit = (props: any) => {
   const [games, setGames] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://10.11.11.3:3333/games/getHistory";
+    const url = "http://localhost:3333/games/getHistory";
 
     const fetchData = async () => {
       try {
@@ -277,7 +277,7 @@ export const ProfileEdit = (props: any) => {
   const clickSave = async () => {
     //return console.log(nick.current.value)
 
-    let url = "http://10.11.11.3:3333/user/update/username";
+    let url = "http://localhost:3333/user/update/username";
 
 
     try {
@@ -309,7 +309,7 @@ export const ProfileEdit = (props: any) => {
   const uploadImage = async (imageList: ImageListType) => {
     console.log(JSON.stringify(imageList[0].dataURL))
     try {
-      const response = await fetch('http://10.11.11.3:3333/user/update/pp', {
+      const response = await fetch('http://localhost:3333/user/update/pp', {
         method: "POST",
         credentials: 'include',
         headers: {
@@ -337,7 +337,7 @@ export const ProfileEdit = (props: any) => {
 
 
 async function deleteImg() {
-  const url = `http://10.11.11.3:3333/user/delete/pp`;
+  const url = `http://localhost:3333/user/delete/pp`;
   try {
       const response = await fetch(url, {
           method: 'POST',

@@ -26,7 +26,7 @@ export function Header(props:any) {
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
-    const url = "http://10.11.11.3:3333/user/me";
+    const url = "http://localhost:3333/user/me";
 
     const fetchData = async () => {
       try {

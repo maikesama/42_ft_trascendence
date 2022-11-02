@@ -6,3 +6,4 @@ import { Cache } from 'cache-manager';
 export class AppService {
 	constructor(@Inject(CACHE_MANAGER) private readonly cacheManager: Cache) {}
 }
+
