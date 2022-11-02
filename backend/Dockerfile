@@ -1,15 +1,9 @@
-FROM node:16-slim
+FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
 
-RUN apt update -y
-
-RUN apt install -y --no-install-recommends libssl1.1
-
-COPY package*.json ./
+COPY ./ ./
 
 RUN npm install
 
-COPY . .
-
-CMD [ "bash", "setup.sh" ]
+CMD [ "sh", "setup.sh" ]

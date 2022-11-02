@@ -9,5 +9,5 @@ async function deleteImg() {
     } catch (error) {
         console.log("error", error);
     }
-
+ 
 }

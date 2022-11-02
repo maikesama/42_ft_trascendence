@@ -4,6 +4,8 @@ npx prisma generate
 
 npx prisma migrate dev --name Mig
 
-npm run build
+#npm run build
 
-node dist/main.js
+npm run start:dev
+
+#node dist/main.js
