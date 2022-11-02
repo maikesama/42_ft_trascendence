@@ -436,28 +436,6 @@ export const AdminGroupActions = (props: any) => {
     }
 
     const handleToggle = (index: number, init: boolean) => () => {
-        // let value;
-
-        // value = search[index]?.idIntra;
-        // const currentIndex = userGroup.includes(value);
-        // //const currentIndex = userGroup.indexOf(index);
-        
-        // const newChecked = [...userGroup];
-        // const newUserGroup = [...userGroup];
-
-        // console.log(currentIndex)
-        // if (currentIndex === false) {
-        //     newChecked.push(index);
-        //     newUserGroup.push(value);
-        //     console.log('newUserGroup', newUserGroup);
-        // } else {
-        //     console.log('currentIndex', currentIndex);
-        //     newChecked.splice(currentIndex, 1);
-        //     newUserGroup.splice(currentIndex, 1);
-        // }
-
-        // setUserGroup(newUserGroup);
-
         let value;
 
         value = search[index]?.idIntra;

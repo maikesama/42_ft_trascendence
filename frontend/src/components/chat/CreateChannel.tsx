@@ -106,19 +106,17 @@ export const CreateChannel = (props: any) => {
             value = friends[index]?.idIntra;
         else
             value = search[index]?.idIntra;
-        const currentIndex = userGroup.indexOf(index);
-        const newChecked = [...userGroup];
-        const newUserGroup = [...userGroup];
+        const newGroup = [...userGroup];
+        const exist = userGroup.includes(value);
 
-        if (currentIndex === -1) {
-            newChecked.push(index);
-            newUserGroup.push(value);
+        if (exist === false) {
+            newGroup.push(value);
         } else {
-            newChecked.splice(currentIndex, 1);
-            newUserGroup.splice(currentIndex, 1);
+            const index = newGroup.indexOf(value);
+            newGroup.splice(index, 1);
         }
-
-        setUserGroup(newUserGroup);
+        setUserGroup(newGroup);
+        console.log('newGroup', newGroup);
     };
 
     function friendsRow(props: ListChildComponentProps) {
@@ -254,7 +252,7 @@ export const CreateChannel = (props: any) => {
                 </FixedSizeList></> : <>
                 <FixedSizeList
 
-                    height={230}
+                    height={Object.values(friends).length * 90}
                     width={500}
                     itemSize={46}
                     itemCount={Object.values(search).length}
