@@ -8,7 +8,7 @@ export function Test() {
     const uploadImage = async (imageList: ImageListType) => {
       console.log(JSON.stringify(imageList[0].dataURL))
       try {
-        const response = await fetch(`http://localhost/api/user/update/pp`, {
+        const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
           method: "POST",
           credentials: 'include',
           headers:{

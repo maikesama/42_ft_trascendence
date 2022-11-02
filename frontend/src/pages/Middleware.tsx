@@ -12,13 +12,13 @@ export const Middleware = () => {
     async function logFunction(evt: any) {
         evt.preventDefault();
 
-        window.location.replace(`http://localhost/home`)
+        window.location.replace(`http://${process.env.REACT_APP_HOST_URI}/home`)
     }
 
     const [user, setUser] = useState({} as any);
 
     useEffect(() => {
-        const url = `http://localhost/api/user/me`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
 
         const fetchData = async () => {
             try {
@@ -48,7 +48,7 @@ export const Middleware = () => {
     const clickSave = async () => {
         //return console.log(nick.current.value)
 
-        let url = `http://localhost/api/user/update/username`;
+        let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
 
 
         try {
@@ -90,7 +90,7 @@ export const Middleware = () => {
     const uploadImage = async (imageList: ImageListType) => {
         console.log(JSON.stringify(imageList[0].dataURL))
         try {
-            const response = await fetch(`http://localhost/api/user/update/pp`, {
+            const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
                 method: "POST",
                 credentials: 'include',
                 headers: {

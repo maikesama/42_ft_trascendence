@@ -14,7 +14,7 @@ export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
 
   useEffect(() => {
-    const url = `http://localhost/api/user/me`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
 
     const fetchData = async () => {
       try {
@@ -38,7 +38,7 @@ export const OtherProfileContain = (props: any) => {
   const [rank, setRank] = useState({} as any);
 
   useEffect(() => {
-    const url = `http://localhost/api/games/getPlayerRank`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getPlayerRank`;
 
     const fetchRank = async () => {
       try {

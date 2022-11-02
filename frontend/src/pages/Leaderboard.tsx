@@ -13,7 +13,7 @@ export const Leaderboard = () => {
         const [user, setUser] = useState({} as any);
 
         useEffect(() => {
-        const url = `http://localhost/api/games/getLeaderboard`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getLeaderboard`;
 
         const fetchData = async () => {
         try {

@@ -17,7 +17,7 @@ export const BlockedList = (props: any) => {
   const [blocked, setBlocked] = useState({} as any);
 
   useEffect(() => {
-    const url = `http://localhost/api/user/getBlocked`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/getBlocked`;
 
     const fetchData = async () => {
       try {
@@ -42,7 +42,7 @@ export const BlockedList = (props: any) => {
 
   async function unblock(index: any) {
     const idIntra = await blocked[index]?.idIntra;
-    const url = `http://localhost/api/user/unblock/${idIntra}`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/unblock/${idIntra}`;
 
     try {
       const response = await fetch(url, {

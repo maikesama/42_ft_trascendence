@@ -83,7 +83,7 @@ export const JoinGroup = (props: any) => {
 
     React.useEffect(() => {
 
-        const url = `http://localhost/api/chat/getChannels`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChannels`;
 
         const fetchData = async () => {
         try {
@@ -109,7 +109,7 @@ export const JoinGroup = (props: any) => {
 
         if (pass.current.value)
             pwd = pass.current.value;
-        const url = `http://localhost/api/chat/joinChannel`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',

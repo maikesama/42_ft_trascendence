@@ -58,7 +58,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     async function searchUser() {
-        const url = `http://localhost/api/chat/searchUserToAdd`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUserToAdd`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -77,7 +77,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function leaveChannel() {
-        const url = `http://localhost/api/chat/leaveChannel`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -95,7 +95,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function kick() {
-        const url = `http://localhost/api/chat/removeUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/removeUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -113,7 +113,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function addUsers() {
-        const url = `http://localhost/api/chat/addUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/addUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -131,7 +131,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function ban() {
-        const url = `http://localhost/api/chat/banUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/banUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -149,7 +149,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function mute() {
-        const url = `http://localhost/api/chat/muteUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/muteUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -167,7 +167,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getBanned() {
-        const url = `http://localhost/api/chat/getBanned`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getBanned`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -188,7 +188,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getMuted() {
-        const url = `http://localhost/api/chat/getMuted`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getMuted`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -208,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function getAdmin() {
-        const url = `http://localhost/api/chat/getAdmin`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getAdmin`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -229,7 +229,7 @@ export const AdminGroupActions = (props: any) => {
 
     async function unBan(index: any) {
         const idIntra = await banned[index]?.idIntra;
-        const url = `http://localhost/api/chat/unbanUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/unbanUser`;
 
         try {
           const response = await fetch(url, {
@@ -248,7 +248,7 @@ export const AdminGroupActions = (props: any) => {
 
       async function unMute(index: any) {
         const idIntra = await muted[index]?.idIntra;
-        const url = `http://localhost/api/chat/unmuteUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/unmuteUser`;
 
         try {
           const response = await fetch(url, {
@@ -267,7 +267,7 @@ export const AdminGroupActions = (props: any) => {
 
       async function promote(index: any) {
         const idIntra = await muted[index]?.idIntra;
-        const url = `http://localhost/api/chat/addAdmin`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/addAdmin`;
 
         try {
           const response = await fetch(url, {
@@ -286,7 +286,7 @@ export const AdminGroupActions = (props: any) => {
 
       async function demote(index: any) {
         const idIntra = await promoted[index]?.idIntra;
-        const url = `http://localhost/api/chat/removeAdmin`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/removeAdmin`;
 
         try {
           const response = await fetch(url, {
@@ -304,7 +304,7 @@ export const AdminGroupActions = (props: any) => {
       }
 
     useEffect(() => {
-        const url = `http://localhost/api/user/me`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
 
         const fetchData = async () => {
             try {

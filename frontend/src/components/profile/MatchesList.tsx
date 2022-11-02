@@ -14,7 +14,7 @@ export const MatchesList = (props: any) => {
     const [games, setGames] = useState({} as any);
 
     useEffect(() => {
-        const url = `http://localhost/api/games/getHistory`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getHistory`;
 
         const fetchData = async () => {
             try {
@@ -38,7 +38,7 @@ export const MatchesList = (props: any) => {
     const [user, setUser] = useState({} as any);
 
     useEffect(() => {
-        const url = `http://localhost/api/user/me`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
 
         const fetchData = async () => {
             try {

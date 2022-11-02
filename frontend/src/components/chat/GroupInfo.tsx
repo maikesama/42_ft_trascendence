@@ -49,7 +49,7 @@ export const GroupInfo = (props: any) => {
     };
 
     async function leaveChannel() {
-        const url = `http://localhost/api/chat/leaveChannel`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/leaveChannel`;
         try {
             const response = await fetch(url, {
                 method: 'POST',

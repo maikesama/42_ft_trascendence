@@ -7,7 +7,7 @@ export const Landing = () => {
 	async function logFunction(evt: any) {
 		evt.preventDefault();
 
-		window.location.replace(`http://localhost/api/auth`)
+		window.location.replace(`http://${process.env.REACT_APP_HOST_URI}/api/auth`)
 	}
 
 	return (

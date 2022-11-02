@@ -18,7 +18,7 @@ export const InvitedList = (props: any) => {
   const [invited, setInvited] = useState({} as any);
 
   useEffect(() => {
-    const url = `http://localhost/api/friend/getInvite`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getInvite`;
 
     const fetchData = async () => {
       try {
@@ -44,7 +44,7 @@ export const InvitedList = (props: any) => {
 
   async function acceptInvite(index: any)
   {
-    const url = `http://localhost/api/friend/acceptInvite`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/acceptInvite`;
     const idIntra = await invited[index]?.idIntra;
 
     const fetchData = async () => {
@@ -73,7 +73,7 @@ export const InvitedList = (props: any) => {
 
   async function declineInvite(index: any)
   {
-    const url = `http://localhost/api/friend/declineInvite`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/declineInvite`;
     const idIntra = await invited[index]?.idIntra;
 
     const fetchData = async () => {

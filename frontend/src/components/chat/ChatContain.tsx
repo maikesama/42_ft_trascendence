@@ -122,7 +122,7 @@ export const ChatContain = (props: any) => {
     const [friends, setFriends] = useState({} as any);
 
     React.useEffect(() => {
-        const url = `http://localhost/api/friend/getFriends`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getFriends`;
 
         const fetchData = async () => {
             try {
@@ -145,7 +145,7 @@ export const ChatContain = (props: any) => {
     const [chats, setChats] = useState({} as any);
 
     React.useEffect(() => {
-        const url = `http://localhost/api/chat/getChatUsers`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatUsers`;
 
         const fetchData = async () => {
             try {
@@ -169,7 +169,7 @@ export const ChatContain = (props: any) => {
     const [partecipants, setPartecipants] = useState({} as any);
 
     async function clickChannelInfo(name: string) {
-        const url = `http://localhost/api/chat/getChanUsers`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChanUsers`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -194,7 +194,7 @@ export const ChatContain = (props: any) => {
     const initials = useRef<any>('');
 
     async function searchUser() {
-        const url = `http://localhost/api/chat/searchUser`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
                 method: 'POST',
