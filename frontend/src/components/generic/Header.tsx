@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
+import { Link as RouterLink } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import Grid from '@mui/material/Grid';
 import "../css/Header.css"
@@ -158,16 +159,18 @@ export function Header(props:any) {
           <Grid item md={12}>
           <Box className="headerButtonsBox" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around' } }}>
             {pages.map((page) => (
+              // <Link key={page} component={RouterLink} to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}>
+              <Link key={page} component={RouterLink} to={`/${page}`}>
               <Button
                 className="headerButtons"
                 style={{backgroundColor: 'transparent'}}
                 key={page}
                 onClick={handleCloseNavMenu}
-                href={page}
                 sx={{ mt: -2, color: 'white', xs:'none', display: 'block', fontSize: 18, padding:4 }}
               >
                 {page}
               </Button>
+              </Link>
             ))}
           </Box>
             </Grid>
