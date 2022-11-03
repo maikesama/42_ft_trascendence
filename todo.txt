@@ -1,0 +1,4 @@
+gestire solo nuova registrazione?
+mettere <Link> al posto di <a> nel menu
+websocket in una porta diversa?
+ProtectedRoute? -> https://www.jeffedmondson.dev/blog/react-protected-routes/

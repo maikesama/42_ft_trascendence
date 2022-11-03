@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import {Route, Routes} from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css';
 import { Landing } from './pages/Landing';
 import { Homepage } from './pages/Homepage';
@@ -14,27 +14,37 @@ import { Profile } from './pages/Profile';
 import { OtherUserProfile } from './pages/OtherUserProfile';
 import { Test } from './pages/Test';
 import { Middleware } from './pages/Middleware';
-
+import { useAuth } from './hooks/useAuth';
+import PrivateRoutes from './components/utils/PrivateRoutes';
 //<Route path="*" element={<Error404 />} />
 
 function App() {
-  
+  const { authed, loading } = useAuth();
+  console.log(authed);
+
   return (
     <div className="App">
+      {loading ? (
+            <div> Loading... </div>
+         ) : (
     <Routes>
-      <Route path="/" element={<Landing />}/>
-      <Route path="/Middleware" element={<Middleware />}/>
-      <Route path='/home' element={<Homepage />}/>
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/matches" element={<Matches />} />
-      <Route path="/chat" element={<Chat />} />
-      <Route path="/profile" element={<Profile />} />
-      <Route path="/profile/*" element={<OtherUserProfile />} />
-      <Route path="/matches" element={<Matches />} />
-      <Route path="/friends" element={<Friends />} />
-      <Route path="/test" element={<Test />} />
+      {!authed ? <Route path="/" element={<Landing />}/> : <Route path="/" element={<Homepage />}/>}
+      <Route element={<PrivateRoutes />}>
+        <Route path="/Middleware" element={<Middleware />}/>
+          <Route path='/home' element={<Homepage />}/>
+          <Route path="/leaderboard" element={<Leaderboard />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/chat" element={<Chat />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/*" element={<OtherUserProfile />} />
+          <Route path="/matches" element={<Matches />} />
+          <Route path="/friends" element={<Friends />} />
+          <Route path="/test" element={<Test />} />
+          <Route path="/" element={<Homepage />}/>
+      </Route>
+      <Route path="*" element={<Error404 />} />
     </Routes>
-    
+           )}
     </div>
   );
 }
