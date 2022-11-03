@@ -98,7 +98,7 @@ export class AuthService {
 					res.redirect(`/api/auth/2fa/${user.id}`)
 				else
 				{
-					const tokens = await this.generateJwtTokens(user.id, user.email);
+					const tokens = await this.generateJwtTokens(user);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
 					res.redirect(`http://${process.env.HOST}/middleware`)
 				}
@@ -113,30 +113,40 @@ export class AuthService {
 		return argon.hash(data)
 	}
 
-	async generateJwtTokens(userId: number, email: string) {
-		const [at, rt] = await Promise.all([
+	// async generateJwtTokens(userId: number, email: string) {
+	// 	const [at, rt] = await Promise.all([
 
-			this.jwtService.signAsync({
-				sub: userId,
-				email
-			}, {
-				secret: process.env.AtSecret,
-				expiresIn: 60 * 60 * 24 * 7
-			}),
+	// 		this.jwtService.signAsync({
+	// 			sub: userId,
+	// 			email
+	// 		}, {
+	// 			// secret: process.env.AtSecret,
+	// 			// expiresIn: 60 * 60 * 24 * 7
+	// 		}),
 
-			this.jwtService.signAsync({
-				sub: userId,
-				email
-			}, {
-				secret: process.env.RtSecret,
-				expiresIn: 60 * 15
-			}),
-		])
+	// 		this.jwtService.signAsync({
+	// 			sub: userId,
+	// 			email
+	// 		}, {
+	// 			secret: process.env.RtSecret,
+	// 			expiresIn: 60 * 15
+	// 		}),
+	// 	])
 
-		return {
-			access_token: at,
-			refresh_token: rt
+	// 	return {
+	// 		access_token: at,
+	// 		refresh_token: rt
+	// 	}
+	// }
+	async generateJwtTokens(user: any) {
+		// console.log(user);
+		if (user && user.id && user.idIntra && user.email) {
+			const payload = { sub: user.id, id: user.idIntra};
+			return {
+				access_token: this.jwtService.sign(payload),
+			};
 		}
+		return null;
 	}
 
 }

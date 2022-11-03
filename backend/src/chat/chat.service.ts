@@ -311,6 +311,7 @@ export class ChatService{
                     invited: invited ? true : false,
                     //friend: friend ? true : false
                 }
+                console.log(ret)
                 return ret
             })
             

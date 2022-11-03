@@ -81,7 +81,7 @@ export class TwoFactorAuthenticationService {
 
 		if (verified)
 		{
-			const tokens = await this.authservice.generateJwtTokens(user.id, user.email);
+			const tokens = await this.authservice.generateJwtTokens(user);
 			res.cookie('at', tokens.access_token, { httpOnly: true })
 			res.redirect('/home')
 			return true;

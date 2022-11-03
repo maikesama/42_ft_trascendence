@@ -6,8 +6,8 @@ import { ChatService } from './chat/chat.service';
 import { AtGuard } from './auth/guards';
 import { Cache, caching } from 'cache-manager';
 // import { SessionService } from './sessionHandler/session.service';
-
-@WebSocketGateway({transports: ['websocket'] ,cors: true})
+@UseGuards(AtGuard)
+@WebSocketGateway(4243, {transports: ['websocket'] ,cors: true})
 export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
   constructor(private prisma: PrismaService, private chat: ChatService,
   //    @Inject(CACHE_MANAGER) private cacheManager : Cache, private sessionService: SessionService
@@ -15,32 +15,32 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   //   this.sessionService = new SessionService(this.cacheManager);
   // }
   ){}
-  
+
   @WebSocketServer() server: Server;
-  
+
   private logger: Logger = new Logger('AppGateway')
-  
+
   afterInit(server: any) {
     this.logger.log('initialized')
   }
 
-  @UseGuards(AtGuard)
-  OnGatewayConnection(client: Socket, ...args: any[]) {
-    console.log(client['sub']['id'])
-    this.logger.log(`Client connected: ${client.id}`)
-  }
+  // @UseGuards(AtGuard)
+  // OnGatewayConnection(client: Socket, ...args: any[]) {
+  //   this.logger.log(`Client connected: ${client.id}`)
+  // }
 
-  OnGatewayDisconnect(client: Socket) {
-    this.logger.log(`Client disconnected: ${client.id}`)
-  }
+  // OnGatewayDisconnect(client: Socket) {
+  //   this.logger.log(`Client disconnected: ${client.id}`)
+  // }
 
   OnGatewayInit(server: any) {
     this.logger.log('initialized')
   }
-  
-  
+
+
   @UseGuards(AtGuard)
-  async handleConnection(client: Socket,  @Req() req, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
+    console.log(client)
     // try
     // {
     //   const user = req.user;
@@ -80,6 +80,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
   }
 
   handleDisconnect(client: Socket) {
+    console.log("disconnected")
     // this.sessionService.saveSession((client as any).idIntra, {
     //       status: "offline",
     //       socketId: client.id
@@ -94,7 +95,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
           idIntra_idChat: {idIntra, idChat}
         }
       })
-      return partecipant 
+      return partecipant
     }
     catch(e: any)
     {
@@ -161,7 +162,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
         throw new BadRequestException("You are muted from this chat")
       if (await this.chat.isBanned(chat.name, message.sender))
         throw new BadRequestException("You are banned from this chat")
-      if (!await this.verifyPartecipant(message.sender, message.idChat)) 
+      if (!await this.verifyPartecipant(message.sender, message.idChat))
         throw new BadRequestException("You are not partecipant of this chat")
       //need to save messages and notify other partecipants
 
@@ -172,7 +173,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
       throw new BadRequestException(e)
     }
 
-    
+
   }
 
   @SubscribeMessage('findAllMessages')
@@ -189,12 +190,12 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
     catch (e) {
       throw new BadRequestException(e)
     }
-  
+
   }
 
   @SubscribeMessage('joinChat')
   async handleJoin(@ConnectedSocket() client: Socket,message:{ sender: string, idChat: number, text: string}) {
-  
+
     return this.identify(message.sender, client.id)
   }
 

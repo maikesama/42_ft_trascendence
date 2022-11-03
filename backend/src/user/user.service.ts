@@ -52,7 +52,8 @@ export class UserService {
 
 		}
 		catch (e) {
-			throw new HttpException(e, HttpStatus.NOT_FOUND)
+			console.log(e)
+			throw new HttpException('User not found', HttpStatus.NOT_FOUND)
 		}
 	}
 

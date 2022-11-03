@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -16,11 +16,25 @@ import { Test } from './pages/Test';
 import { Middleware } from './pages/Middleware';
 import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
+import io from 'socket.io-client';
 //<Route path="*" element={<Error404 />} />
-
+const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
 function App() {
+  const [isConnected, setIsConnected] = useState(socket.connected);
   const { authed, loading } = useAuth();
   console.log(authed);
+
+  useEffect(() => {
+    socket.on('connect', () => {
+      setIsConnected(true);
+      console.log('connected');
+    });
+
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+      console.log('disconnected');
+    });
+  }, []);
 
   return (
     <div className="App">
