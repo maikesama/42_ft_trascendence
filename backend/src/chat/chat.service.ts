@@ -8,6 +8,29 @@ export class ChatService{
 
     constructor(private prismaService: PrismaService){}
 
+    async getChanInfo(body, userId: number)
+    {
+        try{
+            console.log(JSON.stringify(body))
+            const chan = await this.prismaService.chat.findUniqueOrThrow({
+                where: {
+                    name: body.name
+                },
+                select:
+                {
+                    name: true,
+                    id: true,
+                    type: true,
+                }
+            })
+            return chan
+        }
+        catch(err)
+        {
+            throw new BadRequestException(err)
+        }
+    }
+
     async getChannels(userId: number){
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
