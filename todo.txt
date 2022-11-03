@@ -3,3 +3,4 @@ websocket in una porta diversa?
 ProtectedRoute? -> https://www.jeffedmondson.dev/blog/react-protected-routes/
 mettere <Link> al posto di href nel menu (l'ho fatto ma si rompe il css della chat)
 login + cancel
+copy dto fondamentali

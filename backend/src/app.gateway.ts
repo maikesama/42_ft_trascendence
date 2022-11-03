@@ -6,9 +6,10 @@ import { ChatService } from './chat/chat.service';
 import { AtGuard } from './auth/guards';
 import { Cache, caching } from 'cache-manager';
 // import { SessionService } from './sessionHandler/session.service';
+
 @UseGuards(AtGuard)
-@WebSocketGateway(4243, {transports: ['websocket'] ,cors: true})
-export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+@WebSocketGateway(4243, {transports: ['websocket']})
+export class AppGateway implements OnGatewayInit {
   constructor(private prisma: PrismaService, private chat: ChatService,
   //    @Inject(CACHE_MANAGER) private cacheManager : Cache, private sessionService: SessionService
   //    ){
@@ -40,7 +41,7 @@ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGateway
 
   @UseGuards(AtGuard)
   async handleConnection(client: Socket, ...args: any[]) {
-    console.log(client)
+    // console.log(client['user'])
     // try
     // {
     //   const user = req.user;

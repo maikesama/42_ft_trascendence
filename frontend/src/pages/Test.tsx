@@ -1,69 +1,27 @@
 import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
-console.log(process.env.REACT_APP_HOST_URI)
+import io from 'socket.io-client';
+
+
 export function Test() {
-  const [images, setImages] = React.useState([]);
-  const maxNumber = 69;
+  const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
+  const [isConnected, setIsConnected] = useState(socket.connected);
 
-    const uploadImage = async (imageList: ImageListType) => {
-      console.log(JSON.stringify(imageList[0].dataURL))
-      try {
-        const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
-          method: "POST",
-          credentials: 'include',
-          headers:{
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({dataURL: imageList[0].dataURL}),
-      });
-        const json = await response.json();
-        console.log(json);
-      } catch (error) {
-        console.log("error", error);
-      }
-    };
+  useEffect(() => {
+    socket.on('connect', () => {
+      setIsConnected(true);
+      console.log('connected');
+    });
 
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+      console.log('disconnected');
+    });
+  }, []);
 
-
-  const onChange = (
-    imageList: ImageListType,
-    addUpdateIndex: number[] | undefined
-  ) => {
-    // data for submit
-    setImages(imageList as never[]);
-    uploadImage(imageList)
-  };
-
-  // const uploadCristo = async () => {
-  //   let x = JSON.stringify(imageList[0].dataURL);
-  //   console.log(x)
-  //   try {
-  //   const response = await fetch("", {
-  //     method: "POST",
-  //     credentials: "include",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-
-  //   });
-  //   } catch (error) {
-  //     console.log("error", error);
-  //   }
-  // };
-
-
-
-  console.log(process.env.REACT_APP_HOST_URI)
-  console.log(process.env.REACT_APP_HOST_URI)
   return (
-
-      <ImageUploading value={images} onChange={onChange}>
-      {({
-          onImageUpload,
-        }) => (
-          // write your building UI
-            <button onClick={onImageUpload}>Click or Drop here</button>
-        )}
-      </ImageUploading>
-  );
-}
+    <div>
+      <h1>Test</h1>
+      <h2>Socket.io</h2>
+    </div>)
+  }

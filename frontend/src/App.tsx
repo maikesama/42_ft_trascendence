@@ -18,23 +18,23 @@ import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
 //<Route path="*" element={<Error404 />} />
-const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
+// const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
 function App() {
-  const [isConnected, setIsConnected] = useState(socket.connected);
+  // const [isConnected, setIsConnected] = useState(socket.connected);
   const { authed, loading } = useAuth();
   console.log(authed);
 
-  useEffect(() => {
-    socket.on('connect', () => {
-      setIsConnected(true);
-      console.log('connected');
-    });
+  // useEffect(() => {
+  //   socket.on('connect', () => {
+  //     setIsConnected(true);
+  //     console.log('connected');
+  //   });
 
-    socket.on('disconnect', () => {
-      setIsConnected(false);
-      console.log('disconnected');
-    });
-  }, []);
+  //   socket.on('disconnect', () => {
+  //     setIsConnected(false);
+  //     console.log('disconnected');
+  //   });
+  // }, []);
 
   return (
     <div className="App">
@@ -43,6 +43,7 @@ function App() {
          ) : (
     <Routes>
       {!authed ? <Route path="/" element={<Landing />}/> : <Route path="/" element={<Homepage />}/>}
+          <Route path="/test" element={<Test />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/Middleware" element={<Middleware />}/>
           <Route path='/home' element={<Homepage />}/>
@@ -53,7 +54,6 @@ function App() {
           <Route path="/profile/*" element={<OtherUserProfile />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/friends" element={<Friends />} />
-          <Route path="/test" element={<Test />} />
           <Route path="/" element={<Homepage />}/>
       </Route>
       <Route path="*" element={<Error404 />} />
