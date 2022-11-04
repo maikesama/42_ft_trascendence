@@ -38,6 +38,7 @@ import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import "../css/Message.css";
 
 const useStyles = makeStyles({
 	table: {
@@ -57,12 +58,72 @@ const useStyles = makeStyles({
 		height: '70vh',
 		overflowY: 'auto',
 	},
+	friend: {
+		border: "2px solid lightgray",
+		borderRadius: "10px",
+		marginTop: "10px",
+		width: "35%",
+	},
+	myMessage: {
+		border: "2px solid lightgreen",
+		borderRadius: "10px",
+		marginTop: "10px",
+		width: "35%",
+	},
 });
 
+
+//Array di testing
+const messaggi: string[] = [];
+
 export const DM = (props: any) => {
+	
+	function MessageSent(props: any) {
+		return (
+			<>
+				<div className="container-message lighter">
+					{/* <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" /> */}
+					<Typography className="userSending">You</Typography>
+					<Typography>{props.message}</Typography>
+					<span className="time-right">{props.time}</span>
+				</div>
+			</>
+		);
+	}
+	
+	function MessageReceived(props: any) {
+		return (
+			<>
+				<div className="container-message darker">
+					{/* <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" /> */}
+					<Typography className="userSending">{props.friend}</Typography>
+					<Typography className="message">{props.message}</Typography>
+					<span className="time-right">{props.time}</span>
+				</div>
+			</>
+		);
+	}
 
 	const classes = useStyles();
 	const [openUserActions, setopenUserActions] = React.useState(false);
+	const [message, setMessage] = useState('Haloa');
+
+
+	const handleMessage = (event: any) => {
+		if (event.target.value !== '') {
+			setMessage(event.target.value);
+		}
+		else {
+			setMessage('Messaggio vuoto');
+		}
+	}
+
+	const sendMessage = () => {
+		messaggi.push(message);
+		for (var i in messaggi) {
+			console.log(messaggi[i]);
+		}
+	}
 
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
@@ -77,50 +138,26 @@ export const DM = (props: any) => {
 			<List className={classes.messageArea}>
 				<ListItem key="">
 					<ListItemIcon onClick={handleClickOpenUserActions}>
-						<Avatar alt="Lorenzo" src={props.img} style={{width: '60px', height: '60px'}}/>
+						<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
 					</ListItemIcon>
-					<Typography variant='h5' className="userNameChat" onClick={handleClickOpenUserActions} style={{width: '150px', marginLeft: '50px'}}>{props.idIntra}</Typography>
+					<Typography variant='h5' className="userNameChat" onClick={handleClickOpenUserActions} style={{ width: '150px', marginLeft: '50px' }}>{props.idIntra}</Typography>
 					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				<Divider />
-				<ListItem key="1">
-					<Grid container>
-						<Grid item xs={12}>
-							<ListItemText primary="Hey man, What's up ?"></ListItemText>
-						</Grid>
-						<Grid item xs={12}>
-							<ListItemText secondary="09:30"></ListItemText>
-						</Grid>
-					</Grid>
-				</ListItem>
-				<ListItem key="2">
-					<Grid container>
-						<Grid item xs={12}>
-							<ListItemText primary="Hey, Iam Good! What about you ?" ></ListItemText>
-						</Grid>
-						<Grid item xs={12}>
-							<ListItemText secondary="09:31"></ListItemText>
-						</Grid>
-					</Grid>
-				</ListItem>
-				<ListItem key="3">
-					<Grid container>
-						<Grid item xs={12}>
-							<ListItemText primary="Cool. i am good, let's catch up!"></ListItemText>
-						</Grid>
-						<Grid item xs={12}>
-							<ListItemText secondary="10:30"></ListItemText>
-						</Grid>
-					</Grid>
-				</ListItem>
+				{messaggi.map((message: any, index: any) => (
+					<ListItem key={index}>
+						<MessageSent message={messaggi[index]} time={"4:22"} />
+						<MessageReceived message={messaggi[index]} time={"4:22"} friend={props.idIntra}/>
+					</ListItem>
+				))}
 			</List>
 			<Divider />
 			<Grid container style={{ padding: '20px' }}>
 				<Grid item xs={11}>
-					<TextField id="outlined-basic-email" label="Type Something" fullWidth />
+					<TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={handleMessage} />
 				</Grid>
 				<Grid xs={1} >
-					<Fab color="primary" aria-label="add"><SendIcon /></Fab>
+					<Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
 				</Grid>
 			</Grid>
 			{/*MODAL USER ACTIONS */}
