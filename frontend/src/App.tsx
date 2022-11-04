@@ -18,23 +18,25 @@ import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
 //<Route path="*" element={<Error404 />} />
-// const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
+export const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
+
 function App() {
-  // const [isConnected, setIsConnected] = useState(socket.connected);
+  const [isConnected, setIsConnected] = useState(socket.connected);
   const { authed, loading } = useAuth();
   console.log(authed);
 
-  // useEffect(() => {
-  //   socket.on('connect', () => {
-  //     setIsConnected(true);
-  //     console.log('connected');
-  //   });
+  useEffect(() => {
+    socket.on('connect', () => {
+      setIsConnected(true);
+      // console.log('connected');
+    });
 
-  //   socket.on('disconnect', () => {
-  //     setIsConnected(false);
-  //     console.log('disconnected');
-  //   });
-  // }, []);
+    socket.on('disconnect', () => {
+      setIsConnected(false);
+      // console.log('disconnected');
+    });
+    
+  }, []);
 
   return (
     <div className="App">

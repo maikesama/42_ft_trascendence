@@ -1,4 +1,4 @@
-import { ForbiddenException, Injectable } from "@nestjs/common";
+import { ForbiddenException, Injectable, BadRequestException } from "@nestjs/common";
 import { Res, Query, HttpException, HttpStatus} from "@nestjs/common";
 import {PrismaService} from "../prisma/prisma.service"
 import fetch from 'node-fetch';
@@ -21,22 +21,29 @@ export class AuthService {
 	constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
 	async getAuthCode(@Query('code') query: string, @Res() res: Response) {
-		fetch('https://api.intra.42.fr/oauth/token?' + new URLSearchParams({
-			grant_type: 'authorization_code',
-			client_id: process.env.CLIENT_ID,
-			client_secret: process.env.CLIENT_SECRET,
-			code: query,
-			redirect_uri: `http://${process.env.HOST}/api/auth/42/callback`,
-		}), {
-		method: 'POST',
-		headers:{
-			'Content-Type': 'application/json'
-		},
-	})
-	.then(response =>  response.json())
-	.then(data =>{
-		this.getToken(data.access_token, res);
-	})
+		try{
+
+			const response = await fetch('https://api.intra.42.fr/oauth/token?' + new URLSearchParams({
+				grant_type: 'authorization_code',
+				client_id: process.env.CLIENT_ID,
+				client_secret: process.env.CLIENT_SECRET,
+				code: query,
+				redirect_uri: `http://${process.env.HOST}/api/auth/42/callback`,
+			}), {
+			method: 'POST',
+			headers:{
+				'Content-Type': 'application/json'
+			},
+			})
+			if (response.status !== 200)
+				return res.redirect(`http://${process.env.HOST}/`)
+			const data = await response.json()	
+			if (data)
+				await this.getToken(data.access_token, res);
+			}
+		catch (e) {
+			return res.redirect(`http://${process.env.HOST}/`)
+		}
 }
 
 	async checkUsername(username: string){
@@ -105,6 +112,7 @@ export class AuthService {
 			})
 		}
 		catch (e) {
+			res.redirect(`http://${process.env.HOST}/`)
 			throw new HttpException("Something wrong " + e.message, HttpStatus.CONFLICT)
 		}
 	}

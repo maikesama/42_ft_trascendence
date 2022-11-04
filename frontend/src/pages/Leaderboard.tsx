@@ -2,7 +2,7 @@ import React, {useState, useEffect} from "react";
 import {Header} from '../components/generic/Header';
 import { LeaderboardHeader } from "../components/leaderboard/LeaderboardHeader";
 import { LeaderboardItem } from "../components/leaderboard/LeaderboardItem";
-
+import { socket } from "../App";
 
 import '../font/font.css';
 
@@ -32,6 +32,21 @@ export const Leaderboard = () => {
         };
 
         fetchData();
+        socket.on('status', (data) => {
+                // let newUser = user;
+                // console.log(JSON.stringify(newUser));
+                // Object.values(newUser).map((user: any) => {
+                // if (user.idIntra === data.idIntra) {
+                //         // user.status = data.status;
+                // }
+                //         return user;
+                // });
+                // console.log(user)
+                // console.log(JSON.stringify(newUser));
+                // setUser(newUser);
+                fetchData();
+        })
+
         }, []);
 
 	return (
@@ -40,7 +55,7 @@ export const Leaderboard = () => {
         <LeaderboardHeader id="Profile" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="Nickname" win="Wins" score="Score" status="Status"/>
         {
                 Object.values(user).map((user: any, index: number) => (
-                <LeaderboardItem key={user.id} index={index} id={user.id} image={user.img} nickname={user.idIntra} win={user.win} score={user.rank} status="online"/>
+                <LeaderboardItem key={user.id} index={index} id={user.id} image={user.img} nickname={user.userName} win={user.win} score={user.rank} status={user.status === 0 ? "offline" : user.status === 1? "online" : "in game"}/>
                 ))
         }
         </>

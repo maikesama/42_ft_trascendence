@@ -1,21 +1,20 @@
-import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER } from '@nestjs/common';
+import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER, HttpException, HttpStatus } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
 import { AtGuard } from './auth/guards';
+
 import { Cache, caching } from 'cache-manager';
+import { UserService } from './user/user.service';
 // import { SessionService } from './sessionHandler/session.service';
 
+var jwt = require('jsonwebtoken');
+
 @UseGuards(AtGuard)
-@WebSocketGateway(4243, {transports: ['websocket']})
+@WebSocketGateway(4243, { transports: ['websocket'] })
 export class AppGateway implements OnGatewayInit {
-  constructor(private prisma: PrismaService, private chat: ChatService,
-  //    @Inject(CACHE_MANAGER) private cacheManager : Cache, private sessionService: SessionService
-  //    ){
-  //   this.sessionService = new SessionService(this.cacheManager);
-  // }
-  ){}
+  constructor(private prisma: PrismaService, private chat: ChatService, private userService: UserService) { }
 
   @WebSocketServer() server: Server;
 
@@ -38,31 +37,60 @@ export class AppGateway implements OnGatewayInit {
     this.logger.log('initialized')
   }
 
+  async wsGuard(req: Socket) {
+
+    try {
+      let token = null;
+
+      if (req.handshake && req.handshake.headers && req.handshake.headers.cookie) {
+        var cookies: any = req.handshake.headers.cookie;
+        cookies = cookies.split(';');
+        cookies.forEach(function (cookie) {
+          var parts = cookie.split('=');
+          if (parts[0].trim() === 'at')
+            token = parts[1].trim();
+        });
+      }
+      // if (token)
+      // {
+        const payload = this.verifyId(token)
+        if (payload)
+        {
+          const user = await this.userService.getUserByIdIntra(payload['id'])
+          if (user)
+          {
+            console.log(user)
+            return user
+          }
+        }
+      // }
+      // else
+      //   throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+
+    }
+    catch (e) {
+      // console.log(e)
+      // throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED); da capire come gestire
+    }
+    return null
+  }
+
+  verifyId(token: string) {
+    const user = jwt.verify(token,  process.env.AtSecret );
+    if (user)
+      return user;
+  }
 
   @UseGuards(AtGuard)
   async handleConnection(client: Socket, ...args: any[]) {
-    // console.log(client['user'])
-    // try
-    // {
-    //   const user = req.user;
-    //   const me = await this.prisma.user.findUniqueOrThrow({
-    //     where: {
-    //       id: user['sub']
-    //     },
-    //   })
-    //   let session = await this.sessionService.findSession(me.idIntra);
-    //   if (session && session.status !== 'offline') {
-    //     client.emit('alreadyLoggedIn', 'Already logged in');
-    //     client.to(session.socketId).emit('alreadyLoggedIn', 'Already logged in');
-    //     return ;
-    //   }
-    //   else {
-    //     await this.sessionService.saveSession(me.idIntra, {
-    //       status: 'online',
-    //       socketId: client.id,
-    //     });
-    //     (client as any).idIntra = me.idIntra;
-    //     console.log((client as any).idIntra)
+
+    const user = await this.wsGuard(client)
+    if (user) {
+      if (await this.userService.changeUserStatus(user.idIntra, 1))
+        this.server.emit('status', { idIntra: user.idIntra, status: 1 })
+
+    }
+    
     //     let chats = await this.prisma.partecipant.findMany({
     //       where: {
     //         idIntra: me.idIntra
@@ -80,8 +108,12 @@ export class AppGateway implements OnGatewayInit {
     // }
   }
 
-  handleDisconnect(client: Socket) {
-    console.log("disconnected")
+  async handleDisconnect(client: Socket) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      if (await this.userService.changeUserStatus(user.idIntra, 0))
+        this.server.emit('status', { idIntra: user.idIntra, status: 0 })
+    }
     // this.sessionService.saveSession((client as any).idIntra, {
     //       status: "offline",
     //       socketId: client.id
@@ -90,38 +122,35 @@ export class AppGateway implements OnGatewayInit {
   }
 
   async verifyPartecipant(idIntra: string, idChat: number) {
-    try{
+    try {
       const partecipant = await this.prisma.partecipant.findUnique({
         where: {
-          idIntra_idChat: {idIntra, idChat}
+          idIntra_idChat: { idIntra, idChat }
         }
       })
       return partecipant
     }
-    catch(e: any)
-    {
+    catch (e: any) {
       return false
     }
   }
 
-  async isChatAdmin(idIntra: string, idChat: number){
-    try{
+  async isChatAdmin(idIntra: string, idChat: number) {
+    try {
       const partecipant = await this.prisma.partecipant.findUnique({
         where: {
-          idIntra_idChat: {idIntra, idChat}
+          idIntra_idChat: { idIntra, idChat }
         }
       })
       return partecipant.admin
     }
-    catch(e: any)
-    {
+    catch (e: any) {
       return false
     }
   }
 
-  async saveMessage(message: {sender: string, idChat: number, text: string})
-  {
-    try{
+  async saveMessage(message: { sender: string, idChat: number, text: string }) {
+    try {
       const newMessage = await this.prisma.message.create({
         data: {
           idChat: message.idChat,
@@ -131,27 +160,26 @@ export class AppGateway implements OnGatewayInit {
       })
       return newMessage
     }
-    catch(e: any)
-    {
+    catch (e: any) {
       return false
     }
   }
 
   clientToUser = {}
 
-  identify(name: string, clientId: string){
+  identify(name: string, clientId: string) {
     this.clientToUser[clientId] = name
 
     return Object.values(this.clientToUser)
   }
 
-  getClientName(clientId: string){
+  getClientName(clientId: string) {
     return this.clientToUser[clientId]
   }
 
   @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, message:{ sender: string, idChat: number, text: string} ): Promise<void> {
-    try{
+  async handleMessage(client: Socket, message: { sender: string, idChat: number, text: string }): Promise<void> {
+    try {
 
       const chat = await this.prisma.chat.findUniqueOrThrow({
         where: {
@@ -179,7 +207,7 @@ export class AppGateway implements OnGatewayInit {
 
   @SubscribeMessage('findAllMessages')
   async findAllMessages(client: Socket, idChat: number) {
-    try{
+    try {
       const messages = await this.prisma.message.findMany({
         where: {
           idChat: idChat
@@ -195,16 +223,16 @@ export class AppGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('joinChat')
-  async handleJoin(@ConnectedSocket() client: Socket,message:{ sender: string, idChat: number, text: string}) {
+  async handleJoin(@ConnectedSocket() client: Socket, message: { sender: string, idChat: number, text: string }) {
 
     return this.identify(message.sender, client.id)
   }
 
   @SubscribeMessage('typing')
-  async handleTyping(@MessageBody('isTyping') isTyping: boolean ,client: Socket, idChat: number) {
-      const name = await this.getClientName(client.id)
+  async handleTyping(@MessageBody('isTyping') isTyping: boolean, client: Socket, idChat: number) {
+    const name = await this.getClientName(client.id)
 
-      client.broadcast.emit('typing', {isTyping, name})
+    client.broadcast.emit('typing', { isTyping, name })
 
   }
 

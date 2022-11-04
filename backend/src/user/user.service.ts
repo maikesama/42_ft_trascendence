@@ -57,6 +57,45 @@ export class UserService {
 		}
 	}
 
+	async getUserByIdIntra(idIntra: string){
+		try{
+			const user = await this.prisma.user.findUniqueOrThrow({
+				where: {
+					idIntra: idIntra
+				},
+				select: {
+					idIntra: true,
+				}
+			})
+			return user
+		}
+		catch(e){
+			throw new HttpException(e, HttpStatus.BAD_REQUEST)
+		}
+	}
+
+	async changeUserStatus(idIntra: string, st: number){
+		try{
+			st === 0 
+			let data: Date = (st !== 0 ) ?
+				new Date(new Date().getTime() +  (1000 * 60 * 60 * 24 * 7) * 1000):
+				new Date();
+			const user = await this.prisma.user.update({
+				where: {
+					idIntra: idIntra
+				},
+				data: {
+					status: st,
+					lastOnline: data
+				}
+			})
+			return true
+		}
+		catch(e){
+			throw new HttpException(e, HttpStatus.BAD_REQUEST)
+		}
+	}
+
 	async getUserProfile(idintra: string, requestedBy: number)
 	{
 		try{

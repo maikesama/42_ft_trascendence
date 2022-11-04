@@ -16,6 +16,7 @@ import { FriendService } from './friend/friend.service';
 import { FriendModule } from './friend/friend.module';
 import { GamesModule } from './games/games.module';
 import { GamesService } from './games/games.service';
+import { UserService } from './user/user.service';
 
 @Module({
   imports: [

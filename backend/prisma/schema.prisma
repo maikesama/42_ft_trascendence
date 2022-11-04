@@ -33,6 +33,8 @@ model User {
 	achTeninRow		Boolean			@default(false)
 	achTwentyinRow	Boolean			@default(false)
 	achAce			Boolean			@default(false)
+	status			Int				@default(0)
+	lastOnline		DateTime?		
 	friend        	Friend[]       	@relation(name: "friend")
 	friendBy       	Friend[]       	@relation(name: "friendBy")
 	blocked         Blocklist[]     @relation(name: "block")
