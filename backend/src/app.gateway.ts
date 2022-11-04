@@ -56,7 +56,7 @@ export class AppGateway implements OnGatewayInit {
         const payload = this.verifyId(token)
         if (payload)
         {
-          const user = await this.userService.getUserByIdIntra(payload['id'])
+          const user = await this.userService.verifyUserByIdIntra(payload['id'])
           if (user)
           {
             console.log(user)
@@ -90,7 +90,7 @@ export class AppGateway implements OnGatewayInit {
         this.server.emit('status', { idIntra: user.idIntra, status: 1 })
 
     }
-    
+
     //     let chats = await this.prisma.partecipant.findMany({
     //       where: {
     //         idIntra: me.idIntra
@@ -121,119 +121,119 @@ export class AppGateway implements OnGatewayInit {
     //   this.server.sockets.emit("offline", client.handshake.query.auth)
   }
 
-  async verifyPartecipant(idIntra: string, idChat: number) {
-    try {
-      const partecipant = await this.prisma.partecipant.findUnique({
-        where: {
-          idIntra_idChat: { idIntra, idChat }
-        }
-      })
-      return partecipant
-    }
-    catch (e: any) {
-      return false
-    }
-  }
+  // async verifyPartecipant(idIntra: string, idChat: number) {
+  //   try {
+  //     const partecipant = await this.prisma.partecipant.findUnique({
+  //       where: {
+  //         idIntra_idChat: { idIntra, idChat }
+  //       }
+  //     })
+  //     return partecipant
+  //   }
+  //   catch (e: any) {
+  //     return false
+  //   }
+  // }
 
-  async isChatAdmin(idIntra: string, idChat: number) {
-    try {
-      const partecipant = await this.prisma.partecipant.findUnique({
-        where: {
-          idIntra_idChat: { idIntra, idChat }
-        }
-      })
-      return partecipant.admin
-    }
-    catch (e: any) {
-      return false
-    }
-  }
+  // async isChatAdmin(idIntra: string, idChat: number) {
+  //   try {
+  //     const partecipant = await this.prisma.partecipant.findUnique({
+  //       where: {
+  //         idIntra_idChat: { idIntra, idChat }
+  //       }
+  //     })
+  //     return partecipant.admin
+  //   }
+  //   catch (e: any) {
+  //     return false
+  //   }
+  // }
 
-  async saveMessage(message: { sender: string, idChat: number, text: string }) {
-    try {
-      const newMessage = await this.prisma.message.create({
-        data: {
-          idChat: message.idChat,
-          idIntra: message.sender,
-          message: message.text
-        }
-      })
-      return newMessage
-    }
-    catch (e: any) {
-      return false
-    }
-  }
+  // async saveMessage(message: { sender: string, idChat: number, text: string }) {
+  //   try {
+  //     const newMessage = await this.prisma.message.create({
+  //       data: {
+  //         idChat: message.idChat,
+  //         idIntra: message.sender,
+  //         message: message.text
+  //       }
+  //     })
+  //     return newMessage
+  //   }
+  //   catch (e: any) {
+  //     return false
+  //   }
+  // }
 
-  clientToUser = {}
+  // clientToUser = {}
 
-  identify(name: string, clientId: string) {
-    this.clientToUser[clientId] = name
+  // identify(name: string, clientId: string) {
+  //   this.clientToUser[clientId] = name
 
-    return Object.values(this.clientToUser)
-  }
+  //   return Object.values(this.clientToUser)
+  // }
 
-  getClientName(clientId: string) {
-    return this.clientToUser[clientId]
-  }
+  // getClientName(clientId: string) {
+  //   return this.clientToUser[clientId]
+  // }
 
-  @SubscribeMessage('msgToServer')
-  async handleMessage(client: Socket, message: { sender: string, idChat: number, text: string }): Promise<void> {
-    try {
+  // @SubscribeMessage('msgToServer')
+  // async handleMessage(client: Socket, message: { sender: string, idChat: number, text: string }): Promise<void> {
+  //   try {
 
-      const chat = await this.prisma.chat.findUniqueOrThrow({
-        where: {
-          id: message.idChat
-        }
-      })
+  //     const chat = await this.prisma.chat.findUniqueOrThrow({
+  //       where: {
+  //         id: message.idChat
+  //       }
+  //     })
 
-      if (await this.chat.isMuted(chat.name, message.sender))
-        throw new BadRequestException("You are muted from this chat")
-      if (await this.chat.isBanned(chat.name, message.sender))
-        throw new BadRequestException("You are banned from this chat")
-      if (!await this.verifyPartecipant(message.sender, message.idChat))
-        throw new BadRequestException("You are not partecipant of this chat")
-      //need to save messages and notify other partecipants
+  //     if (await this.chat.isMuted(chat.name, message.sender))
+  //       throw new BadRequestException("You are muted from this chat")
+  //     if (await this.chat.isBanned(chat.name, message.sender))
+  //       throw new BadRequestException("You are banned from this chat")
+  //     if (!await this.verifyPartecipant(message.sender, message.idChat))
+  //       throw new BadRequestException("You are not partecipant of this chat")
+  //     //need to save messages and notify other partecipants
 
-      await this.saveMessage(message);
-      this.server.to(message.idChat.toString()).emit('msgToClient', message);
-    }
-    catch (e) {
-      throw new BadRequestException(e)
-    }
+  //     await this.saveMessage(message);
+  //     this.server.to(message.idChat.toString()).emit('msgToClient', message);
+  //   }
+  //   catch (e) {
+  //     throw new BadRequestException(e)
+  //   }
 
 
-  }
+  // }
 
-  @SubscribeMessage('findAllMessages')
-  async findAllMessages(client: Socket, idChat: number) {
-    try {
-      const messages = await this.prisma.message.findMany({
-        where: {
-          idChat: idChat
-        }
-      })
-      //client.emit('allMessages', messages)
-      return messages
-    }
-    catch (e) {
-      throw new BadRequestException(e)
-    }
+  // @SubscribeMessage('findAllMessages')
+  // async findAllMessages(client: Socket, idChat: number) {
+  //   try {
+  //     const messages = await this.prisma.message.findMany({
+  //       where: {
+  //         idChat: idChat
+  //       }
+  //     })
+  //     //client.emit('allMessages', messages)
+  //     return messages
+  //   }
+  //   catch (e) {
+  //     throw new BadRequestException(e)
+  //   }
 
-  }
+  // }
 
-  @SubscribeMessage('joinChat')
-  async handleJoin(@ConnectedSocket() client: Socket, message: { sender: string, idChat: number, text: string }) {
+  // @SubscribeMessage('joinChat')
+  // async handleJoin(@ConnectedSocket() client: Socket, message: { sender: string, idChat: number, text: string }) {
 
-    return this.identify(message.sender, client.id)
-  }
+  //   return this.identify(message.sender, client.id)
+  // }
 
-  @SubscribeMessage('typing')
-  async handleTyping(@MessageBody('isTyping') isTyping: boolean, client: Socket, idChat: number) {
-    const name = await this.getClientName(client.id)
+  // @SubscribeMessage('typing')
+  // async handleTyping(@MessageBody('isTyping') isTyping: boolean, client: Socket, idChat: number) {
+  //   const name = await this.getClientName(client.id)
 
-    client.broadcast.emit('typing', { isTyping, name })
+  //   client.broadcast.emit('typing', { isTyping, name })
 
-  }
+  // }
 
 }

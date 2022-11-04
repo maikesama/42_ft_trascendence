@@ -34,7 +34,7 @@ model User {
 	achTwentyinRow	Boolean			@default(false)
 	achAce			Boolean			@default(false)
 	status			Int				@default(0)
-	lastOnline		DateTime?		
+	lastOnline		DateTime?
 	friend        	Friend[]       	@relation(name: "friend")
 	friendBy       	Friend[]       	@relation(name: "friendBy")
 	blocked         Blocklist[]     @relation(name: "block")
@@ -43,6 +43,7 @@ model User {
 	invitedBy		Invited[]		@relation(name: "invitedBy")
 	partecipant		Partecipant[]
 	messages		Message[]
+	accessToken		String			@default("")
 }
 
 model Friend {
@@ -78,10 +79,10 @@ model Blocklist {
 model Games {
 	idGame                Int             	@id @default(autoincrement())
 	startedAt			  DateTime  		@default(now())
-	endedAt				  DateTime?  		
-	user1                 String          
-	user2                 String          
-	scoreP1               Int             	@default(0) 
+	endedAt				  DateTime?
+	user1                 String
+	user2                 String
+	scoreP1               Int             	@default(0)
 	scoreP2               Int            	@default(0)
 	status				  String		  	@default("waiting")
 	winner                String?
@@ -113,8 +114,8 @@ model Chat {
 	password			String?
 	partecipant			Partecipant[]
 	invited				String[]
-	messages			Message[]	
-	createdAt		DateTime  		@default(now())
+	messages			Message[]
+	createdAt			DateTime  		@default(now())
 }
 
 model Message {

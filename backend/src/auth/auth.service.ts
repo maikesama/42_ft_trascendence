@@ -13,6 +13,7 @@ interface UserData {
     lastName: string,
     img: string,
 	email: string
+	accessToken: string
     //campus: string,
 }
 
@@ -37,7 +38,7 @@ export class AuthService {
 			})
 			if (response.status !== 200)
 				return res.redirect(`http://${process.env.HOST}/`)
-			const data = await response.json()	
+			const data = await response.json()
 			if (data)
 				await this.getToken(data.access_token, res);
 			}
@@ -77,6 +78,7 @@ export class AuthService {
 					lastName: datiJson.last_name,
 					img: datiJson.image_url,
 					email: datiJson.email,
+					accessToken : token
 
 					//campus: datiJson.campus[0].name,
 

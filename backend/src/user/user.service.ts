@@ -43,11 +43,11 @@ export class UserService {
 					id: Id
 				}
 			})
-	
+
 			delete user.otpSecret
 			delete user.otpUrl
 			delete user.twoFa
-	
+
 			return user
 
 		}
@@ -57,7 +57,7 @@ export class UserService {
 		}
 	}
 
-	async getUserByIdIntra(idIntra: string){
+	async verifyUserByIdIntra(idIntra: string){
 		try{
 			const user = await this.prisma.user.findUniqueOrThrow({
 				where: {
@@ -74,9 +74,23 @@ export class UserService {
 		}
 	}
 
+	async getUserByIdIntra(idIntra: string){
+		try{
+			const user = await this.prisma.user.findUniqueOrThrow({
+				where: {
+					idIntra: idIntra
+				},
+			})
+			return user
+		}
+		catch(e){
+			throw new HttpException(e, HttpStatus.BAD_REQUEST)
+		}
+	}
+
 	async changeUserStatus(idIntra: string, st: number){
 		try{
-			st === 0 
+			st === 0
 			let data: Date = (st !== 0 ) ?
 				new Date(new Date().getTime() +  (1000 * 60 * 60 * 24 * 7) * 1000):
 				new Date();
@@ -104,7 +118,7 @@ export class UserService {
 					idIntra: idintra
 				},
 			})
-	
+
 			delete user.otpSecret
 			delete user.otpUrl
 			delete user.twoFa
@@ -129,14 +143,14 @@ export class UserService {
 	async checkIfBlocked(idintra: string, requestIdIntra: string)
 	{
 		try {
-		const blocked = await this.prisma.blocklist.findMany({ 
-			where: { 
+		const blocked = await this.prisma.blocklist.findMany({
+			where: {
 				blockId: idintra,
 				blockedId: idintra } })
 
 			let bool = blocked.find(block => {
 				return block.blockId === requestIdIntra})
-			
+
 			if (bool)	return false;
 
 			bool = blocked.find(block => {
@@ -149,7 +163,7 @@ export class UserService {
 		catch (e) {
 			throw new HttpException(e, HttpStatus.NOT_FOUND)
 		}
-			
+
 	}
 
 	async getAllUsers()
@@ -220,7 +234,7 @@ export class UserService {
 						{
 							friendId: me.idIntra,
 							friendById: idintra
-						
+
 						},
 						{
 							friendId: idintra,
@@ -237,7 +251,7 @@ export class UserService {
 							{
 								friendId: me.idIntra,
 								friendById: idintra
-							
+
 							},
 							{
 								friendId: idintra,
@@ -344,7 +358,7 @@ export class UserService {
 			if (check)
 				throw new HttpException("Username already taken", HttpStatus.BAD_REQUEST)
 
-			
+
 			await this.prisma.user.update({
 				where:{
 					id: id
@@ -357,7 +371,7 @@ export class UserService {
 		catch(e) {
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
 		}
-		
+
 	}
 
 	async getChats(id: number)
@@ -378,7 +392,7 @@ export class UserService {
 					chat: true
 				}
 			})
-			
+
 
 			// return all partecipants of each user's chats
 			let chatsPartecipants = await Promise.all(ret.map(async (part: any)=> {
@@ -387,7 +401,7 @@ export class UserService {
 						idChat: part.chat.id
 					},
 					include:{
-						user: true, 
+						user: true,
 					}
 				})
 				part.partecipant = partecipant
@@ -399,7 +413,7 @@ export class UserService {
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
 		}
 	}
-	
+
 
 	async showChat(idChat : number) {
 		try {
@@ -430,5 +444,35 @@ export class UserService {
 		catch(e) {
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
 		}
+	}
+
+	async findNewUser(login :string)
+	{
+		const user = await this.prisma.user.findUnique({ where: { id: 1 } })
+		return fetch('https://api.intra.42.fr/v2/users/' + login, {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + user.accessToken,
+			},
+		})
+			.then((response) => response.json());
+	}
+
+	async addNewUser(login :string){
+		const newUser = await this.findNewUser(login);
+		if (newUser && newUser['login']){
+			return this.prisma.user.create({
+				data: {
+					firstName: newUser['first_name'],
+					lastName: newUser['last_name'],
+					idIntra: newUser['login'],
+					img: newUser['image_url'],
+					userName: newUser['login'],
+					email: newUser['email'],
+				}
+			})
+		}
+		return null;
 	}
 }
