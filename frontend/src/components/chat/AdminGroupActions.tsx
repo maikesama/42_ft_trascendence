@@ -23,6 +23,8 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import Checkbox from '@mui/material/Checkbox';
 import SettingsIcon from '@mui/icons-material/Settings';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { AdminSettings } from './AdminSettings';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -43,6 +45,16 @@ export const AdminGroupActions = (props: any) => {
     const [userGroup, setUserGroup] = React.useState([] as any);
     const initials = useRef<any>('');
     const [promoted, setPromoted] = useState({} as any);
+    const [openSettings, setOpenSettings] = React.useState(false);
+    const [chan, setChan] = useState({} as any);
+
+    const handleOpenSettings = () => {
+        setOpenSettings(true);
+    };
+
+    const handleCloseSettings = () => {
+        setOpenSettings(false);
+    };
 
     const handleChange = (event: any) => {
         if (event.target.value === selectedName)
@@ -232,76 +244,76 @@ export const AdminGroupActions = (props: any) => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/unbanUser`;
 
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
-          });
-          window.location.reload();
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+            });
+            window.location.reload();
         } catch (error) {
-          console.log("error", error);
+            console.log("error", error);
         }
-      }
+    }
 
-      async function unMute(index: any) {
+    async function unMute(index: any) {
         const idIntra = await muted[index]?.idIntra;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/unmuteUser`;
 
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
-          });
-          window.location.reload();
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+            });
+            window.location.reload();
         } catch (error) {
-          console.log("error", error);
+            console.log("error", error);
         }
-      }
+    }
 
-      async function promote(index: any) {
+    async function promote(index: any) {
         const idIntra = await muted[index]?.idIntra;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/addAdmin`;
 
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
-          });
-          window.location.reload();
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+            });
+            window.location.reload();
         } catch (error) {
-          console.log("error", error);
+            console.log("error", error);
         }
-      }
+    }
 
-      async function demote(index: any) {
+    async function demote(index: any) {
         const idIntra = await promoted[index]?.idIntra;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/removeAdmin`;
 
         try {
-          const response = await fetch(url, {
-            method: 'POST',
-            credentials: 'include',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
-          });
-          window.location.reload();
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+            });
+            window.location.reload();
         } catch (error) {
-          console.log("error", error);
+            console.log("error", error);
         }
-      }
+    }
 
     useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
@@ -325,8 +337,32 @@ export const AdminGroupActions = (props: any) => {
         fetchData();
     }, []);
 
+    useEffect(() => {
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChanInfo`;
+
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ name: props.channelName }),
+                });
+                const json = await response.json();
+                console.log(json);
+                setChan(json);             
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+
+        fetchData();
+    }, []);
+
     function renderGroupRowAdmin(props: any) {
-        const { index, style} = props;
+        const { index, style } = props;
 
         let isMuted = partecipants[index]?.muted ? " [ muted ]" : "";
         //let ci = partecipants[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
@@ -338,22 +374,22 @@ export const AdminGroupActions = (props: any) => {
                 <Divider />
 
                 {partecipants[index]?.idIntra === mySelf.idIntra || partecipants[index]?.owner ? <>
-                <Radio
-                    disabled
-                    checked={selectedName === partecipants[index]?.idIntra}
-                    onClick={handleChange}
-                    value={partecipants[index]?.idIntra}
-                    name="radio-buttons"
-                    inputProps={{ 'aria-label': 'A' }}
-                />
+                    <Radio
+                        disabled
+                        checked={selectedName === partecipants[index]?.idIntra}
+                        onClick={handleChange}
+                        value={partecipants[index]?.idIntra}
+                        name="radio-buttons"
+                        inputProps={{ 'aria-label': 'A' }}
+                    />
                 </> :
-                <Radio
-                    checked={selectedName === partecipants[index]?.idIntra}
-                    onClick={handleChange}
-                    value={partecipants[index]?.idIntra}
-                    name="radio-buttons"
-                    inputProps={{ 'aria-label': 'A' }}
-                />
+                    <Radio
+                        checked={selectedName === partecipants[index]?.idIntra}
+                        onClick={handleChange}
+                        value={partecipants[index]?.idIntra}
+                        name="radio-buttons"
+                        inputProps={{ 'aria-label': 'A' }}
+                    />
                 }
 
             </ListItem>
@@ -361,13 +397,13 @@ export const AdminGroupActions = (props: any) => {
     }
 
     function BannedUserItem(props: any) {
-        const { index, style} = props;
+        const { index, style } = props;
 
         let isMuted = muted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
             <ListItem style={style} key={index} >
-                <Avatar src={banned[index]?.img} style={{marginRight: 10}}/>
+                <Avatar src={banned[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={banned[index]?.idIntra} />
                 <Divider variant="middle" />
                 <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unBan(index)} fontSize="large" /></IconButton>
@@ -376,13 +412,13 @@ export const AdminGroupActions = (props: any) => {
     }
 
     function MutedUserItem(props: any) {
-        const { index, style} = props;
+        const { index, style } = props;
 
         let isMuted = muted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
             <ListItem style={style} key={index} >
-                <Avatar src={muted[index]?.img} style={{marginRight: 10}}/>
+                <Avatar src={muted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={muted[index]?.idIntra} />
                 <Divider variant="middle" />
                 <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unMute(index)} fontSize="large" /></IconButton>
@@ -391,13 +427,13 @@ export const AdminGroupActions = (props: any) => {
     }
 
     function PromotedUserItem(props: any) {
-        const { index, style} = props;
+        const { index, style } = props;
         console.log('promoted', promoted);
         let isMuted = promoted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
             <ListItem style={style} key={index} >
-                <Avatar src={promoted[index]?.img} style={{marginRight: 10}}/>
+                <Avatar src={promoted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={promoted[index]?.idIntra} />
                 <Divider variant="middle" />
                 <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => demote(index)} fontSize="large" /></IconButton>
@@ -406,7 +442,7 @@ export const AdminGroupActions = (props: any) => {
     }
 
     const closeX = {
-        backgroundColor: 'white', color: 'red', marginLeft: '67%', fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
+        backgroundColor: 'white', color: 'red', marginLeft: '50%', fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
     }
 
     function closeFunction() {
@@ -477,128 +513,131 @@ export const AdminGroupActions = (props: any) => {
     }
 
     return (
-        <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle>Admin Actions<button style={closeX} onClick={closeFunction}>X</button> </DialogTitle>
+        <>
+            <Dialog open={props.status} onClose={props.closeStatus}>
+                <DialogTitle>Admin Actions<IconButton onClick={handleOpenSettings}><SettingsIcon /></IconButton><button style={closeX} onClick={closeFunction}>X</button> </DialogTitle>
 
-            <DialogContent>
-                <DialogContentText>
-                    You are {props.user}
-                </DialogContentText>
-                {clickLists === "" ? <>
-                <FixedSizeList
-                    style={{ marginTop: 20 }}
-                    height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
-                    width={500}
-                    itemSize={60}
-                    itemCount={partecipants?.length}
-                    overscanCount={5}
-                >
+                <DialogContent>
+                    <DialogContentText>
+                        You are {props.user}
+                    </DialogContentText>
+                    {clickLists === "" ? <>
+                        <FixedSizeList
+                            style={{ marginTop: 20 }}
+                            height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
+                            width={500}
+                            itemSize={60}
+                            itemCount={partecipants?.length}
+                            overscanCount={5}
+                        >
 
-                    {renderGroupRowAdmin}
-                </FixedSizeList>
-                </> : clickLists === "BannedList" ? <>
-                <DialogContentText>
-                    Banned List
-                </DialogContentText>
-                <FixedSizeList
-                    style={{ marginTop: 20 }}
-                    height={banned?.length > 9 ? 450 : banned?.length * 70}
-                    width={500}
-                    itemSize={60}
-                    itemCount={banned?.length}
-                    overscanCount={5}
-                >
-                    {BannedUserItem}
-                </FixedSizeList>
-                </> : clickLists === "MutedList" ? <>
-                <DialogContentText>
-                    Muted List
-                </DialogContentText>
-                <FixedSizeList
-                    style={{ marginTop: 20 }}
-                    height={muted?.length > 9 ? 450 : muted?.length * 70}
-                    width={500}
-                    itemSize={60}
-                    itemCount={muted?.length}
-                    overscanCount={5}
-                >
-                    {MutedUserItem}
-                </FixedSizeList>
-                </> : clickLists === "AddUser" ? <>
-                <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
-                    Add members to your channel group:
-                </DialogContentText>
-                <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>
-                <FixedSizeList
-                height={230}
-                width={500}
-                itemSize={46}
-                itemCount={Object.values(search).length}
-                overscanCount={5}
-                >
-                {searchRow}
-                </FixedSizeList>
-                </> : clickLists === "PromotedList" ? <>
-                <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
-                    Promoted List
-                </DialogContentText>
-                <FixedSizeList
-                height={230}
-                width={500}
-                itemSize={46}
-                itemCount={Object.values(promoted).length}
-                overscanCount={5}
-                >
-                {PromotedUserItem}
-                </FixedSizeList>
-                </> : null}
-                {banButton ? <>
-                <Typography>Quanti minuti vuoi bannarlo?</Typography>
-                <TextField style={{width:250}} inputRef={bantime} type="number" InputProps={{inputProps: { max: 100, min: 10 }}} label="Minutes"/>
-                <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
-                <Button variant="outlined" onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
-                </> :
-                muteButton ? <>
-                <Typography>Quanti minuti vuoi mutarlo?</Typography>
-                <TextField style={{width:250}} inputRef={mutetime} type="number" InputProps={{inputProps: { max: 100, min: 10 }}} label="Minutes"/>
-                <Button variant="outlined" onClick={() => setMuteButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
-                <Button variant="outlined" onClick={mute}><CheckCircleOutlinedIcon fontSize="large" /></Button>
-                </> :
-                <>
-                <DialogActions>
-                    {selectedName === '' && clickLists === '' ?
-                        <>
-                            <Button variant="outlined" onClick={() => Lists("AddUser")} style={{ border: '2px solid green', color: 'green' }}>Add User</Button>
-                            <Button variant="outlined" onClick={() => Lists("PromotedList")}>Promoted</Button>
-                            <Button variant="outlined" onClick={() => Lists("MutedList")}>Muted</Button>
-                            <Button variant="outlined" onClick={() => Lists("BannedList")}>Banned</Button>
-                            <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
-                        </> : clickLists === '' ?
-                        <>
-                            <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
-                            {selectedNamePower === "user" ?  <>
+                            {renderGroupRowAdmin}
+                        </FixedSizeList>
+                    </> : clickLists === "BannedList" ? <>
+                        <DialogContentText>
+                            Banned List
+                        </DialogContentText>
+                        <FixedSizeList
+                            style={{ marginTop: 20 }}
+                            height={banned?.length > 9 ? 450 : banned?.length * 70}
+                            width={500}
+                            itemSize={60}
+                            itemCount={banned?.length}
+                            overscanCount={5}
+                        >
+                            {BannedUserItem}
+                        </FixedSizeList>
+                    </> : clickLists === "MutedList" ? <>
+                        <DialogContentText>
+                            Muted List
+                        </DialogContentText>
+                        <FixedSizeList
+                            style={{ marginTop: 20 }}
+                            height={muted?.length > 9 ? 450 : muted?.length * 70}
+                            width={500}
+                            itemSize={60}
+                            itemCount={muted?.length}
+                            overscanCount={5}
+                        >
+                            {MutedUserItem}
+                        </FixedSizeList>
+                    </> : clickLists === "AddUser" ? <>
+                        <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
+                            Add members to your channel group:
+                        </DialogContentText>
+                        <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser} />
+                        <FixedSizeList
+                            height={230}
+                            width={500}
+                            itemSize={46}
+                            itemCount={Object.values(search).length}
+                            overscanCount={5}
+                        >
+                            {searchRow}
+                        </FixedSizeList>
+                    </> : clickLists === "PromotedList" ? <>
+                        <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
+                            Promoted List
+                        </DialogContentText>
+                        <FixedSizeList
+                            height={230}
+                            width={500}
+                            itemSize={46}
+                            itemCount={Object.values(promoted).length}
+                            overscanCount={5}
+                        >
+                            {PromotedUserItem}
+                        </FixedSizeList>
+                    </> : null}
+                    {banButton ? <>
+                        <Typography>Quanti minuti vuoi bannarlo?</Typography>
+                        <TextField style={{ width: 250 }} inputRef={bantime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
+                        <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
+                        <Button variant="outlined" onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
+                    </> :
+                        muteButton ? <>
+                            <Typography>Quanti minuti vuoi mutarlo?</Typography>
+                            <TextField style={{ width: 250 }} inputRef={mutetime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
+                            <Button variant="outlined" onClick={() => setMuteButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
+                            <Button variant="outlined" onClick={mute}><CheckCircleOutlinedIcon fontSize="large" /></Button>
+                        </> :
+                            <>
+                                <DialogActions>
+                                    {selectedName === '' && clickLists === '' ?
+                                        <>
+                                            <Button variant="outlined" onClick={() => Lists("AddUser")} style={{ border: '2px solid green', color: 'green' }}>Add User</Button>
+                                            <Button variant="outlined" onClick={() => Lists("PromotedList")}>Promoted</Button>
+                                            <Button variant="outlined" onClick={() => Lists("MutedList")}>Muted</Button>
+                                            <Button variant="outlined" onClick={() => Lists("BannedList")}>Banned</Button>
+                                            <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
+                                        </> : clickLists === '' ?
+                                            <>
+                                                <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                                                {selectedNamePower === "user" ? <>
 
-                            <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
+                                                    <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
 
-                            </>: null}
-                            <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
-                            <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
-                            <Button variant="outlined" onClick={kick}>Kick</Button>
-                        </> : clickLists === "AddUser" ?
-                        <>
-                            <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
-                            <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
-                        </>
-                        : clickLists !== "" ?
-                        <>
-                            <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
-                        </>
-                        : null}
+                                                </> : null}
+                                                <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
+                                                <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
+                                                <Button variant="outlined" onClick={kick}>Kick</Button>
+                                            </> : clickLists === "AddUser" ?
+                                                <>
+                                                    <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
+                                                    <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
+                                                </>
+                                                : clickLists !== "" ?
+                                                    <>
+                                                        <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
+                                                    </>
+                                                    : null}
 
-                </DialogActions>
-                </>}
-            </DialogContent>
-        </Dialog>
+                                </DialogActions>
+                            </>}
+                </DialogContent>
+            </Dialog>
+            <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan}/>
+        </>
     );
 }
 

@@ -17,6 +17,14 @@ export class ChatController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('getChanInfo')
+    async getChanInfo(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getChanInfo(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('getUserPrivilegeInfo')
     async getUserPrivilegeInfo(@Body() body, @Req() req){
         const user = req.user

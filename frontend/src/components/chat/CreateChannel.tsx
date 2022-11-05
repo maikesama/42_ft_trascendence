@@ -252,7 +252,7 @@ export const CreateChannel = (props: any) => {
                 </FixedSizeList></> : <>
                 <FixedSizeList
 
-                    height={Object.values(friends).length * 90}
+                    height={Object.values(search).length * 90}
                     width={500}
                     itemSize={46}
                     itemCount={Object.values(search).length}
