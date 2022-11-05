@@ -349,7 +349,7 @@ export class UserService {
 	{
 		try {
 			if(!body.userName)
-				return
+				throw new HttpException("Username not set", HttpStatus.BAD_REQUEST)
 			const check = await this.prisma.user.findUnique({
 				where:{
 					userName: body.userName

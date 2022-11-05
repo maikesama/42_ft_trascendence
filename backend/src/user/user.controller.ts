@@ -7,6 +7,7 @@ import { UserService } from "./user.service";
 import { bindCallback } from "rxjs";
 import { TwoFactorAuthenticationService} from './../auth/TwoFA/TwoFA.service'
 import { MessageBody } from "@nestjs/websockets";
+import { setUsernameDTO } from './dto/user.dto';
 
 @Controller('user')
 export class UserController{
@@ -84,9 +85,8 @@ export class UserController{
 
 	@UseGuards(AtGuard)
 	@Post('update/username')
-	async changeusername(@Body() body, @Req() req)
+	async changeusername(@Req() req, @Body() body: setUsernameDTO)
 	{
-
 		const user = req.user
 		return await this.userservice.changeUserName(body, user['sub'])
 	}

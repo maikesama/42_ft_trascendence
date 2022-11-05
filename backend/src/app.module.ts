@@ -29,7 +29,7 @@ import { UserService } from './user/user.service';
     // ConfigModule.forRoot({
     //   isGlobal: true
     // }),
-    PassportModule.register({ session: true }),
+    // PassportModule.register({ session: true }),
     ClientsModule.register([
       {
         name:"NOTIFICATION_SERVICE",

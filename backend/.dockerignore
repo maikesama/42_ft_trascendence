@@ -1,7 +1,5 @@
-node_modules
-build
+./src
+./node_modules
 .dockerignore
 Dockerfile
 Dockerfile.prod
-./src
-./node_modules
