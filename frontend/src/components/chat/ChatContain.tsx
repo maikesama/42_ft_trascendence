@@ -276,7 +276,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
