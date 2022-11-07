@@ -1,10 +1,11 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
+import { ChatService } from 'src/chat/chat.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 
 @Injectable()
 export class FriendService{
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService, private chatService: ChatService) {}
 
     async isFriend(userId: string, friendId: string) {
         try{
@@ -189,6 +190,7 @@ export class FriendService{
                     friendById: invitedMe.idIntra,
                 }
             })
+            this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.id)
         }
         catch(e){
             throw new BadRequestException(e)

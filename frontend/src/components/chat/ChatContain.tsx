@@ -118,8 +118,9 @@ export const ChatContain = (props: any) => {
             clickChannelInfo(Number(id));
         }
         setChatView(param);
-        setUserIntra(name);
         setidChat(id)
+        console.log("drsdsrtdsdsxfd",idChat)
+        setUserIntra(name);
         setUserImg(img);
         setUserIdIntra(idIntra);
     }

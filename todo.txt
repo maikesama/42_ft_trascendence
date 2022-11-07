@@ -9,3 +9,18 @@ cambiare error
 add new user
 /api/user/new/all
 /api/user/new/:idIntra
+
+
+
+
+
+
+
+
+
+
+///////////////////////////////
+// 2021-03-18
+///////////////////////////////
+// TODO
+gameHistory w/body.idIntra

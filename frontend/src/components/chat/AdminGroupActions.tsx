@@ -340,6 +340,7 @@ export const AdminGroupActions = (props: any) => {
     useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChanInfo`;
 
+        console.log("ciao" + props.idChat)
         const fetchData = async () => {
             try {
                 const response = await fetch(url, {

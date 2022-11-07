@@ -117,6 +117,10 @@ export class UserService {
 				where:{
 					idIntra: idintra
 				},
+				include: {
+					friend: true,
+					friendBy: true,
+				}
 			})
 
 			delete user.otpSecret
