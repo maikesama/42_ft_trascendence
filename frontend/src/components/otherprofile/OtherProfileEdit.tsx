@@ -33,6 +33,7 @@ export const SocialEdit = (props: any) => {
   const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
+  const user = props.params;
 
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
@@ -80,7 +81,7 @@ export const SocialEdit = (props: any) => {
         <Avatar />
         <ListItemText primary={`Friend`} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle"/>
+        <Divider variant="middle" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
       </ListItem>
     );
@@ -95,7 +96,6 @@ export const SocialEdit = (props: any) => {
             <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
               {props.title}
             </Typography>
-            <label style={{ color: "#fff", backgroundColor: 'black', borderRadius: '35px 35px', padding: 6 }}>{props.tot}</label>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', textAlignLast: 'center' }}>
@@ -131,55 +131,6 @@ export const ProfileEdit = (props: any) => {
   const img = useRef<any>('');
   //const [user, setUser] = useState({} as any);
 
-  const clickSave = async () => {
-    //return console.log(nick.current.value)
-
-    let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
-
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ userName: nick.current.value })
-      });
-      // const json = await response.json();
-      // console.log(json);
-      // setUser(json);
-    } catch (error) {
-      console.log("error", error);
-    }
-    console.log(img.current.value)
-    url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`;
-
-
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ img: img.current.value })
-      });
-      // const json = await response.json();
-      // console.log(json);
-      // setUser(json);
-    } catch (error) {
-      console.log("error", error);
-    }
-
-  }
-
-  function handleNick() {
-    const inputbox = document.getElementById('txtNick');
-    inputbox?.removeAttribute('disabled')
-    inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
-  }
-
   const fontColor = {
     style: { color: 'rgb(0, 0, 0)' }
   }
@@ -187,16 +138,13 @@ export const ProfileEdit = (props: any) => {
   return (
 
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
-      <Button className="UploadImageBtn" component="label" sx={{ width: '100%', height: '380px', padding: 0 }}>
-        <CardMedia
-          component="img"
-          height="380"
-          image={props.img}
-          alt=""
-        />
-        <Typography className="UploadImageTxt">Upload Image</Typography>
-        <TextField type="file" hidden inputRef={img} />
-      </Button>
+
+      <CardMedia
+        component="img"
+        height="380"
+        image={props.img}
+        alt=""
+      />
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -205,9 +153,6 @@ export const ProfileEdit = (props: any) => {
             Nickname:
           </Typography>
           <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
-          <Button sx={{ color: 'black' }} onClick={handleNick}>
-            <EditIcon />
-          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -216,9 +161,6 @@ export const ProfileEdit = (props: any) => {
             Username:
           </Typography>
           <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -226,10 +168,7 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Score:
           </Typography>
-          <TextField inputProps={fontColor} id="txtScore" placeholder="224" variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
+          <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
         </div>
 
       </CardContent>

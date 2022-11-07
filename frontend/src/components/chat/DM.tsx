@@ -139,7 +139,7 @@ export const DM = (props: any) => {
 		<>
 			<List className={classes.messageArea}>
 				<ListItem key="">
-					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "content"}}>
+					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "contents"}}>
 						<ListItemIcon >
 							<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
 						</ListItemIcon>

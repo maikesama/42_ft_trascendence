@@ -10,11 +10,9 @@ import { useParams } from 'react-router';
 export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
   const params = useParams()
-
-  console.log("Prova" + params.idUser);
-
+  
   useEffect(() => {
-    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/${params.idUser}`;
     
     const fetchData = async () => {
       try {
@@ -34,7 +32,7 @@ export const OtherProfileContain = (props: any) => {
     
     fetchData();
   }, []);
-  
+
   const [rank, setRank] = useState({} as any);
   
   useEffect(() => {
@@ -161,29 +159,29 @@ export const OtherProfileContain = (props: any) => {
         </Typography>
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"1"} title={"Prince of the cluster"} explain={"Win 5 matches in a row"} unlocked={true} />
+        <Achievements number={"1"} title={"Prince of the cluster"} explain={"Win 5 matches in a row"} unlocked={user.achFiveinRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} unlocked={false} />
+        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} unlocked={user.achTeninRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} unlocked={false} />
+        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} unlocked={user.achTwentyinRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} unlocked={false} />
+        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} unlocked={user.achAce} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} unlocked={true} />
+        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} unlocked={user.achFirstWin} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} unlocked={false} />
+        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} unlocked={user.achRealLoser} />
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
-        <SocialEdit title="FRIENDS" tot="12" matches={true} />
-        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} />
-        <SocialEdit title="MATCHES" tot="122" matches={false} />
+        <SocialEdit title="FRIENDS" matches={true} user={params}/>
+        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank}/>
+        <SocialEdit title="MATCHES" matches={false} user={params}/>
       </Grid>
     </Grid>
   );

@@ -73,7 +73,7 @@ export const GroupInfo = (props: any) => {
 
         return (
             <ListItem style={style} key={index} >
-                <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${partecipants[index]?.userName}`} underline="none" color="inherit">
+                <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${partecipants[index]?.idIntra}`} underline="none" color="inherit">
                 <ListItemButton>
                     <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
                     <Divider variant='middle' />

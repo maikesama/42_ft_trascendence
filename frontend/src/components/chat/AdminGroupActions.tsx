@@ -25,6 +25,8 @@ import Checkbox from '@mui/material/Checkbox';
 import SettingsIcon from '@mui/icons-material/Settings';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { AdminSettings } from './AdminSettings';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -56,11 +58,15 @@ export const AdminGroupActions = (props: any) => {
         setOpenSettings(false);
     };
 
+    const [idIntraUser, setIdIntraUser] = useState('');
+
     const handleChange = (event: any) => {
         if (event.target.value === selectedName)
             setSelectedName('');
-        else
+        else {
             setSelectedName(event.target.value);
+            
+        }
 
         const user = partecipants.find((user: any) => user.idIntra === event.target.value);
 
@@ -352,7 +358,7 @@ export const AdminGroupActions = (props: any) => {
                 });
                 const json = await response.json();
                 console.log(json);
-                setChan(json);             
+                setChan(json);
             } catch (error) {
                 console.log("error", error);
             }
@@ -370,7 +376,8 @@ export const AdminGroupActions = (props: any) => {
             <ListItem style={style} key={index} >
                 <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
                 <Divider variant='middle' />
-                <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? `Owner` : partecipants[index]?.admin === true ? `Admin` : `User ${isMuted}`} />
+                <ListItemText primary={partecipants[index]?.idIntra} secondary={partecipants[index]?.owner === true ? `Owner` : partecipants[index]?.admin === true ? `Admin` : `User ${isMuted}`} />
+                <ListItemText primary={partecipants[index]?.userName} secondary="Nickname"/>
                 <Divider />
 
                 {partecipants[index]?.idIntra === mySelf.idIntra || partecipants[index]?.owner ? <>
@@ -590,13 +597,13 @@ export const AdminGroupActions = (props: any) => {
                         </FixedSizeList>
                     </> : null}
                     {banButton ? <>
-                        <Typography>Quanti minuti vuoi bannarlo?</Typography>
+                        <Typography>How many minutes would you like to ban him/her?</Typography>
                         <TextField style={{ width: 250 }} inputRef={bantime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
                         <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
                         <Button variant="outlined" onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
                     </> :
                         muteButton ? <>
-                            <Typography>Quanti minuti vuoi mutarlo?</Typography>
+                            <Typography>How many minutes would you like to mute him/her?</Typography>
                             <TextField style={{ width: 250 }} inputRef={mutetime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
                             <Button variant="outlined" onClick={() => setMuteButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
                             <Button variant="outlined" onClick={mute}><CheckCircleOutlinedIcon fontSize="large" /></Button>
@@ -612,7 +619,9 @@ export const AdminGroupActions = (props: any) => {
                                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                                         </> : clickLists === '' ?
                                             <>
-                                                <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                                                <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${selectedName}`} underline="none" color="inherit" >
+                                                    <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                                                </Link>
                                                 {selectedNamePower === "user" ? <>
 
                                                     <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
@@ -636,7 +645,7 @@ export const AdminGroupActions = (props: any) => {
                             </>}
                 </DialogContent>
             </Dialog>
-            <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan}/>
+            <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan} />
         </>
     );
 }
