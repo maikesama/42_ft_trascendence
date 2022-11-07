@@ -51,7 +51,7 @@ export const AdminSettings = (props: any) => {
                         <option value={"Private"}>Private</option>
                         <option value={"Protected"}>Protected</option>
                     </NativeSelect>
-                    {props.channel.type === "protected" ? <>
+                    {type === "Protected" ? <>
                         <DialogContentText paddingTop={'10px'}>
                             Change password:
                         </DialogContentText>

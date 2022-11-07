@@ -37,7 +37,9 @@ import { GroupInfo } from './GroupInfo';
 import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
+import { Link as RouterLink } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import Link from '@mui/material/Link';
 import "../css/Message.css";
 
 const useStyles = makeStyles({
@@ -77,7 +79,7 @@ const useStyles = makeStyles({
 const messaggi: string[] = [];
 
 export const DM = (props: any) => {
-	
+
 	function MessageSent(props: any) {
 		return (
 			<>
@@ -90,7 +92,7 @@ export const DM = (props: any) => {
 			</>
 		);
 	}
-	
+
 	function MessageReceived(props: any) {
 		return (
 			<>
@@ -137,17 +139,19 @@ export const DM = (props: any) => {
 		<>
 			<List className={classes.messageArea}>
 				<ListItem key="">
-					<ListItemIcon onClick={handleClickOpenUserActions}>
-						<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
-					</ListItemIcon>
-					<Typography variant='h5' className="userNameChat" onClick={handleClickOpenUserActions} style={{ width: '150px', marginLeft: '50px' }}>{props.idIntra}</Typography>
+					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "content"}}>
+						<ListItemIcon >
+							<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
+						</ListItemIcon>
+						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
+					</Link>
 					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				<Divider />
 				{messaggi.map((message: any, index: any) => (
 					<ListItem key={index}>
 						<MessageSent message={messaggi[index]} time={"4:22"} />
-						<MessageReceived message={messaggi[index]} time={"4:22"} friend={props.idIntra}/>
+						<MessageReceived message={messaggi[index]} time={"4:22"} friend={props.idIntra} />
 					</ListItem>
 				))}
 			</List>

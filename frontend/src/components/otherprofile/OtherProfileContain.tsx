@@ -2,20 +2,20 @@ import React, {useState, useEffect} from 'react';
 import Typography from '@mui/material/Typography';
 import Grid from '@material-ui/core/Grid';
 import { ProfileEdit, SocialEdit } from "./OtherProfileEdit";
-
 import "../css/ProfileEdit.css"
 import "../css/Navbar.css"
 import { Achievements } from './Achievements';
-
-
-import "../css/ProfileEdit.css"
+import { useParams } from 'react-router';
 
 export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
+  const params = useParams()
+
+  console.log("Prova" + params.idUser);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
-
+    
     const fetchData = async () => {
       try {
         const response = await fetch(url, {
@@ -31,12 +31,12 @@ export const OtherProfileContain = (props: any) => {
         console.log("error", error);
       }
     };
-
+    
     fetchData();
   }, []);
-
+  
   const [rank, setRank] = useState({} as any);
-
+  
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getPlayerRank`;
 
@@ -58,6 +58,7 @@ export const OtherProfileContain = (props: any) => {
 
     fetchRank();
   }, []);
+
   const colors = {
     fontFamily: 'MyWebFont',
     fontWeight: 'bold',
