@@ -45,6 +45,9 @@ const useStyles = makeStyles({
     },
 });
 
+//Array di testing
+const messaggi: string[] = [];
+
 export const Channel = (props: any) => {
 
     const classes = useStyles();
@@ -53,9 +56,52 @@ export const Channel = (props: any) => {
     const partecipants = props.partecipants;
     const permission = props.permission;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
+    const [message, setMessage] = useState('Haloa');
+
+    function MessageSent(props: any) {
+        return (
+            <>
+                <div className="container-message lighter">
+                    {/* <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" /> */}
+                    <Typography className="userSending">You</Typography>
+                    <Typography>{props.message}</Typography>
+                    <span className="time-right">{props.time}</span>
+                </div>
+            </>
+        );
+    }
+
+    function MessageReceived(props: any) {
+        return (
+            <>
+                <div className="container-message darker">
+                    {/* <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" /> */}
+                    <Typography className="userSending">{props.friend}</Typography>
+                    <Typography className="message">{props.message}</Typography>
+                    <span className="time-right">{props.time}</span>
+                </div>
+            </>
+        );
+    }
+
+    const handleMessage = (event: any) => {
+        if (event.target.value !== '') {
+            setMessage(event.target.value);
+        }
+        else {
+            setMessage('Messaggio vuoto');
+        }
+    }
+
+    const sendMessage = () => {
+        messaggi.push(message);
+        for (var i in messaggi) {
+            console.log(messaggi[i]);
+        }
+    }
 
 
-    
+
     const handleClickOpenGroupInfo = () => {
         setopenGroupInfo(true);
     };
@@ -73,7 +119,7 @@ export const Channel = (props: any) => {
     };
 
 
-    async function chanInfo(){
+    async function chanInfo() {
         if (permission?.owner || permission?.admin)
             handleClickOpenAdminActions();
         else
@@ -90,35 +136,14 @@ export const Channel = (props: any) => {
                     <Typography variant='h5' className="groupNameChat" style={{ width: '150px', marginLeft: '50px' }}>{props.name}</Typography>
                 </ListItem>
                 <Divider />
-                <ListItem key="1">
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <ListItemText primary="Hey man, What's up ?" secondary="09:30"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
-                <ListItem key="2">
-                    <Grid container justifyContent="flex-end">
-                        <Grid item xs={12}>
-                            <ListItemText style={{marginRight: '100px'}} primary="Hey, Iam Good! What about you ?" secondary="09:31"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
-                <ListItem key="3">
-                    <Grid container>
-                        <Grid item xs={12}>
-                            <ListItemText primary="Cool. i am good, let's catch up!" secondary="10:30"></ListItemText>
-                        </Grid>
-                    </Grid>
-                </ListItem>
             </List>
             <Divider />
             <Grid container style={{ padding: '20px' }}>
                 <Grid item xs={11}>
-                    <TextField id="outlined-basic-email" label="Type Something" fullWidth />
+                    <TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={handleMessage} />
                 </Grid>
                 <Grid xs={1} >
-                    <Fab color="primary" aria-label="add"><SendIcon /></Fab>
+                    <Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
                 </Grid>
             </Grid>
             {/*MODAL GROUP INFO */}

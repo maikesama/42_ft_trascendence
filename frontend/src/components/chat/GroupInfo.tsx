@@ -32,6 +32,8 @@ import SearchIcon from '@mui/icons-material/Search';
 import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
 import { UserActions } from './UserActions';
 
 export const GroupInfo = (props: any) => {
@@ -71,12 +73,14 @@ export const GroupInfo = (props: any) => {
 
         return (
             <ListItem style={style} key={index} >
-                <ListItemButton href={`/user/${partecipants[index]?.idIntra}`}>
+                <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${partecipants[index]?.userName}`} underline="none" color="inherit">
+                <ListItemButton>
                     <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
                     <Divider variant='middle' />
                     <ListItemText primary={partecipants[index]?.userName} secondary={partecipants[index]?.owner === true ? 'Owner' : partecipants[index]?.admin === true ? 'Admin' : 'User'}/>
                     <Divider />
                 </ListItemButton>
+                </Link>
             </ListItem>
         );
     }
