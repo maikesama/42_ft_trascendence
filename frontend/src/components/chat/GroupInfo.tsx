@@ -57,7 +57,7 @@ export const GroupInfo = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName }),
+                body: JSON.stringify({ id: props.idChat }),
             })
            window.location.reload();
         } catch (error) {

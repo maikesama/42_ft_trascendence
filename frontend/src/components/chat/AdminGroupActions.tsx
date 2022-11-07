@@ -78,7 +78,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ initials: initials.current.value, name: props.channelName }),
+                body: JSON.stringify({ initials: initials.current.value, id: props.idChat }),
             });
             const json = await response.json();
             console.log(json);
@@ -97,7 +97,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName }),
+                body: JSON.stringify({ id: props.idChat }),
             })
             window.location.reload();
         } catch (error) {
@@ -115,7 +115,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+                body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             })
             window.location.reload();
         } catch (error) {
@@ -133,7 +133,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: userGroup }),
+                body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
             window.location.reload();
         } catch (error) {
@@ -151,7 +151,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: selectedName, time: bantime.current.value }),
+                body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: bantime.current.value }),
             })
             window.location.reload();
         } catch (error) {
@@ -169,7 +169,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: selectedName, time: mutetime.current.value }),
+                body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: mutetime.current.value }),
             })
             window.location.reload();
         } catch (error) {
@@ -187,7 +187,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName }),
+                body: JSON.stringify({ id: props.idChat }),
             })
 
             const data = await response.json();
@@ -208,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName }),
+                body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
             console.log(data)
@@ -228,7 +228,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName }),
+                body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
             console.log(data)
@@ -250,7 +250,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+                body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
             window.location.reload();
         } catch (error) {
@@ -269,7 +269,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+                body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
             window.location.reload();
         } catch (error) {
@@ -288,7 +288,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: selectedName }),
+                body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             });
             window.location.reload();
         } catch (error) {
@@ -307,7 +307,7 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: props.channelName, idIntra: idIntra }),
+                body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
             window.location.reload();
         } catch (error) {
@@ -348,7 +348,7 @@ export const AdminGroupActions = (props: any) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ name: props.channelName }),
+                    body: JSON.stringify({ id: props.idChat }),
                 });
                 const json = await response.json();
                 console.log(json);

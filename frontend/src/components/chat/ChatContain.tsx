@@ -67,6 +67,7 @@ export const ChatContain = (props: any) => {
     const [openUserActions, setopenUserActions] = React.useState(false);
     const [chatView, setChatView] = useState('Blank');
     const [userNameIntra, setUserIntra] = useState('');
+    const [idChat, setidChat] = useState(-1);
     const [userImg, setUserImg] = useState('');
 
 
@@ -110,12 +111,13 @@ export const ChatContain = (props: any) => {
         setopenUserActions(false);
     };
 
-    const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, img: React.SetStateAction<string>) => {
+    const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, id: React.SetStateAction<number>, img: React.SetStateAction<string>) => {
         if (param != 'Blank' && param != 'DM') {
-            clickChannelInfo(String(name));
+            clickChannelInfo(Number(id));
         }
         setChatView(param);
         setUserIntra(name);
+        setidChat(id)
         setUserImg(img);
     }
 
@@ -168,7 +170,7 @@ export const ChatContain = (props: any) => {
     const [permission, setPermission] = useState({} as any);
     const [partecipants, setPartecipants] = useState({} as any);
 
-    async function clickChannelInfo(name: string) {
+    async function clickChannelInfo(id: number) {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChanUsers`;
         try {
             const response = await fetch(url, {
@@ -177,7 +179,7 @@ export const ChatContain = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ name: name }),
+                body: JSON.stringify({ id: id }),
             })
             const json = await response.json();
 
@@ -215,8 +217,9 @@ export const ChatContain = (props: any) => {
     function renderFriendRow(props: any) {
         const { index, style } = props;
 
+        /*to fix to real id of the chat*/
         return (
-            <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.userName, friends[index]?.img)}>
+            <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.userName, chats[index]?.id , friends[index]?.img)}>
                 <Avatar src={friends[index]?.img} />
                 <Divider variant='middle' />
                 <Typography variant='h6'>{(friends[index]?.userName)}</Typography>
@@ -228,7 +231,7 @@ export const ChatContain = (props: any) => {
         const { index, style } = props;
 
         return (
-            <ListItem button style={style} key={index} onClick={event => changeChat('Channel', chats[index]?.name, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII=')}>
+            <ListItem button style={style} key={index} onClick={event => changeChat('Channel', chats[index]?.name, chats[index]?.id, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII=')}>
                 <Avatar src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII=' />
                 <Divider variant='middle' />
                 <Typography variant='h6'>{(chats[index]?.name)}</Typography>
@@ -270,13 +273,13 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra={userNameIntra} img={userImg} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM idIntra={userNameIntra} img={userImg} /> : <Channel idChat={idChat} permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}
             <JoinGroup status={openJoinGroup} closeStatus={handleCloseJoinGroup} />
             {/*MODAL ADMIN IN GROUP ACTIONS */}
-            <AdminGroupActions status={openAdminActions} closeStatus={handleCloseAdminActions} channelName={userNameIntra}/>
+            <AdminGroupActions status={openAdminActions} closeStatus={handleCloseAdminActions} idChat={idChat}/>
             {/*MODAL GROUP INFO */}
             <GroupInfo status={openGroupInfo} closeStatus={handleCloseGroupInfo} />
             {/*MODAL CREATE CHANNEL */}

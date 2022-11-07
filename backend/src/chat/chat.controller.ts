@@ -30,6 +30,7 @@ export class ChatController{
         const user = req.user
         return await this.chatService.getUserPrivilegeInfo(body, user['sub'])
     }
+    //non esiste ancore=allora non so come testarlo
 
     @UseGuards(AtGuard)
     @HttpCode(200)
@@ -48,6 +49,7 @@ export class ChatController{
         const user = req.user
         return await this.chatService.newDm(body, user['sub'])
     }
+    //non esiste ancore=allora non so come testarlo
 
     // search user by initials letters - see jquery ajax frontend
     @UseGuards(AtGuard)
@@ -65,6 +67,7 @@ export class ChatController{
         const user = req.user
         return await this.chatService.searchGeneral(body, user['sub'])
     }
+      //non esiste ancore=allora non so come testarlo
 
     @UseGuards(AtGuard)
     @HttpCode(200)
@@ -72,7 +75,6 @@ export class ChatController{
     async muteUser(@Body() body, @Req() req){
         const user = req.user
         return await this.chatService.muteUser(body, user['sub'])
-        // control if theres a time limit in body
     }
 
     @UseGuards(AtGuard)
@@ -148,6 +150,8 @@ export class ChatController{
         return await this.chatService.changePassword(body, user['sub'])
     }
 
+    //non esiste ancore=allora non so come testarlo
+
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('changeVisibility')
@@ -155,6 +159,7 @@ export class ChatController{
         const user = req.user
         return await this.chatService.changeVisibility(body, user['sub'])
     }
+    //non esiste ancore=allora non so come testarlo
 
     @UseGuards(AtGuard)
     @HttpCode(200)

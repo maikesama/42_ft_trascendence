@@ -104,7 +104,7 @@ export const JoinGroup = (props: any) => {
     }, []);
 
 
-    async function joinChannel(name : string) {
+    async function joinChannel(id : number) {
         let pwd = "";
 
         if (pass.current.value)
@@ -117,7 +117,7 @@ export const JoinGroup = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({name: name, password: pwd})
+                body: JSON.stringify({id: id, password: pwd})
             });
             window.location.reload();
         } catch (error) {
@@ -141,7 +141,7 @@ export const JoinGroup = (props: any) => {
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
                 <TextField onChange={handleJoin} inputRef={pass} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
-                <Button color="primary" onClick={() => joinChannel(chats[index]?.name)}>Join</Button>
+                <Button color="primary" onClick={() => joinChannel(chats[index]?.id)}>Join</Button>
             </ListItem>
 
             </>
