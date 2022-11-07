@@ -87,7 +87,8 @@ export class AppGateway implements OnGatewayInit {
     const user = await this.wsGuard(client)
     if (user) {
       if (await this.userService.changeUserStatus(user.idIntra, 1))
-        this.server.emit('status', { idIntra: user.idIntra, status: 1 })
+        // this.server.emit('status', { idIntra: user.idIntra, status: 1 })
+        this.server.emit('trigger')
 
     }
 
@@ -112,7 +113,10 @@ export class AppGateway implements OnGatewayInit {
     const user = await this.wsGuard(client)
     if (user) {
       if (await this.userService.changeUserStatus(user.idIntra, 0))
-        this.server.emit('status', { idIntra: user.idIntra, status: 0 })
+      {
+        // this.server.emit('status', { idIntra: user.idIntra, status: 0 })
+        this.server.emit('trigger')
+      }
     }
     // this.sessionService.saveSession((client as any).idIntra, {
     //       status: "offline",

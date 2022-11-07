@@ -32,7 +32,8 @@ export const Leaderboard = () => {
         };
 
         fetchData();
-        socket.on('status', (data) => {
+        socket.on('trigger',() => {
+        // socket.on('status', (data) => {
                 // let newUser = user;
                 // console.log(JSON.stringify(newUser));
                 // Object.values(newUser).map((user: any) => {

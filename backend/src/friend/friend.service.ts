@@ -1,10 +1,11 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
+import { ChatService } from 'src/chat/chat.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 
 
 @Injectable()
 export class FriendService{
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaService, private chatService: ChatService) {}
 
     async isFriend(userId: string, friendId: string) {
         try{
@@ -87,7 +88,7 @@ export class FriendService{
                 }
             })
 
-            
+
             return invitedByInfo
         }
         catch(e){
@@ -101,7 +102,7 @@ export class FriendService{
     async inviteFriend(body: any, userId: number){
         try{
 
-            
+
             const userToInvite = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.idIntra
@@ -113,7 +114,7 @@ export class FriendService{
                     id: userId
                 }
             })
-            
+
             if (await this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new BadRequestException("Already invited");
             if (await this.isFriend(userRequest.idIntra, userToInvite.idIntra))
@@ -143,7 +144,7 @@ export class FriendService{
                     id: userId
                 }
             })
-            
+
             if (!await this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new BadRequestException("Not invited");
             if (await this.isFriend(userRequest.idIntra, userToInvite.idIntra))
@@ -189,6 +190,7 @@ export class FriendService{
                     friendById: invitedMe.idIntra,
                 }
             })
+            this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.id)
         }
         catch(e){
             throw new BadRequestException(e)
