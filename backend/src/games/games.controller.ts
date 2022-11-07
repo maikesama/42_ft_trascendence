@@ -35,7 +35,9 @@ export class GamesController{
     @Get('getPlayerRank')
     async getPlayerProfile(@Body() body, @Req() req){
         const user = req.user
-        return await this.GamesService.getPlayerProfile(body, user['sub'])
+        if (body['idIntra'] !== undefined)
+            user['idIntra'] = body['idIntra'];
+        return await this.GamesService.getPlayerProfile(body, user['idIntra'])
     }
 
     @UseGuards(AtGuard)
@@ -43,7 +45,9 @@ export class GamesController{
     @Get('getHistory')
     async getGameHistory(@Body() body, @Req() req){
         const user = req.user
-        return await this.GamesService.getGameHistory(body, user['sub'])
+        if (body['idIntra'] !== undefined)
+            user['idIntra'] = body['idIntra'];
+        return await this.GamesService.getGameHistory(body, user['idIntra'])
     }
 
 }

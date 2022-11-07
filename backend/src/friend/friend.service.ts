@@ -190,7 +190,7 @@ export class FriendService{
                     friendById: invitedMe.idIntra,
                 }
             })
-            this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.id)
+            this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.idIntra)
         }
         catch(e){
             throw new BadRequestException(e)
@@ -226,11 +226,11 @@ export class FriendService{
         }
     }
 
-    async getFriends(body: any, userId: number){
+    async getFriends(body: any, idIntra: string){
         try{
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: idIntra
                 }
             })
             const friends = await this.prisma.friend.findMany({
@@ -326,6 +326,32 @@ export class FriendService{
                     ]
                 }
             })
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
+    async defaultFriends(){
+        try{
+            const me = ["ltorrean", "taureli", "mpaci"]
+            const friends = ["ltorrean", "mpaci", "vbeffa", "vubeffa", "taureli", "liafigli"];
+            for (let i = 0; i < me.length; i++){
+                for (let j = 0; j < friends.length; j++){
+                    if (me[i] != friends[j]){
+                        if (!await this.isFriend(me[i], friends[j])){
+                            const friendship = await this.prisma.friend.create({
+                                data: {
+                                    friendId: me[i],
+                                    friendById: friends[j]
+                                }
+                            })
+                            this.chatService.newDm({idIntra: friends[j]}, me[i]);
+                            console.log("friendship", friends[j] + " " + me[i])
+                        }
+                    }
+                }
+            }
         }
         catch(e){
             throw new BadRequestException(e)

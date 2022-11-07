@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards, HttpCode, Get } from '@nestjs/common'
+import { Controller, Post, Body, Req, UseGuards, HttpCode, Get, Res } from '@nestjs/common'
 import { AtGuard } from 'src/auth/guards';
 import { FriendService } from './friend.service';
 
@@ -43,7 +43,9 @@ export class FriendController{
     @Get('getFriends')
     async getFriends(@Body() body, @Req() req){
         const user = req.user
-        return await this.friendService.getFriends(body, user['sub'])
+        if (body['idIntra'] !== undefined)
+            user['idIntra'] = body['idIntra'];
+        return await this.friendService.getFriends(body, user['idIntra'])
     }
 
 
@@ -62,12 +64,18 @@ export class FriendController{
         const user = req.user
         return await this.friendService.getInvitedByMe(user['sub'])
     }
-    
+
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('removeFriend')
     async removeFriend(@Body() body, @Req() req){
         const user = req.user
         return await this.friendService.removeFriend(body, user['sub'])
+    }
+
+    @Get('/new/all')
+    async defaultFriends(@Res() res){
+        await this.friendService.defaultFriends();
+        return res.redirect('/profile');
     }
 }

@@ -56,10 +56,10 @@ export class AppGateway implements OnGatewayInit {
         const payload = this.verifyId(token)
         if (payload)
         {
-          const user = await this.userService.verifyUserByIdIntra(payload['id'])
+          const user = await this.userService.verifyUserByIdIntra(payload['idIntra'])
           if (user)
           {
-            console.log(user)
+            // console.log("user", user)
             return user
           }
         }

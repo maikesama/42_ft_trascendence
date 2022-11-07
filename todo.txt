@@ -17,3 +17,6 @@ add new user
 ///////////////////////////////
 // TODO
 gameHistory w/body.idIntra
+
+if no user in Profile -> redirect to / home
+friend in profilo?

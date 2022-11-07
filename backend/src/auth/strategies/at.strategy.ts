@@ -41,7 +41,7 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt')
 
 	validate(payload: any) {
 		console.log(JSON.stringify(payload))
-		if (!payload || !payload.id)
+		if (!payload || !payload.idIntra || !payload.sub)
 		{
 			console.log("no payload")
 			throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED)

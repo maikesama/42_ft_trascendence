@@ -72,9 +72,9 @@ export class GamesService{
                 where: {
                     id: idUser
                 },
-                
+
             })
-            
+
         }
         catch(e){
             throw new BadRequestException(e)
@@ -100,13 +100,13 @@ export class GamesService{
         }
     }
 
-    async getPlayerProfile(body: any, userId: number){
+    async getPlayerProfile(body: any, idIntra: string){
         try{
             const player = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: idIntra
                 },
-            
+
             })
             const leaderboard = await this.prisma.user.findMany({
                 orderBy: {
@@ -158,7 +158,7 @@ export class GamesService{
                     idIntra: body.winner
                 },
             })
-            
+
             const loser = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.loser
@@ -265,7 +265,7 @@ export class GamesService{
     minus(a: number, b: number) {
         return a - b;
     }
-    
+
     async getLeaderboard(body: any){
         try{
             //lista di tutti gli utenti
@@ -281,7 +281,7 @@ export class GamesService{
                 delete user.otpUrl
                 delete user.twoFa
             })
-            
+
             return leaderboard
         }
         catch(e){
@@ -289,12 +289,12 @@ export class GamesService{
         }
     }
 
-    async getGameHistory(body: any, userId: number){
-    
+    async getGameHistory(body: any, idIntra: string){
+
         try{
             const user = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: idIntra
                 },
             })
             const gameHistory = await this.prisma.games.findMany({

@@ -191,7 +191,7 @@ export class ChatService{
                     id: userId
                 }
             })
-            
+
             const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where:
                 {
@@ -230,7 +230,7 @@ export class ChatService{
                         mutedUntil: part.mutedUntil,
                         muted: await this.isMuted(body.id, part.idIntra)
                     }
-                } 
+                }
             });
 
             const ret2 = await (await Promise.all(ret)).filter((el: any) => el !== undefined)
@@ -305,12 +305,12 @@ export class ChatService{
             })
 
 
-            
+
             const addInvetedRet = await users.map(async(user: any) => {
                 const invited = await this.prismaService.invited.findUnique({
                     where: {
                         invitedId_invitedById: {
-                            
+
                             invitedId: user.idIntra,
                             invitedById: me.idIntra
                         }
@@ -326,8 +326,8 @@ export class ChatService{
                 //             }
                 //         }
                 //     })
-                
-                
+
+
                 const ret = {
                     idIntra: user.idIntra,
                     img: user.img,
@@ -337,11 +337,11 @@ export class ChatService{
                 console.log(ret)
                 return ret
             })
-            
-            const tmp = await Promise.all(addInvetedRet)
-            
 
-            
+            const tmp = await Promise.all(addInvetedRet)
+
+
+
 
             const removeBlocked = await tmp.map(async(user: any) => {
                 const blocked = await this.prismaService.blocklist.findMany({
@@ -361,18 +361,18 @@ export class ChatService{
                 if (blocked.length === 0)
                     return user
             })
-            
+
 
             const ret = await Promise.all(removeBlocked);
-            
 
-            
+
+
             if (ret)
                 return ret;
         }
         catch(err){
             throw new BadRequestException(err)
-        }   
+        }
     }
 
     // async checkDmName(name: string){
@@ -388,17 +388,17 @@ export class ChatService{
 	// 	return name
 	// }
 
-    async newDm(body: any, userId: number){
+    async newDm(body: any, idIntra: string){
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
-                    id: userId
+                    idIntra: idIntra
                 }
             })
 
             if (user.idIntra !== body.idIntra){
 
-            
+
 
             const chat = await this.prismaService.chat.create({
                 data: {
@@ -490,7 +490,7 @@ export class ChatService{
 
 
     async newChannel(body: any, userId: number){
-        
+
         try{
             if (body.name === '')
                 throw new BadRequestException('name is empty')
@@ -537,10 +537,10 @@ export class ChatService{
                     })
                     return part
                 }))
-            }  
+            }
         }
         catch(err){
-            
+
             throw new BadRequestException(err)
         }
     }
@@ -584,7 +584,7 @@ export class ChatService{
                     id: id
                 }
             })
-            
+
             await this.prismaService.partecipant.deleteMany({
                 where: {
                     idChat: channel.id
@@ -630,7 +630,7 @@ export class ChatService{
         catch(err){
             throw new BadRequestException(err)
         }
-    
+
     }
 
     async isMuted(id: number, idIntra: string){
@@ -652,12 +652,12 @@ export class ChatService{
                 return true
             return false
         }
-        catch(err){   
+        catch(err){
             throw new BadRequestException(err)
         }
-    
+
     }
-    
+
     async muteUser(body: any, userId: number){
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -671,7 +671,7 @@ export class ChatService{
                     id: userId
                 }
             })
-            
+
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't mute yorself")
                 if (await this.isMuted(body.id, user.idIntra))
@@ -767,7 +767,7 @@ export class ChatService{
             }
             return false
         }
-        catch(err){ 
+        catch(err){
             throw new BadRequestException(err)
         }
     }
@@ -775,7 +775,7 @@ export class ChatService{
     async changePassword(body: any, userId: number){
         try
         {
-            
+
             if (await this.isAdmin(body.id, userId)){
                 const chan = await this.prismaService.chat.update({
                     where: {
@@ -839,7 +839,7 @@ export class ChatService{
     }
 
     async joinChannel(body: any, userId: number){
-        
+
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
@@ -881,19 +881,19 @@ export class ChatService{
             }
             else if (channel.type === 'private'){
                 let invited = channel.invited;
-                
+
                 const found = invited.find(element => element === user.idIntra);
-            
+
                 if (!found)
                     throw new BadRequestException('Not invited');
-                    
+
                 const partecipant = await this.prismaService.partecipant.create({
                     data: {
                         idChat: channel.id,
                         idIntra: user.idIntra,
                     }
                 })
-                
+
             }
         }
         catch(err){
@@ -903,7 +903,7 @@ export class ChatService{
 
     async unMuteUser(body: any, userId: number){
         try{
-            
+
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -925,7 +925,7 @@ export class ChatService{
             })
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't unmute yorself")
-           
+
             if (!await this.isMuted(body.id, user.idIntra))
                 throw   new BadRequestException('User is not muted');
             const partecipant = await this.prismaService.partecipant.update({
@@ -937,7 +937,7 @@ export class ChatService{
                     mutedUntil: null
                 }
             })
-            
+
         }
         catch(err){
             console.log(err)
@@ -967,7 +967,7 @@ export class ChatService{
             })
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't unban yorself")
-           
+
             if (!await this.isBanned(body.id, user.idIntra))
                 throw   new BadRequestException('User is not muted');
             const partecipant = await this.prismaService.partecipant.update({
@@ -979,7 +979,7 @@ export class ChatService{
                     bannedUntil: null,
                 }
             })
-            
+
         }
         catch(err){
             console.log(err)
@@ -988,27 +988,27 @@ export class ChatService{
     }
 
     async leaveChannel(body: any, userId: number){
-        
+
         try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
                 }
             })
-            
-            
+
+
             if (!await this.isAlreadyIn(body.id, user.idIntra))
                 throw new BadRequestException('User is not in the channel');
             else if (await this.isBanned(body.id, user.idIntra))
                 throw new BadRequestException('User is Banned');
-                
+
             const channel = await this.prismaService.chat.findUniqueOrThrow({
                 where: {
                     id: body.id
                 }
             })
-                
-                
+
+
             if (await this.isChanOwner(channel.id, user.idIntra))
             {
                 await this.prismaService.partecipant.delete({
@@ -1024,11 +1024,11 @@ export class ChatService{
                 where: {
                     idIntra_idChat: {idIntra: user.idIntra, idChat: channel.id}
                 }
-            })   
+            })
             }
         }
         catch(err){
-            
+
             throw new BadRequestException(err)
         }
     }
@@ -1072,7 +1072,7 @@ export class ChatService{
             }
             else if (!body.time || body.time === undefined || body.time <= new Date())
             {
-                
+
                 const partecipant = await this.prismaService.partecipant.update({
                     where: {
                         idIntra_idChat: {idIntra: body.idIntra, idChat: channel.id}
@@ -1133,7 +1133,7 @@ export class ChatService{
                 throw new BadRequestException('not enough rights');
             if (await this.isAlreadyIn(body.id, user.idIntra))
                 throw new BadRequestException('User is already in the channel');
-            
+
 
             const partecipant = await this.prismaService.partecipant.create({
                 data: {
@@ -1152,7 +1152,7 @@ export class ChatService{
     async removeUser(body: any, userId: number)
     {
 
-        try{    
+        try{
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.idIntra
@@ -1170,7 +1170,7 @@ export class ChatService{
                     id: userId
                 }
             })
-            
+
             if (user.idIntra !== body.idIntra)
                 throw new BadRequestException("Can't remove yorself")
             if ((!await this.isAdmin(body.id, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra)))
@@ -1212,7 +1212,7 @@ export class ChatService{
                     id: userId
                 }
             })
-            
+
             const channel = await this.prismaService.chat.findFirstOrThrow({
                 where: {
                     id: body.id
@@ -1222,7 +1222,7 @@ export class ChatService{
                 throw new BadRequestException("Can't add yorself")
             if (!await this.isAdmin(body.id, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra))
                 throw new BadRequestException('User is not an admin or owner');
-            
+
 
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
@@ -1240,7 +1240,7 @@ export class ChatService{
                     }
                 })
             }
-            
+
         }
         catch(err)
         {
@@ -1269,7 +1269,7 @@ export class ChatService{
                 throw new BadRequestException("Can't remove yorself")
             if (!await this.isAdmin(body.id, userId) && !await this.isChanOwner(channel.id, user.idIntra))
                 throw new BadRequestException('Not enough rights');
-            
+
 
             const partecipant = await this.prismaService.partecipant.findUniqueOrThrow({
                 where: {
