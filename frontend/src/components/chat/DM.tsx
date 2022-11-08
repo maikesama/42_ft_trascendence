@@ -41,6 +41,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import Link from '@mui/material/Link';
 import "../css/Message.css";
+import { socket } from "../../App";
 
 const useStyles = makeStyles({
 	table: {

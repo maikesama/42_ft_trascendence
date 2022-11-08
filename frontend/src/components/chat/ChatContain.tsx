@@ -19,6 +19,7 @@ import { UserActions } from './UserActions';
 import { Blank } from './Blank';
 import { DM } from './DM';
 import { Channel } from './Channel';
+import { socket } from "../../App";
 
 const useStyles = makeStyles({
     table: {

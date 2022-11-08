@@ -20,3 +20,8 @@ gameHistory w/body.idIntra
 
 if no user in Profile -> redirect to / home
 friend in profilo?
+return error update images
+gestire errori!
+
+
+più di 4 friend non li mostra in profile

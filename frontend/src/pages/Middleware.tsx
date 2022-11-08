@@ -4,7 +4,7 @@ import TextField from "@mui/material/TextField";
 import './css/Homepage.css';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Typography from '@mui/material/Typography';
-
+import { socket } from "../App";
 
 
 export const Middleware = () => {
@@ -59,15 +59,15 @@ export const Middleware = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ userName: nick.current.value })
-            }).then((response) => {
-                if (response.status === 400) {
-                    alert("Username already exists");
-                    document.location.reload();
-                }
-                else if (response.status === 201) {
-                    document.location.reload();
-                }
-            });
+            })
+            if (response.status === 201) {
+                socket.emit('trg');
+            }
+            else
+            {
+                const data = await response.json();
+                window.alert(data.message);
+            }
             // const json = await response.json();
             // // console.log(json);
             // // setUser(json);

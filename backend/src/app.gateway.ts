@@ -109,6 +109,16 @@ export class AppGateway implements OnGatewayInit {
     // }
   }
 
+  @SubscribeMessage('trg')
+  async trigger(client: Socket, ...args: any[]) {
+    const user = await this.wsGuard(client)
+    //capire se fare controllo user
+    if (user) {
+      console.log("TRIGEEEERRRRRRRRRRRRRRRRRRRRRRR")
+      this.server.emit('trigger')
+    }
+  }
+
   async handleDisconnect(client: Socket) {
     const user = await this.wsGuard(client)
     if (user) {

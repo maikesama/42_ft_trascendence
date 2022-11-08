@@ -23,7 +23,7 @@ import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
-
+import { socket } from "../../App";
 
 const fontColor = {
   style: { WebkitTextFillColor: "rgba(0,0,0)" }
@@ -54,6 +54,7 @@ export const SocialEdit = (props: any) => {
         });
         const json = await response.json();
         console.log(json);
+        console.log("QUIIIIIIIIIIIIIII");
         setFriends(json);
       } catch (error) {
         console.log("error", error);
@@ -289,13 +290,19 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ userName: nick.current.value })
       });
-      // const json = await response.json();
-      // console.log(json);
-      // setUser(json);
+      if (response.status === 201) {
+        socket.emit('trg');
+      }
+      else
+      {
+        const data = await response.json();
+        window.alert(data.message);
+      }
     } catch (error) {
       console.log("error", error);
     }
-    window.location.reload()
+    // window.location.reload()
+
   }
 
   const onChange = (
@@ -343,7 +350,9 @@ async function deleteImg() {
           method: 'POST',
           credentials: 'include',
       })
-      window.location.reload();
+      if (response.status === 201) {
+        window.location.reload();
+      }
   } catch (error) {
       console.log("error", error);
   }
