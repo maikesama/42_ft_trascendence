@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Typography from '@mui/material/Typography';
 import Grid from '@material-ui/core/Grid';
 import { ProfileEdit, SocialEdit } from "./ProfileEdit";
@@ -13,50 +13,51 @@ export const ProfileContain = (props: any) => {
 
   const [user, setUser] = useState({} as any);
 
-        useEffect(() => {
-        const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
 
-        const fetchData = async () => {
-        try {
-                const response = await fetch(url, {
-                credentials: 'include',
-                headers:{
-                'Content-Type': 'application/json',
-                }
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         });
-                const json = await response.json();
-                console.log(json);
-                setUser(json);
-        } catch (error) {
-                console.log("error", error);
-        }
-        };
+        const json = await response.json();
+        console.log(json);
+        setUser(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
 
-        fetchData();
-        }, []);
+    fetchData();
+  }, []);
 
-        const [rank, setRank] = useState({} as any);
+  const [rank, setRank] = useState({} as any);
 
-        useEffect(() => {
+  useEffect(() => {
 
-        const fetchRank = async () => {
-        try {
-                const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/games/getPlayerRank`, {
-                credentials: 'include',
-                headers:{
-                'Content-Type': 'application/json',
-                }
+    const fetchRank = async () => {
+      try {
+        const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/games/getPlayerRank`, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          }
         });
-                const json = await response.json();
-                console.log(json);
-                setRank(json);
-        } catch (error) {
-                console.log("error", error);
-        }
-        };
+        const json = await response.json();
+        console.log(json);
+        setRank(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
 
-        fetchRank();
-        }, []);
+    fetchRank();
+  }, []);
 
   const colors = {
     fontFamily: 'MyWebFont',
@@ -163,26 +164,26 @@ export const ProfileContain = (props: any) => {
         <Achievements number={"1"} title={"Prince of the cluster"} explain={"Win 5 matches in a row"} unlocked={user.achFiveinRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} unlocked={user.achTeninRow}/>
+        <Achievements number={"2"} title={"King of the venue"} explain={"Win 10 matches in a row"} unlocked={user.achTeninRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} unlocked={user.achTwentyinRow}/>
+        <Achievements number={"3"} title={"Legend of the 42"} explain={"Win 20 matches in a row"} unlocked={user.achTwentyinRow} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} unlocked={user.achAce}/>
+        <Achievements number={"4"} title={"ACE!"} explain={"Defeat an enemy that has scored 0 points"} unlocked={user.achAce} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} unlocked={user.achFirstWin}/>
+        <Achievements number={"5"} title={"Lucky Noob"} explain={"Win your first match"} unlocked={user.achFirstWin} />
       </Grid>
       <Grid item xs={2} style={colors.achievementCont} className='achievement'>
-        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} unlocked={user.achRealLoser}/>
+        <Achievements number={"6"} title={"Welcome to the underworld"} explain={"Reach a negative score"} unlocked={user.achRealLoser} />
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
         <SocialEdit title="FRIENDS" tot="12" matches={true} />
-        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank}/>
-        <SocialEdit title="MATCHES" tot="122" matches={false} />
+        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank} />
+        <SocialEdit title="LAST 5 MATCHES" tot="122" matches={false} />
       </Grid>
     </Grid>
   );

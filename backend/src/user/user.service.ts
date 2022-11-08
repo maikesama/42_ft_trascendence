@@ -314,8 +314,8 @@ export class UserService {
 	async changepp(body, id: number)
 	{
 		try {
-			if(!body.dataURL)
-				return
+			// if(!body.dataURL)
+			// 	return
 			await this.prisma.user.update({
 				where:{
 					id: id

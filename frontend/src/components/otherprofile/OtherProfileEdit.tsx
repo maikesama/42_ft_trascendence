@@ -33,7 +33,7 @@ export const SocialEdit = (props: any) => {
   const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
-  const user = props.params;
+  const user = props.user;
 
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
@@ -64,11 +64,21 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem button style={style} key={index} >
-        <Avatar />
-        <ListItemText className="matchLossResult" primary={`You`} />
-        <ListItemText className="matchLossResult" primary={`3 - 5`} />
-        <ListItemText className="matchLossResult" primary={`Adversary`} />
-        <Avatar />
+        {games[index]?.user1 === user?.idIntra ? <>
+        <Avatar src={games[index]?.img1} />
+        <ListItemText primary={games[index]?.user1} />
+        <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+        <ListItemText primary={games[index]?.user2} />
+        <Avatar src={games[index]?.img2}/> </> :
+        <>
+        <Avatar src={games[index]?.img2} />
+        <ListItemText primary={games[index]?.user2} />
+        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+        <ListItemText primary={games[index]?.user1} />
+        <Avatar src={games[index]?.img1}/>
+        </>
+      }
+
       </ListItem>
     );
   }
@@ -78,14 +88,63 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar />
-        <ListItemText primary={`Friend`} />
+        <Avatar src={friends[index]?.img} />
+        <ListItemText  id="idIntraFriend" primary={(friends[index]?.idIntra)}/>
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-        <Divider variant="middle" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
       </ListItem>
     );
   }
+
+  const [games, setGames] = useState({} as any);
+
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getHistory`;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: user.idUser}),
+        });
+        const json = await response.json();
+        setGames(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const [friends, setFriends] = useState({} as any);
+
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getFriends`;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: user.idUser}),
+        });
+        const json = await response.json();
+        console.log(json);
+        setFriends(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <div>
@@ -105,7 +164,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? 12 : 5}
+              itemCount={props.matches ? Object.values(friends).length  : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}

@@ -41,10 +41,12 @@ export const OtherProfileContain = (props: any) => {
     const fetchRank = async () => {
       try {
         const response = await fetch(url, {
+          method: 'POST',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
-          }
+          },
+          body: JSON.stringify({idIntra: params.idUser}),
         });
         const json = await response.json();
         console.log(json);

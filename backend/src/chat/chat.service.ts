@@ -228,7 +228,8 @@ export class ChatService{
                         owner: part.owner,
                         admin: part.admin,
                         mutedUntil: part.mutedUntil,
-                        muted: await this.isMuted(body.id, part.idIntra)
+                        muted: await this.isMuted(body.id, part.idIntra),
+                        type: channel.type
                     }
                 }
             });

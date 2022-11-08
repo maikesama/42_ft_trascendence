@@ -40,7 +40,7 @@ export class FriendController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('getFriends')
+    @Post('getFriends')
     async getFriends(@Body() body, @Req() req){
         const user = req.user
         if (body['idIntra'] !== undefined)

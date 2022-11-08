@@ -32,7 +32,7 @@ export class GamesController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('getPlayerRank')
+    @Post('getPlayerRank')
     async getPlayerProfile(@Body() body, @Req() req){
         const user = req.user
         if (body['idIntra'] !== undefined)
@@ -42,7 +42,7 @@ export class GamesController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
-    @Get('getHistory')
+    @Post('getHistory')
     async getGameHistory(@Body() body, @Req() req){
         const user = req.user
         if (body['idIntra'] !== undefined)

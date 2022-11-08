@@ -47,6 +47,7 @@ export const SocialEdit = (props: any) => {
     const fetchData = async () => {
       try {
         const response = await fetch(url, {
+          method: 'POST',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
@@ -136,6 +137,7 @@ export const SocialEdit = (props: any) => {
     const fetchData = async () => {
       try {
         const response = await fetch(url, {
+          method: 'POST',
           credentials: 'include',
           headers: {
             'Content-Type': 'application/json',
@@ -241,7 +243,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? Object.values(friends).length % 5  : Object.values(games).length % 5}
+              itemCount={props.matches ? Object.values(friends).length  : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}

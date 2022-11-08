@@ -54,7 +54,9 @@ export const AdminGroupActions = (props: any) => {
         setOpenSettings(true);
     };
 
-    const handleCloseSettings = () => {
+    const handleCloseSettings = (event:any, reason:any) => {
+        if (reason && reason == "backdropClick") 
+            return;
         setOpenSettings(false);
     };
 
@@ -357,7 +359,7 @@ export const AdminGroupActions = (props: any) => {
                     body: JSON.stringify({ id: props.idChat }),
                 });
                 const json = await response.json();
-                console.log(json);
+                //console.log("Aoooooone " + JSON.stringify(json));
                 setChan(json);
             } catch (error) {
                 console.log("error", error);
@@ -645,7 +647,7 @@ export const AdminGroupActions = (props: any) => {
                             </>}
                 </DialogContent>
             </Dialog>
-            <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan} />
+            <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan} type={props.type} idChat={props.idChat}/>
         </>
     );
 }

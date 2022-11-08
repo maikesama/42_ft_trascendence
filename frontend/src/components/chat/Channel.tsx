@@ -149,7 +149,7 @@ export const Channel = (props: any) => {
             {/*MODAL GROUP INFO */}
             <GroupInfo status={openGroupInfo} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseGroupInfo} idChat={props.idChat} channelName={props.name} />
             {/*MODAL ADMIN INFO */}
-            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseAdminActions} idChat={props.idChat} channelName={props.name} />
+            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseAdminActions} idChat={props.idChat} channelName={props.name} type={props.type}/>
         </>
     );
 }
