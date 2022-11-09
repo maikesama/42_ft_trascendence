@@ -110,8 +110,8 @@ export const DM = (props: any) => {
 	const classes = useStyles();
 	const [openUserActions, setopenUserActions] = React.useState(false);
 	// const [message, setMessage] = useState('Haloa');
-	const [messages, setMessages] = useState([{}]);
-	// const [arrayMessages, setArrayMessages] = useState([]);
+	const [messages, setMessages] = useState([[{}]]);
+	const [map, setMap] = useState(new Map());
 	const [message, setMessage] = useState('');
 	const [idChat, setIdChat] = useState(props.idChat);
 	const isSecondRender = useRef(false);
@@ -138,13 +138,19 @@ export const DM = (props: any) => {
 			socket.emit('provaJoin', { idIntra: props.idIntra, idChat: props.idChat });
 		}
 
-		// console.log("messaggi:");
+		  const updateMap = (key: any, value:any) => {
+			const currentValues = map.get(key) || []; // get current values for the key, or use empty array
+			setMap(map2 => new Map(map.set(key, [...currentValues, value])));
+		  }
+
 		if (isSecondRender.current){
 			socket.on('provaMessaggi', (data: any) => {
 				console.log("data: ", data);
-				// messaggi.push(data);
-				setMessages( (messages) => [...messages, data]);
-				// console.log("messaggi: ", JSON.stringify(messages));
+				// updateMap(props.idChat, data.message);
+				updateMap(props.idChat, data);
+
+				//da sistemare
+				setMessages( (messages: any) => [...messages, data]);
 			});
 		}
 		isSecondRender.current = true;
@@ -159,7 +165,8 @@ export const DM = (props: any) => {
 		// 	console.log(messaggi[i]);
 		// }
 	}
-	console.log(messages)
+	// console.log(messages)
+	console.log("map: ", map);
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};
@@ -184,7 +191,7 @@ export const DM = (props: any) => {
 				{messages.map((message: any, index: any) => (
 					<ListItem key={index}>
 						{ message.sender  && <MessageSent message={message.message} time={"4:22"} />}
-						{ !message.sender && <MessageReceived message={message.message} time={"4:22"} friend={message.idIntra} />}
+						{ !message.sender &&  message.idIntra && <MessageReceived message={message.message} time={"4:22"} friend={message.idIntra} />}
 					</ListItem>
 				))}
 			</List>
