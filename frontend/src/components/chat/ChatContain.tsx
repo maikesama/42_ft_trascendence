@@ -27,10 +27,11 @@ const useStyles = makeStyles({
     },
     chatSection: {
         width: '100%',
-        height: '80vh'
+        height: '80vh',
+        backgroundColor: 'white',
     },
     headBG: {
-        backgroundColor: '#e0e0e0'
+        backgroundColor: ' #e0e0e0'
     },
     borderRight500: {
         borderRight: '1px solid #e0e0e0'
@@ -280,8 +281,9 @@ export const ChatContain = (props: any) => {
     }
 
     return (
+        // component Paper bugs the header
         <div>
-            <Grid container style={{ top: 20 }} component={Paper} className={classes.chatSection}>
+            <Grid container style={{ top: 20 }} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
                     <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
                         <TextField className="searchBar" inputRef={initials} id="outlined-basic-email" label="Search" variant="outlined" fullWidth onChange={searchUser} />
