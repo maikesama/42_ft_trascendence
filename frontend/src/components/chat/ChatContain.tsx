@@ -19,7 +19,7 @@ import { UserActions } from './UserActions';
 import { Blank } from './Blank';
 import { DM } from './DM';
 import { Channel } from './Channel';
-import socket from '../../App';
+import { socket } from "../../App";
 
 const useStyles = makeStyles({
     table: {
@@ -240,6 +240,108 @@ export const ChatContain = (props: any) => {
             console.log("error", error);
         }
     }
+    
+    const [map, setMap] = useState(new Map());
+    // const [mapped, setMapped] = useState(false);
+    const isSecondRender = useRef(false);
+
+    React.useEffect(() => {
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getMessages`;
+        const fetchData = async () => {
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ count: 50 }),
+                });
+                const json = await response.json();
+                let ret = new Map(json.map((json : any) => [json.chat.id, json.chat.messages]))
+                console.log(ret);
+                for (let entry of Array.from(ret.entries())) {
+
+                    socket.emit('provaJoin', { idChat: entry[0] });
+                    console.log(JSON.stringify(entry[1]));
+                }
+                setMap(ret);
+                return ret;
+            } catch (error) {
+                console.log("error", error);
+            }
+        };
+        if (isSecondRender.current) {
+            fetchData();
+        }
+
+        const updateMap = (key: any, value:any) => {
+            // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
+            console.log(map)
+            const currentValues = map.get(key);
+            console.log("currentValues", currentValues);
+            console.log("key", key);
+            // setMap(map2 => new Map(map.set(key, [...currentValues, value])));
+
+        }
+
+		if (isSecondRender.current){
+			socket.on('provaMessaggi', (data: any) => {
+				console.log("data: ", data);
+				updateMap(data.idChat, data);
+			});
+        }
+        isSecondRender.current = true;
+
+    }, []);
+
+    React.useEffect(() => {
+        const updateMap = (key: any, value:any) => {
+            const currentValues = map.get(key) || []; // get current values for the key, or use empty array
+            console.log("currentValues", currentValues);
+            console.log("key", key);
+            setMap(map2 => new Map(map.set(key, [...currentValues, value])));
+
+        }
+
+		if (isSecondRender.current){
+			socket.on('provaMessaggi', (data: any) => {
+				console.log("data: ", data);
+				updateMap(data.idChat, data);
+			});
+        }
+        isSecondRender.current = true;
+
+    });
+
+    console.log(map);
+    // console.log (map);
+
+
+    // React.useEffect(() => {
+    // const getMessages = async () => {
+
+    //     const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getMessages`;
+    //     try {
+    //         const response = await fetch(url, {
+    //             method: 'POST',
+    //             credentials: 'include',
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //             },
+    //             body: JSON.stringify({ count: 50 }),
+    //         });
+    //         const json = await response.json();
+    //         console.log("aoooooo1" + json);
+    //         setMap(json.map((chat: any) => {
+    //             map.set(chat.idChat, chat.messages);
+    //         }));
+    //         console.log("aooooooo2" + map);
+    //     } catch (error) {
+    //         console.log("error", error);
+    //     }
+    //     getMessages();
+    // }}, []);
 
     // function renderFriendRow(props: any) {
     //     const { index, style } = props;
@@ -313,7 +415,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} type={chanType}/>}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)}/> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} type={chanType}/>}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

@@ -1,11 +1,12 @@
 // /src/hooks/useAuth.tsx
 import React, { useState, createContext, useContext, useEffect } from "react";
-const AuthContext = createContext({ authed: false, setAuthed: (authed: boolean) => {} , loading : true});
+const AuthContext = createContext({ authed: false, setAuthed: (authed: boolean) => {} , loading : true, idIntra: 'nul'});
 
 export const AuthProvider = ({ children }:any) => {
 const [authed, setAuthed] = useState<boolean>(false);
     // Store new value to indicate the call has not finished. Default to true
 const [loading, setLoading] = useState<boolean>(true);
+const [idIntra, setIdinta] = useState('nul');
 
     // Runs once when the component first mounts
     useEffect(() => {
@@ -24,6 +25,7 @@ const [loading, setLoading] = useState<boolean>(true);
                 setLoading(false);
             }
             else {
+                setIdinta(json.idIntra);
                 setAuthed(true);
                 setLoading(false);
             }
@@ -42,7 +44,7 @@ const [loading, setLoading] = useState<boolean>(true);
 
     return (
         // Expose the new `loading` value so we can consume it in `App.tsx`
-        <AuthContext.Provider value={{ authed, setAuthed, loading }}>
+        <AuthContext.Provider value={{ authed, setAuthed, loading, idIntra }}>
             {children}
         </AuthContext.Provider>
     );

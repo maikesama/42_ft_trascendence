@@ -42,6 +42,7 @@ import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined
 import Link from '@mui/material/Link';
 import { socket } from "../../App";
 import "../css/Message.css";
+import { useAuth } from '../../hooks/useAuth';
 
 const useStyles = makeStyles({
 	table: {
@@ -80,7 +81,7 @@ const useStyles = makeStyles({
 const messaggi: string[] = [];
 
 export const DM = (props: any) => {
-
+	const { idIntra } = useAuth();
 	function MessageSent(props: any) {
 		return (
 			<>
@@ -111,10 +112,10 @@ export const DM = (props: any) => {
 	const [openUserActions, setopenUserActions] = React.useState(false);
 	// const [message, setMessage] = useState('Haloa');
 	const [messages, setMessages] = useState([[{}]]);
-	const [map, setMap] = useState(new Map());
+	// const [map, setMap] = useState(new Map());
 	const [message, setMessage] = useState('');
 	const [idChat, setIdChat] = useState(props.idChat);
-	const isSecondRender = useRef(false);
+	// const isSecondRender = useRef(false);
 
 	const handleMessage = (event: any) => {
 		if (event.target.value !== '') {
@@ -127,46 +128,19 @@ export const DM = (props: any) => {
 
 	console.log("idChat: " + props.idChat + " idChat: " + idChat);
 	React.useEffect(() => {
-		// socket.on('connect', () => {
-			// socket.emit('join', { username: props.username, room: props.room });
-			// console.log("socket ");
-			// socket.emit('provaJoin', { idIntra: props.idIntra, idChat: props.idChat });
-			// console.log("Connected");
-		// });
-		if (isSecondRender.current && (idChat !== props.idChat || idChat)) {
+
+		if ( idChat !== props.idChat || idChat) {
 			setIdChat(props.idChat);
-			socket.emit('provaJoin', { idIntra: props.idIntra, idChat: props.idChat });
+			setMessages(props.messages);
 		}
-
-		  const updateMap = (key: any, value:any) => {
-			const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-			setMap(map2 => new Map(map.set(key, [...currentValues, value])));
-		  }
-
-		if (isSecondRender.current){
-			socket.on('provaMessaggi', (data: any) => {
-				console.log("data: ", data);
-				// updateMap(props.idChat, data.message);
-				updateMap(props.idChat, data);
-
-				//da sistemare
-				setMessages( (messages: any) => [...messages, data]);
-			});
-		}
-		isSecondRender.current = true;
-	}, [props.idChat]);
+	}, [props.idChat, props.messages]);
 
 	const sendMessage = () => {
 		console.log("message: " + message);
-		socket.emit('prova', { idIntra: props.idIntra, idChat: props.idChat, message: message });
-		// messaggi.push(message);
-		// console.log(messaggi);
-		// for (var i in messaggi) {
-		// 	console.log(messaggi[i]);
-		// }
+		socket.emit('prova', { idChat: props.idChat, message: message });
+
 	}
 	// console.log(messages)
-	console.log("map: ", map);
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};
@@ -190,8 +164,8 @@ export const DM = (props: any) => {
 				<Divider />
 				{messages.map((message: any, index: any) => (
 					<ListItem key={index}>
-						{ message.sender  && <MessageSent message={message.message} time={"4:22"} />}
-						{ !message.sender &&  message.idIntra && <MessageReceived message={message.message} time={"4:22"} friend={message.idIntra} />}
+						{ message.idIntra === idIntra && <MessageSent message={message.message} time={message.sendedAt} />}
+						{ message.idIntra !== idIntra && <MessageReceived message={message.message} time={message.sendedAt} friend={message?.users?.userName} />}
 					</ListItem>
 				))}
 			</List>

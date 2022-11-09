@@ -114,25 +114,22 @@ export class AppGateway implements OnGatewayInit {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
   @UseGuards(AtGuard)
   @SubscribeMessage('prova')
-  async prova(client: Socket, message: { idIntra: string, idChat: number, message: string }) {
+  async prova(client: Socket, message: { idChat: number, message: string }) {
     const user = await this.wsGuard(client)
-    //controllare se l'utente va bene
-    //nickname ? o idIntra ?
-    let sender = 0
     if (user) {
       console.log("provaMessaggi", message)
-      if (message.idIntra && message.idChat && message.message) {
-        if (user.idIntra !== message.idIntra) {
-          sender = 1
-        }
-        this.server.to(message.idChat.toString()).emit('provaMessaggi', { idIntra: user.idIntra, idChat: message.idChat, message: message.message, sender : sender })
+      if (message.idChat && message.message) {
+        const date = new Date()
+        this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
       }
+      
+
     }
   }
 
   @UseGuards(AtGuard)
   @SubscribeMessage('provaJoin')
-  async provaJoin(client: Socket, message: { idIntra: string, idChat: number }) {
+  async provaJoin(client: Socket, message: { idChat: number }) {
     console.log("ciaooosjdsjjdnnjasndnjasdnjansj")
     const user = await this.wsGuard(client)
     //controllare se l'utente va bene

@@ -229,4 +229,16 @@ export class ChatController{
         const user = req.user
         return await this.chatService.getDms(body, user['idIntra'])
     }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('getMessages')
+    async getMessages(@Body() body, @Req() req){
+        const user = req.user
+        //body.count 
+        if (body.count == undefined){
+            body.count = 50
+        }
+        return await this.chatService.getMessages(body, user['idIntra'])
+    }
 }

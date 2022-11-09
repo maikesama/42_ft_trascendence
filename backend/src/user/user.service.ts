@@ -65,6 +65,7 @@ export class UserService {
 				},
 				select: {
 					idIntra: true,
+					userName : true,
 				}
 			})
 			return user
