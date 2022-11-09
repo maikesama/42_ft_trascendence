@@ -120,12 +120,24 @@ export class AppGateway implements OnGatewayInit {
       console.log("provaMessaggi", message)
       if (message.idChat && message.message) {
         const date = new Date()
-        this.saveMessage( user.idIntra, message.idChat, message.message)
+        if (!await this.chat.isAlreadyIn(message.idChat, user.idIntra))
+          throw new BadRequestException("You are not in this chat")
+        else if (await this.chat.isBanned(message.idChat, user.idIntra))
+          client.to(message.idChat.toString()).emit('provaMessaggi', {message : "Bannato", idIntra : "DIO", sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
+        else if (await this.chat.isMuted(message.idChat, user.idIntra))
+          client.to(message.idChat.toString()).emit('provaMessaggi', {message : "Muto", idIntra : "DIO", sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
+        else {
+          this.saveMessage( user.idIntra, message.idChat, message.message)
+        }
         this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
       }
+      else
+        throw new BadRequestException("idChat or message not found")
       
 
     }
+    else
+      throw new BadRequestException("Unauthorized")
   }
 
   @UseGuards(AtGuard)
@@ -172,19 +184,6 @@ export class AppGateway implements OnGatewayInit {
   //   }
   // }
 
-  // async isChatAdmin(idIntra: string, idChat: number) {
-  //   try {
-  //     const partecipant = await this.prisma.partecipant.findUnique({
-  //       where: {
-  //         idIntra_idChat: { idIntra, idChat }
-  //       }
-  //     })
-  //     return partecipant.admin
-  //   }
-  //   catch (e: any) {
-  //     return false
-  //   }
-  // }
 
   async saveMessage( idIntra: string, idChat: number, message: string) {
     try {

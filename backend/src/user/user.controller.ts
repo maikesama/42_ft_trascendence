@@ -50,22 +50,22 @@ export class UserController{
 	   return await this.userservice.unblock(idIntra, user['sub'])
 	}
 
-	@UseGuards(AtGuard)
-	@Post('turn-on-2fa')
-	async turnOn2fa(@Req() req)
-	{
-		const user = req.user
-		console.log(user)
-		return await this.twofa.turnOnTwoFa(user['sub'])
-	}
+	// @UseGuards(AtGuard)
+	// @Post('turn-on-2fa')
+	// async turnOn2fa(@Req() req)
+	// {
+	// 	const user = req.user
+	// 	console.log(user)
+	// 	return await this.twofa.turnOnTwoFa(user['sub'])
+	// }
 
-	@UseGuards(AtGuard)
-	@Post('turn-off-2fa')
-	async turnOff2fa(@Req() req)
-	{
-		const user = req.user
-		return await this.userservice.turnOffTwoFa(user['sub'])
-	}
+	// @UseGuards(AtGuard)
+	// @Post('turn-off-2fa')
+	// async turnOff2fa(@Req() req)
+	// {
+	// 	const user = req.user
+	// 	return await this.userservice.turnOffTwoFa(user['sub'])
+	// }
 
 	@UseGuards(AtGuard)
 	@Post('update/pp')

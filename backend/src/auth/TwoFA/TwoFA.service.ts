@@ -49,8 +49,8 @@ export class TwoFactorAuthenticationService {
 			}
 		});
 
-		if (!secret.twoFa)
-			return
+		// if (!secret.twoFa)
+		// 	return
 		if (secret.otpUrl)
 		{
 			console.log(secret.otpUrl)
@@ -87,5 +87,38 @@ export class TwoFactorAuthenticationService {
 			return true;
 		}
 		return false;
+	}
+
+	async verify2fa2(body: any, res: Response){
+		let user = await this.prisma.user.findUniqueOrThrow({
+			where:{
+				id : body.id
+			},
+			select:{
+				idIntra : true,
+				otpSecret : true,
+				id: true,
+				email: true
+			}
+		});
+
+		let verified = speakeasy.totp.verify({
+			secret: user.otpSecret,
+			encoding: 'base32',
+			token: body.totp });
+
+		if (verified)
+		{
+			this.prisma.user.update({
+				where: {
+					id: user.id,
+				},
+				data: {
+					twoFa: true,
+				}
+			})
+			return {mesage: "ok", status: 200};
+		}
+		return {mesage: "Invalid token", status: 401};
 	}
 }

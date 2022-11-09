@@ -4,6 +4,7 @@ import {PrismaService} from "../prisma/prisma.service"
 import { Response, Request } from 'express'
 import { AtGuard } from "./guards";
 import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
+import { UserService } from "src/user/user.service";
 
 let tokens;
 
@@ -11,7 +12,9 @@ let tokens;
 export class AuthController{
 	constructor(private readonly prisma: PrismaService,
 		 private authservice: AuthService,
-		  private twoFaService: TwoFactorAuthenticationService) {}
+		  private twoFaService: TwoFactorAuthenticationService,
+		  private userService: UserService,
+		  ) {}
 
 		//@Public()
 		@Get()
@@ -32,20 +35,45 @@ export class AuthController{
         	res.redirect(`http://${process.env.HOST}/`);
 		}
 
-		@Get('2fa/:id')
-		@Bind(Param('id'))
-		async findone(id) {
-			let x = await this.twoFaService.complete2fa(id)
-				return {QRcode : x}
-		}
+		// @Get('2fa/:id')
+		// @Bind(Param('id'))
+		// async findone(id) {
+		// 	let x = await this.twoFaService.complete2fa(id)
+		// 		return {QRcode : x}
+		// }
 
 
 
-		@Post('verify2fa')
+		@Post('2fa/vetify')
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
 				.then((e) => {e? res.redirect(`http://${process.env.HOST}/`) : res.redirect(`http://${process.env.HOST}/`); return e})
 		}
+
+		@UseGuards(AtGuard)
+		@Post('2fa/turn-on')
+		async verify2fa2(@Body() body, @Res() res:Response){
+			return this.twoFaService.verify2fa2(body, res)
+		}
+
+		@UseGuards(AtGuard)
+		@Post('2fa/generate')
+		async generate2fa(@Body() body, @Req() req){
+			let x = await this.twoFaService.complete2fa(req['user']['sub'])
+			return {QRcode : x}
+		}
+
+		@UseGuards(AtGuard)
+		@Post('2fa/turn-off')
+		async turnOffTfa(@Body() body, @Req() req){
+			return this.userService.turnOffTwoFa(req['user']['sub'])
+		}
+
+
+
+
+
+
 
 		// @Post('turn-on-2fa')
 		// async turnOn2fa(@Body() body) {

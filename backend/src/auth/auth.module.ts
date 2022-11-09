@@ -7,18 +7,20 @@ import { AuthController } from "./auth.controller";
 import { AuthService } from "./auth.service";
 import { AtStrategy } from "./strategies";
 import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
+import { UserModule } from "src/user/user.module";
+import { UserService } from "src/user/user.service";
 // import { SessionSerializer } from "./Serializer";
 
 @Module({
-	// imports: [JwtModule.register({})],
 	imports: [
 		PassportModule,
 		JwtModule.register({
 			secret: process.env.AtSecret,
 			signOptions: { expiresIn: '1h' },
-		})
+		}),
+		// UserModule, 
 	],
 	controllers: [AuthController],
-	providers: [ AuthService, AtStrategy, TwoFactorAuthenticationService ]
+	providers: [ AuthService, AtStrategy, TwoFactorAuthenticationService, UserService ]
 })
 export class AuthModule {}
