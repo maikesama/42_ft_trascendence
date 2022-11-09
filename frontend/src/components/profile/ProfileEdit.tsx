@@ -16,6 +16,10 @@ import ListItemText from '@material-ui/core/ListItemText';
 import PersonRemoveOutlinedIcon from '@mui/icons-material/PersonRemoveOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Switch from '@mui/material/Switch';
+import UploadIcon from '@mui/icons-material/Upload';
+import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+
 
 import "../css/ProfileEdit.css"
 import { SearchBar } from './SearchBar';
@@ -192,19 +196,19 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem button style={style} key={index} >
         {games[index]?.user1 === user?.idIntra ? <>
-        <Avatar src={games[index]?.img1} />
-        <ListItemText primary={games[index]?.user1} />
-        <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-        <ListItemText primary={games[index]?.user2} />
-        <Avatar src={games[index]?.img2}/> </> :
-        <>
-        <Avatar src={games[index]?.img2} />
-        <ListItemText primary={games[index]?.user2} />
-        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-        <ListItemText primary={games[index]?.user1} />
-        <Avatar src={games[index]?.img1}/>
-        </>
-      }
+          <Avatar src={games[index]?.img1} />
+          <ListItemText primary={games[index]?.user1} />
+          <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+          <ListItemText primary={games[index]?.user2} />
+          <Avatar src={games[index]?.img2} /> </> :
+          <>
+            <Avatar src={games[index]?.img2} />
+            <ListItemText primary={games[index]?.user2} />
+            <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+            <ListItemText primary={games[index]?.user1} />
+            <Avatar src={games[index]?.img1} />
+          </>
+        }
 
       </ListItem>
     );
@@ -216,7 +220,7 @@ export const SocialEdit = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar src={friends[index]?.img} />
-        <ListItemText  id="idIntraFriend" primary={(friends[index]?.idIntra)}/>
+        <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
         <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
@@ -231,7 +235,7 @@ export const SocialEdit = (props: any) => {
         <CardContent>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-            <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
+            <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               {props.title}
             </Typography>
           </div>
@@ -243,7 +247,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? Object.values(friends).length  : (Object.values(games).length < 5) ? Object.values(games).length : 5}
+              itemCount={props.matches ? Object.values(friends).length : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}
@@ -257,7 +261,7 @@ export const SocialEdit = (props: any) => {
           {props.matches ? <Button onClick={handleClickOpenBlockedList}>Blocked</Button> : <Button onClick={handleClickOpenMatchesList}>Game History</Button>}
         </CardActions>
       </Card>
-      <InvitedList  status={openInvited} closeStatus={handleClickCloseInvited}/>
+      <InvitedList status={openInvited} closeStatus={handleClickCloseInvited} />
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*Blocked List Modal*/}
@@ -338,19 +342,19 @@ export const ProfileEdit = (props: any) => {
   }
 
 
-async function deleteImg() {
-  const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/delete/pp`;
-  try {
+  async function deleteImg() {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/delete/pp`;
+    try {
       const response = await fetch(url, {
-          method: 'POST',
-          credentials: 'include',
+        method: 'POST',
+        credentials: 'include',
       })
       window.location.reload();
-  } catch (error) {
+    } catch (error) {
       console.log("error", error);
-  }
+    }
 
-}
+  }
 
   return (
 
@@ -369,15 +373,15 @@ async function deleteImg() {
           onImageUpload,
         }) => (
           // write your building UI
-          <button onClick={onImageUpload}>Upload Image</button>
+          <button style={{backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5}} onClick={onImageUpload}><UploadIcon fontSize="large"/></button>
         )}
       </ImageUploading>
-      <button onClick={deleteImg}>X</button>
+      <button style={{backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5}} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large"/></button>
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
+          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             Nickname:
           </Typography>
           <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
@@ -388,7 +392,7 @@ async function deleteImg() {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
+          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             Username:
           </Typography>
           <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
@@ -399,7 +403,7 @@ async function deleteImg() {
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
+          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             Score:
           </Typography>
           <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
@@ -408,10 +412,17 @@ async function deleteImg() {
           </Button>
         </div>
 
-      </CardContent>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+
+          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
+            2FA:
+          </Typography>
+          <Switch/>
+        </div>
+        </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
         <Button onClick={clickSave}>Save</Button>
       </CardActions>
-    </Card>
+    </Card >
   );
 }
