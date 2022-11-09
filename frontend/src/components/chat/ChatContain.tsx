@@ -19,6 +19,7 @@ import { UserActions } from './UserActions';
 import { Blank } from './Blank';
 import { DM } from './DM';
 import { Channel } from './Channel';
+import socket from '../../App';
 
 const useStyles = makeStyles({
     table: {
@@ -126,31 +127,52 @@ export const ChatContain = (props: any) => {
         setChanType(type);
     }
 
-    const [friends, setFriends] = useState({} as any);
+    // const [friends, setFriends] = useState({} as any);
+
+    // React.useEffect(() => {
+    //     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getFriends`;
+
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(url, {
+    //                 method: 'POST',
+    //                 credentials: 'include',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 }
+    //             });
+    //             const json = await response.json();
+    //             console.log(json);
+    //             setFriends(json);
+    //         } catch (error) {
+    //             console.log("error", error);
+    //         }
+    //     };
+    //     fetchData();
+    // }, []);
+
+    const [chats, setChats] = useState({} as any);
+    const [dms, setDms] = useState({} as any);
 
     React.useEffect(() => {
-        const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getFriends`;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getDms`;
 
-        const fetchData = async () => {
+        const fetchDataDms = async () => {
             try {
                 const response = await fetch(url, {
-                    method: 'POST',
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
                     }
                 });
                 const json = await response.json();
-                console.log(json);
-                setFriends(json);
+                setDms(json);
             } catch (error) {
                 console.log("error", error);
             }
         };
-        fetchData();
+        fetchDataDms();
     }, []);
-
-    const [chats, setChats] = useState({} as any);
 
     React.useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatUsers`;
@@ -219,15 +241,28 @@ export const ChatContain = (props: any) => {
         }
     }
 
-    function renderFriendRow(props: any) {
-        const { index, style } = props;
+    // function renderFriendRow(props: any) {
+    //     const { index, style } = props;
 
+    //     /*to fix to real id of the chat*/
+    //     return (
+    //         <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.userName, chats[index]?.id , friends[index]?.img, friends[index]?.idIntra, '')}>
+    //             <Avatar src={friends[index]?.img} />
+    //             <Divider variant='middle' />
+    //             <Typography variant='h6'>{(friends[index]?.userName)}</Typography>
+    //         </ListItem>
+    //     );
+    // }
+    function renderDmsRow(props: any) {
+        const { index, style } = props;
         /*to fix to real id of the chat*/
+        // console.log("DMSSS INDEX", JSON.stringify(dms[index]));
+        // console.log("DMSSS userName", dms[index]["partecipant"][0]["user"]);
         return (
-            <ListItem button style={style} key={index} onClick={event => changeChat('DM', friends[index]?.userName, chats[index]?.id , friends[index]?.img, friends[index]?.idIntra, '')}>
-                <Avatar src={friends[index]?.img} />
+            <ListItem button style={style} key={index} onClick={event => changeChat('DM', dms[index]["partecipant"][0]["user"]?.userName, dms[index]?.id , dms[index]["partecipant"][0]["user"]?.img, dms[index]["partecipant"][0]["user"]?.idIntra, '')}>
+                <Avatar src={dms[index]["partecipant"][0]["user"]?.img} />
                 <Divider variant='middle' />
-                <Typography variant='h6'>{(friends[index]?.userName)}</Typography>
+                <Typography variant='h6'>{(dms[index]["partecipant"][0]["user"]?.userName)}</Typography>
             </ListItem>
         );
     }
@@ -256,13 +291,13 @@ export const ChatContain = (props: any) => {
                     <Divider />
                     <h4>DM</h4>
                     <FixedSizeList
-                        height={Object.values(friends).length == 0 ? 90 : Object.values(friends).length > 5 ? 450 : ((Object.values(friends).length) * 90)}
+                        height={Object.values(dms).length == 0 ? 90 : Object.values(dms).length > 5 ? 450 : ((Object.values(dms).length) * 90)}
                         width='full'
                         itemSize={90}
-                        itemCount={Object.values(friends).length}
+                        itemCount={Object.values(dms).length}
                         overscanCount={5}
                     >
-                        {renderFriendRow}
+                        {renderDmsRow}
                     </FixedSizeList>
                     <Divider />
                     <h4>Channels</h4>
@@ -278,7 +313,7 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} type={chanType}/>}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} type={chanType}/>}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

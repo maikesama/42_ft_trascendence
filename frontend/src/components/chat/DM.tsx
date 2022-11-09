@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
@@ -40,6 +40,7 @@ import { UserActions } from './UserActions';
 import { Link as RouterLink } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import Link from '@mui/material/Link';
+import { socket } from "../../App";
 import "../css/Message.css";
 
 const useStyles = makeStyles({
@@ -108,8 +109,12 @@ export const DM = (props: any) => {
 
 	const classes = useStyles();
 	const [openUserActions, setopenUserActions] = React.useState(false);
-	const [message, setMessage] = useState('Haloa');
-
+	// const [message, setMessage] = useState('Haloa');
+	const [messages, setMessages] = useState([{}]);
+	// const [arrayMessages, setArrayMessages] = useState([]);
+	const [message, setMessage] = useState('');
+	const [idChat, setIdChat] = useState(props.idChat);
+	const isSecondRender = useRef(false);
 
 	const handleMessage = (event: any) => {
 		if (event.target.value !== '') {
@@ -120,13 +125,41 @@ export const DM = (props: any) => {
 		}
 	}
 
-	const sendMessage = () => {
-		messaggi.push(message);
-		for (var i in messaggi) {
-			console.log(messaggi[i]);
+	console.log("idChat: " + props.idChat + " idChat: " + idChat);
+	React.useEffect(() => {
+		// socket.on('connect', () => {
+			// socket.emit('join', { username: props.username, room: props.room });
+			// console.log("socket ");
+			// socket.emit('provaJoin', { idIntra: props.idIntra, idChat: props.idChat });
+			// console.log("Connected");
+		// });
+		if (isSecondRender.current && (idChat !== props.idChat || idChat)) {
+			setIdChat(props.idChat);
+			socket.emit('provaJoin', { idIntra: props.idIntra, idChat: props.idChat });
 		}
-	}
 
+		// console.log("messaggi:");
+		if (isSecondRender.current){
+			socket.on('provaMessaggi', (data: any) => {
+				console.log("data: ", data);
+				// messaggi.push(data);
+				setMessages( (messages) => [...messages, data]);
+				// console.log("messaggi: ", JSON.stringify(messages));
+			});
+		}
+		isSecondRender.current = true;
+	}, [props.idChat]);
+
+	const sendMessage = () => {
+		console.log("message: " + message);
+		socket.emit('prova', { idIntra: props.idIntra, idChat: props.idChat, message: message });
+		// messaggi.push(message);
+		// console.log(messaggi);
+		// for (var i in messaggi) {
+		// 	console.log(messaggi[i]);
+		// }
+	}
+	console.log(messages)
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};
@@ -148,10 +181,10 @@ export const DM = (props: any) => {
 					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				<Divider />
-				{messaggi.map((message: any, index: any) => (
+				{messages.map((message: any, index: any) => (
 					<ListItem key={index}>
-						<MessageSent message={messaggi[index]} time={"4:22"} />
-						<MessageReceived message={messaggi[index]} time={"4:22"} friend={props.idIntra} />
+						{ message.sender  && <MessageSent message={message.message} time={"4:22"} />}
+						{ !message.sender && <MessageReceived message={message.message} time={"4:22"} friend={message.idIntra} />}
 					</ListItem>
 				))}
 			</List>
@@ -169,3 +202,5 @@ export const DM = (props: any) => {
 		</>
 	);
 }
+
+

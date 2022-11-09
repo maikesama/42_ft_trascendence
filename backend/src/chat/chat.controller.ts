@@ -5,8 +5,8 @@ import { ChatService } from './chat.service';
 @Controller('chat')
 export class ChatController{
     constructor(private chatService: ChatService){}
-	
-    
+
+
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('newChannel')
@@ -203,7 +203,7 @@ export class ChatController{
         return await this.chatService.getChannels(user['sub'])
     }
 
-    //get all partecipants in channel 
+    //get all partecipants in channel
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('getChanUsers')
@@ -220,5 +220,13 @@ export class ChatController{
     async getChatUsers(@Body() body, @Req() req){
         const user = req.user
         return await this.chatService.getChatUsers(body, user['sub'])
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Get('getDms')
+    async getDms(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getDms(body, user['idIntra'])
     }
 }

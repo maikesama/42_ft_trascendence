@@ -92,6 +92,7 @@ export class AppGateway implements OnGatewayInit {
 
     }
 
+
     //     let chats = await this.prisma.partecipant.findMany({
     //       where: {
     //         idIntra: me.idIntra
@@ -108,6 +109,40 @@ export class AppGateway implements OnGatewayInit {
     //   throw new BadRequestException(e)
     // }
   }
+
+//prova
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  @UseGuards(AtGuard)
+  @SubscribeMessage('prova')
+  async prova(client: Socket, message: { idIntra: string, idChat: number, message: string }) {
+    const user = await this.wsGuard(client)
+    //controllare se l'utente va bene
+    //nickname ? o idIntra ?
+    let sender = 0
+    if (user) {
+      console.log("provaMessaggi", message)
+      if (message.idIntra && message.idChat && message.message) {
+        if (user.idIntra !== message.idIntra) {
+          sender = 1
+        }
+        this.server.to(message.idChat.toString()).emit('provaMessaggi', { idIntra: idIntra, idChat: message.idChat, message: message.message, sender : sender })
+      }
+    }
+  }
+
+  @UseGuards(AtGuard)
+  @SubscribeMessage('provaJoin')
+  async provaJoin(client: Socket, message: { idIntra: string, idChat: number }) {
+    console.log("ciaooosjdsjjdnnjasndnjasdnjansj")
+    const user = await this.wsGuard(client)
+    //controllare se l'utente va bene
+    //nickname ? o idIntra ?
+    if (user) {
+      console.log("provaJoin", message)
+      client.join(message.idChat.toString())
+    }
+  }
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
   async handleDisconnect(client: Socket) {
     const user = await this.wsGuard(client)

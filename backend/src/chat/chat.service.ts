@@ -283,6 +283,70 @@ export class ChatService{
         }
     }
 
+    async getDms(body, idIntra: string){
+        try{
+            const user = await this.prismaService.user.findUniqueOrThrow({
+                where: {
+                    idIntra: idIntra
+                },
+                include: {
+                    partecipant: true
+                }
+            })
+
+            const chats = await user.partecipant.map(async(partecipant: any) => {
+                if (partecipant.bannedUntil === null || partecipant.bannedUntil < new Date())
+                {
+                    console.log(partecipant.idIntra);
+                    const chat = await this.prismaService.chat.findUnique({
+                        where: {
+                            id: partecipant.idChat,
+                        },
+                        select : {
+                            id: true,
+                            type: true,
+                            name: true,
+                            partecipant:
+                            {
+                                select: {
+                                    user: {
+                                        select: {
+                                            idIntra: true,
+                                            userName: true,
+                                            img: true
+                                        },
+                                    }
+                                }
+                            }
+
+                        }
+                    })
+                    // console.log(chat.partecipant);
+                    if (chat.partecipant[0].user.idIntra === idIntra)
+                    {
+                        delete chat.partecipant[0];
+                    }
+                    else
+                    {
+                        delete chat.partecipant[1];
+                    }
+                    if (chat.type === 'dm')
+                    {
+                        // remove null element
+                        chat.partecipant = chat.partecipant.filter((el: any) => el !== undefined)
+                        return chat
+                    }
+                }
+            })
+
+            const ret = await (await Promise.all(chats)).filter((el: any) => el !== undefined)
+            return ret
+        }
+        catch(e){
+            throw new BadRequestException(e)
+        }
+    }
+
     async searchUser(body: any, userId: number){
         try{
             if (body.initials === '')
