@@ -149,6 +149,11 @@ export const DM = (props: any) => {
 		setopenUserActions(false);
 	};
 
+	console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	console.log(messages)
 	return (
 		<>
 			<List className={classes.messageArea}>

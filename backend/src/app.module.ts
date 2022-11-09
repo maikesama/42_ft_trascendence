@@ -30,12 +30,12 @@ import { UserService } from './user/user.service';
     //   isGlobal: true
     // }),
     // PassportModule.register({ session: true }),
-    ClientsModule.register([
-      {
-        name:"NOTIFICATION_SERVICE",
-        transport: Transport.TCP
-      }
-    ])
+    // ClientsModule.register([
+    //   {
+    //     name:"NOTIFICATION_SERVICE",
+    //     transport: Transport.TCP
+    //   }
+    // ])
     // CacheModule.register({
     //   store: redisStore,
     //   url: 'redis://redis:6379'

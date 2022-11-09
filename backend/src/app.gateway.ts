@@ -120,6 +120,7 @@ export class AppGateway implements OnGatewayInit {
       console.log("provaMessaggi", message)
       if (message.idChat && message.message) {
         const date = new Date()
+        this.saveMessage( user.idIntra, message.idChat, message.message)
         this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
       }
       
@@ -185,21 +186,21 @@ export class AppGateway implements OnGatewayInit {
   //   }
   // }
 
-  // async saveMessage(message: { sender: string, idChat: number, text: string }) {
-  //   try {
-  //     const newMessage = await this.prisma.message.create({
-  //       data: {
-  //         idChat: message.idChat,
-  //         idIntra: message.sender,
-  //         message: message.text
-  //       }
-  //     })
-  //     return newMessage
-  //   }
-  //   catch (e: any) {
-  //     return false
-  //   }
-  // }
+  async saveMessage( idIntra: string, idChat: number, message: string) {
+    try {
+      const newMessage = await this.prisma.message.create({
+        data: {
+          idChat: idChat,
+          idIntra: idIntra,
+          message: message
+        }
+      })
+      return newMessage
+    }
+    catch (e: any) {
+      return false
+    }
+  }
 
   // clientToUser = {}
 

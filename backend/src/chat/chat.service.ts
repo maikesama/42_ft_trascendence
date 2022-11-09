@@ -793,9 +793,9 @@ export class ChatService {
                                     },
                                 },
                                 orderBy: {
-                                    sendedAt: 'desc'
+                                    sendedAt: 'asc'
                                 },
-                                take: count,
+                                take: -count,
                             },
                         }
                     }

@@ -15,7 +15,7 @@ import { TwoFactorAuthenticationService } from "./TwoFA/TwoFA.service";
 		PassportModule,
 		JwtModule.register({
 			secret: process.env.AtSecret,
-			signOptions: { expiresIn: '1d' },
+			signOptions: { expiresIn: '1h' },
 		})
 	],
 	controllers: [AuthController],
