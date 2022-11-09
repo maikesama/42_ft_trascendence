@@ -170,6 +170,9 @@ export const CreateChannel = (props: any) => {
     const initials = useRef<any>('');
 
     async function searchUser() {
+        let init = "";
+        if (initials.current.value)
+            init = initials.current.value;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
@@ -178,7 +181,7 @@ export const CreateChannel = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ initials: initials.current.value }),
+                body: JSON.stringify({ initials: init }),
             });
             const json = await response.json();
             console.log(json);
@@ -186,6 +189,12 @@ export const CreateChannel = (props: any) => {
         } catch (error) {
             console.log("error", error);
         }
+    }
+
+    function handleCancel()
+    {
+        //initials.current.value = useRef<any>(undefined);
+        props.closeStatus();
     }
 
     return (
@@ -239,8 +248,9 @@ export const CreateChannel = (props: any) => {
                 <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                     Add members to your channel group:
                 </DialogContentText>
+                {/* inputRef initials bug reopen createChannel */}
                 <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>
-                {initials.current.value == 0 || initials.current.value == null ? <>
+                {initials.current.value === 0 || initials.current.value === null ? <>
                 <FixedSizeList
 
                     height={Object.values(friends).length * 90}
@@ -266,7 +276,7 @@ export const CreateChannel = (props: any) => {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={props.closeStatus}>Cancel</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
                 <Button onClick={createChannel}>Create</Button>
             </DialogActions>
         </Dialog>

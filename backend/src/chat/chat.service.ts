@@ -484,7 +484,8 @@ export class ChatService {
                 return true
             return false
         }
-        catch (err) {
+        catch(err){
+            console.log(err)
             throw new BadRequestException(err)
         }
     }
