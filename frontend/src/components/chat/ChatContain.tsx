@@ -79,9 +79,12 @@ export const ChatContain = (props: any) => {
         setopenCreateGroup(true);
     };
 
-    const handleCloseCreateGroup = () => {
+    const handleCloseCreateGroup = (event:any, reason:any) => {
+        if (reason && reason == "backdropClick") 
+            return;
         setopenCreateGroup(false);
     };
+    
 
     const handleClickOpenJoineGroup = () => {
         setopenJoinGroup(true);

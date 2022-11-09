@@ -35,7 +35,7 @@ export const AdminSettings = (props: any) => {
     const [id, setId] = useState(props.idChat)
     
     const pass = useRef<any>('');
-    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => {setType(e.target.value)}
+    const handleChangeType = (e: { target: { value: React.SetStateAction<string>; }; }) => {setType(e.target.value)}
     useEffect(() => {
         if (realType !== props.type || id !== props.idChat)
         {
@@ -91,7 +91,7 @@ export const AdminSettings = (props: any) => {
                             name: 'visibility',
                             id: 'uncontrolled-native',
                         }}
-                        onChange={handleChangePass}
+                        onChange={handleChangeType}
                     >
                         <option value={"public"}>Public</option>
                         <option value={"private"}>Private</option>
