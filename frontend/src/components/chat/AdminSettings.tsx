@@ -35,7 +35,7 @@ export const AdminSettings = (props: any) => {
     const [id, setId] = useState(props.idChat)
     
     const pass = useRef<any>('');
-    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => setType(e.target.value)
+    const handleChangePass = (e: { target: { value: React.SetStateAction<string>; }; }) => {setType(e.target.value)}
     useEffect(() => {
         if (realType !== props.type || id !== props.idChat)
         {
@@ -50,6 +50,32 @@ export const AdminSettings = (props: any) => {
         setRealType(undefined);
         props.closeStatus();
     }
+
+    async function changeSettings() {
+        let pwd = "";
+
+        if (realType === "protected" && type !== "protected")
+           pwd = ""
+        else
+            pwd = pass.current.value;
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/changeVisibility`;
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({id: props.idChat, type: type, password: pwd})
+            });
+            //const json = await response.json();
+            //console.log(json);
+            window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
     return (
         <>
             <Dialog open={props.status} onClose={props.closeStatus}>
@@ -90,7 +116,7 @@ export const AdminSettings = (props: any) => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={handleCancel}>Cancel</Button>
-                    <Button onClick={props.closeStatus}>Ok</Button>
+                    <Button onClick={changeSettings}>Ok</Button>
                 </DialogActions>
             </Dialog>
         </>

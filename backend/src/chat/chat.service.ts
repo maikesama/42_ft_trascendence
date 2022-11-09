@@ -499,6 +499,7 @@ export class ChatService{
             return false
         }
         catch(err){
+            console.log(err)
             throw new BadRequestException(err)
         }
     }
@@ -863,6 +864,7 @@ export class ChatService{
     async changeVisibility(body: any, userId: number){
         try
         {
+            
             const reqUser = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
