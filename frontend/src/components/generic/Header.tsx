@@ -21,11 +21,18 @@ import "../css/Header.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ['Home', 'Leaderboard', 'Profile', 'Chat'];
-const settings = ['Profile', 'Twofa', 'Logout'];
+const settings = ['Profile'];
 
 export function Header(props: any) {
 
   const [user, setUser] = useState({} as any);
+
+  async function logout()
+  {
+    handleCloseUserMenu();
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/logout`;
+    window.location.replace(url);
+  }
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
@@ -64,7 +71,7 @@ export function Header(props: any) {
     setAnchorElNav(null);
   };
 
-  
+
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
   };
@@ -234,8 +241,14 @@ export function Header(props: any) {
                     <Link href={setting.toLowerCase()} style={{ textDecoration: 'none', color: 'white' }}>
                       <Typography textAlign="center">{setting}</Typography>
                     </Link>
+
                   </MenuItem>
                 ))}
+                <MenuItem onClick={logout} >
+                <Link style={{ textDecoration: 'none', color: 'white' }}>
+                  <Typography textAlign="center">Logout</Typography>
+                </Link>
+                </MenuItem>
               </Menu>
             </Box>
           </Toolbar>
