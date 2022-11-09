@@ -188,6 +188,11 @@ export const CreateChannel = (props: any) => {
         }
     }
 
+    function handleCancel()
+    {
+        props.closeStatus();
+    }
+
     return (
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Create Group</DialogTitle>
@@ -240,7 +245,7 @@ export const CreateChannel = (props: any) => {
                     Add members to your channel group:
                 </DialogContentText>
                 <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>
-                {initials.current.value == 0 || initials.current.value == null ? <>
+                {initials.current.value === 0 || initials.current.value === null ? <>
                 <FixedSizeList
 
                     height={Object.values(friends).length * 90}
@@ -266,7 +271,7 @@ export const CreateChannel = (props: any) => {
             </DialogContent>
 
             <DialogActions>
-                <Button onClick={props.closeStatus}>Cancel</Button>
+                <Button onClick={handleCancel}>Cancel</Button>
                 <Button onClick={createChannel}>Create</Button>
             </DialogActions>
         </Dialog>
