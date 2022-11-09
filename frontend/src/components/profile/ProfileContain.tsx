@@ -78,7 +78,7 @@ export const ProfileContain = (props: any) => {
   }
 
   return (
-    <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1100px' }}>
+    <Grid container spacing={4} style={{ margin: 0, maxWidth: '100%', height: '1100px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
         <Typography
           variant="h4"
