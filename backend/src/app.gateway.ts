@@ -125,7 +125,7 @@ export class AppGateway implements OnGatewayInit {
         if (user.idIntra !== message.idIntra) {
           sender = 1
         }
-        this.server.to(message.idChat.toString()).emit('provaMessaggi', { idIntra: idIntra, idChat: message.idChat, message: message.message, sender : sender })
+        this.server.to(message.idChat.toString()).emit('provaMessaggi', { idIntra: user.idIntra, idChat: message.idChat, message: message.message, sender : sender })
       }
     }
   }
