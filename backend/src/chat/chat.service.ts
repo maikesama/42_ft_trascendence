@@ -131,6 +131,7 @@ export class ChatService {
                         idIntra: partecipant.idIntra,
                         userName: user.userName,
                         img: user.img,
+                        time: partecipant.mutedUntil,
                     }
                 }
             }
@@ -789,6 +790,7 @@ export class ChatService {
                                     users:{
                                         select:{
                                             userName: true,
+                                            img : true,
                                         }
                                     },
                                 },
@@ -813,7 +815,7 @@ export class ChatService {
     async getMessages(body, idIntra: string) {
         try {
             let messages = await this.getUserChatsMessages(idIntra, body.count)
-            
+
             // let ret = new Map(messages.map((message) => [message.chat.id, message.chat.messages]))
             // console.log(ret)
             return messages

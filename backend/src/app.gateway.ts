@@ -1,4 +1,4 @@
-import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER, HttpException, HttpStatus } from '@nestjs/common';
+import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER, HttpException, HttpStatus, Body } from '@nestjs/common';
 import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
@@ -59,7 +59,6 @@ export class AppGateway implements OnGatewayInit {
           const user = await this.userService.verifyUserByIdIntra(payload['idIntra'])
           if (user)
           {
-            // console.log("user", user)
             return user
           }
         }
@@ -123,17 +122,31 @@ export class AppGateway implements OnGatewayInit {
         if (!await this.chat.isAlreadyIn(message.idChat, user.idIntra))
           throw new BadRequestException("You are not in this chat")
         else if (await this.chat.isBanned(message.idChat, user.idIntra))
-          client.to(message.idChat.toString()).emit('provaMessaggi', {message : "Bannato", idIntra : "DIO", sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
-        else if (await this.chat.isMuted(message.idChat, user.idIntra))
-          client.to(message.idChat.toString()).emit('provaMessaggi', {message : "Muto", idIntra : "DIO", sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
-        else {
-          this.saveMessage( user.idIntra, message.idChat, message.message)
+        {
+          console.log("banned banned banned banned")
+          client.emit('provaMessaggi', {errorMessage: "sei bannato vai via ", idChat : message.idChat})
+          //capire se tenere chat bannate
         }
-        this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName}})
+        else if (await this.chat.isMuted(message.idChat, user.idIntra))
+        {
+          console.log("muted muted muted muted")
+          const muted = await this.chat.getMuted({id: message.idChat}, user.idIntra)
+          const now = new Date();
+          const diff = muted[0].time - now.getTime();
+          const minutes = Math.floor(diff / 60000);
+          const messageError = "devi stare MUTOOOO ancora per " + minutes + " minuti"
+          client.emit('provaMessaggi', {errorMessage: messageError, idChat : message.idChat})
+          //prendere tempo di mute
+        }
+        else {
+          console.log("messaggio messaggio messaggio messaggio")
+          this.saveMessage( user.idIntra, message.idChat, message.message)
+          this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}})
+        }
       }
       else
         throw new BadRequestException("idChat or message not found")
-      
+
 
     }
     else
@@ -148,8 +161,19 @@ export class AppGateway implements OnGatewayInit {
     //controllare se l'utente va bene
     //nickname ? o idIntra ?
     if (user) {
-      console.log("provaJoin", message)
-      client.join(message.idChat.toString())
+      if (message.idChat) {
+        if (!await this.chat.isAlreadyIn(message.idChat, user.idIntra))
+          throw new BadRequestException("You are not in this chat")
+        else if (await this.chat.isBanned(message.idChat, user.idIntra))
+        {
+          throw new BadRequestException("sei bannato vai via ")
+        }
+        else
+        {
+          console.log("provaJoin", message)
+          client.join(message.idChat.toString())
+        }
+      }
     }
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -152,6 +152,7 @@ export class AuthService {
 		// console.log(user);
 		if (user && user.id && user.idIntra && user.email) {
 			const payload = { sub: user.id, idIntra: user.idIntra};
+			// const payload = { sub: 2, idIntra: "mpaci"};
 			return {
 				access_token: this.jwtService.sign(payload),
 			};

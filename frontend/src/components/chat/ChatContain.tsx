@@ -13,6 +13,7 @@ import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { CreateChannel } from './CreateChannel';
 import { GroupInfo } from './GroupInfo';
+import { Messages } from './Messages';
 import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
@@ -80,11 +81,11 @@ export const ChatContain = (props: any) => {
     };
 
     const handleCloseCreateGroup = (event:any, reason:any) => {
-        if (reason && reason == "backdropClick") 
+        if (reason && reason == "backdropClick")
             return;
         setopenCreateGroup(false);
     };
-    
+
 
     const handleClickOpenJoineGroup = () => {
         setopenJoinGroup(true);
@@ -244,8 +245,9 @@ export const ChatContain = (props: any) => {
             console.log("error", error);
         }
     }
-    
+
     const [map, setMap] = useState(new Map());
+    const [join, setJoin] = useState(false);
     // const [mapped, setMapped] = useState(false);
     const isSecondRender = useRef(false);
 
@@ -270,6 +272,7 @@ export const ChatContain = (props: any) => {
                     console.log(JSON.stringify(entry[1]));
                 }
                 setMap(ret);
+                setJoin(true);
                 return ret;
             } catch (error) {
                 console.log("error", error);
@@ -385,6 +388,17 @@ export const ChatContain = (props: any) => {
         );
     }
 
+    if (!join)
+    {
+        //loading screen
+        return (
+            <div>
+                {/* <CircularProgress /> */}
+                <h1>Loading...</h1>
+            </div>
+        );
+
+    }
     return (
         // component Paper bugs the header
         <div>
@@ -421,6 +435,7 @@ export const ChatContain = (props: any) => {
                 </Grid>
                 <Grid item xs={9}>
                     {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)}/> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} type={chanType}/>}
+                    {chatView !== 'Blank' && <Messages idChat={idChat} messages={map.get(idChat)}/>}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

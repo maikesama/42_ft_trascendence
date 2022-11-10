@@ -78,68 +78,81 @@ const useStyles = makeStyles({
 
 
 //Array di testing
-// const messaggi: string[] = [];
+const messaggi: string[] = [];
 
-export const DM = (props: any) => {
-	// const { idIntra } = useAuth();
-	// function MessageSent(props: any) {
-	// 	return (
-	// 		<>
-	// 			<div className="container-message lighter">
-	// 				{/* <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" /> */}
-	// 				<Typography className="userSending">You</Typography>
-	// 				<Typography>{props.message}</Typography>
-	// 				<span className="time-right">{props.time}</span>
-	// 			</div>
-	// 		</>
-	// 	);
-	// }
+export const Messages = (props: any) => {
+	const { idIntra } = useAuth();
+	function MessageSent(props: any) {
+		return (
+			<>
+				<div className="container-message lighter">
+					<img src={props.img} alt="Avatar" />
+					<Typography className="userSending">You</Typography>
+					<Typography>{props.message}</Typography>
+					<span className="time-right">{props.time}</span>
+				</div>
+			</>
+		);
+	}
 
-	// function MessageReceived(props: any) {
-	// 	return (
-	// 		<>
-	// 			<div className="container-message darker">
-	// 				{/* <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" /> */}
-	// 				<Typography className="userSending">{props.friend}</Typography>
-	// 				<Typography className="message">{props.message}</Typography>
-	// 				<span className="time-right">{props.time}</span>
-	// 			</div>
-	// 		</>
-	// 	);
-	// }
+	function MessageReceived(props: any) {
+		return (
+			<>
+				<div className="container-message darker">
+					<img src={props.img} alt="Avatar" className="right" />
+					<Typography className="userSending">{props.friend}</Typography>
+					<Typography className="message">{props.message}</Typography>
+					<span className="time-right">{props.time}</span>
+				</div>
+			</>
+		);
+	}
+
+    function ErrorMessage(props: any) {
+		return (
+			<>
+				<div className="container-message-error" >
+					{/* <img src={props.users.} alt="Avatar" className="right" /> */}
+					<Typography className="message">{props.message}</Typography>
+				</div>
+			</>
+		);
+	}
 
 	const classes = useStyles();
 	const [openUserActions, setopenUserActions] = React.useState(false);
 	// const [message, setMessage] = useState('Haloa');
-	// const [messages, setMessages] = useState([[{}]]);
+	const [messages, setMessages] = useState([[{}]]);
 	// const [map, setMap] = useState(new Map());
-	// const [message, setMessage] = useState('');
-	// const [idChat, setIdChat] = useState(props.idChat);
+	const [message, setMessage] = useState('');
+	const [idChat, setIdChat] = useState(props.idChat);
 	// const isSecondRender = useRef(false);
 
-	// const handleMessage = (event: any) => {
-	// 	if (event.target.value !== '') {
-	// 		setMessage(event.target.value);
-	// 	}
-	// 	else {
-	// 		setMessage('Messaggio vuoto');
-	// 	}
-	// }
+	const handleMessage = (event: any) => {
+		if (event.target.value !== '') {
+			setMessage(event.target.value);
+		}
+		else {
+			setMessage('Messaggio vuoto');
+		}
+	}
 
-	// console.log("idChat: " + props.idChat + " idChat: " + idChat);
-	// React.useEffect(() => {
+	console.log("idChat: " + props.idChat + " idChat: " + idChat);
+	React.useEffect(() => {
 
-	// 	if ( idChat !== props.idChat || idChat) {
-	// 		setIdChat(props.idChat);
-	// 		setMessages(props.messages);
-	// 	}
-	// }, [props.idChat, props.messages]);
+		if ( idChat !== props.idChat || idChat) {
+			setIdChat(props.idChat);
+			setMessages(props.messages);
+		}
+	}, [props.idChat, props.messages]);
 
-	// const sendMessage = () => {
-	// 	console.log("message: " + message);
-	// 	socket.emit('prova', { idChat: props.idChat, message: message });
+	const sendMessage = (e:any) => {
+        e.preventDefault();
+		console.log("message: " + message);
+		socket.emit('prova', { idChat: props.idChat, message: message });
+        setMessage('');
+	}
 
-	// }
 	// console.log(messages)
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
@@ -149,10 +162,15 @@ export const DM = (props: any) => {
 		setopenUserActions(false);
 	};
 
+	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	// console.log(messages)
 	return (
 		<>
-			{/* <List className={classes.messageArea}> */}
-				<ListItem key="">
+			<List className={classes.messageArea}>
+				{/* <ListItem key="">
 					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "contents"}}>
 						<ListItemIcon >
 							<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
@@ -160,26 +178,34 @@ export const DM = (props: any) => {
 						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
 					</Link>
 					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
-				</ListItem>
-				{/* <Divider />
+				</ListItem> */}
+				<Divider />
 				{messages.map((message: any, index: any) => (
 					<ListItem key={index}>
-						{ message.idIntra === idIntra && <MessageSent message={message.message} time={message.sendedAt} />}
-						{ message.idIntra !== idIntra && <MessageReceived message={message.message} time={message.sendedAt} friend={message?.users?.userName} />}
+                        { message.errorMessage ? <ErrorMessage message={message.errorMessage} /> :
+                            message.idIntra === idIntra ? <MessageSent message={message.message} time={message.time} img={message?.users?.img}/> :
+                            <MessageReceived friend={message?.users?.userName} message={message.message} time={message.time} img={message?.users?.img}/> }
 					</ListItem>
-				))} */}
-			{/* </List> */}
-			{/* <Divider /> */}
-			{/* <Grid container style={{ padding: '20px' }}>
-				<Grid item xs={11}>
-					<TextField id="outlined-basic-email" label="Type Something" fullWidth onChange={handleMessage} />
-				</Grid>
-				<Grid xs={1} >
-					<Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
-				</Grid>
-			</Grid>
+				))}
+			</List>
+			<Divider />
+            <form onSubmit={sendMessage}>
+                <Grid container style={{ padding: '20px' }}>
+                    <Grid item xs={11}>
+                        <TextField id="outlined-basic-email" label="Type Something" fullWidth  onChange={e => setMessage(e.target.value)} value={message} />
+                    </Grid>
+                    <Grid xs={1} >
+                        <Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
+                    </Grid>
+                </Grid>
+            </form>
+
+				{/* <input className="form-control" placeholder="Write a message" value={message}
+					   onChange={e => setMessage(e.target.value)}
+				/> */}
+
 			{/*MODAL USER ACTIONS */}
-			{/* <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />  */}
+			<UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
 		</>
 	);
 }

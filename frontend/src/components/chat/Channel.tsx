@@ -46,7 +46,7 @@ const useStyles = makeStyles({
 });
 
 //Array di testing
-const messaggi: string[] = [];
+// const messaggi: string[] = [];
 
 export const Channel = (props: any) => {
 
@@ -56,49 +56,49 @@ export const Channel = (props: any) => {
     const partecipants = props.partecipants;
     const permission = props.permission;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
-    const [message, setMessage] = useState('Haloa');
+    // const [message, setMessage] = useState('Haloa');
 
-    function MessageSent(props: any) {
-        return (
-            <>
-                <div className="container-message lighter">
-                    {/* <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" /> */}
-                    <Typography className="userSending">You</Typography>
-                    <Typography>{props.message}</Typography>
-                    <span className="time-right">{props.time}</span>
-                </div>
-            </>
-        );
-    }
+    // function MessageSent(props: any) {
+    //     return (
+    //         <>
+    //             <div className="container-message lighter">
+    //                 {/* <img src="https://www.w3schools.com/w3images/avatar_g2.jpg" alt="Avatar" /> */}
+    //                 <Typography className="userSending">You</Typography>
+    //                 <Typography>{props.message}</Typography>
+    //                 <span className="time-right">{props.time}</span>
+    //             </div>
+    //         </>
+    //     );
+    // }
 
-    function MessageReceived(props: any) {
-        return (
-            <>
-                <div className="container-message darker">
-                    {/* <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" /> */}
-                    <Typography className="userSending">{props.friend}</Typography>
-                    <Typography className="message">{props.message}</Typography>
-                    <span className="time-right">{props.time}</span>
-                </div>
-            </>
-        );
-    }
+    // function MessageReceived(props: any) {
+    //     return (
+    //         <>
+    //             <div className="container-message darker">
+    //                 {/* <img src="https://www.w3schools.com/w3images/bandmember.jpg" alt="Avatar" className="right" /> */}
+    //                 <Typography className="userSending">{props.friend}</Typography>
+    //                 <Typography className="message">{props.message}</Typography>
+    //                 <span className="time-right">{props.time}</span>
+    //             </div>
+    //         </>
+    //     );
+    // }
 
-    const handleMessage = (event: any) => {
-        if (event.target.value !== '') {
-            setMessage(event.target.value);
-        }
-        else {
-            setMessage('Messaggio vuoto');
-        }
-    }
+    // const handleMessage = (event: any) => {
+    //     if (event.target.value !== '') {
+    //         setMessage(event.target.value);
+    //     }
+    //     else {
+    //         setMessage('Messaggio vuoto');
+    //     }
+    // }
 
-    const sendMessage = () => {
-        messaggi.push(message);
-        for (var i in messaggi) {
-            console.log(messaggi[i]);
-        }
-    }
+    // const sendMessage = () => {
+    //     messaggi.push(message);
+    //     for (var i in messaggi) {
+    //         console.log(messaggi[i]);
+    //     }
+    // }
 
 
 
@@ -128,7 +128,7 @@ export const Channel = (props: any) => {
 
     return (
         <>
-            <List className={classes.messageArea}>
+            {/* <List className={classes.messageArea}> */}
                 <ListItem button key="" onClick={chanInfo}>
                     <ListItemIcon>
                         <Avatar src={props.img} />
@@ -136,7 +136,7 @@ export const Channel = (props: any) => {
                     <Typography variant='h5' className="groupNameChat" style={{ width: '150px', marginLeft: '50px' }}>{props.name}</Typography>
                 </ListItem>
                 <Divider />
-            </List>
+            {/* </List>
             <Divider />
             <Grid container style={{ padding: '20px' }}>
                 <Grid item xs={11}>
@@ -145,7 +145,7 @@ export const Channel = (props: any) => {
                 <Grid xs={1} >
                     <Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
                 </Grid>
-            </Grid>
+            </Grid> */}
             {/*MODAL GROUP INFO */}
             <GroupInfo status={openGroupInfo} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseGroupInfo} idChat={props.idChat} channelName={props.name} />
             {/*MODAL ADMIN INFO */}

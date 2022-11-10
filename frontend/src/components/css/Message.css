@@ -6,13 +6,23 @@
     width: 45%;
     scale: 0.92;
   }
-  
+
+.container-message-error {
+    border: 2px solid #dedede;
+    background-color: red;
+    color : white;
+    border-radius: 5px;
+    padding: 10px;
+    width: 90%;
+    scale: 0.92;
+  }
+
   /* Darker chat container */
   .darker {
     border-color: #ccc;
     background-color: #ddd;
   }
-  
+
   .lighter {
     margin-left: 975px;
   }
@@ -23,7 +33,7 @@
     clear: both;
     display: table;
   }
-  
+
   /* Style images */
   .container-message img {
     float: left;
@@ -32,21 +42,21 @@
     margin-right: 20px;
     border-radius: 50%;
   }
-  
+
   /* Style the right image */
   .container-message img.right {
     float: right;
     margin-left: 20px;
     margin-right:0;
   }
-  
+
   /* Style time text */
   .time-right {
     float: right;
     color: #aaa;
     scale: 0.8;
   }
-  
+
   /* Style time text */
   .time-left {
     float: left;
