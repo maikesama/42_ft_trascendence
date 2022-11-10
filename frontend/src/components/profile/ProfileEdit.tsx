@@ -29,6 +29,7 @@ import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import { Alert, manageError } from '../generic/Alert';
 
 
 const fontColor = {
@@ -284,6 +285,7 @@ export const ProfileEdit = (props: any) => {
   const nick = useRef<any>('');
   const img = useRef<any>();
   const [images, setImages] = React.useState([]);
+  const [alert, setAlert] = React.useState("");
 
   //const [user, setUser] = useState({} as any);
 
@@ -303,14 +305,8 @@ export const ProfileEdit = (props: any) => {
         body: JSON.stringify({ userName: nick.current.value })
       });
       const data = await response.json();
-      if (data.statusCode !== 200 || data.statusCode !== 201) {
-        if (data.message)
-          alert(data.message);
-      }
-      // if÷ (data.statusCode !== 201) {
-
-
-      //window.location.reload()
+      manageError(data, response, props.triggerUser, setAlert);
+      
     } catch (error) {
       console.log("error", error);
     }
@@ -336,12 +332,13 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ dataURL: imageList[0].dataURL }),
       });
-      const json = await response.json();
+      manageError({}, response, props.triggerUser, setAlert);
+      // setAlert(c);
       //console.log(json);
     } catch (error) {
       console.log("error", error);
     }
-    window.location.reload()
+    // window.location.reload()
   };
 
   function handleNick() {
@@ -362,7 +359,8 @@ export const ProfileEdit = (props: any) => {
         method: 'POST',
         credentials: 'include',
       })
-      window.location.reload();
+      //window.location.reload();
+      manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
       console.log("error", error);
     }
@@ -370,7 +368,7 @@ export const ProfileEdit = (props: any) => {
   }
 
   return (
-
+<>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
 
       <CardMedia
@@ -437,5 +435,7 @@ export const ProfileEdit = (props: any) => {
         <Button onClick={clickSave}>Save</Button>
       </CardActions>
     </Card >
+    <Alert status={alert != "" ? true : false } closeStatus={() => setAlert("")} error={alert}/>
+    </>
   );
 }
