@@ -13,6 +13,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import Typography from '@mui/material/Typography';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import { TextField } from '@mui/material';
 
 export const TwofaOn = (props: any) => {
 
@@ -44,12 +45,16 @@ export const TwofaOn = (props: any) => {
 //     };
 //     fetchData();
 //   }
-  console.log('cia')
+  console.log(props.qr)
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
+
+            <DialogTitle><img src={props.qr.QRcode}/></DialogTitle>
+
             <DialogTitle>2FA</DialogTitle>
+
             <DialogContent>
-                
+                <TextField placeholder='insert code'/>
             </DialogContent>
         </Dialog>
   );

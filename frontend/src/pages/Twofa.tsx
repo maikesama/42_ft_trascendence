@@ -22,8 +22,12 @@ export const Twofa = () => {
         <>
         <Header/>
         <button onClick={handleOpen}>ciao</button>
-        <Alert status={open} handleClose={handleClose} />
+
         <TwofaOn status={open} closeStatus={handleClose}/>
+
+        <Alert status={open} handleClose={handleClose} />
+        {/* <TwofaOn status={open} closeStatus={handleClose}/> */}
+
         </>
 	);
 }

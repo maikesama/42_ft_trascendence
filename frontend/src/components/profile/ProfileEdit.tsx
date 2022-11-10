@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import Dialog from '@mui/material/Dialog';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -30,6 +31,8 @@ import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import { Alert, manageError } from '../generic/Alert';
+import { Twofa } from '../../pages/Twofa';
+import { TwofaOn } from './TwofaOn';
 
 
 const fontColor = {
@@ -367,6 +370,54 @@ export const ProfileEdit = (props: any) => {
 
   }
 
+  const [Qr, setQr] = React.useState('');
+
+  async function generate2faQr() {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      const json = await response.json();
+      console.log(json);
+      setQr(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  const [isCheck, setCheck] = React.useState(false);
+  const [open2FA, setOpen2FA] = React.useState(false);
+
+  const close2FA = () => {
+    setOpen2FA(false);
+  }
+
+  const handleOpen2FA = () => {
+    setOpen2FA(true);
+  }
+
+  async function handleChange(e: any) {
+    try {
+
+      const bool = !isCheck;
+      setCheck(!isCheck);
+      
+      if (bool === false) {
+        //turn off
+      }
+      else {
+        await generate2faQr()
+        handleOpen2FA();
+      }
+    }
+    catch (error) {
+      console.log("error", error);
+    }
+  }
+
+
   return (
 <>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -428,7 +479,13 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             2FA:
           </Typography>
-          <Switch />
+
+          <Switch
+            checked={isCheck}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
+
         </div>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
@@ -436,6 +493,7 @@ export const ProfileEdit = (props: any) => {
       </CardActions>
     </Card >
     <Alert status={alert != "" ? true : false } closeStatus={() => setAlert("")} error={alert}/>
+    <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr}/>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import io from 'socket.io-client';
-import Alert from '../components/generic/Alert';
+import {Alert} from '../components/generic/Alert';
 
 
 export function Test() {

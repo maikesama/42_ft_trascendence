@@ -162,7 +162,7 @@ export class AppGateway implements OnGatewayInit {
     //nickname ? o idIntra ?
     if (user) {
       if (message.idChat) {
-        if (!await this.chat.isAlreadyIn(message.idChat, user.idIntra))
+        if (!await this.chat.isAlreadyIn(message.idChat, user.idIntra)) // controllare se l'utente è già in chat in db
           throw new BadRequestException("You are not in this chat")
         else if (await this.chat.isBanned(message.idChat, user.idIntra))
         {
