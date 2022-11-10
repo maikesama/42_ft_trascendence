@@ -28,6 +28,6 @@ export const Twofa = () => {
         <Alert status={open} handleClose={handleClose} />
         {/* <TwofaOn status={open} closeStatus={handleClose}/> */}
 
-        </>
+        </> 
 	);
 }

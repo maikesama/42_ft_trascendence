@@ -39,6 +39,21 @@ function App() {
     
   }, []);
 
+  // useEffect(() => {
+  //   const onPageLoad = () => {
+  //     alert('welcome')
+  //   };
+
+  //   // Check if the page has already loaded
+  //   if (document.readyState === 'complete') {
+  //     onPageLoad();
+  //   } else {
+  //     window.addEventListener('load', onPageLoad);
+  //     // Remove the event listener when component unmounts
+  //     return () => window.removeEventListener('load', onPageLoad);
+  //   }
+  // }, [loading]);
+
   return (
     <div className="App">
       {loading ? (
@@ -46,7 +61,6 @@ function App() {
          ) : (
     <Routes>
       {!authed ? <Route path="/" element={<Landing />}/> : <Route path="/" element={<Homepage />}/>}
-          <Route path="/test" element={<Test />} />
       <Route element={<PrivateRoutes />}>
         <Route path="/Middleware" element={<Middleware />}/>
           <Route path='/home' element={<Homepage />}/>

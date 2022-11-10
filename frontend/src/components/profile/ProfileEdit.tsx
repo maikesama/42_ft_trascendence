@@ -309,11 +309,11 @@ export const ProfileEdit = (props: any) => {
       });
       const data = await response.json();
       manageError(data, response, props.triggerUser, setAlert);
-      
+
     } catch (error) {
       console.log("error", error);
     }
-    
+
   }
 
   const onChange = (
@@ -372,20 +372,23 @@ export const ProfileEdit = (props: any) => {
 
   const [Qr, setQr] = React.useState('');
 
-  async function generate2faQr() {
-    const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-      })
-      const json = await response.json();
-      console.log(json);
-      setQr(json);
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+  React.useEffect(() => {
+    async function generate2faQr() {
+      const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+        })
+        const json = await response.json();
+        console.log(json);
+        setQr(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    } 
+    generate2faQr();
+  }, []);
 
   const [isCheck, setCheck] = React.useState(false);
   const [open2FA, setOpen2FA] = React.useState(false);
@@ -403,12 +406,12 @@ export const ProfileEdit = (props: any) => {
 
       const bool = !isCheck;
       setCheck(!isCheck);
-      
+
       if (bool === false) {
         //turn off
       }
       else {
-        await generate2faQr()
+        // await generate2faQr()
         handleOpen2FA();
       }
     }
@@ -419,81 +422,81 @@ export const ProfileEdit = (props: any) => {
 
 
   return (
-<>
-    <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
+    <>
+      <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
 
-      <CardMedia
-        component="img"
-        height="380"
-        image={props.img}
-        alt=""
-      />
-      <Typography className="UploadImageTxt">Upload Image</Typography>
+        <CardMedia
+          component="img"
+          height="380"
+          image={props.img}
+          alt=""
+        />
+        <Typography className="UploadImageTxt">Upload Image</Typography>
 
-      <ImageUploading value={images} onChange={onChange}>
-        {({
-          onImageUpload,
-        }) => (
-          // write your building UI
-          <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={onImageUpload}><UploadIcon fontSize="large" /></button>
-        )}
-      </ImageUploading>
-      <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large" /></button>
+        <ImageUploading value={images} onChange={onChange}>
+          {({
+            onImageUpload,
+          }) => (
+            // write your building UI
+            <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={onImageUpload}><UploadIcon fontSize="large" /></button>
+          )}
+        </ImageUploading>
+        <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large" /></button>
 
-      <CardContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <CardContent>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-            Nickname:
-          </Typography>
-          <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
-          <Button sx={{ color: 'black' }} onClick={handleNick}>
-            <EditIcon />
-          </Button>
-        </div>
+            <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
+              Nickname:
+            </Typography>
+            <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
+            <Button sx={{ color: 'black' }} onClick={handleNick}>
+              <EditIcon />
+            </Button>
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-            Username:
-          </Typography>
-          <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
-        </div>
+            <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
+              Username:
+            </Typography>
+            <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
+            <Button sx={{ color: 'black', visibility: 'hidden' }} >
+              <EditIcon />
+            </Button>
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-            Score:
-          </Typography>
-          <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
-          <Button sx={{ color: 'black', visibility: 'hidden' }} >
-            <EditIcon />
-          </Button>
-        </div>
+            <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
+              Score:
+            </Typography>
+            <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
+            <Button sx={{ color: 'black', visibility: 'hidden' }} >
+              <EditIcon />
+            </Button>
+          </div>
 
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
-          <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-            2FA:
-          </Typography>
+            <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
+              2FA:
+            </Typography>
 
-          <Switch
-            checked={isCheck}
-            onChange={handleChange}
-            inputProps={{ 'aria-label': 'controlled' }}
-          />
+            <Switch
+              checked={isCheck}
+              onChange={handleChange}
+              inputProps={{ 'aria-label': 'controlled' }}
+            />
 
-        </div>
-      </CardContent>
-      <CardActions sx={{ justifyContent: 'center' }}>
-        <Button onClick={clickSave}>Save</Button>
-      </CardActions>
-    </Card >
-    <Alert status={alert != "" ? true : false } closeStatus={() => setAlert("")} error={alert}/>
-    <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr}/>
+          </div>
+        </CardContent>
+        <CardActions sx={{ justifyContent: 'center' }}>
+          <Button onClick={clickSave}>Save</Button>
+        </CardActions>
+      </Card >
+      <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+      <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr} />
     </>
   );
 }
