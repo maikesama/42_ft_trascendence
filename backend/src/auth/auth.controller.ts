@@ -44,7 +44,7 @@ export class AuthController{
 
 
 
-		@Post('2fa/vetify')
+		@Post('2fa/verify')
 		async verify2fa(@Body() body, @Res() res:Response){
 			this.twoFaService.verify2fa(body, res)
 				.then((e) => {e? res.redirect(`http://${process.env.HOST}/`) : res.redirect(`http://${process.env.HOST}/`); return e})

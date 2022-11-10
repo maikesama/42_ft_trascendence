@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
+import Dialog from '@mui/material/Dialog';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -27,6 +28,8 @@ import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import { Twofa } from '../../pages/Twofa';
+import { TwofaOn } from './TwofaOn';
 
 
 const fontColor = {
@@ -356,8 +359,56 @@ export const ProfileEdit = (props: any) => {
 
   }
 
-  return (
+  const [Qr, setQr] = React.useState('');
 
+  async function generate2faQr() {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'include',
+      })
+      const json = await response.json();
+      console.log(json);
+      setQr(json);
+    } catch (error) {
+      console.log("error", error);
+    }
+  }
+
+  const [isCheck, setCheck] = React.useState(false);
+  const [open2FA, setOpen2FA] = React.useState(false);
+
+  const close2FA = () => {
+    setOpen2FA(false);
+  }
+
+  const handleOpen2FA = () => {
+    setOpen2FA(true);
+  }
+
+  async function handleChange(e: any) {
+    try {
+
+      const bool = !isCheck;
+      setCheck(!isCheck);
+      
+      if (bool === false) {
+        //turn off
+      }
+      else {
+        await generate2faQr()
+        handleOpen2FA();
+      }
+    }
+    catch (error) {
+      console.log("error", error);
+    }
+  }
+
+
+  return (
+<>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
 
       <CardMedia
@@ -373,10 +424,10 @@ export const ProfileEdit = (props: any) => {
           onImageUpload,
         }) => (
           // write your building UI
-          <button style={{backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5}} onClick={onImageUpload}><UploadIcon fontSize="large"/></button>
+          <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={onImageUpload}><UploadIcon fontSize="large" /></button>
         )}
       </ImageUploading>
-      <button style={{backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5}} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large"/></button>
+      <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large" /></button>
 
       <CardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -417,12 +468,18 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             2FA:
           </Typography>
-          <Switch/>
+          <Switch
+            checked={isCheck}
+            onChange={handleChange}
+            inputProps={{ 'aria-label': 'controlled' }}
+          />
         </div>
-        </CardContent>
+      </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>
         <Button onClick={clickSave}>Save</Button>
       </CardActions>
     </Card >
+    <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr}/>
+    </>
   );
 }
