@@ -30,6 +30,7 @@ import { InvitedList } from './InvitedList';
 import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
+import { Alert, manageError } from '../generic/Alert';
 import { Twofa } from '../../pages/Twofa';
 import { TwofaOn } from './TwofaOn';
 
@@ -289,6 +290,7 @@ export const ProfileEdit = (props: any) => {
   const nick = useRef<any>('');
   const img = useRef<any>();
   const [images, setImages] = React.useState([]);
+  const [alert, setAlert] = React.useState("");
 
   //const [user, setUser] = useState({} as any);
 
@@ -308,14 +310,8 @@ export const ProfileEdit = (props: any) => {
         body: JSON.stringify({ userName: nick.current.value })
       });
       const data = await response.json();
-      if (data.statusCode !== 200 || data.statusCode !== 201) {
-        if (data.message)
-          alert(data.message);
-      }
-      // if÷ (data.statusCode !== 201) {
+      manageError(data, response, props.triggerUser, setAlert);
 
-
-      //window.location.reload()
     } catch (error) {
       console.log("error", error);
     }
@@ -341,12 +337,13 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ dataURL: imageList[0].dataURL }),
       });
-      const json = await response.json();
+      manageError({}, response, props.triggerUser, setAlert);
+      // setAlert(c);
       //console.log(json);
     } catch (error) {
       console.log("error", error);
     }
-    window.location.reload()
+    // window.location.reload()
   };
 
   function handleNick() {
@@ -367,7 +364,8 @@ export const ProfileEdit = (props: any) => {
         method: 'POST',
         credentials: 'include',
       })
-      window.location.reload();
+      //window.location.reload();
+      manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
       console.log("error", error);
     }
@@ -376,20 +374,23 @@ export const ProfileEdit = (props: any) => {
 
   const [Qr, setQr] = React.useState('');
 
-  async function generate2faQr() {
-    const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
-    try {
-      const response = await fetch(url, {
-        method: 'POST',
-        credentials: 'include',
-      })
-      const json = await response.json();
-      console.log(json);
-      setQr(json);
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
+  React.useEffect(() => {
+    async function generate2faQr() {
+      const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+        })
+        const json = await response.json();
+        console.log(json);
+        setQr(json);
+      } catch (error) {
+        console.log("error", error);
+      }
+    } 
+    generate2faQr();
+  }, []);
 
   const [user, setUser] = useState({} as any);
   const [isCheck, setCheck] = React.useState(false);
@@ -455,7 +456,7 @@ export const ProfileEdit = (props: any) => {
         await turnOff2FA();
       }
       else {
-        await generate2faQr()
+        // await generate2faQr()
         handleOpen2FA();
       }
     }
@@ -539,6 +540,7 @@ export const ProfileEdit = (props: any) => {
           <Button onClick={clickSave}>Save</Button>
         </CardActions>
       </Card >
+      <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
       <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr} />
     </>
   );

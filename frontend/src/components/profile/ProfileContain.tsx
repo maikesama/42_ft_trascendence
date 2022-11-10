@@ -11,7 +11,9 @@ import { Achievements } from './Achievements';
 
 export const ProfileContain = (props: any) => {
 
+  
   const [user, setUser] = useState({} as any);
+  const [triggerUser, setTriggerUser] = useState(false);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
@@ -27,13 +29,14 @@ export const ProfileContain = (props: any) => {
         const json = await response.json();
         console.log(json);
         setUser(json);
+        setTriggerUser(false);
       } catch (error) {
         console.log("error", error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [triggerUser]);
 
   const [rank, setRank] = useState({} as any);
 
@@ -182,7 +185,7 @@ export const ProfileContain = (props: any) => {
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
         <SocialEdit title="FRIENDS" tot="12" matches={true} />
-        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank} />
+        <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank} triggerUser={setTriggerUser}/>
         <SocialEdit title="LAST 5 MATCHES" tot="122" matches={false} />
       </Grid>
     </Grid>
