@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from "react";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import io from 'socket.io-client';
+import Alert from '../components/generic/Alert';
 
 
 export function Test() {
@@ -20,8 +21,9 @@ export function Test() {
 //   }, []);
 
   return (
+    
     <div>
-      <h1>Test</h1>
-      <h2>Socket.io</h2>
-    </div>)
+      <Alert />
+    </div>
+    )
   }

@@ -86,7 +86,7 @@ export const Messages = (props: any) => {
 		return (
 			<>
 				<div className="container-message lighter">
-					<img src={props.img} alt="Avatar" />
+					{/* <img src={props.img} alt="Avatar" /> */}
 					<Typography className="userSending">You</Typography>
 					<Typography>{props.message}</Typography>
 					<span className="time-right">{props.time}</span>
@@ -99,7 +99,7 @@ export const Messages = (props: any) => {
 		return (
 			<>
 				<div className="container-message darker">
-					<img src={props.img} alt="Avatar" className="right" />
+					{/* <img src={props.img} alt="Avatar" className="right" /> */}
 					<Typography className="userSending">{props.friend}</Typography>
 					<Typography className="message">{props.message}</Typography>
 					<span className="time-right">{props.time}</span>

@@ -47,7 +47,7 @@ export const TwofaOn = (props: any) => {
   console.log('cia')
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle>Join Group</DialogTitle>
+            <DialogTitle>2FA</DialogTitle>
             <DialogContent>
                 
             </DialogContent>

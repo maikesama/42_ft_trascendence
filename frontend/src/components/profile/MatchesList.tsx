@@ -8,6 +8,8 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
 export const MatchesList = (props: any) => {
 
@@ -64,23 +66,25 @@ export const MatchesList = (props: any) => {
         const { index, style, matches } = props;
 
         return (
-            <ListItem button style={style} key={index} >
-                {games[index]?.user1 === user?.idIntra ? <>
-                    <Avatar src={games[index]?.img1} />
-                    <ListItemText primary={games[index]?.user1} />
-                    <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-                    <ListItemText primary={games[index]?.user2} />
-                    <Avatar src={games[index]?.img2} /> </> :
-                    <>
-                        <Avatar src={games[index]?.img2} />
-                        <ListItemText primary={games[index]?.user2} />
-                        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-                        <ListItemText primary={games[index]?.user1} />
+            <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+                <ListItem button style={style} key={index} >
+                    {games[index]?.user1 === user?.idIntra ? <>
                         <Avatar src={games[index]?.img1} />
-                    </>
-                }
+                        <ListItemText primary={games[index]?.user1} />
+                        <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+                        <ListItemText primary={games[index]?.user2} />
+                        <Avatar src={games[index]?.img2} /> </> :
+                        <>
+                            <Avatar src={games[index]?.img2} />
+                            <ListItemText primary={games[index]?.user2} />
+                            <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+                            <ListItemText primary={games[index]?.user1} />
+                            <Avatar src={games[index]?.img1} />
+                        </>
+                    }
 
-            </ListItem>
+                </ListItem>
+            </Link>
         );
     }
 

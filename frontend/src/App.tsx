@@ -58,6 +58,7 @@ function App() {
           <Route path="/matches" element={<Matches />} />
           <Route path="/friends" element={<Friends />} />
           <Route path="/twofa" element={<Twofa />} />
+          <Route path="/test" element={<Test />} />
           <Route path="/" element={<Homepage />}/>
       </Route>
       <Route path="*" element={<Error404 />} />

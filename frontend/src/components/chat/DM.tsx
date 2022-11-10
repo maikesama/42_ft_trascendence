@@ -50,7 +50,7 @@ const useStyles = makeStyles({
 	},
 	chatSection: {
 		width: '100%',
-		height: '80vh'
+		height: '85vh'
 	},
 	headBG: {
 		backgroundColor: '#e0e0e0'
@@ -155,11 +155,11 @@ export const DM = (props: any) => {
 				<ListItem key="">
 					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "contents"}}>
 						<ListItemIcon >
-							<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
+							<Avatar alt="Avatar" src={props.img} style={{ width: '50px', height: '50px' }} />
 						</ListItemIcon>
 						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
 					</Link>
-					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
+					<IconButton aria-label="inviteGame" style={{ color: 'green', width: '50px', height: '50px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				{/* <Divider />
 				{messages.map((message: any, index: any) => (

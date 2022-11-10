@@ -21,7 +21,7 @@ import "../css/Header.css"
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ['Home', 'Leaderboard', 'Profile', 'Chat'];
-const settings = ['Profile'];
+const settings = ['Logout'];
 
 export function Header(props: any) {
 
@@ -236,14 +236,14 @@ export function Header(props: any) {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                {settings.map((setting) => (
+                {/* {settings.map((setting) => (
                   <MenuItem key={setting} onClick={handleCloseUserMenu} >
                     <Link href={setting.toLowerCase()} style={{ textDecoration: 'none', color: 'white' }}>
                       <Typography textAlign="center">{setting}</Typography>
                     </Link>
 
                   </MenuItem>
-                ))}
+                ))} */}
                 <MenuItem onClick={logout} >
                 <Link style={{ textDecoration: 'none', color: 'white' }}>
                   <Typography textAlign="center">Logout</Typography>
