@@ -48,7 +48,11 @@ export const TwofaOn = (props: any) => {
   console.log(props.qr)
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
+
             <DialogTitle><img src={props.qr.QRcode}/></DialogTitle>
+
+            <DialogTitle>2FA</DialogTitle>
+
             <DialogContent>
                 <TextField placeholder='insert code'/>
             </DialogContent>

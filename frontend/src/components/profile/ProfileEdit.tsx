@@ -20,6 +20,8 @@ import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Switch from '@mui/material/Switch';
 import UploadIcon from '@mui/icons-material/Upload';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
 
 import "../css/ProfileEdit.css"
@@ -197,23 +199,26 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem button style={style} key={index} >
-        {games[index]?.user1 === user?.idIntra ? <>
-          <Avatar src={games[index]?.img1} />
-          <ListItemText primary={games[index]?.user1} />
-          <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-          <ListItemText primary={games[index]?.user2} />
-          <Avatar src={games[index]?.img2} /> </> :
-          <>
-            <Avatar src={games[index]?.img2} />
-            <ListItemText primary={games[index]?.user2} />
-            <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-            <ListItemText primary={games[index]?.user1} />
+      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+        <ListItem button style={style} key={index} >
+          {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />
-          </>
-        }
+            <ListItemText primary={games[index]?.user1} />
+            <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+            <ListItemText primary={games[index]?.user2} />
+            <Avatar src={games[index]?.img2} />
+          </> :
+            <>
 
-      </ListItem>
+              <Avatar src={games[index]?.img2} />
+              <ListItemText primary={games[index]?.user2} />
+              <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+              <ListItemText primary={games[index]?.user1} />
+              <Avatar src={games[index]?.img1} />
+            </>
+          }
+        </ListItem>
+      </Link>
     );
   }
 
@@ -222,9 +227,11 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar src={friends[index]?.img} />
-        <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+          <Avatar src={friends[index]?.img} />
+          <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
+          <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        </Link>
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
@@ -298,13 +305,19 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ userName: nick.current.value })
       });
-      // const json = await response.json();
-      // console.log(json);
-      // setUser(json);
+      const data = await response.json();
+      if (data.statusCode !== 200 || data.statusCode !== 201) {
+        if (data.message)
+          alert(data.message);
+      }
+      // if÷ (data.statusCode !== 201) {
+
+
+      //window.location.reload()
     } catch (error) {
       console.log("error", error);
     }
-    window.location.reload()
+    
   }
 
   const onChange = (
@@ -468,11 +481,13 @@ export const ProfileEdit = (props: any) => {
           <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
             2FA:
           </Typography>
+
           <Switch
             checked={isCheck}
             onChange={handleChange}
             inputProps={{ 'aria-label': 'controlled' }}
           />
+
         </div>
       </CardContent>
       <CardActions sx={{ justifyContent: 'center' }}>

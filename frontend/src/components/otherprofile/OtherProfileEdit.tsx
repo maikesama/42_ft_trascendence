@@ -17,6 +17,8 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import Link from '@mui/material/Link';
+import { Link as RouterLink } from 'react-router-dom';
 
 import "../css/ProfileEdit.css"
 import { SearchBar } from './SearchBar';
@@ -63,23 +65,25 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <ListItem button style={style} key={index} >
-        {games[index]?.user1 === user?.idIntra ? <>
-        <Avatar src={games[index]?.img1} />
-        <ListItemText primary={games[index]?.user1} />
-        <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-        <ListItemText primary={games[index]?.user2} />
-        <Avatar src={games[index]?.img2}/> </> :
-        <>
-        <Avatar src={games[index]?.img2} />
-        <ListItemText primary={games[index]?.user2} />
-        <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-        <ListItemText primary={games[index]?.user1} />
-        <Avatar src={games[index]?.img1}/>
-        </>
-      }
+      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+        <ListItem button style={style} key={index} >
+          {games[index]?.user1 === user?.idIntra ? <>
+            <Avatar src={games[index]?.img1} />
+            <ListItemText primary={games[index]?.user1} />
+            <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
+            <ListItemText primary={games[index]?.user2} />
+            <Avatar src={games[index]?.img2} /> </> :
+            <>
+              <Avatar src={games[index]?.img2} />
+              <ListItemText primary={games[index]?.user2} />
+              <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
+              <ListItemText primary={games[index]?.user1} />
+              <Avatar src={games[index]?.img1} />
+            </>
+          }
 
-      </ListItem>
+        </ListItem>
+      </Link>
     );
   }
 
@@ -88,9 +92,11 @@ export const SocialEdit = (props: any) => {
 
     return (
       <ListItem style={style} key={index} >
-        <Avatar src={friends[index]?.img} />
-        <ListItemText  id="idIntraFriend" primary={(friends[index]?.idIntra)}/>
-        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+          <Avatar src={friends[index]?.img} />
+          <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
+          <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+        </Link>
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
       </ListItem>
     );
@@ -109,7 +115,7 @@ export const SocialEdit = (props: any) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({idIntra: user.idUser}),
+          body: JSON.stringify({ idIntra: user.idUser }),
         });
         const json = await response.json();
         setGames(json);
@@ -134,7 +140,7 @@ export const SocialEdit = (props: any) => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({idIntra: user.idUser}),
+          body: JSON.stringify({ idIntra: user.idUser }),
         });
         const json = await response.json();
         console.log(json);
@@ -164,7 +170,7 @@ export const SocialEdit = (props: any) => {
               height={460}
               width={310}
               itemSize={90}
-              itemCount={props.matches ? Object.values(friends).length  : (Object.values(games).length < 5) ? Object.values(games).length : 5}
+              itemCount={props.matches ? Object.values(friends).length : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}
             >
               {props.matches ? renderSocialRow : renderMatchesRowPreview}

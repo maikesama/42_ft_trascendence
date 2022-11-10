@@ -131,11 +131,10 @@ export const Channel = (props: any) => {
             {/* <List className={classes.messageArea}> */}
                 <ListItem button key="" onClick={chanInfo}>
                     <ListItemIcon>
-                        <Avatar src={props.img} />
+                        <Avatar src={props.img} style={{ width: '51px', height: '51px' }}/>
                     </ListItemIcon>
                     <Typography variant='h5' className="groupNameChat" style={{ width: '150px', marginLeft: '50px' }}>{props.name}</Typography>
                 </ListItem>
-                <Divider />
             {/* </List>
             <Divider />
             <Grid container style={{ padding: '20px' }}>

@@ -21,6 +21,8 @@ import { Blank } from './Blank';
 import { DM } from './DM';
 import { Channel } from './Channel';
 import { socket } from "../../App";
+import Alert from '@mui/material/Alert';
+
 
 const useStyles = makeStyles({
     table: {
@@ -28,7 +30,7 @@ const useStyles = makeStyles({
     },
     chatSection: {
         width: '100%',
-        height: '80vh',
+        height: '85vh',
         backgroundColor: 'white',
     },
     headBG: {
@@ -444,6 +446,7 @@ export const ChatContain = (props: any) => {
             <CreateChannel status={openCreateGroup} closeStatus={handleCloseCreateGroup} />
             {/*MODAL USER ACTIONS */}
             <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
+            
         </div >
     );
 }

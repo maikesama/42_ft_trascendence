@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import '../font/font.css';
 import './css/Homepage.css';
 import { TwofaOn } from '../components/profile/TwofaOn';
+import {Alert} from '../components/generic/Alert';
 
 let logged = false;
 
@@ -10,7 +11,7 @@ export const Twofa = () => {
     const [open, setOpen] = useState(false);
 
     const handleOpen = () => {
-        setOpen(!open);
+        setOpen(true);
     };
 
     const handleClose = () => {
@@ -21,7 +22,12 @@ export const Twofa = () => {
         <>
         <Header/>
         <button onClick={handleOpen}>ciao</button>
+
         <TwofaOn status={open} closeStatus={handleClose}/>
+
+        <Alert status={open} handleClose={handleClose} />
+        {/* <TwofaOn status={open} closeStatus={handleClose}/> */}
+
         </>
 	);
 }
