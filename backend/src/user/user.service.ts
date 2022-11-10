@@ -46,7 +46,6 @@ export class UserService {
 
 			delete user.otpSecret
 			delete user.otpUrl
-			delete user.twoFa
 
 			return user
 

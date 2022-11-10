@@ -43,18 +43,18 @@ export class AuthController{
 		// }
 
 
-
-		@Post('2fa/verify')
-		async verify2fa(@Body() body, @Res() res:Response){
-			this.twoFaService.verify2fa(body, res)
-				.then((e) => {e? res.redirect(`http://${process.env.HOST}/`) : res.redirect(`http://${process.env.HOST}/`); return e})
-		}
-
 		@UseGuards(AtGuard)
 		@Post('2fa/turn-on')
-		async verify2fa2(@Body() body, @Res() res:Response){
-			return this.twoFaService.verify2fa2(body, res)
+		async verify2fa2(@Body() body, @Req() req){
+			return this.twoFaService.verify2fa2(body, req['user']['sub'])
 		}
+
+		@Post('2fa/verify')
+		async verify2fa(@Body() body, @Res() res, @Req() req){
+			console.log
+			return await this.twoFaService.verify2fa(body, res, req.cookies['id'])
+		}
+
 
 		@UseGuards(AtGuard)
 		@Post('2fa/generate')

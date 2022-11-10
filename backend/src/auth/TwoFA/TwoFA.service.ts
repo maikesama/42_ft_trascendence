@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable,HttpException, HttpStatus } from '@nestjs/common';
 import { Response} from 'express';
 import {PrismaService} from "../../prisma/prisma.service"
 import {GeneratedSecret} from 'speakeasy'
@@ -53,7 +53,6 @@ export class TwoFactorAuthenticationService {
 		// 	return
 		if (secret.otpUrl)
 		{
-			console.log(secret.otpUrl)
 			return(await qrcode.toDataURL(secret.otpUrl));
 
 		}
@@ -61,64 +60,72 @@ export class TwoFactorAuthenticationService {
 			return "non ce niente"
 	}
 
-	async verify2fa(body: any, res: Response) :Promise<Boolean> {
-		let user = await this.prisma.user.findUniqueOrThrow({
-			where:{
-				id : body.id
-			},
-			select:{
-				idIntra : true,
-				otpSecret : true,
-				id: true,
-				email: true
+	async verify2fa(body: any, res: any, id : number) {
+
+		try {
+			if (id === undefined || body.totp === undefined)
+				throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+			const idNumber: number = +id;
+			console.log(idNumber)
+			let user = await this.prisma.user.findUniqueOrThrow({
+				where:{
+					id : idNumber
+				},
+			});
+			if (user.twoFa === false)
+				throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+			let verified = speakeasy.totp.verify({
+				secret: user.otpSecret,
+				encoding: 'base32',
+				token: body.totp });
+			
+			if (verified)
+			{
+				const tokens = await this.authservice.generateJwtTokens(user);
+				res.clearCookie('id');
+				res.cookie('at', tokens.access_token, { httpOnly: true })
+				return res.redirect('/')
 			}
-		});
+			throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
 
-		let verified = speakeasy.totp.verify({
-			secret: user.otpSecret,
-			encoding: 'base32',
-			token: body.totp });
-
-		if (verified)
-		{
-			const tokens = await this.authservice.generateJwtTokens(user);
-			res.cookie('at', tokens.access_token, { httpOnly: true })
-			res.redirect('/home')
-			return true;
 		}
-		return false;
+		catch (e) {
+			console.log(e)
+			throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
+		}
 	}
 
-	async verify2fa2(body: any, res: Response){
-		let user = await this.prisma.user.findUniqueOrThrow({
-			where:{
-				id : body.id
-			},
-			select:{
-				idIntra : true,
-				otpSecret : true,
-				id: true,
-				email: true
-			}
-		});
+	async verify2fa2(body: any, userId: number) {
+		try {
 
-		let verified = speakeasy.totp.verify({
-			secret: user.otpSecret,
-			encoding: 'base32',
-			token: body.totp });
-
-		if (verified)
-		{
-			this.prisma.user.update({
-				where: {
-					id: user.id,
-				},
-				data: {
-					twoFa: true,
+			let user = await this.prisma.user.findUniqueOrThrow({
+				where:{
+					id : userId
 				}
-			})
-			return {mesage: "ok", status: 200};
+			});
+	
+			let verified = speakeasy.totp.verify({
+				secret: user.otpSecret,
+				encoding: 'base32',
+				token: body.totp });
+	
+			if (verified)
+			{
+				await this.prisma.user.update({
+					where: {
+						id: userId,
+					},
+					data: {
+						twoFa: true,
+					}
+				})
+				
+				return {message: "ok", status: 200};
+			}
+			return {message: "Invalid token", status: 401};
 		}
-		return {mesage: "Invalid token", status: 401};
+		catch (e) {
+			return {message: "Invalid token", status: 401};
+		}
 	}
 }

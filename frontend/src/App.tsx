@@ -46,7 +46,9 @@ function App() {
          ) : (
     <Routes>
       {!authed ? <Route path="/" element={<Landing />}/> : <Route path="/" element={<Homepage />}/>}
+      {!authed ? <Route path="/twofa" element={<Twofa />}/> : <Route path="/twofa" element={<Homepage />} />}
           <Route path="/test" element={<Test />} />
+          
       <Route element={<PrivateRoutes />}>
         <Route path="/Middleware" element={<Middleware />}/>
           <Route path='/home' element={<Homepage />}/>
@@ -57,7 +59,6 @@ function App() {
           <Route path="/profile/:idUser" element={<OtherUserProfile />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/friends" element={<Friends />} />
-          <Route path="/twofa" element={<Twofa />} />
           <Route path="/test" element={<Test />} />
           <Route path="/" element={<Homepage />}/>
       </Route>

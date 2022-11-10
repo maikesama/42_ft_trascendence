@@ -104,7 +104,10 @@ export class AuthService {
 					})
 				}
 				if (user.twoFa === true)
-					res.redirect(`/api/auth/2fa/${user.id}`)
+				{
+					res.cookie('id', user.id, {httpOnly: true})
+					res.redirect('/twofa')
+				}
 				else
 				{
 					const tokens = await this.generateJwtTokens(user);
