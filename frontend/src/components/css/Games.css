@@ -1,0 +1,9 @@
+* {
+    padding: 0;
+    margin: 0;
+  }
+  canvas {
+    background: rgb(227, 166, 166);
+    display: block;
+    margin: 0 auto;
+  }

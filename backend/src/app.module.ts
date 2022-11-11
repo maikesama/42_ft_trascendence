@@ -17,6 +17,9 @@ import { FriendModule } from './friend/friend.module';
 import { GamesModule } from './games/games.module';
 import { GamesService } from './games/games.service';
 import { UserService } from './user/user.service';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -41,6 +44,10 @@ import { UserService } from './user/user.service';
     //   url: 'redis://redis:6379'
     // })
     // SessionSerializer
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'client'),
+    }),
+    ScheduleModule.forRoot(),
   ],
   controllers: [],
   providers: [PrismaService, AppGateway, ChatService, FriendService, GamesService ]

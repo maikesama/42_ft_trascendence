@@ -32,9 +32,12 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend/src:/app/src
+      - ./backend/client:/app/client
     expose:
       - "3333"
       - "4244"
+    # ports:
+    #   - "3333:3333"
     environment:
       HOST: ${REACT_APP_HOST_URI}
       DATABASE_URL: ${DATABASE_URL}

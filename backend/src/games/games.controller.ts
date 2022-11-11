@@ -1,4 +1,4 @@
-import { Controller, Post, Body, Req, UseGuards, HttpCode, Get } from '@nestjs/common'
+import { Controller, Post, Body, Req, UseGuards, HttpCode, Get, Res } from '@nestjs/common'
 import { AtGuard } from 'src/auth/guards';
 import { GamesService } from './games.service';
 
@@ -49,5 +49,14 @@ export class GamesController{
             user['idIntra'] = body['idIntra'];
         return await this.GamesService.getGameHistory(body, user['idIntra'])
     }
+
+//     @UseGuards(AtGuard)
+//     @HttpCode(200)
+//     @Get('prova')
+//     get(@Res() res) {
+//         res.sendFile('index.html', {
+//       root: '.',
+//     });
+//   }
 
 }
