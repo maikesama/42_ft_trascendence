@@ -16,9 +16,8 @@ import DialogActions from '@mui/material/DialogActions/DialogActions';
 export const manageError = (data: any, response: any, success:any, error:any) => {
     if ((data !== undefined && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201) 
          || (response.status && response.status !== 200 && response.status !== 201)){
-        console.log("Error");
-        console.log (data);
-        console.log (response);
+        console.log("error", data);
+        console.log("error2", response);
         let message = "Error";
         if (data.message)
             message = data.message;

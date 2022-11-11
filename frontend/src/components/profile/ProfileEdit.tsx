@@ -311,6 +311,7 @@ export const ProfileEdit = (props: any) => {
       });
       const data = await response.json();
       manageError(data, response, props.triggerUser, setAlert);
+      console.log(alert)
 
     } catch (error) {
       console.log("error", error);

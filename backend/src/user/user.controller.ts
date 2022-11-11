@@ -25,6 +25,14 @@ export class UserController{
 	}
 
 	@UseGuards(AtGuard)
+    @Post('isBlocked')
+    async isBlocked(@Body() body, @Req() req){
+        const user = req.user
+        if (body['idIntra'] !== undefined)
+        	return await this.userservice.isBlocked(body.idIntra, user['idIntra'])
+    }
+
+	@UseGuards(AtGuard)
 	@Get('all')
 	async getAllUsers()
 	{

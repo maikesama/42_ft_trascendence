@@ -146,6 +146,26 @@ export class UserService {
 		}
 	}
 
+
+	async isBlocked(userId: string, blockId: string) {
+        try{
+            const blocked = await this.prisma.blocklist.findMany({
+                where: {
+                    OR: [
+                        {blockId: userId, blockedId: blockId},
+                        {blockId: blockId, blockedId: userId}
+                    ]
+                }
+            })
+            if (blocked.length > 0)
+                return true
+            return false
+        }
+        catch(e){
+			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+        }
+    }
+
 	async checkIfBlocked(idintra: string, requestIdIntra: string)
 	{
 		try {

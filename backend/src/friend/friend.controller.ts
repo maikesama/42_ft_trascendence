@@ -48,6 +48,16 @@ export class FriendController{
         return await this.friendService.getFriends(body, user['idIntra'])
     }
 
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('isFriend')
+    async isFriend(@Body() body, @Req() req){
+        const user = req.user
+        if (body['idIntra'] !== undefined)
+            return await this.friendService.isFriend(user['idIntra'], body.idIntra)
+            
+    }
+
 
     @UseGuards(AtGuard)
     @HttpCode(200)
