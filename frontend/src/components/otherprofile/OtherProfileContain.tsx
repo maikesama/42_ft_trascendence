@@ -9,8 +9,9 @@ import { useParams } from 'react-router';
 
 export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
+  const [loading, setLoading] = useState(false);
   const params = useParams()
-  
+  console.log("ciao",loading)
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/${params.idUser}`;
     
@@ -25,6 +26,12 @@ export const OtherProfileContain = (props: any) => {
         const json = await response.json();
         console.log(json);
         setUser(json);
+        if (response.status !== 200) {
+          window.location.replace('/');
+        }
+        else {
+          setLoading(true);
+        }
       } catch (error) {
         console.log("error", error);
       }
@@ -76,7 +83,13 @@ export const OtherProfileContain = (props: any) => {
     color: 'black', backgroundColor: 'white',
     display: 'flex', alignItems: 'center', justifyContents: 'center'
   }
-
+  if (!loading) {
+    return (
+    <div>
+      <h1>loading</h1>
+    </div>
+    )
+  }
   return (
     <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1100px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
