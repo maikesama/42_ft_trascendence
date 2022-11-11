@@ -32,6 +32,7 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
+import { Alert, manageError } from '../generic/Alert';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -77,6 +78,7 @@ export const SearchBar = (props: any) => {
 
     const [search, setSearch] = useState({} as any);
     const initials = useRef<any>('');
+    const [alert, setAlert] = useState("");
 
     async function searchUser() {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
@@ -131,12 +133,10 @@ export const SearchBar = (props: any) => {
                         'Content-Type': 'application/json',
                     },
                     body: JSON.stringify({idIntra: idIntra}),
-                }).then((response) => {
-                    if (response.status === 400) {
-                        alert("You already have a pending request with this user");
-                    }
-                });
-                window.location.reload();
+                })
+                const data = await response.json();
+                //window.location.reload(); or null
+                manageError(data, response, null, setAlert);
             } catch (error) {
                 console.log("error", error);
             }
@@ -179,6 +179,7 @@ export const SearchBar = (props: any) => {
     }
 
     return (
+        <>
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle textAlign="center">Search Friends</DialogTitle>
             <DialogContent>
@@ -209,5 +210,7 @@ export const SearchBar = (props: any) => {
                 </DialogActions>
             </DialogContent>
         </Dialog>
+        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        </>
     );
 }
