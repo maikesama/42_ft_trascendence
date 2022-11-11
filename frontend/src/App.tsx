@@ -15,6 +15,7 @@ import { OtherUserProfile } from './pages/OtherUserProfile';
 import { Test } from './pages/Test';
 import { Middleware } from './pages/Middleware';
 import { Twofa } from './pages/Twofa';
+import { Games } from './pages/Games';
 import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
@@ -74,6 +75,7 @@ function App() {
           <Route path="/profile/:idUser" element={<OtherUserProfile />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/friends" element={<Friends />} />
+          <Route path="/games/:idGame" element={<Games />} />
           <Route path="/test" element={<Test />} />
           <Route path="/" element={<Homepage />}/>
       </Route>
