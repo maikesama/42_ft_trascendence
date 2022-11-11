@@ -310,7 +310,7 @@ async function addInviteFriend(index: any) {
           body: JSON.stringify({idIntra: props.idIntra}),
       })
       const data = await response.json();
-      manageError(data, response,props.triggerUser ,setAlert,"You already have a pending request with this user");
+      manageError(data, response,props.triggerUser ,setAlert);
       // if (response.status === 400) {
       //   alert("You already have a pending request with this user");
       // }
