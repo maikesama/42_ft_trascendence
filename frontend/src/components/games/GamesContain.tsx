@@ -13,7 +13,7 @@ export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
     // const [loading, setLoading] = useState(false);
-    const [esit, setEsit] = useState();
+    const [esit, setEsit] = useState<string | null>(null);
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -93,12 +93,12 @@ export const GamesContain = (props: any) => {
         });
 
         socketGames.on('lose', (gameState:any ) => {
-          setEsit(<img src={LoserImage} alt="lose" width="20%" height="20%"/>)
+          setEsit(LoserImage)
           console.log("lose")
         });
 
         socketGames.on('win', (gameState:any ) => {
-          setEsit(<img src={WinnerImage} alt="lose" width="20%" height="20%"/>)
+          setEsit(WinnerImage)
           console.log("win")
         });
 
@@ -152,7 +152,7 @@ export const GamesContain = (props: any) => {
             </head>
             <body>
                 <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
-                {esit && <div id="esit"><div>{esit}</div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link></div>}
+                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link></div>}
             </body>
         </>
     );
