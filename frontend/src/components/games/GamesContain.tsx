@@ -31,6 +31,9 @@ export const GamesContain = (props: any) => {
           return ;
         }
         const ctx = canvas.getContext('2d');
+        if (!ctx) {
+          return ;
+        }
         const drawPlayer = (player: any) => {
             ctx.beginPath();
             ctx.rect(player.x, player.y, player.width, player.height);
@@ -39,14 +42,23 @@ export const GamesContain = (props: any) => {
             ctx.closePath();
           };
 
+          const drawBall = (ball: any) => {
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ball.ballRadius, 0, Math.PI*2);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+            ctx.closePath();
+          }
+
         socketGames.on('state', (gameState:any ) => {
           // console.log("sono qui")
           // console.log(gameState)
           console.log("gameState", gameState.players)
           ctx.clearRect(0, 0, canvas.width, canvas.height);
-            for (let player in gameState.players) {
-              drawPlayer(gameState.players[player])
-            }
+          for (let player in gameState.players) {
+            drawPlayer(gameState.players[player])
+          }
+          drawBall(gameState.ball);
           });
 
         const playerMovement = {
@@ -76,6 +88,10 @@ export const GamesContain = (props: any) => {
             } else if (e.keyCode == 40) {
               playerMovement.down = false;
             }
+            //sapce
+            // if (e.keyCode == 32) {
+            //   socketGames.emit('shoot');
+            // }
           };
 
           setInterval(() => {
@@ -94,7 +110,7 @@ export const GamesContain = (props: any) => {
 
             </head>
             <body>
-                <canvas id="myCanvas" width="480" height="320" ref={canvasRef}></canvas>
+                <canvas id="myCanvas" width="600" height="400" ref={canvasRef}></canvas>
             </body>
         </>
     );
