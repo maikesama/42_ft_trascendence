@@ -5,7 +5,7 @@ import * as cookieParser from 'cookie-parser'
 import {Transport} from "@nestjs/microservices";
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, );
+  const app = await NestFactory.create(AppModule);
   app.enableCors({
     origin: [,
       `http://${process.env.HOST}/api`,
@@ -21,6 +21,7 @@ async function bootstrap() {
   //       });
   app.useGlobalPipes(new ValidationPipe({whitelist: true}));
   app.use(cookieParser());
+
   // await app.startAllMicroservices()
   await app.listen(3333);
 }

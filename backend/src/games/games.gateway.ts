@@ -51,24 +51,25 @@ export class GamesGateway implements OnGatewayInit {
 
     @SubscribeMessage('playerMovement')
     async handlePlayerMovement(client: Socket,playerMovement: any){
+            // console.log("gameState", gameState.players)
             const player = gameState.players[client.id]
             const canvasWidth = 480
             const canvasHeight = 320
-            
+
             if (playerMovement.left && player.x > 0) {
               player.x -= 4
             }
             if (playerMovement.right && player.x < canvasWidth - player.width) {
             player.x += 4
           }
-            
+
             if (playerMovement.up && player.y > 0) {
               player.y -= 4
             }
             if (playerMovement.down && player.y < canvasHeight - player.height) {
               player.y += 4
             }
-            console.log("player", player)
+            // console.log("player", player)
     }
 
     // setInterval(() => {

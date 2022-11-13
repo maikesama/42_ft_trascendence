@@ -1,16 +1,20 @@
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import "../css/Games.css";
 export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
 
-
+// let ctx:any;
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
     const [loading, setLoading] = useState(false);
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
+
+    const canvasRef = useRef<HTMLCanvasElement | null>(null);
     console.log("Games", isConnectedGames)
+
+
     useEffect(() => {
         socketGames.on('connect', () => {
                 setIsConnectedGames(true);
@@ -19,20 +23,31 @@ export const GamesContain = (props: any) => {
         socketGames.on('disconnect', () => {
                 setIsConnectedGames(false);
         });
+        // var canvas = document.querySelector('canvas');
+        // var c = document.getElementById("myCanvas");
+        // const ctx = canvas.getContext('2d');
+        const canvas = canvasRef.current;
+        if (!canvas) {
+          return ;
+        }
+        const ctx = canvas.getContext('2d');
+        const drawPlayer = (player: any) => {
+            ctx.beginPath();
+            ctx.rect(player.x, player.y, player.width, player.height);
+            ctx.fillStyle = '#0095DD';
+            ctx.fill();
+            ctx.closePath();
+          };
 
-        // const drawPlayer = (player: any) => {
-        //     ctx.beginPath();
-        //     ctx.rect(player.x, player.y, player.width, player.height);
-        //     ctx.fillStyle = '#0095DD';
-        //     ctx.fill();
-        //     ctx.closePath();
-        //   };
-
-        // socketGames.on('state', (gameState) => {
-        //     for (let player in gameState.players) {
-        //       drawPlayer(gameState.players[player])
-        //     }
-        //   }
+        socketGames.on('state', (gameState:any ) => {
+          // console.log("sono qui")
+          // console.log(gameState)
+          console.log("gameState", gameState.players)
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+            for (let player in gameState.players) {
+              drawPlayer(gameState.players[player])
+            }
+          });
 
         const playerMovement = {
             up: false,
@@ -69,17 +84,17 @@ export const GamesContain = (props: any) => {
           document.addEventListener('keydown', keyDownHandler, false);
           document.addEventListener('keyup', keyUpHandler, false);
 
-        
+
     }, []);
-    
+
     return (
         <>
             <head>
                 <title>Gamedev Canvas Workshop</title>
-                
+
             </head>
             <body>
-                <canvas id="myCanvas" width="480" height="320"></canvas>
+                <canvas id="myCanvas" width="480" height="320" ref={canvasRef}></canvas>
             </body>
         </>
     );
