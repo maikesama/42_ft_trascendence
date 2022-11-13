@@ -44,9 +44,9 @@ import { ScheduleModule } from '@nestjs/schedule';
     //   url: 'redis://redis:6379'
     // })
     // SessionSerializer
-    ServeStaticModule.forRoot({
-      rootPath: join(__dirname, '..', 'client'),
-    }),
+    // ServeStaticModule.forRoot({
+    //   rootPath: join(__dirname, '..', 'client'),
+    // }),
     ScheduleModule.forRoot(),
   ],
   controllers: [],

@@ -8,7 +8,7 @@ export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/gam
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -20,12 +20,10 @@ export const GamesContain = (props: any) => {
                 setIsConnectedGames(true);
         } );
         socketGames.emit('newPlayer');
+        socketGames.emit('pong');
         socketGames.on('disconnect', () => {
                 setIsConnectedGames(false);
         });
-        // var canvas = document.querySelector('canvas');
-        // var c = document.getElementById("myCanvas");
-        // const ctx = canvas.getContext('2d');
         const canvas = canvasRef.current;
         if (!canvas) {
           return ;
@@ -34,32 +32,68 @@ export const GamesContain = (props: any) => {
         if (!ctx) {
           return ;
         }
-        const drawPlayer = (player: any) => {
-            ctx.beginPath();
-            ctx.rect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = '#0095DD';
-            ctx.fill();
-            ctx.closePath();
-          };
 
-          const drawBall = (ball: any) => {
-            ctx.beginPath();
-            ctx.arc(ball.x, ball.y, ball.ballRadius, 0, Math.PI*2);
-            ctx.fillStyle = "#ffffff";
-            ctx.fill();
-            ctx.closePath();
+        const drawRect = (x:any, y:any, w:any, h:any, color:any) => {
+            ctx.fillStyle = color;
+            ctx.fillRect(x, y, w, h);
+        }
+
+        const drawArc = (x:any, y:any, r:any, color:any) => {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(x,y,r,0,Math.PI*2,true);
+          ctx.closePath();
+          ctx.fill();
+        }
+
+        const drawNet = (net:any) => {
+          for(let i = 0; i <= canvas.height; i+=15){
+              drawRect(net.x, net.y + i, net.width, net.height, net.color);
           }
+        }
+
+        const drawText = (text:any,x:any,y:any) => {
+          ctx.fillStyle = "#FFF";
+          ctx.font = "75px fantasy";
+          ctx.fillText(text, x, y);
+      }
+
+      const render = (user:any, ball:any, net:any, com: any) => {
+
+        // clear the canvas
+        drawRect(0, 0, canvas.width, canvas.height, "#000");
+
+        // draw the user score to the left
+        drawText(user.score,canvas.width/4,canvas.height/5);
+
+        // draw the COM score to the right
+        drawText(com.score,3*canvas.width/4,canvas.height/5);
+
+        // draw the net
+        drawNet(net);
+
+        // draw the user's paddle
+        drawRect(user.x, user.y, user.width, user.height, user.color);
+
+        // draw the COM's paddle
+        drawRect(com.x, com.y, com.width, com.height, com.color);
+
+        // draw the ball
+        drawArc(ball.x, ball.y, ball.radius, ball.color);
+    }
 
         socketGames.on('state', (gameState:any ) => {
           // console.log("sono qui")
           // console.log(gameState)
           console.log("gameState", gameState.players)
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-          for (let player in gameState.players) {
-            drawPlayer(gameState.players[player])
-          }
-          drawBall(gameState.ball);
-          });
+          // ctx.clearRect(0, 0, canvas.width, canvas.height);
+          // for (let player in gameState.players) {
+          //   drawPlayer(gameState.players[player])
+          // }
+          // drawBall(gameState.ball);
+          // update();
+          render(gameState.user, gameState.ball, gameState.net, gameState.com)
+        });
 
         const playerMovement = {
             up: false,
@@ -68,28 +102,28 @@ export const GamesContain = (props: any) => {
             right: false
           };
           const keyDownHandler = (e:any) => {
-            if (e.keyCode == 39) {
+            if (e.keyCode === 39) {
              playerMovement.right = true;
-            } else if (e.keyCode == 37) {
+            } else if (e.keyCode === 37) {
               playerMovement.left = true;
-            } else if (e.keyCode == 38) {
+            } else if (e.keyCode === 38) {
               playerMovement.up = true;
-            } else if (e.keyCode == 40) {
+            } else if (e.keyCode === 40) {
               playerMovement.down = true;
             }
           };
           const keyUpHandler = (e:any) => {
-            if (e.keyCode == 39) {
+            if (e.keyCode === 39) {
               playerMovement.right = false;
-            } else if (e.keyCode == 37) {
+            } else if (e.keyCode === 37) {
               playerMovement.left = false;
-            } else if (e.keyCode == 38) {
+            } else if (e.keyCode === 38) {
               playerMovement.up = false;
-            } else if (e.keyCode == 40) {
+            } else if (e.keyCode === 40) {
               playerMovement.down = false;
             }
             //sapce
-            // if (e.keyCode == 32) {
+            // if (e.keyCode === 32) {
             //   socketGames.emit('shoot');
             // }
           };
@@ -110,7 +144,7 @@ export const GamesContain = (props: any) => {
 
             </head>
             <body>
-                <canvas id="myCanvas" width="600" height="400" ref={canvasRef}></canvas>
+                <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
             </body>
         </>
     );
