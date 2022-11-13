@@ -2,13 +2,18 @@
 import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import "../css/Games.css";
+import Button from '@mui/material/Button';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from '@mui/material';
 export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
-
+const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
+const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
 // let ctx:any;
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
     // const [loading, setLoading] = useState(false);
+    const [esit, setEsit] = useState();
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -83,16 +88,18 @@ export const GamesContain = (props: any) => {
     }
 
         socketGames.on('state', (gameState:any ) => {
-          // console.log("sono qui")
-          // console.log(gameState)
           console.log("gameState", gameState.players)
-          // ctx.clearRect(0, 0, canvas.width, canvas.height);
-          // for (let player in gameState.players) {
-          //   drawPlayer(gameState.players[player])
-          // }
-          // drawBall(gameState.ball);
-          // update();
           render(gameState.user, gameState.ball, gameState.net, gameState.com)
+        });
+
+        socketGames.on('lose', (gameState:any ) => {
+          setEsit(<img src={LoserImage} alt="lose" width="20%" height="20%"/>)
+          console.log("lose")
+        });
+
+        socketGames.on('win', (gameState:any ) => {
+          setEsit(<img src={WinnerImage} alt="lose" width="20%" height="20%"/>)
+          console.log("win")
         });
 
         const playerMovement = {
@@ -145,6 +152,7 @@ export const GamesContain = (props: any) => {
             </head>
             <body>
                 <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
+                {esit && <div id="esit"><div>{esit}</div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link></div>}
             </body>
         </>
     );

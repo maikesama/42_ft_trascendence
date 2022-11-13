@@ -21,3 +21,27 @@ body{
     left:0;
     bottom:0;
 }
+
+#esit {
+    position: absolute;
+    margin :auto;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
+    margin-top: 10%;
+    color: white;
+    font-size: 50px;
+    text-align: center;
+    font-family: 'Press Start 2P', cursive;
+}
+
+#buttonGameHome {
+    width: 200px;
+    height: 50px;
+    background-color: #000;
+    color: white;
+    font-size: 20px;
+    border: 2px solid #FFF;
+    font-family: 'Press Start 2P', cursive;
+}
