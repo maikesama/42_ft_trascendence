@@ -193,13 +193,19 @@ export class GamesGateway implements OnGatewayInit {
 									// delete rooms[room];
 									delete players[rooms[room].gameState.user.socketId];
 									delete players[rooms[room].gameState.com.socketId];
-									console.log("rooms", rooms)
 									console.log("players", players)
+
 							}
-							// console.log("room", room)
 							this.server.to(room).emit('state', rooms[room].gameState)
+							if (rooms[room].status === 1) {
+								delete rooms[room];
+							}
+							console.log("rooms", rooms)
 					}, 1000 / 60)
 					console.log("interval")
+
+
+
 		}
 
 		// @SubscribeMessage('pong')
