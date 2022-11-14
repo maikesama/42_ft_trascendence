@@ -11,6 +11,7 @@ const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mari
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
+import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 // let ctx:any;
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
@@ -19,6 +20,9 @@ export const GamesContain = (props: any) => {
     const [esit, setEsit] = useState<string | null>(null);
     const [start, setStart] = useState(false);
     const [restart, setReStart] = useState(false);
+    // const [userLeft, setUserLeft] = useState(null);
+    // const [userRight, setUserRight] = useState(null);
+
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -68,15 +72,34 @@ export const GamesContain = (props: any) => {
           ctx.fillText(text, x, y);
       }
 
+      const drawUsername = (text:any,x:any,y:any) => {
+        ctx.fillStyle = "#FFF";
+        ctx.font = "35px fantasy";
+        ctx.fillText(text, x, y);
+      }
+
+      const drawImg = (img:any,x:any,y:any) => {
+        //size of image
+        var newImg = new Image;
+        newImg.src = img;
+        ctx.drawImage(newImg, x, y, 70, 70);
+      }
+
+
+
       const render = (user:any, ball:any, net:any, com: any) => {
 
         // clear the canvas
         drawRect(0, 0, canvas.width, canvas.height, "#000");
 
         // draw the user score to the left
+        drawUsername(user.username,canvas.width/4.6, (canvas.height/20));
+        // drawImg(user.img, canvas.width/2, (canvas.height/2));
         drawText(user.score,canvas.width/4,canvas.height/5);
 
         // draw the COM score to the right
+        drawUsername(com.username, 2.95 * canvas.width/4, (canvas.height/20));
+        // drawImg(com.img, 2.95 * canvas.width/4, (canvas.height/20)+50);
         drawText(com.score,3*canvas.width/4,canvas.height/5);
 
         // draw the net
@@ -158,6 +181,11 @@ export const GamesContain = (props: any) => {
 
     console.log("esit", esit)
     console.log("start", start)
+
+    // function back(){
+    //   // window.history.back();
+    //   //window.location.assign('/')
+    // }
     return (
         <>
             <head>
@@ -166,8 +194,15 @@ export const GamesContain = (props: any) => {
             </head>
             <body>
                 <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
-                {/* <div> ciao</div> */}
-                {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}><CircularProgress /> Matchmaking... <h5>, dobbiamo metter il pulsante torna indietro</h5></div>}
+                {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
+                <Link key={"home"} component={RouterLink} to={"/"}>
+                  <button>
+                    <KeyboardBackspaceIcon/>
+                    </button>
+                    </Link>
+                    Matchmaking...
+                    <CircularProgress />
+                    </div>}
                 {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/classic"}><button id="buttonGameHome" onClick={handleRestart}>Play Again</button></Link></div>}
             </body>
         </>

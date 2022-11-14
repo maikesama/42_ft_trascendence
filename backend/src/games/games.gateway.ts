@@ -3,6 +3,8 @@ import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocke
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Cron, CronExpression, Interval } from '@nestjs/schedule';
+import { AtGuard } from 'src/auth/guards';
+import { UserService } from 'src/user/user.service';
 import { GamesService, userDefault, maxScoreClassic, canvas, ballDefault, comDefault , netDefault, players, rooms} from './games.service';
 
 var playersNumber = 0;
@@ -11,6 +13,7 @@ export class GamesGateway implements OnGatewayInit {
 		constructor(
 			private prisma: PrismaService,
 			private gameService: GamesService,
+			private userService: UserService,
 		) { }
 		@WebSocketServer() server: Server;
 		private logger: Logger = new Logger('GamesGateway')
@@ -41,8 +44,6 @@ export class GamesGateway implements OnGatewayInit {
 					else{
 						if (rooms[players[client.id].roomId].status === 1) {
 							delete players[client.id];
-							// playersNumber--;
-							// delete rooms[players[client.id].roomId];
 						}
 						else
 						{
@@ -69,7 +70,6 @@ export class GamesGateway implements OnGatewayInit {
 		}
 
 		isAlreadyInRoom(idIntra: string) {
-				return false;
 				for (let i = 0; i < players.size; i++) {
 						if (players[i].idIntra === idIntra) {
 								return true;
@@ -77,13 +77,28 @@ export class GamesGateway implements OnGatewayInit {
 				}
 				return false;
 		}
+
+
+		setUserInfo(user: any, socketId: any, userToSet:any)
+		{
+			userToSet.idIntra = user.idIntra;
+			userToSet.img = user.img;
+			userToSet.username = user.userName;
+			userToSet.socketId = socketId;
+		}
+
+		@UseGuards(AtGuard)
 		@SubscribeMessage('newPlayer')
 		async handleNewPlayer(client: Socket) {
 				//not viewer but player and idIntra
 				//check if already in players map
-				let idIntra = "ltorrean";
-				//mettere a posto
-				console.log("handleNewPlayer")
+				const user = await this.userService.getUserByIdIntra(client["user"]["idIntra"]);
+				// console.log("user", user)
+				const idIntra = user.idIntra;
+				if (idIntra === "liafigli")
+				{
+					return;
+				}
 				if (players[client.id] === undefined && !this.isAlreadyInRoom(idIntra)) {
 						playersNumber++;
 						let roomId = Math.round(playersNumber / 2).toString();
@@ -93,40 +108,26 @@ export class GamesGateway implements OnGatewayInit {
 						players[client.id] = {idIntra: idIntra, roomId: roomId, type: type, status : 0};
 						if (rooms[roomId] === undefined && type === 0) {
 							rooms[roomId] = {id : roomId, status:-1, gameState: {user: this.gameService.defUser(), ball: this.gameService.defBall(), net: this.gameService.defNet()}};
-							// rooms[roomId] = {id : roomId, status:-1, gameState: {user: userDefault, ball: ballDefault, net: netDefault, com: comDefault}};
-							rooms[roomId].gameState.user.idIntra = "idIntra";
-							rooms[roomId].gameState.user.img = "https://cdn.intra.42.fr/users/medium_ltorrean.jpg";
-							rooms[roomId].gameState.user.username = "ltorreanUsername";
-							rooms[roomId].gameState.user.socketId = client.id;
-							client.join(Math.round(playersNumber / 2).toString())
+							this.setUserInfo(user, client.id, rooms[roomId].gameState.user);
+							client.join(roomId)
 							console.log("join ", roomId)
 						}
 						else {
 							rooms[roomId].status = 0;
 							rooms[roomId].gameState.com = this.gameService.defCom();
-							rooms[roomId].gameState.com.idIntra = "ltorrean";
-							rooms[roomId].gameState.com.img = "https://cdn.intra.42.fr/users/medium_ltorrean.jpg";
-							rooms[roomId].gameState.com.username = "ltorreanUsername";
-							rooms[roomId].gameState.com.socketId = client.id;
+							this.setUserInfo(user, client.id, rooms[roomId].gameState.com);
 							players[client.id].status = 1;
 							players[rooms[roomId].gameState.user.socketId].status = 1;
-							// console.log("com", rooms[roomId].gameState.com)
-							client.join(Math.round(playersNumber / 2).toString())
+							client.join(roomId)
 							console.log("join ", roomId)
-							console.log("com", rooms[roomId].gameState.com)
+							const games = this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra});
+							rooms[roomId].realId = games;
 							this.handleStart(roomId);
 						}
 						console.log("players", players)
 						console.log("rooms", rooms)
 						console.log("number", playersNumber)
-						// console.log("update user", rooms[roomId].gameState.user)
-						// console.log("update com", rooms[roomId].gameState.com)
-						// console.log("update ball", rooms[roomId].gameState.ball)
-						// console.log("update net", rooms[roomId].gameState.net)
 					}
-					// console.log("rooms", rooms[players[client.id].roomId].gameState.user)
-
-				// user.socketId = client.id;
 		}
 
 		@SubscribeMessage('playerMovement')

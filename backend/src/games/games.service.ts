@@ -295,44 +295,50 @@ update(ball:any, user:any, com:any, net:any){
                     user2: body.user2,
                 }
             })
+            return game.idGame
         }
         catch(e){
             throw new BadRequestException(e)
         }
     }
 
-    async updateGame(body: any) {
-        try{
-            const game = await this.prisma.games.update({
-                where: {
-                    idGame: Number(body.idGame),
-                },
-                data: {
-                    endedAt: new Date(),
-                    winner: body.winner,
-                    loser: body.loser,
-                    scoreP1: Number(body.scoreP1),
-                    scoreP2: Number(body.scoreP2),
-                    status: "ended",
+
+    async findGameById(gameId: any)
+    {
+        try {
+            return await this.prisma.games.findUniqueOrThrow({
+                where:
+                {
+                    idGame: gameId
                 }
             })
 
+        } catch (error) {
+            throw new BadRequestException(error)
+        }
+    }
+
+    async updateUserStats(winnerIdIntra: any, loserIdIntra: any, gameId: any)
+    {
+        try {
+
+            const game = await this.findGameById(gameId);
             const winner = await this.prisma.user.findUniqueOrThrow({
-                where: {
-                    idIntra: body.winner
-                },
-            })
+                    where: {
+                        idIntra: winnerIdIntra
+                    },
+                })
 
             const loser = await this.prisma.user.findUniqueOrThrow({
                 where: {
-                    idIntra: body.loser
+                    idIntra: loserIdIntra
 
                 },
             })
 
            await this.prisma.user.update({
                 where: {
-                    idIntra: body.loser
+                    idIntra: loserIdIntra
                 },
                 data: {
                     rank: this.minus(loser.rank ,30),
@@ -342,7 +348,7 @@ update(ball:any, user:any, com:any, net:any){
             })
             await this.prisma.user.update({
                 where: {
-                    idIntra: body.winner
+                    idIntra: winnerIdIntra
                 },
                 data: {
                     rank: this.sum(winner.rank, 30),
@@ -355,7 +361,7 @@ update(ball:any, user:any, com:any, net:any){
             {
                 await this.prisma.user.update({
                     where: {
-                        idIntra: body.winner
+                        idIntra: winnerIdIntra
                     },
                     data: {
                         achFirstWin: true,
@@ -368,7 +374,7 @@ update(ball:any, user:any, com:any, net:any){
             {
                 await this.prisma.user.update({
                     where: {
-                        idIntra: body.winner
+                        idIntra: winnerIdIntra
                     },
                     data: {
                         achFiveinRow: true,
@@ -381,7 +387,7 @@ update(ball:any, user:any, com:any, net:any){
             {
                 await this.prisma.user.update({
                     where: {
-                        idIntra: body.winner
+                        idIntra: winnerIdIntra
                     },
                     data: {
                         achTeninRow: true,
@@ -394,7 +400,7 @@ update(ball:any, user:any, com:any, net:any){
             {
                 await this.prisma.user.update({
                     where: {
-                        idIntra: body.winner
+                        idIntra: winnerIdIntra
                     },
                     data: {
                         achTwentyinRow: true,
@@ -407,7 +413,7 @@ update(ball:any, user:any, com:any, net:any){
             {
                 await this.prisma.user.update({
                     where: {
-                        idIntra: body.winner
+                        idIntra: winnerIdIntra
                     },
                     data: {
                         achAce: true,
@@ -415,9 +421,26 @@ update(ball:any, user:any, com:any, net:any){
                 })
                 //emit event to user
             }
+        }
+        catch(e)
+        {
+            throw new BadRequestException(e)
+        }
+    }
 
-
-
+    async updateGame(body: any) {
+        try{
+            const game = await this.prisma.games.update({
+                where: {
+                    idGame: Number(body.idGame),
+                },
+                data: {
+                    endedAt: new Date(),
+                    scoreP1: Number(body.scoreP1),
+                    scoreP2: Number(body.scoreP2),
+                    status: (body.scoreP1 > body.scoreP2 ? 1 : 2),
+                }
+            })
         }
         catch(e){
             throw new BadRequestException(e)

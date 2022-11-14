@@ -84,9 +84,7 @@ model Games {
 	user2                 String
 	scoreP1               Int             	@default(0)
 	scoreP2               Int            	@default(0)
-	status				  String		  	@default("waiting")
-	winner                String?
-	loser				  String?
+	status				  Int		  		@default(0)
 }
 
 model Partecipant{

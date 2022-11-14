@@ -24,17 +24,28 @@ export const Homepage = () => {
     //w-50 h-50 d-inline-block
     //backgroundImage: `url(${background})`
     //d-flex justify-content-center align-items-center
+
+    function classico()
+    {
+        window.location.assign('games/classic')
+    }
+
+    function custom()
+    {
+        window.location.assign('games/custom')
+    }
+
 	return (
         <>
         <Header/>
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
-                    <Link component={RouterLink} to="/games/2">
-                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
+
+                    <div onClick={classico} className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
                         <h1 className="modalityName">Classico</h1>
                     </div>
-                    </Link>
-                    <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
+
+                    <div onClick={custom} className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
                         <h1 className="modalityName">Custom</h1>
                     </div>
                 </div>
