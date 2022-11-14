@@ -57,7 +57,6 @@ export const Twofa = () => {
                     console.log("ciao");
                 }
                 else {
-                    // alert(json.message);
                     setMesage(json.message);
                 }
             } catch (error) {

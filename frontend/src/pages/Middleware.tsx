@@ -4,6 +4,7 @@ import TextField from "@mui/material/TextField";
 import './css/Homepage.css';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import Typography from '@mui/material/Typography';
+import { Alert, manageError } from '../components/generic/Alert';
 
 
 
@@ -42,6 +43,7 @@ export const Middleware = () => {
     const nick = useRef<any>('');
     const img = useRef<any>();
     const [images, setImages] = React.useState([]);
+    const [alert, setAlert] = React.useState("");
 
     //const [user, setUser] = useState({} as any);
 
@@ -59,15 +61,9 @@ export const Middleware = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ userName: nick.current.value })
-            }).then((response) => {
-                if (response.status === 400) {
-                    alert("Username already exists");
-                    document.location.reload();
-                }
-                else if (response.status === 201) {
-                    document.location.reload();
-                }
-            });
+            })
+            const data = await response.json();
+            manageError(data, response, null ,setAlert)
             // const json = await response.json();
             // // console.log(json);
             // // setUser(json);
@@ -158,6 +154,7 @@ export const Middleware = () => {
                     </div>
                 </div>
             </section>
+            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

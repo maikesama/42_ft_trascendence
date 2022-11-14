@@ -58,6 +58,7 @@ export function Header(props: any) {
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(null);
   const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+  const [notify, setNotify] = React.useState<null | HTMLElement>(null);
 
   const handleOpenNavMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElNav(event.currentTarget);
@@ -74,6 +75,23 @@ export function Header(props: any) {
 
   const handleCloseUserMenu = () => {
     setAnchorElUser(null);
+  };
+
+  const handleOpenNavNotify = (event: React.MouseEvent<HTMLElement>) => {
+    setNotify(event.currentTarget);
+  };
+
+  const handleOpenUserNotify = (event: React.MouseEvent<HTMLElement>) => {
+    setNotify(event.currentTarget);
+  };
+
+  const handleCloseNavNotify = () => {
+    setNotify(null);
+  };
+
+
+  const handleCloseUserNotify = () => {
+    setNotify(null);
   };
 
   const darkTheme = createTheme({
@@ -192,33 +210,9 @@ export function Header(props: any) {
                   <Avatar alt="Remy Sharp" src={user.img} sx={{ width: 50, height: 50 }} />
                 </IconButton>
               </Tooltip>
-              <Menu
-                sx={{ mt: '45px' }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: 'top',
-                  horizontal: 'right',
-                }}
-                open={Boolean(anchorElUser)}
-                onClose={handleCloseUserMenu}
-              >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleCloseUserMenu} >
-                    <Link href={setting.toLowerCase()} style={{ textDecoration: 'none', color: 'white' }}>
-                      <Typography textAlign="center">{setting}</Typography>
-                    </Link>
-                  </MenuItem>
-                ))}
-
-              </Menu>
+              
               <Tooltip title="Open notify">
-                <IconButton onClick={handleOpenUserMenu} sx={{ ml: 2, width: 50, height: 50 }}><NotificationsIcon></NotificationsIcon></IconButton>
+                <IconButton onClick={handleOpenUserNotify} sx={{ ml: 2, width: 50, height: 50 }}><NotificationsIcon></NotificationsIcon></IconButton>
               </Tooltip>
               <Menu
                 sx={{ mt: '45px' }}
@@ -247,6 +241,39 @@ export function Header(props: any) {
                 <MenuItem onClick={logout} >
                 <Link style={{ textDecoration: 'none', color: 'white' }}>
                   <Typography textAlign="center">Logout</Typography>
+                </Link>
+                </MenuItem>
+              </Menu>
+
+              {/*NOTIFICHE WEB E MOBILE */}
+
+              <Menu
+                sx={{ mt: '45px', ml: '100px' }}
+                id="menu-appbar"
+                anchorEl={notify}
+                anchorOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: 'top',
+                  horizontal: 'right',
+                }}
+                open={Boolean(notify)}
+                onClose={handleCloseUserNotify}
+              >
+                {/* {notify.map((notify) => (
+                  <MenuItem key={notify} onClick={handleCloseUserMenu} >
+                    <Link href={notify.toLowerCase()} style={{ textDecoration: 'none', color: 'white' }}>
+                      <Typography textAlign="center">{notify}</Typography>
+                    </Link>
+
+                  </MenuItem>
+                ))} */}
+                <MenuItem  >
+                <Link style={{ textDecoration: 'none', color: 'white' }}>
+                  <Typography textAlign="center">mpaci ti ha invitato</Typography>
                 </Link>
                 </MenuItem>
               </Menu>

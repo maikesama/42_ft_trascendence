@@ -19,10 +19,13 @@ import BlockIcon from '@mui/icons-material/Block';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import "../css/ProfileEdit.css"
 import { SearchBar } from './SearchBar';
 import { MatchesList } from './MatchesList';
+import { Alert, manageError } from '../generic/Alert';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -200,8 +203,146 @@ export const ProfileEdit = (props: any) => {
     style: { color: 'rgb(0, 0, 0)' }
   }
 
-  return (
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [isFriend, setIsFriend] = useState(false);
+  const [alert, setAlert] = useState("");
 
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isFriend`;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+        });
+        const json = await response.json();
+        console.log("isF" +json);
+        setIsFriend(json);
+        //window.location.reload();
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, [isFriend]);
+
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/isBlocked`;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+        });
+        const json = await response.json();
+        console.log("isB" +json);
+        setIsBlocked(json);
+        //window.location.reload();
+        //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, [isBlocked]);
+
+  async function block(index: any) {
+    //const idIntra = await search[index]?.idIntra;
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/block/${props.idIntra}`;
+
+    try {
+        const response = await fetch(url, {
+            method: 'POST',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({idIntra: props.idIntra}),
+        });
+        window.location.reload();
+    } catch (error) {
+        console.log("error", error);
+    }
+}
+
+async function unblock(index: any) {
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/unblock/${props.idIntra}`;
+
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      }
+    });
+    window.location.reload();
+  } catch (error) {
+    console.log("error", error);
+  }
+}
+
+async function addInviteFriend(index: any) {
+
+  //const idIntra = await search[index]?.idIntra;
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/inviteFriend`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+      })
+      const data = await response.json();
+      manageError(data, response,props.triggerUser ,setAlert);
+      // if (response.status === 400) {
+      //   alert("You already have a pending request with this user");
+      // }
+          
+  
+      //window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
+}
+
+async function removeInviteFriend(index: any) {
+  //const idIntra = await search[index]?.idIntra;
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/removeInvite/`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+      });
+      window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
+}
+
+  return (
+    <>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
 
       <CardMedia
@@ -239,9 +380,26 @@ export const ProfileEdit = (props: any) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
         <IconButton aria-label="message" size="small" ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="addfriend" size="small" style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+        {isFriend === false ? <>
+          <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
+        </> 
+
+        : <>
+          <IconButton aria-label="addfriend" size="small" onClick={removeInviteFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton>
+        </>}
+        {isBlocked === false ? <>
+          <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
+        </> 
+
+        : <>
+          <IconButton aria-label="block" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton>
+        </>}
+        
+        
+        
       </CardActions>
     </Card>
+    <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+    </>
   );
 }

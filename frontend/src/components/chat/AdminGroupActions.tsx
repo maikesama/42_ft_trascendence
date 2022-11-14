@@ -27,6 +27,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { AdminSettings } from './AdminSettings';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
+import { Alert, manageError } from '../generic/Alert';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -49,6 +50,7 @@ export const AdminGroupActions = (props: any) => {
     const [promoted, setPromoted] = useState({} as any);
     const [openSettings, setOpenSettings] = React.useState(false);
     const [chan, setChan] = useState({} as any);
+    const [alert, setAlert] = useState("");
 
     const handleOpenSettings = () => {
         setOpenSettings(true);
@@ -107,7 +109,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat }),
             })
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -125,7 +128,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             })
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -143,7 +147,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -161,7 +166,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: bantime.current.value }),
             })
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -179,7 +185,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: mutetime.current.value }),
             })
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -260,7 +267,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -279,7 +287,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -298,7 +307,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             });
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -317,7 +327,8 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            window.location.reload();
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
         } catch (error) {
             console.log("error", error);
         }
@@ -648,6 +659,7 @@ export const AdminGroupActions = (props: any) => {
                 </DialogContent>
             </Dialog>
             <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan} type={props.type} idChat={props.idChat}/>
+            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }
