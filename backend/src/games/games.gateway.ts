@@ -7,7 +7,8 @@ import { AtGuard } from 'src/auth/guards';
 import { UserService } from 'src/user/user.service';
 import { GamesService, userDefault, maxScoreClassic, canvas, ballDefault, comDefault , netDefault, players, rooms} from './games.service';
 
-var playersNumber = 0;
+var playersNumberClassic = 0;
+var playersNumberCustom = 0;
 @WebSocketGateway(4244, { namespace: '/games', transports: ['websocket'] })
 export class GamesGateway implements OnGatewayInit {
 		constructor(
@@ -37,7 +38,7 @@ export class GamesGateway implements OnGatewayInit {
 				// com.score = 0;
 				if (players[client.id] !== undefined) {
 					if (players[client.id].status === 0) {
-						playersNumber--;
+						playersNumberClassic--;
 						delete rooms[players[client.id].roomId];
 						delete players[client.id];
 					}
@@ -94,28 +95,26 @@ export class GamesGateway implements OnGatewayInit {
 				//check if already in players map
 				const user = await this.userService.getUserByIdIntra(client["user"]["idIntra"]);
 				const idIntra = user.idIntra;
-				// if (idIntra === "liafigli3")
-				// {
-				// 	return;
-				// }
-				const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
-				if (idIntraSpectator || idIntraSpect !== idIntra)
-				{
-					client.join(players[idIntraSpectator].roomId);
-					// await this.handleStart(players[idIntraSpectator].roomId);
+
+				let typeGame = (idIntraSpect === "1") ? 1 : (idIntraSpect === "0") ? 0 : 2;
+				if (typeGame === 2) {
+					const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
+					if (idIntraSpectator && idIntraSpect !== idIntra)
+					{
+						client.join(players[idIntraSpectator].roomId);
+					}
 					return;
 				}
 
 				if (players[client.id] === undefined && !this.isAlreadyInRoom(idIntra)) {
-						playersNumber++;
-						let roomId = Math.round(playersNumber / 2).toString();
-						let type = (playersNumber % 2 === 0) ? 1 : 0;
-						let typeGame = 0;
+						playersNumberClassic++;
+						let roomId = Math.round(playersNumberClassic / 2).toString();
+						let type = (playersNumberClassic % 2 === 0) ? 1 : 0;
 						// 0 left
 						// 1 right
 						players[client.id] = {idIntra: idIntra, roomId: roomId, type: type, status : 0};
 						if (rooms[roomId] === undefined && type === 0) {
-							rooms[roomId] = {id : roomId, status:-1, gameState: {user: this.gameService.defUser(), ball: this.gameService.defBall(), net: this.gameService.defNet()}};
+							rooms[roomId] = {id : roomId, status:-1, type : typeGame, gameState: {user: this.gameService.defUser(), ball: this.gameService.defBall(), net: this.gameService.defNet()}};
 							this.setUserInfo(user, client.id, rooms[roomId].gameState.user);
 							client.join(roomId)
 							console.log("join ", roomId)
@@ -134,7 +133,7 @@ export class GamesGateway implements OnGatewayInit {
 						}
 						console.log("players", players)
 						console.log("rooms", rooms)
-						console.log("number", playersNumber)
+						console.log("number", playersNumberClassic)
 					}
 		}
 
@@ -146,12 +145,20 @@ export class GamesGateway implements OnGatewayInit {
 				let roomId = players[client.id].roomId;
 				// console.log("roomId", roomId)
 				let userToMove = (players[client.id].type === 0) ? rooms[roomId].gameState.user : rooms[roomId].gameState.com;
+				let type = players[client.id].type;
+
 				if (playerMovement.left && userToMove.x > 0) {
-					userToMove.x -= 4
+					if ((type === 1 && (userToMove.x - 4) >= canvas.width / 2)|| type === 0 ) {
+						userToMove.x -= 4
+					}
 				}
 				if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-					userToMove.x += 4
+					if ((type === 0 && (userToMove.x + 4) <= canvas.width / 2 - 10) || type === 1 ) {
+						userToMove.x += 4
+					}
 				}
+
+
 				if (playerMovement.up && userToMove.y > 0) {
 					userToMove.y -= 4
 				}

@@ -132,16 +132,16 @@ update(ball:any, user:any, com:any, net:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-    if (com.idIntra === "ltorrean" )
-    {
-        com.y += ((ball.y - (com.y + com.height/2)))*0.3;
-        // com.score = 5;
-    }
-    else if (user.idIntra === "ltorrean")
-    {
-        // user.score = 5;
-        user.y += ((ball.y - (user.y + user.height/2)))*0.3;
-    }
+    // if (com.idIntra === "ltorrean" )
+    // {
+    //     com.y += ((ball.y - (com.y + com.height/2)))*0.3;
+    //     // com.score = 5;
+    // }
+    // else if (user.idIntra === "ltorrean")
+    // {
+    //     // user.score = 5;
+    //     user.y += ((ball.y - (user.y + user.height/2)))*0.3;
+    // }
 
 	// com.y += ((ball.y - (com.y + com.height/2)))*0.1;
 
@@ -304,7 +304,7 @@ update(ball:any, user:any, com:any, net:any){
                 data: {
                     user1: body.user1,
                     user2: body.user2,
-                    // type: body.type
+                    type: body.type
                 }
             })
             return game.idGame
@@ -353,7 +353,7 @@ update(ball:any, user:any, com:any, net:any){
                     idIntra: loserIdIntra
                 },
                 data: {
-                    rank: this.minus(loser.rank ,30),
+                    rank: this.minus(loser.rank, 30) <= -2147483648 ? loser.rank : this.minus(loser.rank, 30),
                     loss: this.sum(loser.loss , 1),
                     winRow: 0,
                 }
@@ -363,7 +363,7 @@ update(ball:any, user:any, com:any, net:any){
                     idIntra: winnerIdIntra
                 },
                 data: {
-                    rank: this.sum(winner.rank, 30),
+                    rank: this.sum(winner.rank, 30) >= 2147483647 ? winner.rank : this.sum(winner.rank, 30),
                     win: this.sum(winner.win, 1),
                     winRow: this.sum(winner.winRow, 1),
                 }
