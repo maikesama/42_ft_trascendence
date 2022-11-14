@@ -46,7 +46,6 @@ export class GamesGateway implements OnGatewayInit {
 						}
 						else
 						{
-							console.log("4")
 							let type = players[client.id].type;
 							//capire decisione da prendere
 							if (type === 0) {
@@ -199,8 +198,8 @@ export class GamesGateway implements OnGatewayInit {
 							this.server.to(room).emit('state', rooms[room].gameState)
 							if (rooms[room].status === 1) {
 								delete rooms[room];
+								console.log("rooms", rooms)
 							}
-							console.log("rooms", rooms)
 					}, 1000 / 60)
 					console.log("interval")
 

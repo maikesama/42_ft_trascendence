@@ -1,6 +1,6 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-export const maxScoreClassic: number = 10;
+export const maxScoreClassic: number = 5;
 
 export const canvas = {
         width: 1000,

@@ -1,5 +1,9 @@
 all: ip up
 
+run: up
+
+run2: up2
+
 del:
 	@sed -ie '/REACT_APP_HOST_URI/d' .env
 	@rm .enve
@@ -9,6 +13,9 @@ ip: del
 
 up :
 	docker-compose up --build
+
+up2 :
+	docker-compose up --build -d
 
 localhost:
 	@echo "REACT_APP_HOST_URI=localhost" >> .env

@@ -32,7 +32,6 @@ services:
     restart: unless-stopped
     volumes:
       - ./backend/src:/app/src
-      - ./backend/client:/app/client
     expose:
       - "3333"
       - "4244"
