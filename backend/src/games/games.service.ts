@@ -132,6 +132,17 @@ update(ball:any, user:any, com:any, net:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
+    if (com.idIntra === "ltorrean" )
+    {
+        com.y += ((ball.y - (com.y + com.height/2)))*0.3;
+        // com.score = 5;
+    }
+    else if (user.idIntra === "ltorrean")
+    {
+        // user.score = 5;
+        user.y += ((ball.y - (user.y + user.height/2)))*0.3;
+    }
+
 	// com.y += ((ball.y - (com.y + com.height/2)))*0.1;
 
 	// when the ball collides with bottom and top walls we inverse the y velocity.
@@ -293,6 +304,7 @@ update(ball:any, user:any, com:any, net:any){
                 data: {
                     user1: body.user1,
                     user2: body.user2,
+                    // type: body.type
                 }
             })
             return game.idGame
@@ -356,6 +368,18 @@ update(ball:any, user:any, com:any, net:any){
                     winRow: this.sum(winner.winRow, 1),
                 }
             })
+
+            if (loser.rank < 0 && loser.achRealLoser === false)
+            {
+                await this.prisma.user.update({
+                    where: {
+                        idIntra: loserIdIntra
+                    },
+                    data: {
+                        achRealLoser: true,
+                    }
+                })
+            }
 
             if (winner.win === 1 && winner.achFirstWin === false)
             {

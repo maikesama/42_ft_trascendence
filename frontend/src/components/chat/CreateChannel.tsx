@@ -170,8 +170,10 @@ export const CreateChannel = (props: any) => {
     let initials = useRef<any>('');
 
     async function searchUser() {
-        let init = document.getElementById('searchBar')?.innerText;
+        let input = document.getElementById('searchBar') as HTMLInputElement | null;
 
+        let init = input?.value
+        console.log(init)
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
@@ -250,7 +252,7 @@ export const CreateChannel = (props: any) => {
                 </DialogContentText>
                 {/* inputRef initials bug reopen createChannel */}
                 {/*<TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>*/}
-                <input type="text" name="searchBar" id="searchBar" onChange={searchUser}/>
+                <input type="text" name="searchBar" id="searchBar" onChange={searchUser} fullWidth/>
                 {initials.current.value === 0 || initials.current.value === null ? <>
                 <FixedSizeList
 

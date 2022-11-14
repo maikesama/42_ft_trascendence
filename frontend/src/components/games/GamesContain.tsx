@@ -12,14 +12,18 @@ import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
+import { useParams } from 'react-router';
+
 // let ctx:any;
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
     // const [loading, setLoading] = useState(false);
+    const params = useParams()
     const [esit, setEsit] = useState<string | null>(null);
     const [start, setStart] = useState(false);
     const [restart, setReStart] = useState(false);
+    // console.log("id", )
     // const [userLeft, setUserLeft] = useState(null);
     // const [userRight, setUserRight] = useState(null);
 
@@ -33,7 +37,7 @@ export const GamesContain = (props: any) => {
         socketGames.on('connect', () => {
                 setIsConnectedGames(true);
         } );
-        socketGames.emit('newPlayer');
+        socketGames.emit('newPlayer', params.idIntra);
         socketGames.emit('pong');
         socketGames.on('disconnect', () => {
                 setIsConnectedGames(false);
@@ -94,7 +98,7 @@ export const GamesContain = (props: any) => {
 
         // draw the user score to the left
         drawUsername(user.username,canvas.width/4.6, (canvas.height/20));
-        // drawImg(user.img, canvas.width/2, (canvas.height/2));
+        // sdrawImg(user.img, canvas.width/2, (canvas.height/2));
         drawText(user.score,canvas.width/4,canvas.height/5);
 
         // draw the COM score to the right
@@ -147,6 +151,18 @@ export const GamesContain = (props: any) => {
             } else if (e.keyCode === 40) {
               playerMovement.down = true;
             }
+            else if (e.keyCode === 68) {
+              playerMovement.right = true;
+            }
+            else if (e.keyCode === 65) {
+              playerMovement.left = true;
+            }
+            else if (e.keyCode === 87) {
+              playerMovement.up = true;
+            }
+            else if (e.keyCode === 83) {
+              playerMovement.down = true;
+            }
           };
           const keyUpHandler = (e:any) => {
             if (e.keyCode === 39) {
@@ -156,6 +172,18 @@ export const GamesContain = (props: any) => {
             } else if (e.keyCode === 38) {
               playerMovement.up = false;
             } else if (e.keyCode === 40) {
+              playerMovement.down = false;
+            }
+            else if (e.keyCode === 68) {
+              playerMovement.right = false;
+            }
+            else if (e.keyCode === 65) {
+              playerMovement.left = false;
+            }
+            else if (e.keyCode === 87) {
+              playerMovement.up = false;
+            }
+            else if (e.keyCode === 83) {
               playerMovement.down = false;
             }
             //sapce

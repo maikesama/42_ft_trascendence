@@ -70,12 +70,12 @@ export class GamesGateway implements OnGatewayInit {
 		}
 
 		isAlreadyInRoom(idIntra: string) {
-				for (let i = 0; i < players.size; i++) {
-						if (players[i].idIntra === idIntra) {
-								return true;
-						}
+			for (let key in players) {
+				if (players[key].idIntra === idIntra) {
+					return key;
 				}
-				return false;
+			}
+			return null;
 		}
 
 
@@ -89,20 +89,28 @@ export class GamesGateway implements OnGatewayInit {
 
 		@UseGuards(AtGuard)
 		@SubscribeMessage('newPlayer')
-		async handleNewPlayer(client: Socket) {
+		async handleNewPlayer(client: Socket, idIntraSpect : any) {
 				//not viewer but player and idIntra
 				//check if already in players map
 				const user = await this.userService.getUserByIdIntra(client["user"]["idIntra"]);
-				// console.log("user", user)
 				const idIntra = user.idIntra;
-				if (idIntra === "liafigli")
+				// if (idIntra === "liafigli3")
+				// {
+				// 	return;
+				// }
+				const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
+				if (idIntraSpectator || idIntraSpect !== idIntra)
 				{
+					client.join(players[idIntraSpectator].roomId);
+					// await this.handleStart(players[idIntraSpectator].roomId);
 					return;
 				}
+
 				if (players[client.id] === undefined && !this.isAlreadyInRoom(idIntra)) {
 						playersNumber++;
 						let roomId = Math.round(playersNumber / 2).toString();
 						let type = (playersNumber % 2 === 0) ? 1 : 0;
+						let typeGame = 0;
 						// 0 left
 						// 1 right
 						players[client.id] = {idIntra: idIntra, roomId: roomId, type: type, status : 0};
@@ -120,9 +128,9 @@ export class GamesGateway implements OnGatewayInit {
 							players[rooms[roomId].gameState.user.socketId].status = 1;
 							client.join(roomId)
 							console.log("join ", roomId)
-							const games = this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra});
+							const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: typeGame});
 							rooms[roomId].realId = games;
-							this.handleStart(roomId);
+							await this.handleStart(roomId);
 						}
 						console.log("players", players)
 						console.log("rooms", rooms)
@@ -138,12 +146,12 @@ export class GamesGateway implements OnGatewayInit {
 				let roomId = players[client.id].roomId;
 				// console.log("roomId", roomId)
 				let userToMove = (players[client.id].type === 0) ? rooms[roomId].gameState.user : rooms[roomId].gameState.com;
-				// if (playerMovement.left && userToMove.x > 0) {
-				// 	userToMove.x -= 4
-				// }
-				// if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-				// 	userToMove.x += 4
-				// }
+				if (playerMovement.left && userToMove.x > 0) {
+					userToMove.x -= 4
+				}
+				if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
+					userToMove.x += 4
+				}
 				if (playerMovement.up && userToMove.y > 0) {
 					userToMove.y -= 4
 				}
@@ -165,32 +173,29 @@ export class GamesGateway implements OnGatewayInit {
 		// }
 
 		// @SubscribeMessage('pong')
-		handleStart(room: string) {
-			const interval = setInterval(() => {
+		async handleStart(room: string) {
+			const interval = setInterval(async () => {
 							this.gameService.update( rooms[room].gameState.ball, rooms[room].gameState.user, rooms[room].gameState.com, rooms[room].gameState.net);
-							// console.log("update user", rooms[room].gameState.user)
-							// console.log("update com", rooms[room].gameState.com)
-							// console.log("update ball", rooms[room].gameState.ball)
-							// console.log("update net", rooms[room].gameState.net)
-							// clearInterval(interval);
-							// rooms[room].user = user;
-							// rooms[room].com = com;
-							// rooms[room].ball = ball;
-							// rooms[room].net = net;
 							if (rooms[room].gameState.user?.score === maxScoreClassic || rooms[room].gameState.com?.score === maxScoreClassic) {
 									clearInterval(interval)
 									rooms[room].status = 1;
+									var winner;
+									var loser;
 									if (rooms[room].gameState.com.score === maxScoreClassic) {
+										winner = rooms[room].gameState.com;
+										loser = rooms[room].gameState.user;
 										this.server.to(rooms[room].gameState.com.socketId).emit('win', rooms[room].gameState)
 										this.server.to(rooms[room].gameState.user.socketId).emit('lose', rooms[room].gameState)
 									}
 									else
 									{
+										winner = rooms[room].gameState.user;
+										loser = rooms[room].gameState.com;
 										this.server.to(rooms[room].gameState.com.socketId).emit('lose', rooms[room].gameState)
 										this.server.to(rooms[room].gameState.user.socketId).emit('win', rooms[room].gameState)
 									}
-									// update database
-									// delete rooms[room];
+									const update = await this.gameService.updateGame({idGame: rooms[room].realId, scoreP1: rooms[room].gameState.user.score, scoreP2: rooms[room].gameState.com.score});
+									const updateUserStats = await this.gameService.updateUserStats(winner.idIntra, loser.idIntra, rooms[room].realId);
 									delete players[rooms[room].gameState.user.socketId];
 									delete players[rooms[room].gameState.com.socketId];
 									console.log("players", players)

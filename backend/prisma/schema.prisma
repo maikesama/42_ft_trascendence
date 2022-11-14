@@ -85,6 +85,7 @@ model Games {
 	scoreP1               Int             	@default(0)
 	scoreP2               Int            	@default(0)
 	status				  Int		  		@default(0)
+	type				  Int 				@default(0)
 }
 
 model Partecipant{
