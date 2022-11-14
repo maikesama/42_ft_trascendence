@@ -33,4 +33,7 @@ qunado cambi scena si scollega?
 capire se tenere chat bannate
 loading ?
 limite messaggi chat lunghezza?
-messaggio vuoto? 
+messaggio vuoto?
+
+
+fare funziona esterna guardie gataway

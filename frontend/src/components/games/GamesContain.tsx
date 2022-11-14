@@ -8,12 +8,17 @@ import { Link } from '@mui/material';
 export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
 const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
 const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 // let ctx:any;
 export const GamesContain = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
     //console.log(props.match.params.username)
     // const [loading, setLoading] = useState(false);
     const [esit, setEsit] = useState<string | null>(null);
+    const [start, setStart] = useState(false);
+    const [restart, setReStart] = useState(false);
     const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
@@ -88,6 +93,7 @@ export const GamesContain = (props: any) => {
     }
 
         socketGames.on('state', (gameState:any ) => {
+          setStart(true);
           console.log("gameState", gameState.players)
           render(gameState.user, gameState.ball, gameState.net, gameState.com)
         });
@@ -142,8 +148,16 @@ export const GamesContain = (props: any) => {
           document.addEventListener('keyup', keyUpHandler, false);
 
 
-    }, []);
+    }, [restart]);
 
+    const handleRestart = () => {
+      setEsit(null);
+      setReStart(!restart);
+      setStart(false);
+  };
+
+    console.log("esit", esit)
+    console.log("start", start)
     return (
         <>
             <head>
@@ -152,7 +166,9 @@ export const GamesContain = (props: any) => {
             </head>
             <body>
                 <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
-                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link></div>}
+                {/* <div> ciao</div> */}
+                {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}><CircularProgress /> Matchmaking... <h5>, dobbiamo metter il pulsante torna indietro</h5></div>}
+                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/classic"}><button id="buttonGameHome" onClick={handleRestart}>Play Again</button></Link></div>}
             </body>
         </>
     );

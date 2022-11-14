@@ -1,6 +1,8 @@
 import {Header} from '../components/generic/Header';
 import '../font/font.css';
 import './css/Homepage.css';
+import { Link as RouterLink } from 'react-router-dom';
+import { Link } from '@mui/material';
 
 let logged = false;
 
@@ -16,7 +18,7 @@ export const Homepage = () => {
         });
 }
     richiedi();*/
-    
+
     //https://img.freepik.com/free-vector/vector-cartoon-background-quest-room-with-closed-doors_33099-1202.jpg
     //d-flex justify-content-evenly align-items-center mw-100
     //w-50 h-50 d-inline-block
@@ -27,11 +29,13 @@ export const Homepage = () => {
         <Header/>
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
+                    <Link component={RouterLink} to="/games/2">
                     <div className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
-                        <h1 className="modalityName">Classico</h1> 
+                        <h1 className="modalityName">Classico</h1>
                     </div>
+                    </Link>
                     <div className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
-                        <h1 className="modalityName">Custom</h1> 
+                        <h1 className="modalityName">Custom</h1>
                     </div>
                 </div>
         </div>

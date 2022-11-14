@@ -1,34 +1,27 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-
-export const maxScoreClassic = 5;
-
-export const rooms = {
-    1: {
-        id: 1,
-        name: 'room1',
-        gameState: {}
-    },
-    2: {
-        id: 2,
-        name: 'room2',
-        gameState: {}
-    },
-}
-export const gameState = {
-		user: {},
-		com: {},
-		ball: {},
-		net : {},
-        status : 0,
-}
+export const maxScoreClassic: number = 10;
 
 export const canvas = {
-		width: 1000,
-		height: 600,
+        width: 1000,
+        height: 600,
 }
+
+export const rooms = new Map<string, any>();
+
+export const players = new Map<string, any>();
+
+
+// export const gameState = {
+// 		user: {},
+// 		com: {},
+// 		ball: {},
+// 		net : {},
+//         status : 0,
+// }
+
 // Ball object
-export const ball = {
+export const ballDefault = {
 	x : canvas.width/2,
 	y : canvas.height/2,
 	radius : 10,
@@ -39,7 +32,7 @@ export const ball = {
 }
 
 // User Paddle
-export const user = {
+export const userDefault = {
 	x : 0, // left side of canvas
 	y : (canvas.height - 100)/2, // -100 the height of paddle
 	width : 10,
@@ -47,20 +40,27 @@ export const user = {
 	score : 0,
 	color : "WHITE",
 	socketId : null,
+    idIntra : null,
+    username : null,
+    img : null,
 }
 
 // COM Paddle
-export const com = {
+export const comDefault = {
 	x : canvas.width - 10, // - width of paddle
 	y : (canvas.height - 100)/2, // -100 the height of paddle
 	width : 10,
 	height : 100,
 	score : 0,
-	color : "WHITE"
+	color : "WHITE",
+    socketId : null,
+    idIntra : null,
+    username : null,
+    img : null,
 }
 
 // NET
-export const net = {
+export const netDefault = {
 	x : (canvas.width - 2)/2,
 	y : 0,
 	height : 10,
@@ -75,14 +75,23 @@ export class GamesService{
     constructor(private prisma: PrismaService) {}
 
 
-    resetGameState(){
-    gameState.user = {};
-    gameState.com = {};
-    gameState.ball = {};
-    gameState.net = {};
+defBall(){
+    return JSON.parse(JSON.stringify(ballDefault));
 }
 
-resetBall(){
+defUser(){
+    return JSON.parse(JSON.stringify(userDefault));
+}
+
+defCom(){
+    return JSON.parse(JSON.stringify(comDefault));
+}
+
+defNet(){
+    return JSON.parse(JSON.stringify(netDefault));
+}
+
+resetBall(ball:any){
 	ball.x = canvas.width/2;
 	ball.y = canvas.height/2;
 	ball.velocityX = -ball.velocityX;
@@ -104,17 +113,17 @@ collision(b,p){
 	return p.left < b.right && p.top < b.bottom && p.right > b.left && p.bottom > b.top;
 }
 
-update(){
+update(ball:any, user:any, com:any, net:any){
 
 	// change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
 	if( ball.x - ball.radius < 0 ){
 			com.score++;
 			// comScore.play();
-			this.resetBall();
+			this.resetBall(ball);
 	}else if( ball.x + ball.radius > canvas.width){
 			user.score++;
 			// userScore.play();
-			this.resetBall();
+			this.resetBall(ball);
 	}
 
 	// the ball has a velocity
@@ -123,7 +132,7 @@ update(){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-	com.y += ((ball.y - (com.y + com.height/2)))*0.1;
+	// com.y += ((ball.y - (com.y + com.height/2)))*0.1;
 
 	// when the ball collides with bottom and top walls we inverse the y velocity.
 	if(ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height){
