@@ -16,9 +16,9 @@ import { UserService } from "src/user/user.service";
 		PassportModule,
 		JwtModule.register({
 			secret: process.env.AtSecret,
-			signOptions: { expiresIn: '1h' },
+			signOptions: { expiresIn: '3h' },
 		}),
-		// UserModule, 
+		// UserModule,
 	],
 	controllers: [AuthController],
 	providers: [ AuthService, AtStrategy, TwoFactorAuthenticationService, UserService ]

@@ -7,8 +7,11 @@ import { AtGuard } from 'src/auth/guards';
 import { UserService } from 'src/user/user.service';
 import { GamesService, userDefault, maxScoreClassic, canvas, ballDefault, comDefault , netDefault, players, rooms} from './games.service';
 
-var playersNumberClassic = 0;
-var playersNumberCustom = 0;
+// var playersNumberClassic = 0;
+// var playersNumberCustom = 0;
+
+var playerClassic = [];
+var playerCustom = [];
 @WebSocketGateway(4244, { namespace: '/games', transports: ['websocket'] })
 export class GamesGateway implements OnGatewayInit {
 		constructor(
@@ -32,42 +35,52 @@ export class GamesGateway implements OnGatewayInit {
 
 		}
 
+		leaveGame(client: Socket) {
+			if (players[client.id] !== undefined) {
+				const type = players[client.id].type;
+				if (type === 0) {
+					rooms[players[client.id].roomId].gameState.user.score = 0;
+					rooms[players[client.id].roomId].gameState.com.score = maxScoreClassic;
+				}
+				else if (type === 1) {
+					rooms[players[client.id].roomId].gameState.com.score = 0;
+					rooms[players[client.id].roomId].gameState.user.score = maxScoreClassic;
+				}
+				delete players[client.id];
+			}
+			else
+			{
+				console.log("player not found");
+				for (let i = 0; i < playerClassic.length; i++) {
+					// console.log(playerClassic[i]);
+					if (playerClassic[i].client.id === client.id) {
+						//delete playerClassic[i];
+						playerClassic.splice(i, 1);
+						console.log("leave room classic");
+					}
+				}
+				for (let i = 0; i < playerCustom.length; i++) {
+					if (playerCustom[i].client.id === client.id) {
+						playerClassic.splice(i, 1);
+						console.log("leave room custom");
+					}
+				}
+			}
+
+			console.log ("players", players)
+			console.log ("rooms", rooms)
+		}
+
 		handleDisconnect(client: Socket) {
 				this.logger.log(`Client disconnected: ${client.id}`)
-				// user.score = 0;
-				// com.score = 0;
-				if (players[client.id] !== undefined) {
-					if (players[client.id].status === 0) {
-						playersNumberClassic--;
-						delete rooms[players[client.id].roomId];
-						delete players[client.id];
-					}
-					else{
-						if (rooms[players[client.id].roomId].status === 1) {
-							delete players[client.id];
-						}
-						else
-						{
-							let type = players[client.id].type;
-							//capire decisione da prendere
-							if (type === 0) {
-								rooms[players[client.id].roomId].gameState.user.score = 0;
-								rooms[players[client.id].roomId].gameState.com.score = maxScoreClassic;
-							}
-							else
-							{
-								rooms[players[client.id].roomId].gameState.com.score = 0;
-								rooms[players[client.id].roomId].gameState.user.score = maxScoreClassic;
-							}
-						}
-					}
+				this.leaveGame(client);
+		}
 
-				}
-				// end match?
-				console.log ("players", players)
-				console.log ("rooms", rooms)
-
-				// delete gameState.players[client.id]
+		@SubscribeMessage('leaveGame')
+		leaveGameHandler(client: Socket) {
+			console.log("leaveGameHandler");
+			this.logger.log(`Client leave: ${client.id}`)
+			this.leaveGame(client);
 		}
 
 		isAlreadyInRoom(idIntra: string) {
@@ -80,13 +93,101 @@ export class GamesGateway implements OnGatewayInit {
 		}
 
 
-		setUserInfo(user: any, socketId: any, userToSet:any)
+		setUserInfo(user: any, client: any, userToSet:any)
 		{
 			userToSet.idIntra = user.idIntra;
 			userToSet.img = user.img;
 			userToSet.username = user.userName;
-			userToSet.socketId = socketId;
+			userToSet.socketId = client.id;
+			// userToSet.client = client;
 		}
+
+		isAlredyInQueue(idIntra: string, type: number) {
+			for (let i = 0; i < playerClassic.length; i++) {
+				if (playerClassic[i].idIntra === idIntra) {
+					return true;
+				}
+			}
+			for (let i = 0; i < playerCustom.length; i++) {
+				if (playerCustom[i].idIntra === idIntra) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		setQueueInfo(data:any, type: number)
+		{
+			if(!this.isAlredyInQueue(data.idIntra, type))
+			{
+				if (type === 0) {
+					playerClassic.push(data);
+				}
+				else
+				{
+					playerCustom.push(data);
+				}
+			}
+		}
+
+		newTwoUserQueue(type: number)
+		{
+			if (type === 0) {
+				if (playerClassic.length >= 2) {
+					let user1 = playerClassic.shift();
+					let user2 = playerClassic.shift();
+					return [user1, user2];
+				}
+			}
+			else
+			{
+				if (playerCustom.length >= 2) {
+					let user1 = playerCustom.shift();
+					let user2 = playerCustom.shift();
+					return [user1, user2];
+				}
+			}
+			return [];
+
+		}
+
+		createRandomIdRoom()
+		{
+			//stringa random
+			let idRoom = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+			while (rooms[idRoom] !== undefined) {
+				idRoom = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+			}
+			return idRoom;
+		}
+
+		async createRoom(type: number, newUsers: any)
+		{
+			const roomId = this.createRandomIdRoom();
+			let room = {
+				id: roomId,
+				status: 0,
+				type: type,
+				gameState: {
+					user: this.gameService.defUser(),
+					com: this.gameService.defCom(),
+					ball: this.gameService.defBall(),
+					net: this.gameService.defNet(),
+					powerUp: this.gameService.defPowerUp()
+				}
+			}
+			rooms[roomId] = room;
+			for (let i = 0; i < 2; i++) {
+				players[newUsers[i].client.id] = {idIntra: newUsers[i].idIntra, roomId: roomId, type: i, client: newUsers[i].client};
+				newUsers[i].client.join(roomId);
+			}
+			this.setUserInfo({idIntra: newUsers[0].idIntra, img : newUsers[0].img, userName: newUsers[0].userName}, newUsers[0].client, rooms[roomId].gameState.user);
+			this.setUserInfo({idIntra: newUsers[1].idIntra, img : newUsers[1].img, userName: newUsers[1].userName}, newUsers[1].client, rooms[roomId].gameState.com);
+			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: type});
+			rooms[roomId].realId = games;
+			return roomId;
+		}
+
 
 		@UseGuards(AtGuard)
 		@SubscribeMessage('newPlayer')
@@ -94,47 +195,81 @@ export class GamesGateway implements OnGatewayInit {
 				//not viewer but player and idIntra
 				//check if already in players map
 				const user = await this.userService.getUserByIdIntra(client["user"]["idIntra"]);
-				const idIntra = user.idIntra;
+				// user["idIntra"] = client["user"]["idIntra"];
 
 				let typeGame = (idIntraSpect === "1") ? 1 : (idIntraSpect === "0") ? 0 : 2;
 				if (typeGame === 2) {
 					const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
-					if (idIntraSpectator && idIntraSpect !== idIntra)
+					if (idIntraSpectator && idIntraSpect !== user.idIntra)
 					{
 						client.join(players[idIntraSpectator].roomId);
 					}
+					// return;
+					client.emit("GameNotFound");
 					return;
 				}
 
-				if (players[client.id] === undefined && !this.isAlreadyInRoom(idIntra)) {
-						playersNumberClassic++;
-						let roomId = Math.round(playersNumberClassic / 2).toString();
-						let type = (playersNumberClassic % 2 === 0) ? 1 : 0;
-						// 0 left
-						// 1 right
-						players[client.id] = {idIntra: idIntra, roomId: roomId, type: type, status : 0};
-						if (rooms[roomId] === undefined && type === 0) {
-							rooms[roomId] = {id : roomId, status:-1, type : typeGame, gameState: {user: this.gameService.defUser(), ball: this.gameService.defBall(), net: this.gameService.defNet()}};
-							this.setUserInfo(user, client.id, rooms[roomId].gameState.user);
-							client.join(roomId)
-							console.log("join ", roomId)
-						}
-						else {
-							rooms[roomId].status = 0;
-							rooms[roomId].gameState.com = this.gameService.defCom();
-							this.setUserInfo(user, client.id, rooms[roomId].gameState.com);
-							players[client.id].status = 1;
-							players[rooms[roomId].gameState.user.socketId].status = 1;
-							client.join(roomId)
-							console.log("join ", roomId)
-							const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: typeGame});
-							rooms[roomId].realId = games;
-							await this.handleStart(roomId);
-						}
-						console.log("players", players)
-						console.log("rooms", rooms)
-						console.log("number", playersNumberClassic)
+				if (players[client.id] === undefined && user && !this.isAlreadyInRoom(user.idIntra) && !this.isAlredyInQueue(user.idIntra, typeGame))
+				{
+					this.setQueueInfo({idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client}, typeGame);
+					console.log("PlaerClassic: " + playerClassic);
+					console.log("PlaerCustom: " + playerCustom);
+					const newUsers = this.newTwoUserQueue(typeGame)
+					if (newUsers.length === 2)
+					{
+							const roomId = await this.createRoom(typeGame, newUsers);
+							if (roomId)
+							{
+								await this.handleStart(roomId);
+								console.log("user", rooms[roomId].gameState.user)
+								console.log("com", rooms[roomId].gameState.com)
+							}
+							else
+							{
+								for (let i = 0; i < 100; i++) {
+									console.log("error create room");
+								}
+							}
 					}
+
+				}
+				// emit matthmaking
+
+
+				// if (players[client.id] === undefined && !this.isAlreadyInRoom(idIntra)) {
+				// 		playersNumberClassic++;
+				// 		let roomId = Math.round(playersNumberClassic / 2).toString();
+				// 		let type = (playersNumberClassic % 2 === 0) ? 1 : 0;
+				// 		// 0 left
+				// 		// 1 right
+				// 		players[client.id] = {idIntra: idIntra, roomId: roomId, type: type, status : 0};
+				// 		if (rooms[roomId] === undefined && type === 0) {
+				// 			rooms[roomId] = {id : roomId, status:-1, type : typeGame, gameState: {user: this.gameService.defUser(), ball: this.gameService.defBall(), net: this.gameService.defNet()}};
+				// 			this.setUserInfo(user, client.id, rooms[roomId].gameState.user);
+				// 			client.join(roomId)
+				// 			console.log("join ", roomId)
+				// 		}
+				// 		else {
+				// 			rooms[roomId].status = 0;
+				// 			rooms[roomId].gameState.com = this.gameService.defCom();
+				// 			this.setUserInfo(user, client.id, rooms[roomId].gameState.com);
+				// 			players[client.id].status = 1;
+				// 			players[rooms[roomId].gameState.user.socketId].status = 1;
+				// 			client.join(roomId)
+				// 			console.log("join ", roomId)
+				// 			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: typeGame});
+				// 			rooms[roomId].realId = games;
+				// 			await this.handleStart(roomId);
+				// 		}
+				// 		console.log("number", playersNumberClassic)
+				// 	}
+				console.log("players", players)
+				console.log("rooms", rooms)
+				console.log("PlaerClassic: ");
+					console.log(playerClassic);
+					console.log("PlaerCustom: ");
+					console.log(playerCustom);
+
 		}
 
 		@SubscribeMessage('playerMovement')
@@ -145,16 +280,20 @@ export class GamesGateway implements OnGatewayInit {
 				let roomId = players[client.id].roomId;
 				// console.log("roomId", roomId)
 				let userToMove = (players[client.id].type === 0) ? rooms[roomId].gameState.user : rooms[roomId].gameState.com;
-				let type = players[client.id].type;
 
-				if (playerMovement.left && userToMove.x > 0) {
-					if ((type === 1 && (userToMove.x - 4) >= canvas.width / 2)|| type === 0 ) {
-						userToMove.x -= 4
+
+				if(rooms[roomId].type === 1)
+				{
+					let type = players[client.id].type;
+					if (playerMovement.left && userToMove.x > 0) {
+						if ((type === 1 && (userToMove.x - 4) >= canvas.width / 2)|| type === 0 ) {
+							userToMove.x -= 4
+						}
 					}
-				}
-				if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-					if ((type === 0 && (userToMove.x + 4) <= canvas.width / 2 - 10) || type === 1 ) {
-						userToMove.x += 4
+					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
+						if ((type === 0 && (userToMove.x + 4) <= canvas.width / 2 - 10) || type === 1 ) {
+							userToMove.x += 4
+						}
 					}
 				}
 
@@ -181,8 +320,10 @@ export class GamesGateway implements OnGatewayInit {
 
 		// @SubscribeMessage('pong')
 		async handleStart(room: string) {
-			const interval = setInterval(async () => {
-							this.gameService.update( rooms[room].gameState.ball, rooms[room].gameState.user, rooms[room].gameState.com, rooms[room].gameState.net);
+			console.log("fine")
+			if (rooms[room] !== undefined && rooms[room].status === 0) {
+				const interval = setInterval(async () => {
+							this.gameService.update( rooms[room].gameState.ball, rooms[room].gameState.user, rooms[room].gameState.com, rooms[room].gameState.net, rooms[room].gameState.powerUp, rooms[room].type);
 							if (rooms[room].gameState.user?.score === maxScoreClassic || rooms[room].gameState.com?.score === maxScoreClassic) {
 									clearInterval(interval)
 									rooms[room].status = 1;
@@ -203,21 +344,28 @@ export class GamesGateway implements OnGatewayInit {
 									}
 									const update = await this.gameService.updateGame({idGame: rooms[room].realId, scoreP1: rooms[room].gameState.user.score, scoreP2: rooms[room].gameState.com.score});
 									const updateUserStats = await this.gameService.updateUserStats(winner.idIntra, loser.idIntra, rooms[room].realId);
-									delete players[rooms[room].gameState.user.socketId];
-									delete players[rooms[room].gameState.com.socketId];
-									console.log("players", players)
 
-							}
+
+								}
 							this.server.to(room).emit('state', rooms[room].gameState)
 							if (rooms[room].status === 1) {
+								if (players[rooms[room].gameState.user.socketId] !== undefined) {
+									players[rooms[room].gameState.user.socketId].client.leave(room);
+								}
+								if (players[rooms[room].gameState.com.socketId] !== undefined) {
+									players[rooms[room].gameState.com.socketId].client.leave(room);
+								}
+								delete players[rooms[room].gameState.user.socketId];
+								delete players[rooms[room].gameState.com.socketId];
 								delete rooms[room];
+								console.log("players", players)
 								console.log("rooms", rooms)
 							}
 					}, 1000 / 60)
 					console.log("interval")
 
 
-
+				}
 		}
 
 		// @SubscribeMessage('pong')

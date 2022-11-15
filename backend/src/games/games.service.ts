@@ -1,6 +1,6 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-export const maxScoreClassic: number = 5;
+export const maxScoreClassic: number = 10;
 
 export const canvas = {
         width: 1000,
@@ -68,6 +68,21 @@ export const netDefault = {
 	color : "WHITE"
 }
 
+export const powerUpDefault = {
+    x : 0,
+    y : 0,
+    with : 10,
+    height : 10,
+    velocityX : 5,
+    velocityY : 5,
+    speed : 7,
+    color : "YELLOW",
+    type : null,
+    active : false,
+    time : 0,
+}
+
+
 
 
 @Injectable()
@@ -89,6 +104,10 @@ defCom(){
 
 defNet(){
     return JSON.parse(JSON.stringify(netDefault));
+}
+
+defPowerUp(){
+    return JSON.parse(JSON.stringify(powerUpDefault));
 }
 
 resetBall(ball:any){
@@ -113,7 +132,7 @@ collision(b,p){
 	return p.left < b.right && p.top < b.bottom && p.right > b.left && p.bottom > b.top;
 }
 
-update(ball:any, user:any, com:any, net:any){
+update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
 	// change the score of players, if the ball goes to the left "ball.x<0" computer win, else if "ball.x > canvas.width" the user win
 	if( ball.x - ball.radius < 0 ){
@@ -150,6 +169,85 @@ update(ball:any, user:any, com:any, net:any){
         ball.velocityY = -ball.velocityY;
         // wall.play();
 	}
+
+    if (typeGame === 1)
+    {
+        //random ball color
+
+        // we check if the paddle hit the user or the com paddle
+        const arrayColor = ["NONE","RED", "GREEN", "BLUE", "YELLOW"]
+        com.color = "PINK";
+        user.color = "PINK";
+        user.height = 140;
+        com.height = 140;
+        ball.radius = 20;
+        //random create powerUp randomly every from 5 to 10 seconds
+
+        if (powerUp.active === false || powerUp.time <= 0)
+        {
+            // random from 5 to 10 seconds
+            powerUp.time = Math.floor(Math.random() * 500) + 300;
+            // random type speed / size / ball reverse
+            //1 speed
+            //2 size
+            //3 ball reverse
+            //4 ball black
+            powerUp.type = Math.floor(Math.random() * 4) + 1;
+            // powerUp.type = 4
+            powerUp.color = arrayColor[powerUp.type];
+            powerUp.height = 50;
+            powerUp.width = 50;
+            powerUp.x = Math.floor(Math.random() * (canvas.width - 10)) + 1;
+            powerUp.y = Math.floor(Math.random() * (canvas.height - 10)) + 1;
+            powerUp.active = true;
+            // powerUp.ball = 0;
+        }
+        else if (powerUp.active === true && powerUp.time > 0)
+        {
+            powerUp.time--;
+        }
+
+        if (powerUp.ball > 0)
+        {
+            powerUp.ball--;
+            ball.color = "BLACK";
+        }
+        else
+        {
+            ball.color = "rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+        }
+
+
+        if (powerUp.active)
+        {
+            if (this.collision(ball, powerUp))
+            {
+                //destroy powerUp
+                powerUp.active = false;
+                powerUp.x = 0;
+                powerUp.y = 0;
+
+                if (powerUp.type === 1)
+                {
+                    ball.speed += 5;
+                }
+                else if (powerUp.type === 2)
+                {
+                    ball.radius += 4;
+                }
+                else if (powerUp.type === 3)
+                {
+                    ball.velocityX = -ball.velocityX;
+                }
+                else if (powerUp.type === 4)
+                {
+                    powerUp.ball = Math.floor(Math.random() * 500) + 50;
+                }
+            }
+        }
+
+
+    }
 
 	// we check if the paddle hit the user or the com paddle
 	let player = (ball.x + ball.radius < canvas.width/2) ? user : com;

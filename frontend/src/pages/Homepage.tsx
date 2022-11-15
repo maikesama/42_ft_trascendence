@@ -24,15 +24,15 @@ export const Homepage = () => {
     //w-50 h-50 d-inline-block
     //backgroundImage: `url(${background})`
     //d-flex justify-content-center align-items-center
-
     function classico()
     {
-        window.location.assign('games/classic')
+        // window.location.assign('games/classic')
+        window.location.assign('/games/0')
     }
 
     function custom()
     {
-        window.location.assign('games/custom')
+        window.location.assign('/games/1')
     }
 
 	return (
@@ -41,11 +41,11 @@ export const Homepage = () => {
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
 
-                    <div onClick={classico} className="col-md-6 d-flex justify-content-center align-items-center" id="classic">
+                    <div onClick={classico} className="col-md-6 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
                         <h1 className="modalityName">Classico</h1>
                     </div>
 
-                    <div onClick={custom} className="col-md-6 d-flex justify-content-center align-items-center" id="custom">
+                    <div onClick={custom} className="col-md-6 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
                         <h1 className="modalityName">Custom</h1>
                     </div>
                 </div>

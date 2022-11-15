@@ -8,6 +8,7 @@ import { Link } from '@mui/material';
 export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
 const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
 const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
+const GameNotFoundImage = "https://media.tenor.com/GuqY6L8lsBoAAAAC/not-found.gif"
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -23,6 +24,7 @@ export const GamesContain = (props: any) => {
     const [esit, setEsit] = useState<string | null>(null);
     const [start, setStart] = useState(false);
     const [restart, setReStart] = useState(false);
+    const [loading, setLoading] = useState(true);
     // console.log("id", )
     // const [userLeft, setUserLeft] = useState(null);
     // const [userRight, setUserRight] = useState(null);
@@ -89,9 +91,11 @@ export const GamesContain = (props: any) => {
         ctx.drawImage(newImg, x, y, 70, 70);
       }
 
+      //draw powerUp
 
 
-      const render = (user:any, ball:any, net:any, com: any) => {
+
+      const render = (user:any, ball:any, net:any, com: any, powerUp: any) => {
 
         // clear the canvas
         drawRect(0, 0, canvas.width, canvas.height, "#000");
@@ -117,12 +121,18 @@ export const GamesContain = (props: any) => {
 
         // draw the ball
         drawArc(ball.x, ball.y, ball.radius, ball.color);
+
+        //draw powerUp
+        // if active
+        if(powerUp.active){
+          drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
+        }
     }
 
         socketGames.on('state', (gameState:any ) => {
           setStart(true);
           console.log("gameState", gameState.players)
-          render(gameState.user, gameState.ball, gameState.net, gameState.com)
+          render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
         });
 
         socketGames.on('lose', (gameState:any ) => {
@@ -133,6 +143,11 @@ export const GamesContain = (props: any) => {
         socketGames.on('win', (gameState:any ) => {
           setEsit(WinnerImage)
           console.log("win")
+        });
+
+        socketGames.on('GameNotFound', (gameState:any ) => {
+          setEsit(GameNotFoundImage)
+          console.log("GameNotFound")
         });
 
         const playerMovement = {
@@ -207,6 +222,13 @@ export const GamesContain = (props: any) => {
       setStart(false);
   };
 
+  const handleBack = () => {
+    setEsit(null);
+    setStart(false);
+    socketGames.emit('leaveGame');
+    // window.location.assign('/')
+  }
+
     console.log("esit", esit)
     console.log("start", start)
 
@@ -224,14 +246,14 @@ export const GamesContain = (props: any) => {
                 <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
                 {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
                 <Link key={"home"} component={RouterLink} to={"/"}>
-                  <button>
-                    <KeyboardBackspaceIcon/>
+                  <button onClick={handleBack}>
+                    <KeyboardBackspaceIcon />
                     </button>
                     </Link>
                     Matchmaking...
                     <CircularProgress />
                     </div>}
-                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/classic"}><button id="buttonGameHome" onClick={handleRestart}>Play Again</button></Link></div>}
+                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div>}
             </body>
         </>
     );
