@@ -14,6 +14,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useParams } from 'react-router';
+import { socket } from '../../App';
 
 // let ctx:any;
 export const GamesContain = (props: any) => {
@@ -156,6 +157,10 @@ export const GamesContain = (props: any) => {
         socketGames.on('GameNotFound', (gameState:any ) => {
           setEsit(GameNotFoundImage)
           console.log("GameNotFound")
+        });
+
+        socketGames.on('trigger', (gameState:any ) => {
+          socket.emit('trigger');
         });
 
         socketGames.on('gameOver', (gameState:any ) => {

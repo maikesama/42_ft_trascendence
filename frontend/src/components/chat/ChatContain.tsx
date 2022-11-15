@@ -446,7 +446,7 @@ export const ChatContain = (props: any) => {
             <CreateChannel status={openCreateGroup} closeStatus={handleCloseCreateGroup} />
             {/*MODAL USER ACTIONS */}
             <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
-            
+
         </div >
     );
 }

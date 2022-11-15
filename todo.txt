@@ -49,3 +49,6 @@ pallina sparisce sopra o sotto
  //size       "https://www.clipartmax.com/png/full/27-274934_new-super-mario-bros-mario-power-up-mushroom.png",
  //reverse    "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
  //ball black "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"
+
+
+2ltorrean entra in coda

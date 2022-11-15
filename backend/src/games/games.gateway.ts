@@ -5,7 +5,6 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Cron, CronExpression, Interval } from '@nestjs/schedule';
 import { AtGuard } from 'src/auth/guards';
 import { UserService } from 'src/user/user.service';
-import { AppGateway } from 'src/app.gateway';
 import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} from './games.service';
 
 // var playersNumberClassic = 0;
@@ -13,13 +12,13 @@ import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} 
 
 var playerClassic = [];
 var playerCustom = [];
+var playerInvited = new Map<string, any>();
 @WebSocketGateway(4244, { namespace: '/games', transports: ['websocket'] })
 export class GamesGateway implements OnGatewayInit {
 		constructor(
 			private prisma: PrismaService,
 			private gameService: GamesService,
 			private userService: UserService,
-			private appGateway: AppGateway,
 		) { }
 		@WebSocketServer() server: Server;
 		private logger: Logger = new Logger('GamesGateway')
@@ -190,10 +189,29 @@ export class GamesGateway implements OnGatewayInit {
 			this.setUserInfo({idIntra: newUsers[1].idIntra, img : newUsers[1].img, userName: newUsers[1].userName}, newUsers[1].client, rooms[roomId].gameState.com);
 			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: type});
 			rooms[roomId].realId = games;
-			this.appGateway.server.emit("trigger");
+			this.server.emit("trigger");
 			return roomId;
 		}
 
+		async matchUsers(typeGame: number, newUsers: any)
+		{
+			if (newUsers.length === 2)
+			{
+				const roomId = await this.createRoom(typeGame, newUsers);
+				if (roomId)
+				{
+					await this.handleStart(roomId);
+					console.log("user", rooms[roomId].gameState.user)
+					console.log("com", rooms[roomId].gameState.com)
+				}
+				else
+				{
+					for (let i = 0; i < 100; i++) {
+						console.log("error create room");
+					}
+				}
+			}
+		}
 
 		@UseGuards(AtGuard)
 		@SubscribeMessage('newPlayer')
@@ -204,42 +222,59 @@ export class GamesGateway implements OnGatewayInit {
 				// user["idIntra"] = client["user"]["idIntra"];
 
 				let typeGame = (idIntraSpect === "1") ? 1 : (idIntraSpect === "0") ? 0 : 2;
+
 				if (typeGame === 2) {
-					const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
-					if (idIntraSpectator && idIntraSpect !== user.idIntra)
-					{
-						client.join(players[idIntraSpectator].roomId);
+					if ((idIntraSpect[0] === "1" || idIntraSpect[0] === "0" || idIntraSpect[0] === "2" ) && !this.isAlredyInQueue(user.idIntra, typeGame) && playerInvited[user.idIntra] === undefined) {
+						let typeGame2 = parseInt(idIntraSpect[0]);
+						idIntraSpect = idIntraSpect.slice(1);
+						const userInvited = await this.userService.isUserExist(idIntraSpect);
+						console.log("userInvited", userInvited)
+						if (userInvited) {
+							// && idIntraSpect !== user.idIntra
+							if (typeGame2 === 2)
+							{
+								if (playerInvited[idIntraSpect] !== undefined && playerInvited[idIntraSpect].invited.idintra === user.idIntra) {
+									var user2 = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client}
+									await this.matchUsers(playerInvited[idIntraSpect].typeGame, [playerInvited[idIntraSpect], user2]);
+								}
+							}
+							else
+							{
+								if (playerInvited[user.idIntra] === undefined) {
+									playerInvited[user.idIntra] = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, typeGame: typeGame, invited:{idIntra: idIntraSpect, status: 0}};
+								}
+							}
+						}
+						else
+						{
+							client.emit("GameNotFound");
+							return;
+						}
+						// this.server.to(userInvited.socketId).emit("invite", {idIntra: user.idIntra, userName: user.userName, img: user.img, type: typeGame});
 					}
 					else
 					{
-						client.emit("GameNotFound");
+						const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
+						if (idIntraSpectator && idIntraSpect !== user.idIntra)
+						{
+							client.join(players[idIntraSpectator].roomId);
+						}
+						else
+						{
+							client.emit("GameNotFound");
+						}
+						// return;
+						return;
 					}
-					// return;
-					return;
 				}
 
-				if (players[client.id] === undefined && user && !this.isAlreadyInRoom(user.idIntra) && !this.isAlredyInQueue(user.idIntra, typeGame))
+				if (players[client.id] === undefined && user && !this.isAlreadyInRoom(user.idIntra) && !this.isAlredyInQueue(user.idIntra, typeGame) && typeGame !== 2) {
 				{
 					this.setQueueInfo({idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client}, typeGame);
 					console.log("PlaerClassic: " + playerClassic);
 					console.log("PlaerCustom: " + playerCustom);
 					const newUsers = this.newTwoUserQueue(typeGame)
-					if (newUsers.length === 2)
-					{
-							const roomId = await this.createRoom(typeGame, newUsers);
-							if (roomId)
-							{
-								await this.handleStart(roomId);
-								console.log("user", rooms[roomId].gameState.user)
-								console.log("com", rooms[roomId].gameState.com)
-							}
-							else
-							{
-								for (let i = 0; i < 100; i++) {
-									console.log("error create room");
-								}
-							}
-					}
+					await this.matchUsers(typeGame, newUsers);
 
 				}
 				// emit matthmaking
@@ -280,6 +315,7 @@ export class GamesGateway implements OnGatewayInit {
 					console.log(playerCustom);
 
 		}
+	}
 
 		@SubscribeMessage('playerMovement')
 		async handlePlayerMovement(client: Socket, playerMovement: any){
@@ -367,7 +403,7 @@ export class GamesGateway implements OnGatewayInit {
 									await this.userService.changeUserStatus(rooms[room].gameState.com.idIntra, 1);
 								}
 								this.server.to(room).emit('gameOver');
-								this.appGateway.server.emit('trigger');
+								this.server.emit('trigger');
 								delete players[rooms[room].gameState.user.socketId];
 								delete players[rooms[room].gameState.com.socketId];
 								delete rooms[room];

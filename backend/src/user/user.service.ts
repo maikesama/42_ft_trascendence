@@ -75,6 +75,22 @@ export class UserService {
 		}
 	}
 
+	async isUserExist(idIntra: string){
+		try{
+			const user = await this.prisma.user.findUnique({
+				where: {
+					idIntra: idIntra
+				}
+			})
+			if (user)
+				return true
+			return false
+		}
+		catch(e){
+			throw new HttpException(e, HttpStatus.BAD_REQUEST)
+		}
+	}
+
 	async getUserByIdIntra(idIntra: string){
 		try{
 			const user = await this.prisma.user.findUniqueOrThrow({

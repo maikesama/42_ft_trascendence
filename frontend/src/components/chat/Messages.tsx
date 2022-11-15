@@ -166,6 +166,8 @@ export const Messages = (props: any) => {
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+
+
 	// console.log(messages)
 	return (
 		<>
@@ -181,7 +183,8 @@ export const Messages = (props: any) => {
 				</ListItem> */}
 				<Divider />
 				{messages.map((message: any, index: any) => (
-					<ListItem key={index}>
+
+					<ListItem key={index} id={index}>
                         { message.errorMessage ? <ErrorMessage message={message.errorMessage} /> :
                             message.idIntra === idIntra ? <MessageSent message={message.message} time={message.time} img={message?.users?.img}/> :
                             <MessageReceived friend={message?.users?.userName} message={message.message} time={message.time} img={message?.users?.img}/> }
