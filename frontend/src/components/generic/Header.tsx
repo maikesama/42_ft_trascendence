@@ -190,11 +190,11 @@ export function Header(props: any) {
                     // <Link key={page} component={RouterLink} to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}>
                     <Link key={page} component={RouterLink} to={`/${page}`}>
                       <Button
+                        sx={{ mt: -2, color: 'white', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
                         className="headerButtons"
                         style={{ backgroundColor: 'transparent' }}
                         key={page}
                         onClick={handleCloseNavMenu}
-                        sx={{ mt: -2, color: 'white', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
                       >
                         {page}
                       </Button>
@@ -210,7 +210,7 @@ export function Header(props: any) {
                   <Avatar alt="Remy Sharp" src={user.img} sx={{ width: 50, height: 50 }} />
                 </IconButton>
               </Tooltip>
-              
+
               <Tooltip title="Open notify">
                 <IconButton onClick={handleOpenUserNotify} sx={{ ml: 2, width: 50, height: 50 }}><NotificationsIcon></NotificationsIcon></IconButton>
               </Tooltip>

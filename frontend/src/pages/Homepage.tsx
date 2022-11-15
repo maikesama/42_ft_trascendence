@@ -3,27 +3,25 @@ import '../font/font.css';
 import './css/Homepage.css';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
-
-let logged = false;
+import HelpIcon from '@mui/icons-material/Help';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import {Tutorial} from '../components/generic/Tutorial'
+import React, {useState} from 'react';
 
 export const Homepage = () => {
 
+    const [openTutorial, setOpenTutorial]= useState(false)
 
-/*    function richiedi() {
-        axios.get("api/user", {
-            responseType: "json",
-        })
-        .then(function (response) {
-            console.log(response.data);
-        });
-}
-    richiedi();*/
+    const handleClickOpenTutorial = () =>
+    {
+        setOpenTutorial(true);
+    }
 
-    //https://img.freepik.com/free-vector/vector-cartoon-background-quest-room-with-closed-doors_33099-1202.jpg
-    //d-flex justify-content-evenly align-items-center mw-100
-    //w-50 h-50 d-inline-block
-    //backgroundImage: `url(${background})`
-    //d-flex justify-content-center align-items-center
+    const handleClickCloseTutorial = () => {
+        setOpenTutorial(false);
+    }
+
     function classico()
     {
         // window.location.assign('games/classic')
@@ -41,15 +39,20 @@ export const Homepage = () => {
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
 
-                    <div onClick={classico} className="col-md-6 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
+                    <div onClick={classico} className="col-md-5 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
                         <h1 className="modalityName">Classico</h1>
                     </div>
-
-                    <div onClick={custom} className="col-md-6 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
+                    <div className="col-md-2 d-flex justify-content-center align-items-center" id="tutorial">
+                    <Button onClick={handleClickOpenTutorial} size="large" variant="contained" endIcon={<HelpIcon />}>
+                        Tutorial
+                    </Button>
+                    </div>
+                    <div onClick={custom} className="col-md-5 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
                         <h1 className="modalityName">Custom</h1>
                     </div>
                 </div>
         </div>
+        <Tutorial status={openTutorial} closeStatus={handleClickCloseTutorial} />
         </>
 	);
 }

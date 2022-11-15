@@ -84,11 +84,18 @@ export const GamesContain = (props: any) => {
         ctx.fillText(text, x, y);
       }
 
-      const drawImg = (img:any,x:any,y:any) => {
+      const drawImg = (img:any,x:any,y:any, width:any, height:any) => {
         //size of image
-        var newImg = new Image;
+        var newImg = new Image(100,100);
         newImg.src = img;
-        ctx.drawImage(newImg, x, y, 70, 70);
+        newImg.onload=function(){
+          ctx.drawImage(newImg, x, y, width, height);
+        }
+
+// image.onload=function(){
+// context.drawImage(image,0,0,canvas.width,canvas.height);
+// };
+// image.src="http://www.lunapic.com/editor/premade/transparent.gif";
       }
 
       //draw powerUp
@@ -125,7 +132,8 @@ export const GamesContain = (props: any) => {
         //draw powerUp
         // if active
         if(powerUp.active){
-          drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
+          // drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
+          drawImg(powerUp.color, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
         }
     }
 
@@ -148,6 +156,13 @@ export const GamesContain = (props: any) => {
         socketGames.on('GameNotFound', (gameState:any ) => {
           setEsit(GameNotFoundImage)
           console.log("GameNotFound")
+        });
+
+        socketGames.on('gameOver', (gameState:any ) => {
+          if (!esit)
+          {
+            window.location.href = "/";
+          }
         });
 
         const playerMovement = {

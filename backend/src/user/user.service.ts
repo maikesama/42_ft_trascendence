@@ -8,7 +8,6 @@ import { Response } from "express";
 export class UserService {
 	constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-
 	async getBlocked(userId: number){
 		try{
 			const user = await this.prisma.user.findUnique({

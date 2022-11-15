@@ -5,7 +5,8 @@ import { PrismaService } from 'src/prisma/prisma.service';
 import { Cron, CronExpression, Interval } from '@nestjs/schedule';
 import { AtGuard } from 'src/auth/guards';
 import { UserService } from 'src/user/user.service';
-import { GamesService, userDefault, maxScoreClassic, canvas, ballDefault, comDefault , netDefault, players, rooms} from './games.service';
+import { AppGateway } from 'src/app.gateway';
+import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} from './games.service';
 
 // var playersNumberClassic = 0;
 // var playersNumberCustom = 0;
@@ -18,6 +19,7 @@ export class GamesGateway implements OnGatewayInit {
 			private prisma: PrismaService,
 			private gameService: GamesService,
 			private userService: UserService,
+			private appGateway: AppGateway,
 		) { }
 		@WebSocketServer() server: Server;
 		private logger: Logger = new Logger('GamesGateway')
@@ -35,18 +37,20 @@ export class GamesGateway implements OnGatewayInit {
 
 		}
 
-		leaveGame(client: Socket) {
+		async leaveGame(client: Socket) {
 			if (players[client.id] !== undefined) {
 				const type = players[client.id].type;
 				if (type === 0) {
-					rooms[players[client.id].roomId].gameState.user.score = 0;
-					rooms[players[client.id].roomId].gameState.com.score = maxScoreClassic;
+					// rooms[players[client.id].roomId].gameState.user.score = 0;
+					rooms[players[client.id].roomId].gameState.com.score = (rooms[players[client.id].roomId].type === 0) ? maxScoreClassic : maxScoreCustom;
 				}
 				else if (type === 1) {
-					rooms[players[client.id].roomId].gameState.com.score = 0;
-					rooms[players[client.id].roomId].gameState.user.score = maxScoreClassic;
+					// rooms[players[client.id].roomId].gameState.com.score = 0;
+					rooms[players[client.id].roomId].gameState.user.score = (rooms[players[client.id].roomId].type === 0) ? maxScoreClassic : maxScoreCustom;
 				}
+				// await this.userService.changeUserStatus(players[client.id].idIntra, 1);
 				delete players[client.id];
+
 			}
 			else
 			{
@@ -71,16 +75,16 @@ export class GamesGateway implements OnGatewayInit {
 			console.log ("rooms", rooms)
 		}
 
-		handleDisconnect(client: Socket) {
+		async handleDisconnect(client: Socket) {
 				this.logger.log(`Client disconnected: ${client.id}`)
-				this.leaveGame(client);
+				await this.leaveGame(client);
 		}
 
 		@SubscribeMessage('leaveGame')
-		leaveGameHandler(client: Socket) {
+		async leaveGameHandler(client: Socket) {
 			console.log("leaveGameHandler");
 			this.logger.log(`Client leave: ${client.id}`)
-			this.leaveGame(client);
+			await this.leaveGame(client);
 		}
 
 		isAlreadyInRoom(idIntra: string) {
@@ -179,12 +183,14 @@ export class GamesGateway implements OnGatewayInit {
 			rooms[roomId] = room;
 			for (let i = 0; i < 2; i++) {
 				players[newUsers[i].client.id] = {idIntra: newUsers[i].idIntra, roomId: roomId, type: i, client: newUsers[i].client};
+				await this.userService.changeUserStatus(newUsers[i].idIntra, 2)
 				newUsers[i].client.join(roomId);
 			}
 			this.setUserInfo({idIntra: newUsers[0].idIntra, img : newUsers[0].img, userName: newUsers[0].userName}, newUsers[0].client, rooms[roomId].gameState.user);
 			this.setUserInfo({idIntra: newUsers[1].idIntra, img : newUsers[1].img, userName: newUsers[1].userName}, newUsers[1].client, rooms[roomId].gameState.com);
 			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: type});
 			rooms[roomId].realId = games;
+			this.appGateway.server.emit("trigger");
 			return roomId;
 		}
 
@@ -204,8 +210,11 @@ export class GamesGateway implements OnGatewayInit {
 					{
 						client.join(players[idIntraSpectator].roomId);
 					}
+					else
+					{
+						client.emit("GameNotFound");
+					}
 					// return;
-					client.emit("GameNotFound");
 					return;
 				}
 
@@ -324,12 +333,12 @@ export class GamesGateway implements OnGatewayInit {
 			if (rooms[room] !== undefined && rooms[room].status === 0) {
 				const interval = setInterval(async () => {
 							this.gameService.update( rooms[room].gameState.ball, rooms[room].gameState.user, rooms[room].gameState.com, rooms[room].gameState.net, rooms[room].gameState.powerUp, rooms[room].type);
-							if (rooms[room].gameState.user?.score === maxScoreClassic || rooms[room].gameState.com?.score === maxScoreClassic) {
+							if ((rooms[room].gameState.user?.score === ((rooms[room].type === 0) ? maxScoreClassic : maxScoreCustom)) || (rooms[room].gameState.com?.score === ((rooms[room].type === 0) ? maxScoreClassic : maxScoreCustom)))  {
 									clearInterval(interval)
 									rooms[room].status = 1;
 									var winner;
 									var loser;
-									if (rooms[room].gameState.com.score === maxScoreClassic) {
+									if (rooms[room].gameState.com.score === ((rooms[room].type === 0) ? maxScoreClassic : maxScoreCustom)) {
 										winner = rooms[room].gameState.com;
 										loser = rooms[room].gameState.user;
 										this.server.to(rooms[room].gameState.com.socketId).emit('win', rooms[room].gameState)
@@ -351,10 +360,14 @@ export class GamesGateway implements OnGatewayInit {
 							if (rooms[room].status === 1) {
 								if (players[rooms[room].gameState.user.socketId] !== undefined) {
 									players[rooms[room].gameState.user.socketId].client.leave(room);
+									await this.userService.changeUserStatus(rooms[room].gameState.user.idIntra, 1);
 								}
 								if (players[rooms[room].gameState.com.socketId] !== undefined) {
 									players[rooms[room].gameState.com.socketId].client.leave(room);
+									await this.userService.changeUserStatus(rooms[room].gameState.com.idIntra, 1);
 								}
+								this.server.to(room).emit('gameOver');
+								this.appGateway.server.emit('trigger');
 								delete players[rooms[room].gameState.user.socketId];
 								delete players[rooms[room].gameState.com.socketId];
 								delete rooms[room];

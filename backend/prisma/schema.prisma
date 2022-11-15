@@ -26,7 +26,7 @@ model User {
 	winRow			Int				@default(0) // Vittorie di fila
 	win             Int             @default(0)
 	loss            Int             @default(0)
-	rank            Int             @default(1000)
+	rank            Int             @default(100)
 	achFirstWin		Boolean			@default(false)
 	achRealLoser	Boolean			@default(false)
 	achFiveinRow	Boolean			@default(false)

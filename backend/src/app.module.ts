@@ -50,7 +50,8 @@ import { ScheduleModule } from '@nestjs/schedule';
     ScheduleModule.forRoot(),
   ],
   controllers: [],
-  providers: [PrismaService, AppGateway, ChatService, FriendService, GamesService ]
+  providers: [PrismaService, AppGateway, ChatService, FriendService, GamesService ],
+  exports: [AppGateway]
   //   {
   //   provide: APP_INTERCEPTOR,
   //   useClass: CacheInterceptor,

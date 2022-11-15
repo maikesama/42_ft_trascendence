@@ -250,9 +250,8 @@ export const CreateChannel = (props: any) => {
                 <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                     Add members to your channel group:
                 </DialogContentText>
-                {/* inputRef initials bug reopen createChannel */}
                 {/*<TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser}/>*/}
-                <input type="text" name="searchBar" id="searchBar" onChange={searchUser} fullWidth/>
+                <input type="text" name="searchBar" id="searchBar" onChange={searchUser} />
                 {initials.current.value === 0 || initials.current.value === null ? <>
                 <FixedSizeList
 

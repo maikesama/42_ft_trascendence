@@ -37,3 +37,15 @@ messaggio vuoto?
 
 
 fare funziona esterna guardie gataway
+inviti a partite
+pagina di errore partite
+in games status
+socket chat + game
+
+pallina sparisce sopra o sotto
+
+
+ //speed      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Star_with_eyes.svg/1920px-Star_with_eyes.svg.png",
+ //size       "https://www.clipartmax.com/png/full/27-274934_new-super-mario-bros-mario-power-up-mushroom.png",
+ //reverse    "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
+ //ball black "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"

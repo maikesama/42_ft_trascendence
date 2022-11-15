@@ -1,6 +1,8 @@
 import {Injectable, BadRequestException} from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
-export const maxScoreClassic: number = 10;
+
+export const maxScoreClassic: number = 5;
+export const maxScoreCustom: number = 10;
 
 export const canvas = {
         width: 1000,
@@ -175,7 +177,12 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
         //random ball color
 
         // we check if the paddle hit the user or the com paddle
-        const arrayColor = ["NONE","RED", "GREEN", "BLUE", "YELLOW"]
+        const arrayColor = ["NONE",
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Star_with_eyes.svg/1920px-Star_with_eyes.svg.png",
+        "https://www.clipartmax.com/png/full/27-274934_new-super-mario-bros-mario-power-up-mushroom.png",
+        "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
+        "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"
+    ]
         com.color = "PINK";
         user.color = "PINK";
         user.height = 140;
@@ -193,7 +200,6 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             //3 ball reverse
             //4 ball black
             powerUp.type = Math.floor(Math.random() * 4) + 1;
-            // powerUp.type = 4
             powerUp.color = arrayColor[powerUp.type];
             powerUp.height = 50;
             powerUp.width = 50;
@@ -214,7 +220,8 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
         }
         else
         {
-            ball.color = "rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+            // ball.color = "rgb("+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+","+Math.floor(Math.random()*255)+")";
+            ball.color = "PINK";
         }
 
 
@@ -446,12 +453,13 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                 },
             })
 
-           await this.prisma.user.update({
+            const toAddOnRank = game.type === 0 ? 10 : 30;
+            await this.prisma.user.update({
                 where: {
                     idIntra: loserIdIntra
                 },
                 data: {
-                    rank: this.minus(loser.rank, 30) <= -2147483648 ? loser.rank : this.minus(loser.rank, 30),
+                    rank: this.minus(loser.rank, toAddOnRank) <= -2147483648 ? loser.rank : this.minus(loser.rank, toAddOnRank),
                     loss: this.sum(loser.loss , 1),
                     winRow: 0,
                 }
@@ -461,7 +469,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                     idIntra: winnerIdIntra
                 },
                 data: {
-                    rank: this.sum(winner.rank, 30) >= 2147483647 ? winner.rank : this.sum(winner.rank, 30),
+                    rank: this.sum(winner.rank, toAddOnRank) >= 2147483647 ? winner.rank : this.sum(winner.rank, toAddOnRank),
                     win: this.sum(winner.win, 1),
                     winRow: this.sum(winner.winRow, 1),
                 }

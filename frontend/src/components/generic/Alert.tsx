@@ -1,8 +1,3 @@
-{/* <div style={{position: 'absolute', marginTop: '-25%', marginLeft: '30%'}} class="alert alert-primary" role="alert">
-  This is a primary alert—check it out!
-</div>
-            <Alert severity="error" style={{position: "fixed", width: '30%', justifyContent: 'center', alignItems: 'center', marginLeft: '35%', marginTop: '15%'}}>This is an error alert — check it out!</Alert> */}
-
 
 import React, { useState, useRef } from 'react';
 import Dialog from '@mui/material/Dialog';
@@ -14,7 +9,7 @@ import Button from '@mui/material/Button/Button';
 import DialogActions from '@mui/material/DialogActions/DialogActions';
 
 export const manageError = (data: any, response: any, success:any, error:any) => {
-    if ((data !== undefined && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201) 
+    if ((data !== undefined && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201)
          || (response.status && response.status !== 200 && response.status !== 201)){
         console.log("error", data);
         console.log("error2", response);
@@ -27,13 +22,13 @@ export const manageError = (data: any, response: any, success:any, error:any) =>
     }
     else
         success(true);
-    
+
   }
 
 
 
 export const Alert = (props: any) => {
-    
+
     return (
         <>
             <Dialog open={props.status} onClose={props.closeStatus}>

@@ -6,7 +6,12 @@
     scale: 0.55;
     border-radius: 50px 25px;
     margin-bottom: 5%;
-    
+    margin-right: -5%
+
+}
+
+#tutorial{
+
 }
 
 #classic:hover{
@@ -25,6 +30,7 @@
     scale: 0.55;
     border-radius: 50px 25px;
     margin-bottom: 5%;
+    margin-left: -5%
 }
 
 #custom:hover{
@@ -41,14 +47,14 @@
     background-image: url("../../images/2.jpg");
     background-size: 100% 100%;
     background-repeat: no-repeat;
-    
+
 }
 
 #back {
     height: calc(100vh - 180px);
     background-image: url("../../images/backLanding.jpg");
     background-size: 100% 100%;
-    background-repeat: no-repeat;   
+    background-repeat: no-repeat;
 }
 
 .modalityName{
