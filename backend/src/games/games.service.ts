@@ -96,12 +96,33 @@ defBall(){
     return JSON.parse(JSON.stringify(ballDefault));
 }
 
+defBallCustom(){
+    var data = this.defBall();
+    data.color = "PINK";
+    data.radius = 20;
+    return data;
+}
+
 defUser(){
     return JSON.parse(JSON.stringify(userDefault));
 }
 
+defUserCustom(){
+    var data = this.defUser();
+    data.color = "BLUE";
+    data.height = 140;
+    return data;
+}
+
 defCom(){
     return JSON.parse(JSON.stringify(comDefault));
+}
+
+defComCustom(){
+    var data = this.defCom();
+    data.color = "RED";
+    data.height = 140;
+    return data;
 }
 
 defNet(){
@@ -112,12 +133,26 @@ defPowerUp(){
     return JSON.parse(JSON.stringify(powerUpDefault));
 }
 
-resetBall(ball:any){
+resetBall(ball:any , typeGame: number){
+    // var velocityX = -ball.velocityX;
+    // console.log(velocityX)
+    var copyBall;
+    if (typeGame === 1){
+        copyBall = this.defBallCustom();
+    }
+    else{
+        copyBall = this.defBall();
+    }
 	ball.x = canvas.width/2;
 	ball.y = canvas.height/2;
-	ball.velocityX = -ball.velocityX;
-	ball.speed = 7;
-	ball.radius = 10;
+    // random velocytyX and velocityY
+    var velocityX = Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+    var velocityY = Math.floor(Math.random() * 2) == 1 ? 1 : -1;
+    ball.velocityX = copyBall.velocityX * velocityX;
+    ball.velocityY = copyBall.velocityY * velocityY;
+	ball.speed = copyBall.speed;
+	ball.radius = copyBall.radius;
+
 }
 
 collision(b,p){
@@ -140,11 +175,11 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 	if( ball.x - ball.radius < 0 ){
 			com.score++;
 			// comScore.play();
-			this.resetBall(ball);
+			this.resetBall(ball, typeGame);
 	}else if( ball.x + ball.radius > canvas.width){
 			user.score++;
 			// userScore.play();
-			this.resetBall(ball);
+			this.resetBall(ball, typeGame);
 	}
 
 	// the ball has a velocity
@@ -183,12 +218,6 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
         "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
         "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"
     ]
-        com.color = "PINK";
-        user.color = "PINK";
-        user.height = 140;
-        com.height = 140;
-        ball.radius = 20;
-        //random create powerUp randomly every from 5 to 10 seconds
 
         if (powerUp.active === false || powerUp.time <= 0)
         {

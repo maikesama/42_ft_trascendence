@@ -69,6 +69,13 @@ export class GamesGateway implements OnGatewayInit {
 					}
 				}
 			}
+			for (let key in playerInvited) {
+				if (playerInvited[key].client.id === client.id) {
+					delete playerInvited[key];
+					console.log("leave room invited");
+					break;
+				}
+			}
 
 			console.log ("players", players)
 			console.log ("rooms", rooms)
@@ -172,9 +179,9 @@ export class GamesGateway implements OnGatewayInit {
 				status: 0,
 				type: type,
 				gameState: {
-					user: this.gameService.defUser(),
-					com: this.gameService.defCom(),
-					ball: this.gameService.defBall(),
+					user: (type === 0) ? this.gameService.defUser(): this.gameService.defUserCustom(),
+					com: (type === 0) ? this.gameService.defCom(): this.gameService.defComCustom(),
+					ball: (type === 0) ? this.gameService.defBall(): this.gameService.defBallCustom(),
 					net: this.gameService.defNet(),
 					powerUp: this.gameService.defPowerUp()
 				}
@@ -189,7 +196,10 @@ export class GamesGateway implements OnGatewayInit {
 			this.setUserInfo({idIntra: newUsers[1].idIntra, img : newUsers[1].img, userName: newUsers[1].userName}, newUsers[1].client, rooms[roomId].gameState.com);
 			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: type});
 			rooms[roomId].realId = games;
+			rooms[roomId].invited = (newUsers[0]?.invited?.invited !== undefined) ? newUsers[0]?.invited?.invited : undefined;
 			this.server.emit("trigger");
+			console.log("create room", rooms);
+			console.log("create room", players);
 			return roomId;
 		}
 
@@ -201,8 +211,9 @@ export class GamesGateway implements OnGatewayInit {
 				if (roomId)
 				{
 					await this.handleStart(roomId);
-					console.log("user", rooms[roomId].gameState.user)
-					console.log("com", rooms[roomId].gameState.com)
+					// console.log("user", rooms[roomId].gameState.user)
+					// console.log("com", rooms[roomId].gameState.com)
+					return ;
 				}
 				else
 				{
@@ -211,6 +222,7 @@ export class GamesGateway implements OnGatewayInit {
 					}
 				}
 			}
+			return false;
 		}
 
 		@UseGuards(AtGuard)
@@ -230,18 +242,20 @@ export class GamesGateway implements OnGatewayInit {
 						const userInvited = await this.userService.isUserExist(idIntraSpect);
 						console.log("userInvited", userInvited)
 						if (userInvited) {
-							// && idIntraSpect !== user.idIntra
 							if (typeGame2 === 2)
 							{
-								if (playerInvited[idIntraSpect] !== undefined && playerInvited[idIntraSpect].invited.idintra === user.idIntra) {
-									var user2 = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client}
+								if (playerInvited[idIntraSpect] !== undefined && playerInvited[idIntraSpect].invited.idIntra === user.idIntra && playerInvited[idIntraSpect].invited.status === 0) {
+									var user2 = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, idIntraSpect: idIntraSpect};
+									playerInvited[idIntraSpect].invited.status = 1;
 									await this.matchUsers(playerInvited[idIntraSpect].typeGame, [playerInvited[idIntraSpect], user2]);
+									// delete playerInvited[idIntraSpect];
 								}
 							}
 							else
 							{
 								if (playerInvited[user.idIntra] === undefined) {
-									playerInvited[user.idIntra] = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, typeGame: typeGame, invited:{idIntra: idIntraSpect, status: 0}};
+									playerInvited[user.idIntra] = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, typeGame: typeGame2, invited:{idIntra: idIntraSpect, status: 0, invited: user.idIntra}};
+									console.log("player invited", playerInvited[user.idIntra].idIntra, " -> ", idIntraSpect);
 								}
 							}
 						}
@@ -266,6 +280,7 @@ export class GamesGateway implements OnGatewayInit {
 						// return;
 						return;
 					}
+
 				}
 
 				if (players[client.id] === undefined && user && !this.isAlreadyInRoom(user.idIntra) && !this.isAlredyInQueue(user.idIntra, typeGame) && typeGame !== 2) {
@@ -313,6 +328,7 @@ export class GamesGateway implements OnGatewayInit {
 					console.log(playerClassic);
 					console.log("PlaerCustom: ");
 					console.log(playerCustom);
+					console.log("playerInvited", playerInvited)
 
 		}
 	}
@@ -406,9 +422,13 @@ export class GamesGateway implements OnGatewayInit {
 								this.server.emit('trigger');
 								delete players[rooms[room].gameState.user.socketId];
 								delete players[rooms[room].gameState.com.socketId];
+								if (rooms[room]?.invited !== undefined) {
+									delete playerInvited[rooms[room].invited];
+								}
 								delete rooms[room];
 								console.log("players", players)
 								console.log("rooms", rooms)
+								// console.log("playerInvited", playerInvited)
 							}
 					}, 1000 / 60)
 					console.log("interval")

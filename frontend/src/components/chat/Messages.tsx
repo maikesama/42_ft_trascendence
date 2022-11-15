@@ -78,10 +78,11 @@ const useStyles = makeStyles({
 
 
 //Array di testing
-const messaggi: string[] = [];
 
 export const Messages = (props: any) => {
 	const { idIntra } = useAuth();
+	const messaggi: string[] = [];
+	const el = document.getElementById('chat-feed');
 	function MessageSent(props: any) {
 		return (
 			<>
@@ -166,21 +167,19 @@ export const Messages = (props: any) => {
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
 	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	//scoll always donw chat
+	React.useEffect(() => {
+		if (el) {
+			el.scrollTop = el.scrollHeight;
+		}
+	}, [messages]);
 
 
 	// console.log(messages)
 	return (
 		<>
-			<List className={classes.messageArea}>
-				{/* <ListItem key="">
-					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "contents"}}>
-						<ListItemIcon >
-							<Avatar alt="Avatar" src={props.img} style={{ width: '60px', height: '60px' }} />
-						</ListItemIcon>
-						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
-					</Link>
-					<IconButton aria-label="inviteGame" style={{ marginTop: '10px', color: 'green', width: '70px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
-				</ListItem> */}
+		{/* scoll down always */}
+			<List className={classes.messageArea} id = "chat-feed">
 				<Divider />
 				{messages.map((message: any, index: any) => (
 
