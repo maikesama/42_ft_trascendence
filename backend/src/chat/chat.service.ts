@@ -13,6 +13,7 @@ export class ChatService {
     async getChatFromOtherProfile(body, idIntra: string)
     {
         try {
+            var type = 0;
             const chats = await this.prismaService.chat.findMany({
                 where:
                 {
@@ -28,22 +29,31 @@ export class ChatService {
                 }
             })
 
+            const user = await this.userService.getUserByIdIntra(body.idIntra)
 
-            //var chat = chats.find(chat => chat.partecipant.some(partecipant => partecipant.idIntra === body.idIntra))
+            if (user.idIntra === idIntra) {
+                throw new BadRequestException('You can\'t chat with yourself')
+            }
 
-            // if (!chat)
-            // {
-            //     chat = await this.newDm({ idIntra: body.idIntra }, idIntra)
-            // }
+            var chat = chats.find(chat => chat.partecipant.some(partecipant => partecipant.idIntra === body.idIntra))
+            var chatId = chat?.id
+            if (chat === undefined) 
+            {
+                const newChat = await this.newDm({ idIntra: body.idIntra }, idIntra)
+                chatId = newChat?.id
+                if (newChat === undefined) 
+                {
+                    throw new BadRequestException("chat non trovata")
+                }
+            }
 
-            // const user = await this.userService.getUserByIdIntra(body.idIntra)
 
-            // return {
-            //     id : chat.id,
-            //     userName : user.userName,
-            //     img : user.img,
-            //     idIntra: user.idIntra
-            // }
+            return {
+                id : chatId,
+                userName : user.userName,
+                img : user.img,
+                idIntra: user.idIntra
+            }
         }
         catch (e) {
             throw new BadRequestException(e)
