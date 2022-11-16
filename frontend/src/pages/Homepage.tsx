@@ -41,33 +41,6 @@ export const Homepage = () => {
         <>
         <Header/>
         
-        <Alert action={
-            <>
-            <IconButton
-            aria-label="close"
-            color="inherit"
-            size="small"
-            onClick={() => {
-              // setOpen(false);
-            }}
-          >
-            <CheckIcon fontSize="inherit" />
-          </IconButton>
-
-          <IconButton
-              aria-label="close"
-              color="inherit"
-              size="small"
-              onClick={() => {
-                // setOpen(false);
-              }}
-            >
-              <CloseIcon fontSize="inherit" />
-            </IconButton>
-          </>
-          }
-          sx={{ mb: 2 }}
-         style={{position: 'absolute', width: 500, right: 5, top: 185}} severity="info">This is a warning alert — check it out!</Alert>
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
 

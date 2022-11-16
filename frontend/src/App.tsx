@@ -19,72 +19,77 @@ import { Games } from './pages/Games';
 import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
-import {Notify} from './components/generic/Alert';
+import { Notify } from './components/generic/Alert';
+import { Alert } from 'react-bootstrap';
+import CheckIcon from '@mui/icons-material/Check';
+import { IconButton } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
 
 function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
+  //const [notify, setNotify] = useState(true);
   const { authed, loading } = useAuth();
   console.log(authed);
 
+  //toast("Wow so easy!");
+  toast("Wow so easy!");
   useEffect(() => {
     socket.on('connect', () => {
       setIsConnected(true);
-      // console.log('connected');
     });
 
     socket.on('disconnect', () => {
       setIsConnected(false);
-      // console.log('disconnected');
+    });
+
+    socket.on('notify', () => {
+      toast("Wow so easy!");
     });
 
   }, []);
 
-  // useEffect(() => {
-  //   const onPageLoad = () => {
-  //     alert('welcome')
-  //   };
-
-  //   // Check if the page has already loaded
-  //   if (document.readyState === 'complete') {
-  //     onPageLoad();
-  //   } else {
-  //     window.addEventListener('load', onPageLoad);
-  //     // Remove the event listener when component unmounts
-  //     return () => window.removeEventListener('load', onPageLoad);
-  //   }
-  // }, [loading]);
+  function ciao()
+  {
+    console.log("ciao");
+  }
+  function pippo()
+  {
+    console.log("poppoo");
+  }
 
   return (
     <div className="App">
       {loading ? (
-            <div> Loading... </div>
-         ) : (
-    <Routes>
-      {!authed ? <Route path="/" element={<Landing />}/> : <Route path="/" element={<Homepage />}/>}
-      {!authed ? <Route path="/twofa" element={<Twofa />}/> : <Route path="/twofa" element={<Homepage />} />}
+        <div> Loading... </div>
+      ) : (
+        <Routes>
+          {!authed ? <Route path="/" element={<Landing />} /> : <Route path="/" element={<Homepage />} />}
+          {!authed ? <Route path="/twofa" element={<Twofa />} /> : <Route path="/twofa" element={<Homepage />} />}
           <Route path="/test" element={<Test />} />
 
-      <Route element={<PrivateRoutes />}>
-        <Route path="/Middleware" element={<Middleware />}/>
-          <Route path='/home' element={<Homepage />}/>
-          <Route path="/leaderboard" element={<Leaderboard />} />
-          <Route path="/matches" element={<Matches />} />
-          <Route path="/chat/" element={<Chat />} />
-          <Route path="/chat/:idIntra" element={<Chat />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/profile/:idUser" element={<OtherUserProfile />} />
-          <Route path="/matches" element={<Matches />} />
-          <Route path="/friends" element={<Friends />} />
-          <Route path="/games/:idIntra" element={<Games />} />
-          <Route path="/test" element={<Test />} />
-          <Route path="/" element={<Homepage />}/>
-      </Route>
-      <Route path="*" element={<Error404 />} />
-    </Routes>
-           )}
-    
+          <Route element={<PrivateRoutes />}>
+            <Route path="/Middleware" element={<Middleware />} />
+            <Route path='/home' element={<Homepage />} />
+            <Route path="/leaderboard" element={<Leaderboard />} />
+            <Route path="/matches" element={<Matches />} />
+            <Route path="/chat/" element={<Chat />} />
+            <Route path="/chat/:idIntra" element={<Chat />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/profile/:idUser" element={<OtherUserProfile />} />
+            <Route path="/matches" element={<Matches />} />
+            <Route path="/friends" element={<Friends />} />
+            <Route path="/games/:idIntra" element={<Games />} />
+            <Route path="/test" element={<Test />} />
+            <Route path="/" element={<Homepage />} />
+          </Route>
+          <Route path="*" element={<Error404 />} />
+        </Routes>
+      )}
+        <ToastContainer onClick={ciao} newestOnTop={true} autoClose={false} />
     </div>
   );
 }
