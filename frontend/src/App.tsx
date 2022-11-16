@@ -20,9 +20,9 @@ import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
 import { Notify } from './components/generic/Alert';
-import { Alert } from 'react-bootstrap';
+import { Alert, Button } from 'react-bootstrap';
 import CheckIcon from '@mui/icons-material/Check';
-import { IconButton } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,7 +36,7 @@ function App() {
   console.log(authed);
 
   //toast("Wow so easy!");
-  toast("Wow so easy!");
+  toast(<><Button onClick={ciao}>Ciao</Button></>);
   useEffect(() => {
     socket.on('connect', () => {
       setIsConnected(true);
@@ -89,7 +89,7 @@ function App() {
           <Route path="*" element={<Error404 />} />
         </Routes>
       )}
-        <ToastContainer onClick={ciao} newestOnTop={true} autoClose={false} />
+        <ToastContainer onClick={ciao} newestOnTop={true} autoClose={10000} closeButton={true} />
     </div>
   );
 }
