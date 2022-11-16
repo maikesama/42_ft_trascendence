@@ -19,7 +19,8 @@ import { Games } from './pages/Games';
 import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
-//<Route path="*" element={<Error404 />} />
+import {Notify} from './components/generic/Alert';
+
 export const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
 
 function App() {
@@ -83,6 +84,7 @@ function App() {
       <Route path="*" element={<Error404 />} />
     </Routes>
            )}
+    
     </div>
   );
 }

@@ -5,8 +5,11 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import "../css/Message.css";
 import Typography from '@material-ui/core/Typography';
-import Button from '@mui/material/Button/Button';
 import DialogActions from '@mui/material/DialogActions/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const manageError = (data: any, response: any, success:any, error:any) => {
     if ((data !== undefined && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201)
@@ -25,8 +28,6 @@ export const manageError = (data: any, response: any, success:any, error:any) =>
 
   }
 
-
-
 export const Alert = (props: any) => {
 
     return (
@@ -44,6 +45,38 @@ export const Alert = (props: any) => {
             </div>
         </Dialog>
         </>
+    );
+}
+
+export const Notify = (props: any) => {
+    return (
+        <Alert action={
+            <>
+            <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            // onClick={() => {
+            //   setOpen(false);
+            // }}
+          >
+            <CheckIcon fontSize="inherit" />
+          </IconButton>
+      
+          <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+            //   onClick={() => {
+            //     setOpen(false);
+            //   }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          </>
+          }
+          sx={{ mb: 2 }}
+         style={{position: 'absolute', width: 500, right: 5, top: 185}} severity="info">This is a warning alert — check it out!</Alert>
     );
 }
 

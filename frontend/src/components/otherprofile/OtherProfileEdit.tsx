@@ -195,7 +195,7 @@ export const SocialEdit = (props: any) => {
   );
 }
 
-export const ProfileEdit = (props: any) => {
+export const ProfileEdit =  (props: any) => {
 
   const nick = useRef<any>('');
   const img = useRef<any>('');
@@ -362,6 +362,9 @@ async function removeFriend(index: any) {
   }
 }
 
+function ToDm() {
+  window.location.href = `/chat/${props.idIntra}`;
+}
   return (
     <>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -400,7 +403,7 @@ async function removeFriend(index: any) {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
-        <IconButton aria-label="message" size="small" ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="message" size="small" onClick={ToDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
         {isFriend === false ? <>
           <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
         </> 

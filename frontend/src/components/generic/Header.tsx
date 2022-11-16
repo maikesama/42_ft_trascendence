@@ -104,6 +104,7 @@ export function Header(props: any) {
   });
 
   return (
+    <>
     <ThemeProvider theme={darkTheme}>
       <AppBar position="static" style={{ height: 180, justifyContent: 'center', alignItems: 'center' }}>
         <Container maxWidth="xl">
@@ -282,5 +283,7 @@ export function Header(props: any) {
         </Container>
       </AppBar>
     </ThemeProvider>
+    
+   </>
   );
 };

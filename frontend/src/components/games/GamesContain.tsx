@@ -106,7 +106,7 @@ export const GamesContain = (props: any) => {
       const render = (user:any, ball:any, net:any, com: any, powerUp: any) => {
 
         // clear the canvas
-        drawRect(0, 0, canvas.width, canvas.height, '../../images/animaImg.gif');
+        drawRect(0, 0, canvas.width, canvas.height, 'black');
 
         // draw the user score to the left
         drawUsername(user.username,canvas.width/4.6, (canvas.height/20));
