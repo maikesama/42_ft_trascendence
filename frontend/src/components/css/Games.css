@@ -10,8 +10,8 @@
 
 body{
     background-color: dimgray;
-    background-image: url('../../images/animaImg.gif');
-    background-repeat: repeat;
+    /* background-image: url('../../images/animaImg.gif');
+    background-repeat: repeat; */
 }
 #myCanvas{
     border: 2px solid #FFF;

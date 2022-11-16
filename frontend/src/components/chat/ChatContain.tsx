@@ -137,12 +137,13 @@ export const ChatContain = (props: any) => {
 
     const [userChat, setUserChat] = useState({} as any);
 
-    useEffect( () => {
+    React.useEffect( () => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile`;
     
         const fetchData = async () => {
           try {
             const response = await fetch(url, {
+            method: 'POST',
               credentials: 'include',
               headers: {
                 'Content-Type': 'application/json',
@@ -153,8 +154,10 @@ export const ChatContain = (props: any) => {
             });
             const json = await response.json();
             console.log(json);
-            setUserChat(json);
-            
+            if (response.status) {
+                setUserChat(json);
+                changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
+            }
           } catch (error) {
             console.log("error", error);
           }
@@ -162,10 +165,8 @@ export const ChatContain = (props: any) => {
     
         if (params.idIntra)
         {
-            fetchData().then(() => {
-                console.log("fetch done");
-            });
-            changeChat('DM', userChat.userName, userChat.id, userChat.img, userChat.idIntra, '');
+            console.log("params.idIntra : " + params.idIntra)
+            fetchData();
         }
       }, []);
 
@@ -243,7 +244,7 @@ export const ChatContain = (props: any) => {
             }
         };
         fetchDataDms();
-    }, []);
+    }, [userChat]);
 
     React.useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatUsers`;

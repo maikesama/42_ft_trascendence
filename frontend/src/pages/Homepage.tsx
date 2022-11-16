@@ -46,7 +46,7 @@ export const Homepage = () => {
             color="inherit"
             size="small"
             onClick={() => {
-              setOpen(false);
+              // setOpen(false);
             }}
           >
             <CheckIcon fontSize="inherit" />
@@ -57,7 +57,7 @@ export const Homepage = () => {
               color="inherit"
               size="small"
               onClick={() => {
-                setOpen(false);
+                // setOpen(false);
               }}
             >
               <CloseIcon fontSize="inherit" />
