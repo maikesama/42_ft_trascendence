@@ -38,7 +38,9 @@ export const OtherProfileContain = (props: any) => {
     };
     
     fetchData();
-  }, []);
+  }, [params]);
+
+  //retrigger
 
   const [rank, setRank] = useState({} as any);
   
@@ -64,7 +66,7 @@ export const OtherProfileContain = (props: any) => {
     };
 
     fetchRank();
-  }, []);
+  }, [params]);
 
   const colors = {
     fontFamily: 'MyWebFont',

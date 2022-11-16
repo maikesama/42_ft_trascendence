@@ -70,7 +70,8 @@ function App() {
           <Route path='/home' element={<Homepage />}/>
           <Route path="/leaderboard" element={<Leaderboard />} />
           <Route path="/matches" element={<Matches />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/chat/" element={<Chat />} />
+          <Route path="/chat/:idIntra" element={<Chat />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/profile/:idUser" element={<OtherUserProfile />} />
           <Route path="/matches" element={<Matches />} />

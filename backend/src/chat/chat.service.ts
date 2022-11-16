@@ -1,12 +1,54 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
+import { UserService } from 'src/user/user.service'
 import * as argon from 'argon2'
 
 
 @Injectable()
 export class ChatService {
 
-    constructor(private prismaService: PrismaService) { }
+    constructor(private prismaService: PrismaService, private userService: UserService) { }
+
+
+    async getChatFromOtherProfile(body, idIntra: string)
+    {
+        try {
+            const chats = await this.prismaService.chat.findMany({
+                where:
+                {
+                    type: 'dm',
+                    partecipant: {
+                        some: {
+                            idIntra: idIntra
+                        }
+                    }
+                },
+                include: {
+                    partecipant: true,
+                }
+            })
+
+
+            //var chat = chats.find(chat => chat.partecipant.some(partecipant => partecipant.idIntra === body.idIntra))
+
+            // if (!chat)
+            // {
+            //     chat = await this.newDm({ idIntra: body.idIntra }, idIntra)
+            // }
+
+            // const user = await this.userService.getUserByIdIntra(body.idIntra)
+
+            // return {
+            //     id : chat.id,
+            //     userName : user.userName,
+            //     img : user.img,
+            //     idIntra: user.idIntra
+            // }
+        }
+        catch (e) {
+            throw new BadRequestException(e)
+        }
+    }
 
     async getChanInfo(body, userId: number) {
         try {
@@ -467,7 +509,11 @@ export class ChatService {
                         }
                     }
                 })
+
+                return chat
             }
+            return null
+            
         }
         catch (err) {
             throw new BadRequestException(err)

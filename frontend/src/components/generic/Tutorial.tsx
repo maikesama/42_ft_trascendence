@@ -42,7 +42,7 @@ const steps = [
     },
     {
         label: 'Quitting',
-        description: `If you quit the game, you will lose the match`,
+        description: `Quitters are puny losers, don't do that. It's not fun. -42 points.`,
     },
 ];
 
@@ -81,26 +81,26 @@ export const Tutorial = (props: any) => {
                                     <Typography>{step.description}</Typography>
                                     {index === 2 ?
                                     <>
-                                    <table>
-                                        <tr>
+                                    <table border={1} style={{padding: 3}}>
+                                        <tr style={{border: '1px solid'}}>
                                             {/* <th colspan="2">When the ball hits the power ups/downs:</th> */}
-                                            <th>When the ball hits the power ups/downs:</th>
+                                            <th colSpan={2} style={{border: 1}}>When the ball hits the power ups/downs:</th>
                                         </tr>
-                                        <tr>
+                                        <tr style={{border: '1px solid'}}>
                                             <td><img width="25px" height="25px" src={step.img1}/></td>
                                             <td>Speed, the ball starts to go faster</td>
                                         </tr>
-                                        <tr>
+                                        <tr style={{border: '1px solid'}}>
                                             <td><img width="25px" height="25px" src={step.img2}/></td>
                                             <td>Size, the ball changes the size</td>
                                         </tr>
-                                        <tr>
+                                        <tr style={{border: '1px solid'}}>
                                             <td><img width="25px" height="25px" src={step.img3}/></td>
                                             <td>Reverse, the ball reverses its direction</td>
                                         </tr>
-                                        <tr>
+                                        <tr style={{border: '1px solid'}}>
                                             <td><img width="25px" height="25px" src={step.img4}/></td>
-                                            <td>Ball back, the ball bounces</td>
+                                            <td>Ball black, the ball bounces</td>
                                         </tr>
                                     </table>
                                     </>

@@ -241,4 +241,12 @@ export class ChatController{
         }
         return await this.chatService.getMessages(body, user['idIntra'])
     }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
+    @Post('getChatFromOtherProfile')
+    async getChatFromOtherProfile(@Body() body, @Req() req){
+        const user = req.user
+        return await this.chatService.getChatFromOtherProfile(body, user['idIntra'])
+    }
 }

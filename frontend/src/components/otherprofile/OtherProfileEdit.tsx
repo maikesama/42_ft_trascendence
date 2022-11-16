@@ -155,6 +155,8 @@ export const SocialEdit = (props: any) => {
     fetchData();
   }, []);
 
+  //retrigger
+
   return (
     <div>
       <Card sx={{ minWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -231,7 +233,7 @@ export const ProfileEdit = (props: any) => {
     };
 
     fetchData();
-  }, [isFriend]);
+  }, [props.idIntra]);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/isBlocked`;
@@ -257,7 +259,7 @@ export const ProfileEdit = (props: any) => {
     };
 
     fetchData();
-  }, [isBlocked]);
+  }, [props.idIntra]);
 
   async function block(index: any) {
     //const idIntra = await search[index]?.idIntra;
@@ -341,6 +343,25 @@ async function removeInviteFriend(index: any) {
   }
 }
 
+async function removeFriend(index: any) {
+  //const idIntra = await search[index]?.idIntra;
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/removeFriend/`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+      });
+      window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
+}
+
   return (
     <>
     <Card sx={{ maxWidth: 400, height: 600, borderRadius: 10, boxShadow: '0px 0px 0px 1px #D0D0D0' }}>
@@ -385,7 +406,7 @@ async function removeInviteFriend(index: any) {
         </> 
 
         : <>
-          <IconButton aria-label="addfriend" size="small" onClick={removeInviteFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton>
+          <IconButton aria-label="addfriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton>
         </>}
         {isBlocked === false ? <>
           <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>

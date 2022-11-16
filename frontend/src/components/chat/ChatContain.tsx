@@ -22,7 +22,7 @@ import { DM } from './DM';
 import { Channel } from './Channel';
 import { socket } from "../../App";
 import Alert from '@mui/material/Alert';
-
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles({
     table: {
@@ -49,6 +49,8 @@ const useStyles = makeStyles({
 export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
+    const params = useParams()
+    // console.log("params : " + JSON.stringify(params))
     let status;
 
     if (onstatus && onstatus === "online") {
@@ -82,7 +84,7 @@ export const ChatContain = (props: any) => {
         setopenCreateGroup(true);
     };
 
-    const handleCloseCreateGroup = (event:any, reason:any) => {
+    const handleCloseCreateGroup = (event: any, reason: any) => {
         if (reason && reason == "backdropClick")
             return;
         setopenCreateGroup(false);
@@ -121,7 +123,6 @@ export const ChatContain = (props: any) => {
         setopenUserActions(false);
     };
 
-
     const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, id: React.SetStateAction<number>, img: React.SetStateAction<string>, idIntra: React.SetStateAction<string>, type: React.SetStateAction<string>) => {
         if (param != 'Blank' && param != 'DM') {
             clickChannelInfo(Number(id));
@@ -134,6 +135,69 @@ export const ChatContain = (props: any) => {
         setChanType(type);
     }
 
+    const [userChat, setUserChat] = useState({} as any);
+
+    useEffect( () => {
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile`;
+    
+        const fetchData = async () => {
+          try {
+            const response = await fetch(url, {
+              credentials: 'include',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                idIntra: params.idIntra
+                })
+            });
+            const json = await response.json();
+            console.log(json);
+            setUserChat(json);
+            
+          } catch (error) {
+            console.log("error", error);
+          }
+        };
+    
+        if (params.idIntra)
+        {
+            fetchData().then(() => {
+                console.log("fetch done");
+            });
+            changeChat('DM', userChat.userName, userChat.id, userChat.img, userChat.idIntra, '');
+        }
+      }, []);
+
+    // const [user, setUser] = useState({} as any);
+
+    // useEffect(() => {
+    //     if (!(params)) 
+    //         return;
+    //     const [triggerUser, setTriggerUser] = useState(false);
+
+    //     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
+
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch(url, {
+    //                 credentials: 'include',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 }
+    //             });
+    //             const json = await response.json();
+    //             console.log(json);
+    //             setUser(json);
+    //         } catch (error) {
+    //             console.log("error", error);
+    //         }
+    //     };
+
+    //     await fetchData();
+    //     changeChat('DM', user.idIntra, user.userName, user.userImg, user.userIdIntra);
+
+    // }, [params])
     // const [friends, setFriends] = useState({} as any);
 
     // React.useEffect(() => {
@@ -266,7 +330,7 @@ export const ChatContain = (props: any) => {
                     body: JSON.stringify({ count: 50 }),
                 });
                 const json = await response.json();
-                let ret = new Map(json.map((json : any) => [json.chat.id, json.chat.messages]))
+                let ret = new Map(json.map((json: any) => [json.chat.id, json.chat.messages]))
                 console.log(ret);
                 for (let entry of Array.from(ret.entries())) {
 
@@ -284,7 +348,7 @@ export const ChatContain = (props: any) => {
             fetchData();
         }
 
-        const updateMap = (key: any, value:any) => {
+        const updateMap = (key: any, value: any) => {
             // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
             console.log(map)
             const currentValues = map.get(key);
@@ -294,18 +358,18 @@ export const ChatContain = (props: any) => {
 
         }
 
-		if (isSecondRender.current){
-			socket.on('provaMessaggi', (data: any) => {
-				console.log("data: ", data);
-				updateMap(data.idChat, data);
-			});
+        if (isSecondRender.current) {
+            socket.on('provaMessaggi', (data: any) => {
+                console.log("data: ", data);
+                updateMap(data.idChat, data);
+            });
         }
         isSecondRender.current = true;
 
     }, []);
 
     React.useEffect(() => {
-        const updateMap = (key: any, value:any) => {
+        const updateMap = (key: any, value: any) => {
             const currentValues = map.get(key) || []; // get current values for the key, or use empty array
             console.log("currentValues", currentValues);
             console.log("key", key);
@@ -313,11 +377,11 @@ export const ChatContain = (props: any) => {
 
         }
 
-		if (isSecondRender.current){
-			socket.on('provaMessaggi', (data: any) => {
-				console.log("data: ", data);
-				updateMap(data.idChat, data);
-			});
+        if (isSecondRender.current) {
+            socket.on('provaMessaggi', (data: any) => {
+                console.log("data: ", data);
+                updateMap(data.idChat, data);
+            });
         }
         isSecondRender.current = true;
 
@@ -370,7 +434,7 @@ export const ChatContain = (props: any) => {
         // console.log("DMSSS INDEX", JSON.stringify(dms[index]));
         // console.log("DMSSS userName", dms[index]["partecipant"][0]["user"]);
         return (
-            <ListItem button style={style} key={index} onClick={event => changeChat('DM', dms[index]["partecipant"][0]["user"]?.userName, dms[index]?.id , dms[index]["partecipant"][0]["user"]?.img, dms[index]["partecipant"][0]["user"]?.idIntra, '')}>
+            <ListItem button style={style} key={index} onClick={event => changeChat('DM', dms[index]["partecipant"][0]["user"]?.userName, dms[index]?.id, dms[index]["partecipant"][0]["user"]?.img, dms[index]["partecipant"][0]["user"]?.idIntra, '')}>
                 <Avatar src={dms[index]["partecipant"][0]["user"]?.img} />
                 <Divider variant='middle' />
                 <Typography variant='h6'>{(dms[index]["partecipant"][0]["user"]?.userName)}</Typography>
@@ -390,8 +454,7 @@ export const ChatContain = (props: any) => {
         );
     }
 
-    if (!join)
-    {
+    if (!join) {
         //loading screen
         return (
             <div>
@@ -436,8 +499,8 @@ export const ChatContain = (props: any) => {
                     </FixedSizeList>
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)}/> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType}/>}
-                    {chatView !== 'Blank' && <Messages idChat={idChat} messages={map.get(idChat)}/>}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
+                    {chatView !== 'Blank' && <Messages idChat={idChat} messages={map.get(idChat)} />}
                 </Grid>
             </Grid>
             {/*MODAL JOIN GROUP */}

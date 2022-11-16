@@ -6,21 +6,23 @@
     background: rgb(227, 166, 166);
     display: block;
     margin: 0 auto;
-  } */
+  }*/
 
 body{
     background-color: dimgray;
+    background-image: url('../../images/animaImg.gif');
+    background-repeat: repeat;
 }
 #myCanvas{
     border: 2px solid #FFF;
-    background-color: #000;
+    background-color: red;
     color : #FFF;
     position: absolute;
     margin :auto;
     top:0;
     right:0;
     left:0;
-    bottom:0;
+    bottom:0; 
 }
 
 #esit {

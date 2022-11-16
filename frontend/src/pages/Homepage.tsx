@@ -8,6 +8,9 @@ import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Tutorial} from '../components/generic/Tutorial'
 import React, {useState} from 'react';
+import Alert from '@mui/material/Alert';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckIcon from '@mui/icons-material/Check';
 
 export const Homepage = () => {
 
@@ -36,6 +39,33 @@ export const Homepage = () => {
 	return (
         <>
         <Header/>
+        <Alert action={
+            <>
+            <IconButton
+            aria-label="close"
+            color="inherit"
+            size="small"
+            onClick={() => {
+              setOpen(false);
+            }}
+          >
+            <CheckIcon fontSize="inherit" />
+          </IconButton>
+
+          <IconButton
+              aria-label="close"
+              color="inherit"
+              size="small"
+              onClick={() => {
+                setOpen(false);
+              }}
+            >
+              <CloseIcon fontSize="inherit" />
+            </IconButton>
+          </>
+          }
+          sx={{ mb: 2 }}
+         style={{position: 'absolute', width: 500, right: 5, top: 185}} severity="info">This is a warning alert — check it out!</Alert>
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
 
@@ -48,11 +78,12 @@ export const Homepage = () => {
                     </Button>
                     </div>
                     <div onClick={custom} className="col-md-5 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
-                        <h1 className="modalityName">Custom</h1>
+                        <h1  className="modalityName">Custom</h1>
                     </div>
                 </div>
         </div>
         <Tutorial status={openTutorial} closeStatus={handleClickCloseTutorial} />
+        
         </>
 	);
 }
