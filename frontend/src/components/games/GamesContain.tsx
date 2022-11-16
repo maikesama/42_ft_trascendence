@@ -9,6 +9,7 @@ export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/gam
 const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
 const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
 const GameNotFoundImage = "https://media.tenor.com/GuqY6L8lsBoAAAAC/not-found.gif"
+const DelcineImage = "https://media.tenor.com/7oJfe_AbYbkAAAAd/offer-declined-declined.gif"
 import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
@@ -41,10 +42,15 @@ export const GamesContain = (props: any) => {
                 setIsConnectedGames(true);
         } );
         socketGames.emit('newPlayer', params.idIntra);
-        socketGames.emit('pong');
         socketGames.on('disconnect', () => {
                 setIsConnectedGames(false);
         });
+
+        socket.on('declineGame', (data) => {
+            socketGames.emit('declineGame', data.idIntra);
+            setEsit(DelcineImage);
+        });
+
         const canvas = canvasRef.current;
         if (!canvas) {
           return ;

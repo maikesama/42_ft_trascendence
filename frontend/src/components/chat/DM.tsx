@@ -43,6 +43,7 @@ import Link from '@mui/material/Link';
 import { socket } from "../../App";
 import "../css/Message.css";
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles({
 	table: {
@@ -81,6 +82,7 @@ const useStyles = makeStyles({
 // const messaggi: string[] = [];
 
 export const DM = (props: any) => {
+	let navigate = useNavigate();
 	// const { idIntra } = useAuth();
 	// function MessageSent(props: any) {
 	// 	return (
@@ -149,6 +151,13 @@ export const DM = (props: any) => {
 		setopenUserActions(false);
 	};
 
+	const handleInvite = () => {
+		console.log("Invite");
+		socket.emit('notification', { type: 2, idIntra: props.idIntra});
+		navigate('/games/1' + props.idIntra);
+		// window.location.assign("/games/1" + props.idIntra);
+	};
+
 	return (
 		<>
 			{/* <List className={classes.messageArea}> */}
@@ -159,7 +168,7 @@ export const DM = (props: any) => {
 						</ListItemIcon>
 						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
 					</Link>
-					<IconButton aria-label="inviteGame" style={{ color: 'green', width: '50px', height: '50px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
+					<IconButton aria-label="inviteGame" onClick={handleInvite} style={{ color: 'green', width: '50px', height: '50px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
 				{/* <Divider />
 				{messages.map((message: any, index: any) => (

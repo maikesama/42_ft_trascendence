@@ -65,7 +65,7 @@ export class GamesGateway implements OnGatewayInit {
 				for (let i = 0; i < playerCustom.length; i++) {
 					if (playerCustom[i].client.id === client.id) {
 						playerCustom.splice(i, 1);
-						
+
 						console.log("leave room custom");
 					}
 				}
@@ -323,7 +323,7 @@ export class GamesGateway implements OnGatewayInit {
 				// 		}
 				// 		console.log("number", playersNumberClassic)
 				// 	}
-				
+
 				this.consoleLog()
 		}
 	}
@@ -339,6 +339,18 @@ export class GamesGateway implements OnGatewayInit {
 		console.log(playerCustom);
 		console.log("playerInvited", playerInvited)
 	}
+
+	@SubscribeMessage('declineGame')
+	declineGame(client: Socket, data: any){
+		for (let key in playerInvited) {
+			if (playerInvited[key].client.id === client.id) {
+				if (playerInvited[key].invited.idIntra === data.idIntra) {
+					delete playerInvited[key];
+				}
+			}
+		}
+	}
+
 
 		@SubscribeMessage('playerMovement')
 		async handlePlayerMovement(client: Socket, playerMovement: any){

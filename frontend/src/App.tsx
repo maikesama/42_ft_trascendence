@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import logo from './logo.svg';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
@@ -25,6 +25,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import { IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { ToastContainer, toast } from 'react-toastify';
+import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 
 export const socket = io(`http://${process.env.REACT_APP_HOST_URI}:8002/`, { transports: ['websocket'] });
@@ -33,11 +34,12 @@ function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   //const [notify, setNotify] = useState(true);
   const { authed, loading } = useAuth();
+  const isSecondRender = useRef(false);
+  let navigate = useNavigate();
   console.log(authed);
 
   //toast("Wow so easy!");
-  toast(<><Button onClick={ciao}>Ciao</Button></>);
-  useEffect(() => {
+  React.useEffect(() => {
     socket.on('connect', () => {
       setIsConnected(true);
     });
@@ -46,16 +48,55 @@ function App() {
       setIsConnected(false);
     });
 
-    socket.on('notify', () => {
-      toast("Wow so easy!");
-    });
+    // const handleNewMessage = (data) => {
+    //   console.log("new message");
+    //   // toast(data);
+    // }
+
+    if (isSecondRender.current) {
+      socket.on('notify', (data) => {
+        if (data)
+        {
+          if (data.type === 1)
+          {
+            toast.info(<>
+              <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+              <Typography style={{ marginLeft: "10px" }}>{data.userName} invite you to becaome friend</Typography>
+              <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
+                socket.emit("acceptFriend", data);
+                toast.dismiss();
+              }}>Accept</Button>
+              <Button variant="outline-danger" style={{ marginLeft: "10px" }} onClick={() => {
+                socket.emit("rejectFriend", data);
+                toast.dismiss();
+              }}>Decline</Button>
+            </>);
+          }
+          if (data.type === 2)
+          {
+            toast(<>
+              <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to a game</Typography>
+              <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
+                navigate(`/games/2${data.idIntra}`);
+                // window.location.assign("/games/2" + data.idIntra);
+                // window.location.href = "/games/2" + data.idIntra;
+              }}>Join</Button>
+              <Button style={{ marginLeft: "10px" }} variant="danger" onClick={() => {
+                socket.emit("declineGame", {idIntra :data.idIntra});
+              }}>Decline</Button>
+            </>);
+          }
+
+        }
+        });
+      }
+    isSecondRender.current = true;
+
 
   }, []);
 
-  function ciao()
-  {
-    console.log("ciao");
-  }
+
   function pippo()
   {
     console.log("poppoo");
@@ -89,7 +130,7 @@ function App() {
           <Route path="*" element={<Error404 />} />
         </Routes>
       )}
-        <ToastContainer onClick={ciao} newestOnTop={true} autoClose={10000} closeButton={true} />
+        <ToastContainer newestOnTop={true} autoClose={100000} closeButton={true} />
     </div>
   );
 }

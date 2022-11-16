@@ -53,3 +53,8 @@ pallina sparisce sopra o sotto
 
 2ltorrean entra in coda
 chat con me stesso
+add notification in db
+
+game not found error fix
+
+matchmaking error fix

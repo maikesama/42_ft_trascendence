@@ -10,7 +10,7 @@ import { UserService } from './user/user.service';
 // import { SessionService } from './sessionHandler/session.service';
 
 var jwt = require('jsonwebtoken');
-
+var users = new Map<string, string>();
 @UseGuards(AtGuard)
 @WebSocketGateway(4243, { transports: ['websocket'] })
 export class AppGateway implements OnGatewayInit {
@@ -85,10 +85,10 @@ export class AppGateway implements OnGatewayInit {
 
     const user = await this.wsGuard(client)
     if (user) {
+      users.set(user.idIntra, client.id);
       if (await this.userService.changeUserStatus(user.idIntra, 1))
         // this.server.emit('status', { idIntra: user.idIntra, status: 1 })
         this.server.emit('trigger')
-
     }
 
 
@@ -178,9 +178,47 @@ export class AppGateway implements OnGatewayInit {
   }
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+@SubscribeMessage('notification')
+async notification(client: Socket, message: { type: number, idIntra: string }) {
+  const user = await this.wsGuard(client)
+  if (user && message && message.type && message.idIntra) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2) {
+      console.log("notification", message)
+      if (message.type == 1) {
+        //friend request
+      }
+      else if (message.type == 2) {
+        //game invite
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra)).emit('notify', { type: 2, idIntra: user.idIntra, userName: user.userName, img: user.img })
+        }
+      }
+    }
+  }
+}
+
+@SubscribeMessage('declineGame')
+async declineGame(client: Socket, message: { idIntra: string }) {
+  const user = await this.wsGuard(client)
+  if (user && message && message.idIntra) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2) {
+      if (users.has(message.idIntra)) {
+        this.server.to(users.get(message.idIntra)).emit('declineGame', { idIntra: user.idIntra })
+      }
+    }
+  }
+}
+
+
+
+
+
   async handleDisconnect(client: Socket) {
     const user = await this.wsGuard(client)
     if (user) {
+      users.delete(user.idIntra);
       if (await this.userService.changeUserStatus(user.idIntra, 0))
       {
         // this.server.emit('status', { idIntra: user.idIntra, status: 0 })
