@@ -244,7 +244,8 @@ export const ChatContain = (props: any) => {
             }
         };
         fetchDataDms();
-    }, [userChat]);
+    // }, [userChat]);
+    }, []);
 
     React.useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatUsers`;

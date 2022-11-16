@@ -47,7 +47,7 @@ export class ChatController{
     @Post('newDm')
     async newDm(@Body() body, @Req() req){
         const user = req.user
-        return await this.chatService.newDm(body, user['sub'])
+        return await this.chatService.newDm(body, user['idIntra'])
     }
     //non esiste ancore=allora non so come testarlo
 

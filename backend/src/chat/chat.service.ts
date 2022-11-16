@@ -37,15 +37,18 @@ export class ChatService {
 
             var chat = chats.find(chat => chat.partecipant.some(partecipant => partecipant.idIntra === body.idIntra))
             var chatId = chat?.id
-            if (chat === undefined) 
-            {
-                const newChat = await this.newDm({ idIntra: body.idIntra }, idIntra)
-                chatId = newChat?.id
-                if (newChat === undefined) 
-                {
-                    throw new BadRequestException("chat non trovata")
-                }
+            if (chatId === undefined) {
+                throw new BadRequestException('Chat not found')
             }
+            // if (chat === undefined) 
+            // {
+            //     const newChat = await this.newDm({ idIntra: body.idIntra }, idIntra)
+            //     chatId = newChat?.id
+            //     if (newChat === undefined) 
+            //     {
+            //         throw new BadRequestException("chat non trovata")
+            //     }
+            // }
 
 
             return {

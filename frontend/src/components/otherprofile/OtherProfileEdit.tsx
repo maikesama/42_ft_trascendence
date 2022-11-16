@@ -21,7 +21,8 @@ import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
 import CancelIcon from '@mui/icons-material/Cancel';
-
+// import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import "../css/ProfileEdit.css"
 import { SearchBar } from './SearchBar';
 import { MatchesList } from './MatchesList';
@@ -34,7 +35,7 @@ const fontColor = {
 
 
 export const SocialEdit = (props: any) => {
-
+  // const history = useHistory();
   const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
@@ -196,7 +197,7 @@ export const SocialEdit = (props: any) => {
 }
 
 export const ProfileEdit =  (props: any) => {
-
+  let navigate = useNavigate();
   const nick = useRef<any>('');
   const img = useRef<any>('');
   //const [user, setUser] = useState({} as any);
@@ -362,8 +363,62 @@ async function removeFriend(index: any) {
   }
 }
 
-function ToDm() {
-  window.location.href = `/chat/${props.idIntra}`;
+async function newDm(index: any) {
+  //const idIntra = await search[index]?.idIntra;
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
+
+  try {
+      console.log("newDm");
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+      });
+      const json = await response.json();
+      console.log(json);
+      if (response.status === 200) {
+        // console.log(json)
+        // window.location.href = ;
+        navigate(`/chat/${props.idIntra}`); 
+      }
+      console.log(json);
+      // window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
+}
+
+async function toDm(index: any) {
+  //const idIntra = await search[index]?.idIntra;
+  const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
+
+  try {
+      const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+      });
+      const json = await response.json();
+      console.log(json);
+      if (response.status !== 200) {
+        await newDm(index);
+      }
+      else {
+      //  window.location.href = `/chat/${props.idIntra}`;
+       navigate(`/chat/${props.idIntra}`); 
+      }
+      
+      console.log(json);
+      // window.location.reload();
+  } catch (error) {
+      console.log("error", error);
+  }
 }
   return (
     <>
@@ -403,7 +458,7 @@ function ToDm() {
 
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
-        <IconButton aria-label="message" size="small" onClick={ToDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+        <IconButton aria-label="message" size="small" onClick={toDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
         {isFriend === false ? <>
           <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
         </> 
