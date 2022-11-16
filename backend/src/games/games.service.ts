@@ -5,8 +5,8 @@ export const maxScoreClassic: number = 5;
 export const maxScoreCustom: number = 10;
 
 export const canvas = {
-        width: 1000,
-        height: 600,
+        width: 1920,
+        height: 1080,
 }
 
 export const rooms = new Map<string, any>();

@@ -64,7 +64,8 @@ export class GamesGateway implements OnGatewayInit {
 				}
 				for (let i = 0; i < playerCustom.length; i++) {
 					if (playerCustom[i].client.id === client.id) {
-						playerClassic.splice(i, 1);
+						playerCustom.splice(i, 1);
+						
 						console.log("leave room custom");
 					}
 				}
@@ -77,8 +78,7 @@ export class GamesGateway implements OnGatewayInit {
 				}
 			}
 
-			console.log ("players", players)
-			console.log ("rooms", rooms)
+			this.consoleLog()
 		}
 
 		async handleDisconnect(client: Socket) {
@@ -198,8 +198,7 @@ export class GamesGateway implements OnGatewayInit {
 			rooms[roomId].realId = games;
 			rooms[roomId].invited = (newUsers[0]?.invited?.invited !== undefined) ? newUsers[0]?.invited?.invited : undefined;
 			this.server.emit("trigger");
-			console.log("create room", rooms);
-			console.log("create room", players);
+			this.consoleLog()
 			return roomId;
 		}
 
@@ -262,6 +261,7 @@ export class GamesGateway implements OnGatewayInit {
 						else
 						{
 							client.emit("GameNotFound");
+							this.consoleLog()
 							return;
 						}
 						// this.server.to(userInvited.socketId).emit("invite", {idIntra: user.idIntra, userName: user.userName, img: user.img, type: typeGame});
@@ -278,6 +278,7 @@ export class GamesGateway implements OnGatewayInit {
 							client.emit("GameNotFound");
 						}
 						// return;
+						this.consoleLog()
 						return;
 					}
 
@@ -322,15 +323,21 @@ export class GamesGateway implements OnGatewayInit {
 				// 		}
 				// 		console.log("number", playersNumberClassic)
 				// 	}
-				console.log("players", players)
-				console.log("rooms", rooms)
-				console.log("PlaerClassic: ");
-					console.log(playerClassic);
-					console.log("PlaerCustom: ");
-					console.log(playerCustom);
-					console.log("playerInvited", playerInvited)
-
+				
+				this.consoleLog()
 		}
+	}
+
+
+	consoleLog()
+	{
+		console.log("players", players)
+		console.log("rooms", rooms)
+		console.log("PlaerClassic: ");
+		console.log(playerClassic);
+		console.log("PlaerCustom: ");
+		console.log(playerCustom);
+		console.log("playerInvited", playerInvited)
 	}
 
 		@SubscribeMessage('playerMovement')
@@ -426,8 +433,7 @@ export class GamesGateway implements OnGatewayInit {
 									delete playerInvited[rooms[room].invited];
 								}
 								delete rooms[room];
-								console.log("players", players)
-								console.log("rooms", rooms)
+								this.consoleLog()
 								// console.log("playerInvited", playerInvited)
 							}
 					}, 1000 / 60)
