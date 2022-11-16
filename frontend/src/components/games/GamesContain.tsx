@@ -263,7 +263,7 @@ export const GamesContain = (props: any) => {
 
             </head>
             <body>
-                <canvas id="myCanvas" width="1000" height="600" ref={canvasRef}></canvas>
+                <canvas id="myCanvas" width="1920" height="1080" ref={canvasRef}></canvas>
                 {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
                 <Link key={"home"} component={RouterLink} to={"/"}>
                   <button onClick={handleBack}>
