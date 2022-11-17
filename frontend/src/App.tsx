@@ -61,7 +61,7 @@ function App() {
           {
             toast.info(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} invite you to becaome friend</Typography>
+              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to become friend</Typography>
               <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("acceptFriend", data);
                 toast.dismiss();

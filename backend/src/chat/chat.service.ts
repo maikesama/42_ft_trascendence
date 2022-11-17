@@ -407,6 +407,7 @@ export class ChatService {
                 },
                 select: {
                     idIntra: true,
+                    userName: true,
                     img: true
                 }
             })
@@ -437,6 +438,7 @@ export class ChatService {
 
                 const ret = {
                     idIntra: user.idIntra,
+                    userName: user.userName,
                     img: user.img,
                     invited: invited ? true : false,
                     //friend: friend ? true : false
