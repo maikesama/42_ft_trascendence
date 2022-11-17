@@ -16,7 +16,7 @@ model User {
 	userName        String          @unique
 	email           String          @default("")
 	tel             String          @default("")
-	img             String
+	img             String  	  	@db.Text()
 	firstName       String
 	lastName        String
 	createdAt		DateTime  		@default(now())

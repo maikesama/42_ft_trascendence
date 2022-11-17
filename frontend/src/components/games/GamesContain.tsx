@@ -19,233 +19,250 @@ import { socket } from '../../App';
 
 // let ctx:any;
 export const GamesContain = (props: any) => {
-    // axios.get('api/getinfo').then(data=>data.json() )
-    //console.log(props.match.params.username)
-    // const [loading, setLoading] = useState(false);
-    const params = useParams()
-    const [esit, setEsit] = useState<string | null>(null);
-    const [start, setStart] = useState(false);
-    const [restart, setReStart] = useState(false);
-    const [loading, setLoading] = useState(true);
-    // console.log("id", )
-    // const [userLeft, setUserLeft] = useState(null);
-    // const [userRight, setUserRight] = useState(null);
+  // axios.get('api/getinfo').then(data=>data.json() )
+  //console.log(props.match.params.username)
+  // const [loading, setLoading] = useState(false);
+  const params = useParams()
+  const [esit, setEsit] = useState<string | null>(null);
+  const [start, setStart] = useState(false);
+  const [textMatchmaking, setTextMatchmaking] = useState("Matchmaking...");
+  const [restart, setReStart] = useState(false);
+  const [loading, setLoading] = useState(true);
+  // console.log("id", )
+  // const [userLeft, setUserLeft] = useState(null);
+  // const [userRight, setUserRight] = useState(null);
 
-    const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
+  const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
 
-    const canvasRef = useRef<HTMLCanvasElement | null>(null);
-    console.log("Games", isConnectedGames)
-
-
-    useEffect(() => {
-        socketGames.on('connect', () => {
-                setIsConnectedGames(true);
-        } );
-        socketGames.emit('newPlayer', params.idIntra);
-        socketGames.on('disconnect', () => {
-                setIsConnectedGames(false);
-        });
-
-        socket.on('declineGame', (data) => {
-            socketGames.emit('declineGame', data.idIntra);
-            setEsit(DelcineImage);
-        });
-
-        const canvas = canvasRef.current;
-        if (!canvas) {
-          return ;
-        }
-        const ctx = canvas.getContext('2d');
-        if (!ctx) {
-          return ;
-        }
-
-        const drawRect = (x:any, y:any, w:any, h:any, color:any) => {
-            ctx.fillStyle = color;
-            ctx.fillRect(x, y, w, h);
-        }
-
-        const drawArc = (x:any, y:any, r:any, color:any) => {
-          ctx.fillStyle = color;
-          ctx.beginPath();
-          ctx.arc(x,y,r,0,Math.PI*2,true);
-          ctx.closePath();
-          ctx.fill();
-        }
-
-        const drawNet = (net:any) => {
-          for(let i = 0; i <= canvas.height; i+=15){
-              drawRect(net.x, net.y + i, net.width, net.height, net.color);
-          }
-        }
-
-        const drawText = (text:any,x:any,y:any) => {
-          ctx.fillStyle = "#FFF";
-          ctx.font = "75px fantasy";
-          ctx.fillText(text, x, y);
-      }
-
-      const drawUsername = (text:any,x:any,y:any) => {
-        ctx.fillStyle = "#FFF";
-        ctx.font = "35px fantasy";
-        ctx.fillText(text, x, y);
-      }
-
-      const drawImg = (img:any,x:any,y:any, width:any, height:any) => {
-        //size of image
-        var newImg = new Image(100,100);
-        newImg.src = img;
-        newImg.onload=function(){
-          ctx.drawImage(newImg, x, y, width, height);
-        }
-
-// image.onload=function(){
-// context.drawImage(image,0,0,canvas.width,canvas.height);
-// };
-// image.src="http://www.lunapic.com/editor/premade/transparent.gif";
-      }
-
-      //draw powerUp
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  console.log("Games", isConnectedGames)
 
 
+  // useEffect(() => {
+  //   setEsit(null);
+  // })
 
-      const render = (user:any, ball:any, net:any, com: any, powerUp: any) => {
+  useEffect(() => {
+    socketGames.on('connect', () => {
+      setIsConnectedGames(true);
+    });
 
-        // clear the canvas
-        drawRect(0, 0, canvas.width, canvas.height, 'black');
+    socketGames.emit('newPlayer', params.idIntra);
+    socketGames.on('disconnect', () => {
+      setIsConnectedGames(false);
+    });
 
-        // draw the user score to the left
-        drawUsername(user.username,canvas.width/4.6, (canvas.height/20));
-        // sdrawImg(user.img, canvas.width/2, (canvas.height/2));
-        drawText(user.score,canvas.width/4,canvas.height/5);
+    socket.on('declineGame', (data) => {
+      socketGames.emit('declineGame', data.idIntra);
+      setEsit(DelcineImage);
+    });
 
-        // draw the COM score to the right
-        drawUsername(com.username, 2.95 * canvas.width/4, (canvas.height/20));
-        // drawImg(com.img, 2.95 * canvas.width/4, (canvas.height/20)+50);
-        drawText(com.score,3*canvas.width/4,canvas.height/5);
-
-        // draw the net
-        drawNet(net);
-
-        // draw the user's paddle
-        drawRect(user.x, user.y, user.width, user.height, user.color);
-
-        // draw the COM's paddle
-        drawRect(com.x, com.y, com.width, com.height, com.color);
-
-        // draw the ball
-        drawArc(ball.x, ball.y, ball.radius, ball.color);
-
-        //draw powerUp
-        // if active
-        if(powerUp.active){
-          // drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
-          drawImg(powerUp.color, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
-        }
+    const canvas = canvasRef.current;
+    if (!canvas) {
+      return;
+    }
+    const ctx = canvas.getContext('2d');
+    if (!ctx) {
+      return;
     }
 
-        socketGames.on('state', (gameState:any ) => {
-          setStart(true);
-          console.log("gameState", gameState.players)
-          render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
-        });
+    const drawRect = (x: any, y: any, w: any, h: any, color: any) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(x, y, w, h);
+    }
 
-        socketGames.on('lose', (gameState:any ) => {
-          setEsit(LoserImage)
-          console.log("lose")
-        });
+    const drawArc = (x: any, y: any, r: any, color: any) => {
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(x, y, r, 0, Math.PI * 2, true);
+      ctx.closePath();
+      ctx.fill();
+    }
 
-        socketGames.on('win', (gameState:any ) => {
-          setEsit(WinnerImage)
-          console.log("win")
-        });
+    const drawNet = (net: any) => {
+      for (let i = 0; i <= canvas.height; i += 15) {
+        drawRect(net.x, net.y + i, net.width, net.height, net.color);
+      }
+    }
 
-        socketGames.on('GameNotFound', (gameState:any ) => {
-          setEsit(GameNotFoundImage)
-          console.log("GameNotFound")
-        });
+    const drawText = (text: any, x: any, y: any) => {
+      ctx.fillStyle = "#FFF";
+      ctx.font = "75px fantasy";
+      ctx.fillText(text, x, y);
+    }
 
-        socketGames.on('trigger', (gameState:any ) => {
-          socket.emit('trigger');
-        });
+    const drawUsername = (text: any, x: any, y: any) => {
+      ctx.fillStyle = "#FFF";
+      ctx.font = "35px fantasy";
+      ctx.fillText(text, x, y);
+    }
 
-        socketGames.on('gameOver', (gameState:any ) => {
-          if (!esit)
-          {
-            window.location.href = "/";
-          }
-        });
+    const drawImg = (img: any, x: any, y: any, width: any, height: any) => {
+      //size of image
+      var newImg = new Image(100, 100);
+      newImg.src = img;
+      newImg.onload = function () {
+        ctx.drawImage(newImg, x, y, width, height);
+      }
 
-        const playerMovement = {
-            up: false,
-            down: false,
-            left: false,
-            right: false
-          };
-          const keyDownHandler = (e:any) => {
-            if (e.keyCode === 39) {
-             playerMovement.right = true;
-            } else if (e.keyCode === 37) {
-              playerMovement.left = true;
-            } else if (e.keyCode === 38) {
-              playerMovement.up = true;
-            } else if (e.keyCode === 40) {
-              playerMovement.down = true;
-            }
-            else if (e.keyCode === 68) {
-              playerMovement.right = true;
-            }
-            else if (e.keyCode === 65) {
-              playerMovement.left = true;
-            }
-            else if (e.keyCode === 87) {
-              playerMovement.up = true;
-            }
-            else if (e.keyCode === 83) {
-              playerMovement.down = true;
-            }
-          };
-          const keyUpHandler = (e:any) => {
-            if (e.keyCode === 39) {
-              playerMovement.right = false;
-            } else if (e.keyCode === 37) {
-              playerMovement.left = false;
-            } else if (e.keyCode === 38) {
-              playerMovement.up = false;
-            } else if (e.keyCode === 40) {
-              playerMovement.down = false;
-            }
-            else if (e.keyCode === 68) {
-              playerMovement.right = false;
-            }
-            else if (e.keyCode === 65) {
-              playerMovement.left = false;
-            }
-            else if (e.keyCode === 87) {
-              playerMovement.up = false;
-            }
-            else if (e.keyCode === 83) {
-              playerMovement.down = false;
-            }
-            //sapce
-            // if (e.keyCode === 32) {
-            //   socketGames.emit('shoot');
-            // }
-          };
+      // image.onload=function(){
+      // context.drawImage(image,0,0,canvas.width,canvas.height);
+      // };
+      // image.src="http://www.lunapic.com/editor/premade/transparent.gif";
+    }
 
-          setInterval(() => {
-            socketGames.emit('playerMovement', playerMovement);
-          }, 1000 / 60);
-          document.addEventListener('keydown', keyDownHandler, false);
-          document.addEventListener('keyup', keyUpHandler, false);
+    //draw powerUp
 
 
-    }, [restart]);
 
-    const handleRestart = () => {
-      setEsit(null);
-      setReStart(!restart);
+    const render = (user: any, ball: any, net: any, com: any, powerUp: any) => {
+
+      // clear the canvas
+      drawRect(0, 0, canvas.width, canvas.height, 'black');
+
+      // draw the user score to the left
+      drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
+      // sdrawImg(user.img, canvas.width/2, (canvas.height/2));
+      drawText(user.score, canvas.width / 4, canvas.height / 5);
+
+      // draw the COM score to the right
+      drawUsername(com.username, 2.95 * canvas.width / 4, (canvas.height / 20));
+      // drawImg(com.img, 2.95 * canvas.width/4, (canvas.height/20)+50);
+      drawText(com.score, 3 * canvas.width / 4, canvas.height / 5);
+
+      // draw the net
+      drawNet(net);
+
+      // draw the user's paddle
+      drawRect(user.x, user.y, user.width, user.height, user.color);
+
+      // draw the COM's paddle
+      drawRect(com.x, com.y, com.width, com.height, com.color);
+
+      // draw the ball
+      drawArc(ball.x, ball.y, ball.radius, ball.color);
+
+      //draw powerUp
+      // if active
+      if (powerUp.active) {
+        // drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
+        drawImg(powerUp.color, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+      }
+    }
+    // setEsit(null);
+    
+    socketGames.on('state', (gameState: any) => {
+      setStart(true);
+      setTextMatchmaking("Matchmaking....");
+      console.log("gameState", gameState.players)
+      render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
+    });
+    
+    socketGames.on('lose', (gameState: any) => {
       setStart(false);
+      setEsit(LoserImage)
+      console.log("lose")
+    });
+
+    socketGames.on('win', (gameState: any) => {
+      setStart(false);
+      setEsit(WinnerImage)
+      console.log("win")
+    });
+    
+    socketGames.on('GameNotFound', (gameState: any) => {
+      setStart(false);
+      setEsit(GameNotFoundImage)
+      console.log("GameNotFound")
+    });
+    
+    socketGames.on('trigger', (gameState: any) => {
+      socket.emit('trigger');
+    });
+    
+    socketGames.on('gameOver', (gameState: any) => {
+      if (!esit) {
+        window.location.href = "/";
+      }
+    });
+    
+    socketGames.on('invited', () => {
+      setStart(false);
+      setTextMatchmaking("Waiting for a player to accept the invitation");
+      // setEsit(WinnerImage)
+      // console.log("win")
+    });
+
+    const playerMovement = {
+      up: false,
+      down: false,
+      left: false,
+      right: false
+    };
+    const keyDownHandler = (e: any) => {
+      if (e.keyCode === 39) {
+        playerMovement.right = true;
+      } else if (e.keyCode === 37) {
+        playerMovement.left = true;
+      } else if (e.keyCode === 38) {
+        playerMovement.up = true;
+      } else if (e.keyCode === 40) {
+        playerMovement.down = true;
+      }
+      else if (e.keyCode === 68) {
+        playerMovement.right = true;
+      }
+      else if (e.keyCode === 65) {
+        playerMovement.left = true;
+      }
+      else if (e.keyCode === 87) {
+        playerMovement.up = true;
+      }
+      else if (e.keyCode === 83) {
+        playerMovement.down = true;
+      }
+    };
+    const keyUpHandler = (e: any) => {
+      if (e.keyCode === 39) {
+        playerMovement.right = false;
+      } else if (e.keyCode === 37) {
+        playerMovement.left = false;
+      } else if (e.keyCode === 38) {
+        playerMovement.up = false;
+      } else if (e.keyCode === 40) {
+        playerMovement.down = false;
+      }
+      else if (e.keyCode === 68) {
+        playerMovement.right = false;
+      }
+      else if (e.keyCode === 65) {
+        playerMovement.left = false;
+      }
+      else if (e.keyCode === 87) {
+        playerMovement.up = false;
+      }
+      else if (e.keyCode === 83) {
+        playerMovement.down = false;
+      }
+      //sapce
+      // if (e.keyCode === 32) {
+      //   socketGames.emit('shoot');
+      // }
+    };
+
+    setInterval(() => {
+      socketGames.emit('playerMovement', playerMovement);
+    }, 1000 / 60);
+    document.addEventListener('keydown', keyDownHandler, false);
+    document.addEventListener('keyup', keyUpHandler, false);
+
+
+  }, [restart]);
+
+  const handleRestart = () => {
+    setEsit(null);
+    setReStart(!restart);
+    setStart(false);
   };
 
   const handleBack = () => {
@@ -255,33 +272,34 @@ export const GamesContain = (props: any) => {
     // window.location.assign('/')
   }
 
-    console.log("esit", esit)
-    console.log("start", start)
+  console.log("esit", esit)
+  console.log("start", start)
 
-    // function back(){
-    //   // window.history.back();
-    //   //window.location.assign('/')
-    // }
-    return (
-        <>
-            <head>
-                <title>Gamedev Canvas Workshop</title>
+  // function back(){
+  //   // window.history.back();
+  //   //window.location.assign('/')
+  // }
+  return (
+    <>
+      <head>
+        <title>Gamedev Canvas Workshop</title>
 
-            </head>
-            <body>
-                <canvas id="myCanvas" width="1920" height="1080" ref={canvasRef}></canvas>
-                {!start && <div id="textMatchmaking" style={{display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
-                <Link key={"home"} component={RouterLink} to={"/"}>
-                  <button onClick={handleBack}>
-                    <KeyboardBackspaceIcon />
-                    </button>
-                    </Link>
-                    Matchmaking...
-                    <CircularProgress />
-                    </div>}
-                {esit && <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%"/></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div>}
-            </body>
-        </>
-    );
+      </head>
+      <body>
+        <canvas id="myCanvas" width="1920" height="1080" ref={canvasRef}/>
+        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div> : 
+        null}
+        {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
+          <Link key={"home"} component={RouterLink} to={"/"}>
+            <button onClick={handleBack}>
+              <KeyboardBackspaceIcon />
+            </button>
+          </Link>
+          {textMatchmaking}
+          <CircularProgress />
+        </div>}
+      </body>
+    </>
+  );
 
 }

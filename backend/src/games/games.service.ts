@@ -29,7 +29,7 @@ export const ballDefault = {
 	radius : 10,
 	velocityX : 5,
 	velocityY : 5,
-	speed : 7,
+	speed : 13,
 	color : "WHITE"
 }
 

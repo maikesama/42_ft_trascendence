@@ -78,9 +78,9 @@ function App() {
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
               <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to a game</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
-                navigate(`/games/2${data.idIntra}`);
+                // navigate(`/games/2${data.idIntra}`);
                 // window.location.assign("/games/2" + data.idIntra);
-                // window.location.href = "/games/2" + data.idIntra;
+                window.location.href = "/games/2" + data.idIntra;
               }}>Join</Button>
               <Button style={{ marginLeft: "10px" }} variant="danger" onClick={() => {
                 socket.emit("declineGame", {idIntra :data.idIntra});

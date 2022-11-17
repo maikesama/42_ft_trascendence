@@ -348,7 +348,7 @@ export class UserService {
 		}
 	}
 
-	async changepp(body, id: number)
+	async changepp(body: any, id: number)
 	{
 		try {
 			// if(!body.dataURL)
@@ -364,6 +364,7 @@ export class UserService {
 		}
 		catch(e)
 		{
+			console.log(body.dataURL)
 			throw new HttpException(e, HttpStatus.NOT_FOUND)
 		}
 	}

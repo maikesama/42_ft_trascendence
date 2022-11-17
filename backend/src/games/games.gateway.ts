@@ -10,6 +10,7 @@ import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} 
 // var playersNumberClassic = 0;
 // var playersNumberCustom = 0;
 
+var movSpeed = 8
 var playerClassic = [];
 var playerCustom = [];
 var playerInvited = new Map<string, any>();
@@ -255,6 +256,7 @@ export class GamesGateway implements OnGatewayInit {
 								if (playerInvited[user.idIntra] === undefined) {
 									playerInvited[user.idIntra] = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, typeGame: typeGame2, invited:{idIntra: idIntraSpect, status: 0, invited: user.idIntra}};
 									console.log("player invited", playerInvited[user.idIntra].idIntra, " -> ", idIntraSpect);
+									client.emit("invited");
 								}
 							}
 						}
@@ -366,23 +368,23 @@ export class GamesGateway implements OnGatewayInit {
 				{
 					let type = players[client.id].type;
 					if (playerMovement.left && userToMove.x > 0) {
-						if ((type === 1 && (userToMove.x - 4) >= canvas.width / 2)|| type === 0 ) {
-							userToMove.x -= 4
+						if ((type === 1 && (userToMove.x - movSpeed) >= canvas.width / 2)|| type === 0 ) {
+							userToMove.x -= movSpeed
 						}
 					}
 					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-						if ((type === 0 && (userToMove.x + 4) <= canvas.width / 2 - 10) || type === 1 ) {
-							userToMove.x += 4
+						if ((type === 0 && (userToMove.x + movSpeed) <= canvas.width / 2 - 10) || type === 1 ) {
+							userToMove.x += movSpeed
 						}
 					}
 				}
 
 
 				if (playerMovement.up && userToMove.y > 0) {
-					userToMove.y -= 4
+					userToMove.y -= movSpeed
 				}
 				if (playerMovement.down && userToMove.y < canvas.height - userToMove.height) {
-					userToMove.y += 4
+					userToMove.y += movSpeed
 				}
 				// console.log ("userToMove", userToMove)
 			}

@@ -154,8 +154,9 @@ export const DM = (props: any) => {
 	const handleInvite = () => {
 		console.log("Invite");
 		socket.emit('notification', { type: 2, idIntra: props.idIntra});
-		navigate('/games/1' + props.idIntra);
+		// navigate('/games/1' + props.idIntra);
 		// window.location.assign("/games/1" + props.idIntra);
+		window.location.href = "/games/1" + props.idIntra;
 	};
 
 	return (

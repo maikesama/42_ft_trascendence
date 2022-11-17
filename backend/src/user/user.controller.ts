@@ -80,6 +80,7 @@ export class UserController{
 	async changePP(@Body() body, @Req() req)
 	{
 		const user = req.user
+		// console.log(body)
 		return await this.userservice.changepp(body, user['sub'])
 	}
 
