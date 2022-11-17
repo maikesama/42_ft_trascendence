@@ -45,6 +45,8 @@ export const Homepage = () => {
                 <div className="row" id="row">
 
                     <div onClick={classico} className="col-md-5 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
+                        {/* <img src="http://10.11.12.2/static/media/custom.a6b30656151a16d82711.gif"  /> */}
+                        {/* <div className="text"><h1 className="modalityName">Classico</h1></div> */}
                         <h1 className="modalityName">Classico</h1>
                     </div>
                     <div className="col-md-2 d-flex justify-content-center align-items-center" id="tutorial">
