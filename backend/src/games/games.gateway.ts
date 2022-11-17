@@ -241,7 +241,7 @@ export class GamesGateway implements OnGatewayInit {
 						idIntraSpect = idIntraSpect.slice(1);
 						const userInvited = await this.userService.isUserExist(idIntraSpect);
 						console.log("userInvited", userInvited)
-						if (userInvited) {
+						if (userInvited && idIntraSpect !== user.idIntra) {
 							if (typeGame2 === 2)
 							{
 								if (playerInvited[idIntraSpect] !== undefined && playerInvited[idIntraSpect].invited.idIntra === user.idIntra && playerInvited[idIntraSpect].invited.status === 0) {
@@ -249,16 +249,19 @@ export class GamesGateway implements OnGatewayInit {
 									playerInvited[idIntraSpect].invited.status = 1;
 									await this.matchUsers(playerInvited[idIntraSpect].typeGame, [playerInvited[idIntraSpect], user2]);
 									// delete playerInvited[idIntraSpect];
+									return;
 								}
 							}
-							else
+							else if (typeGame2 === 1 || typeGame2 === 0)
 							{
 								if (playerInvited[user.idIntra] === undefined) {
 									playerInvited[user.idIntra] = {idIntra: user.idIntra, roomId: null, type: 0, status : 0, img: user.img, userName: user.userName, client: client, typeGame: typeGame2, invited:{idIntra: idIntraSpect, status: 0, invited: user.idIntra}};
 									console.log("player invited", playerInvited[user.idIntra].idIntra, " -> ", idIntraSpect);
 									client.emit("invited");
+									return;
 								}
 							}
+							this.consoleLog()
 						}
 						else
 						{

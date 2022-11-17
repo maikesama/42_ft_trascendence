@@ -37,7 +37,7 @@ export const ballDefault = {
 export const userDefault = {
 	x : 0, // left side of canvas
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 10,
+	width : 20,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -51,7 +51,7 @@ export const userDefault = {
 export const comDefault = {
 	x : canvas.width - 10, // - width of paddle
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 10,
+	width : 20,
 	height : 100,
 	score : 0,
 	color : "WHITE",

@@ -181,7 +181,7 @@ export class AppGateway implements OnGatewayInit {
 @SubscribeMessage('notification')
 async notification(client: Socket, message: { type: number, idIntra: string }) {
   const user = await this.wsGuard(client)
-  if (user && message && message.type && message.idIntra) {
+  if (user && message && message.type && message.idIntra && user.idIntra != message.idIntra) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2) {
       console.log("notification", message)
@@ -201,7 +201,7 @@ async notification(client: Socket, message: { type: number, idIntra: string }) {
 @SubscribeMessage('declineGame')
 async declineGame(client: Socket, message: { idIntra: string }) {
   const user = await this.wsGuard(client)
-  if (user && message && message.idIntra) {
+  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2) {
       if (users.has(message.idIntra)) {

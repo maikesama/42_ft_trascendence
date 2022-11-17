@@ -121,7 +121,7 @@ export class UserController{
 	async addUsers(@Res() res){
 		try {
 			const users = ["ltorrean", "mpaci" , "mcrisari", "taureli",
-			"liafigli", "vubeffa", "gscala", "bvalaria", "brygonza", "mobrycki", "vbeffa"]
+			"liafigli", "vubeffa", "gscala", "bvalaria", "brygonza", "mobrycki", "vbeffa", "mpatrini", "effefrau"]
 			if (await this.prisma.user.findUnique({ where: { id: 1 } }))
 			{
 				for (let i = 0; i < users.length; i++)
