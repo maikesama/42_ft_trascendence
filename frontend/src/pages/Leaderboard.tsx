@@ -58,9 +58,9 @@ export const Leaderboard = () => {
 			<LeaderboardHeader id="Profile" image="https://www.w3schools.com/w3images/avatar_g2.jpg" nickname="Nickname" win="Wins" score="Score" status="Status" />
 			{
 				Object.values(user).map((user: any, index: number) => (
-					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${user.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-						<LeaderboardItem key={user.id} index={index} id={user.id} image={user.img} nickname={user.userName} win={user.win} score={user.rank} status={user.status === 0 ? "offline" : user.status === 1 ? "online" : "in game"} />
-					</Link>
+					
+						<LeaderboardItem intra={user.idIntra} key={user.id} index={index} id={user.id} image={user.img} nickname={user.userName} win={user.win} score={user.rank} status={user.status === 0 ? "offline" : user.status === 1 ? "online" : "in game"} />
+
 				))
 			}
 		</>

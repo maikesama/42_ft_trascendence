@@ -1,8 +1,16 @@
 import '../css/Navbar.css';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
+import { socket } from "../../App";
+import { useNavigate } from "react-router-dom";
+import IconButton from '@material-ui/core/IconButton';
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 
 export function LeaderboardItem(props: any) {
+
+    let navigate = useNavigate();
 
     const leaderboardItem = {
         width: '80%',
@@ -41,15 +49,26 @@ export function LeaderboardItem(props: any) {
         );
     }
 
+    const handleInvite = () => {
+        console.log("Invite");
+        socket.emit('notification', { type: 2, idIntra: props.intra });
+        navigate('/games/1' + props.intra);
+        // window.location.assign("/games/1" + props.idIntra);
+    };
+
     return (
         <>
             <div className='d-flex justify-content-evenly align-items-center' style={leaderboardItem}>
-                <label style={{ marginRight: '34px' }}>{props.index + 1}</label>
-                <img src={props.image} style={img} />
-                <label>{props.nickname}</label>
-                <label>{props.win}</label>
-                <label>{props.score}</label>
-                <label>{status} {props.status}</label>
+                <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.intra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+                    <label style={{ marginRight: '34px' }}>{props.index + 1}</label>
+                    <img src={props.image} style={img} />
+                    <label>{props.nickname}</label>
+                    <label>{props.win}</label>
+                    <label>{props.score}</label>
+                    <label>{status} {props.status}</label>
+                </Link>
+                {props.status === "online" ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large" onClick={() => window.location.assign("/games/" + props.intra)}/> : <DesktopAccessDisabledIcon fontSize="large" />}
+                
             </div>
         </>
     )

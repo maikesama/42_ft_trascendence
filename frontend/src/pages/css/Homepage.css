@@ -3,10 +3,13 @@
     background-image: url('../../images/classic.jpg') ;
     background-repeat: no-repeat ;
     background-size: 100% 100%;
-    scale: 0.55;
-    border-radius: 50px 25px;
+    /* scale: 0.55; */
+    width: auto;  
+    max-height: 100%;
+    border-radius: 50px 50px;
     margin-bottom: 5%;
-    margin-right: -5%
+    margin-right: -5%;
+    margin: auto;
 
 }
 
@@ -18,9 +21,12 @@
     background-image: url('../../images/classic.gif');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    scale: 0.55;
-    border-radius: 50px 25px;
+    /* scale: 0.55; */
+    width: auto;  
+    max-height: 50%;
+    border-radius: 50px 50px;
     margin-bottom: 5%;
+    margin: auto;
 }
 
 #custom{
@@ -28,7 +34,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     scale: 0.55;
-    border-radius: 50px 25px;
+    border-radius: 50px 50px;
     margin-bottom: 5%;
     margin-left: -5%
 }
@@ -38,7 +44,7 @@
     background-repeat: no-repeat;
     background-size: 100% 100%;
     scale: 0.55;
-    border-radius: 50px 25px;
+    border-radius: 50px 50px;
     margin-bottom: 5%;
 }
 
