@@ -211,9 +211,13 @@ async declineGame(client: Socket, message: { idIntra: string }) {
   }
 }
 
-
-
-
+@SubscribeMessage('trigger')
+async trigger(client: Socket) {
+  const user = await this.wsGuard(client)
+  if (user) {
+    this.server.emit('trigger')
+  }
+}
 
   async handleDisconnect(client: Socket) {
     const user = await this.wsGuard(client)
