@@ -30,7 +30,8 @@ export function LeaderboardHeader(props:any) {
             <label>{props.nickname}</label>
             <label>{props.win}</label>
             <label>{props.score}</label>
-            <label> {props.status}</label>
+            <label>{props.status}</label>
+            <label>Invite</label>
         </div>
     </>
 	)

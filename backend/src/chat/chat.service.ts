@@ -13,7 +13,7 @@ export class ChatService {
     async getChatFromOtherProfile(body, idIntra: string)
     {
         try {
-            var type = 0;
+            console.log(JSON.stringify(body))
             const chats = await this.prismaService.chat.findMany({
                 where:
                 {
@@ -407,6 +407,7 @@ export class ChatService {
                 },
                 select: {
                     idIntra: true,
+                    userName: true,
                     img: true
                 }
             })
@@ -437,6 +438,7 @@ export class ChatService {
 
                 const ret = {
                     idIntra: user.idIntra,
+                    userName: user.userName,
                     img: user.img,
                     invited: invited ? true : false,
                     //friend: friend ? true : false

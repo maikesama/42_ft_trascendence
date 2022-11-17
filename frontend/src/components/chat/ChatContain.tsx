@@ -23,6 +23,8 @@ import { Channel } from './Channel';
 import { socket } from "../../App";
 import Alert from '@mui/material/Alert';
 import { useParams } from 'react-router';
+import { useNavigate } from "react-router-dom";
+
 
 const useStyles = makeStyles({
     table: {
@@ -47,6 +49,7 @@ const useStyles = makeStyles({
 
 
 export const ChatContain = (props: any) => {
+    let navigate = useNavigate();
     const classes = useStyles();
     const onstatus = props.status;
     const params = useParams()
@@ -137,38 +140,37 @@ export const ChatContain = (props: any) => {
 
     const [userChat, setUserChat] = useState({} as any);
 
-    React.useEffect( () => {
+    React.useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile`;
-    
+
         const fetchData = async () => {
-          try {
-            const response = await fetch(url, {
-            method: 'POST',
-              credentials: 'include',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({
-                idIntra: params.idIntra
-                })
-            });
-            const json = await response.json();
-            console.log(json);
-            if (response.status) {
-                setUserChat(json);
-                changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        idIntra: params.idIntra
+                    })
+                });
+                const json = await response.json();
+                console.log(json);
+                if (response.status) {
+                    setUserChat(json);
+                    changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
+                }
+            } catch (error) {
+                console.log("error", error);
             }
-          } catch (error) {
-            console.log("error", error);
-          }
         };
-    
-        if (params.idIntra)
-        {
+
+        if (params.idIntra) {
             console.log("params.idIntra : " + params.idIntra)
             fetchData();
         }
-      }, []);
+    }, []);
 
     // const [user, setUser] = useState({} as any);
 
@@ -244,7 +246,7 @@ export const ChatContain = (props: any) => {
             }
         };
         fetchDataDms();
-    // }, [userChat]);
+        // }, [userChat]);
     }, []);
 
     React.useEffect(() => {
@@ -293,9 +295,14 @@ export const ChatContain = (props: any) => {
     }
 
     const [search, setSearch] = useState({} as any);
-    const initials = useRef<any>('');
+    const [searching, setSearching] = useState(false);
+    let initials = useRef<any>('');
 
     async function searchUser() {
+        if (initials.current.value == '')
+            setSearching(false)
+        else if (!searching)
+            setSearching(true)
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
@@ -307,8 +314,69 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            console.log(json);
+            console.log(json)
             setSearch(json);
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
+    async function newDm(idIntra: any) {
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
+
+        try {
+            console.log("newDm");
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idIntra: idIntra }),
+            });
+            const json = await response.json();
+            console.log(json);
+            if (response.status === 200) {
+                // console.log(json)
+                // window.location.href = ;
+                navigate(`/chat/${idIntra}`);
+            }
+            console.log(json);
+            // window.location.reload();
+        } catch (error) {
+            console.log("error", error);
+        }
+    }
+
+    async function toDm(index: any) {
+        const idIntra = await search[index]?.idIntra;
+        //console.log(props.idIntra)
+        const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ idIntra: idIntra }),
+            });
+            const json = await response.json();
+            console.log('ciao' + JSON.stringify(json));
+            //changeChat('DM', dms[index]?.userName, dms[index]?.id, dms[index]?.img, dms[index]?.idIntra, '')
+            if (response.status !== 200) {
+                await newDm(idIntra);
+                //changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
+            }
+            else {
+                //  window.location.href = `/chat/${props.idIntra}`;
+                navigate(`/chat/${idIntra}`);
+                changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
+            }
+
+            console.log(json);
+            // window.location.reload();
         } catch (error) {
             console.log("error", error);
         }
@@ -389,7 +457,6 @@ export const ChatContain = (props: any) => {
 
     });
 
-    console.log(map);
     // console.log (map);
 
 
@@ -444,6 +511,17 @@ export const ChatContain = (props: any) => {
         );
     }
 
+    function renderSearchRow(props: any) {
+        const { index, style } = props;
+        return (
+            <ListItem button style={style} key={index} onClick={event => toDm(index)}>
+                <Avatar src={search[index].img} />
+                <Divider variant='middle' />
+                <Typography variant='h6'>{(search[index]?.userName)}</Typography>
+            </ListItem>
+        );
+    }
+
     function renderChannelRow(props: any) {
         const { index, style } = props;
 
@@ -464,47 +542,62 @@ export const ChatContain = (props: any) => {
                 <h1>Loading...</h1>
             </div>
         );
-
     }
+
+
     return (
         // component Paper bugs the header
         <div>
             <Grid container style={{ top: 20 }} className={classes.chatSection}>
                 <Grid item xs={3} className={classes.borderRight500}>
-                    <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start' }}>
+                    <Grid item xs={12} style={{ padding: '10px', display: 'flex', justifyContent: 'flex-start', alignItems: 'center' }}>
                         <TextField className="searchBar" inputRef={initials} id="outlined-basic-email" label="Search" variant="outlined" fullWidth onChange={searchUser} />
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenCreateGroup}><GroupAddSharpIcon fontSize="large" /></IconButton>
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenJoineGroup}><Diversity3OutlinedIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
-                    <h4>DM</h4>
-                    <FixedSizeList
-                        height={Object.values(dms).length == 0 ? 90 : Object.values(dms).length > 5 ? 450 : ((Object.values(dms).length) * 90)}
-                        width='full'
-                        itemSize={90}
-                        itemCount={Object.values(dms).length}
-                        overscanCount={5}
-                    >
-                        {renderDmsRow}
-                    </FixedSizeList>
-                    <Divider />
-                    <h4>Channels</h4>
-                    <FixedSizeList
+                    {searching && initials.current != '' ?
+                        <>
+                            <FixedSizeList
+                                height={Object.values(search).length == 0 ? 90 : Object.values(search).length > 5 ? 450 : ((Object.values(search).length) * 90)}
+                                width='full'
+                                itemSize={90}
+                                itemCount={Object.values(search).length}
+                                overscanCount={5}
+                            >
+                                {renderSearchRow}
+                            </FixedSizeList>
+                        </> : <>
+                            <h4>DM</h4>
+                            <FixedSizeList
+                                height={Object.values(dms).length == 0 ? 90 : Object.values(dms).length > 5 ? 450 : ((Object.values(dms).length) * 90)}
+                                width='full'
+                                itemSize={90}
+                                itemCount={Object.values(dms).length}
+                                overscanCount={5}
+                            >
+                                {renderDmsRow}
+                            </FixedSizeList>
+                            <Divider />
+                            <h4>Channels</h4>
+                            <FixedSizeList
 
-                        height={(Object.values(chats).length == 0 ? 90 : Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length) * 90))}
-                        width='full'
-                        itemSize={90}
-                        itemCount={Object.values(chats).length}
-                        overscanCount={5}
-                    >
-                        {renderChannelRow}
-                    </FixedSizeList>
+                                height={(Object.values(chats).length == 0 ? 90 : Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length) * 90))}
+                                width='full'
+                                itemSize={90}
+                                itemCount={Object.values(chats).length}
+                                overscanCount={5}
+                            >
+                                {renderChannelRow}
+                            </FixedSizeList>
+                        </>}
                 </Grid>
                 <Grid item xs={9}>
                     {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
                     {chatView !== 'Blank' && <Messages idChat={idChat} messages={map.get(idChat)} />}
                 </Grid>
             </Grid>
+
             {/*MODAL JOIN GROUP */}
             <JoinGroup status={openJoinGroup} closeStatus={handleCloseJoinGroup} />
             {/*MODAL CREATE CHANNEL */}
