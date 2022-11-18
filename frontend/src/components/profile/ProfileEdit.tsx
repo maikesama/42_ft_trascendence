@@ -199,29 +199,42 @@ export const SocialEdit = (props: any) => {
   };
 
   function renderMatchesRowPreview(props: any) {
-    const { index, style, matches } = props;
+    let { index,style, matches } = props;
+
+    console.log(style)
+
+    var style2 = {
+      ...style,
+      display: 'flex',
+      justifyContent: 'space-between',
+    }
+    
+    // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
+    
+
+    // console.log("vaffanc" + JSON.stringify(style2))
 
     return (
-      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-        <ListItem button style={style} key={index} >
+       <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+        <ListItem key={index}  style={style2}>
           {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />
-            <ListItemText primary={games[index]?.user1} />
-            <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-            <ListItemText primary={games[index]?.user2} />
+            <Typography sx={{color: 'black', textDecoration: 'none'}}>{games[index]?.user1}</Typography>
+            <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
+            <Typography>{games[index]?.user2}</Typography>
             <Avatar src={games[index]?.img2} />
           </> :
             <>
 
               <Avatar src={games[index]?.img2} />
-              <ListItemText primary={games[index]?.user2} />
-              <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-              <ListItemText primary={games[index]?.user1} />
+              <Typography>{games[index]?.user2}</Typography>
+              <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
+              <Typography>{games[index]?.user1}</Typography>
               <Avatar src={games[index]?.img1} />
             </>
           }
         </ListItem>
-      </Link>
+       </Link>
     );
   }
 
@@ -232,7 +245,7 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
-          <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
+          <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
           <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         </Link>
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>

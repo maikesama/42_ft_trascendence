@@ -51,9 +51,6 @@ export const OtherProfileContain = (props: any) => {
         console.log("error", error);
       }
     };
-    //console.log("parapipoo", params.idUser, json, params === user.idIntra)
-    
-
     fetchData();
   }, [params]);
 
