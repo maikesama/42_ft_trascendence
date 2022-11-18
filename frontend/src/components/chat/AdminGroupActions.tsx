@@ -28,6 +28,7 @@ import { AdminSettings } from './AdminSettings';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { Alert, manageError } from '../generic/Alert';
+import { socket } from '../../App';
 
 
 export const AdminGroupActions = (props: any) => {
@@ -57,7 +58,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     const handleCloseSettings = (event:any, reason:any) => {
-        if (reason && reason == "backdropClick") 
+        if (reason && reason == "backdropClick")
             return;
         setOpenSettings(false);
     };
@@ -69,7 +70,7 @@ export const AdminGroupActions = (props: any) => {
             setSelectedName('');
         else {
             setSelectedName(event.target.value);
-            
+
         }
 
         const user = partecipants.find((user: any) => user.idIntra === event.target.value);
@@ -166,8 +167,12 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: bantime.current.value }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            // const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status == 200)
+            {
+                socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
+            }
         } catch (error) {
             console.log("error", error);
         }
@@ -267,8 +272,10 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            // const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200)
+            socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
         } catch (error) {
             console.log("error", error);
         }

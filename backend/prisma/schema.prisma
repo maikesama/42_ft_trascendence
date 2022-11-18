@@ -92,7 +92,7 @@ model Partecipant{
 	idIntra 	String
 	idChat		Int
 	user		User			@relation(fields: [idIntra], references: [idIntra])
-	chat		Chat			@relation(fields: [idChat], references: [id])
+	chat		Chat			@relation( fields: [idChat], references: [id], onDelete: Cascade)
 	owner		Boolean			@default(false)
 	admin		Boolean			@default(false)
 	joinedAt	DateTime  		@default(now())
@@ -110,9 +110,9 @@ model Chat {
 	name				String?
 	type				String		@default("public")
 	password			String?
-	partecipant			Partecipant[]
+	partecipant			Partecipant[] 
 	invited				String[]
-	messages			Message[]
+	messages			Message[] 
 	createdAt			DateTime  		@default(now())
 }
 
@@ -123,5 +123,5 @@ model Message {
 	idIntra				String
 	sendedAt			DateTime  	@default(now())
 	users				User		@relation(fields: [idIntra], references: [idIntra])
-	chat				Chat		@relation(fields: [idChat], references: [id])
+	chat				Chat		@relation( fields: [idChat], references: [id], onDelete: Cascade)
 }

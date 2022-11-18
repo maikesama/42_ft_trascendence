@@ -37,7 +37,7 @@ export const ballDefault = {
 export const userDefault = {
 	x : 0, // left side of canvas
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 10,
+	width : 20,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -51,7 +51,7 @@ export const userDefault = {
 export const comDefault = {
 	x : canvas.width - 10, // - width of paddle
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 10,
+	width : 20,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -204,8 +204,11 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 	// when the ball collides with bottom and top walls we inverse the y velocity.
 	if(ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height){
         ball.velocityY = -ball.velocityY;
+        ball.y = ball.y - ball.radius < 0 ? ball.radius : canvas.height - ball.radius;
         // wall.play();
 	}
+    //ball not over the screen
+
 
     if (typeGame === 1)
     {

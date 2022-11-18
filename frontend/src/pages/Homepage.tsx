@@ -12,7 +12,6 @@ import Alert from '@mui/material/Alert';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 
-
 export const Homepage = () => {
 
     const [openTutorial, setOpenTutorial]= useState(false)
@@ -40,25 +39,43 @@ export const Homepage = () => {
 	return (
         <>
         <Header/>
-        
+
         <div className="container-fluid " id="bodybox">
                 <div className="row" id="row">
 
-                    <div onClick={classico} className="col-md-5 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
+                    {/* <div onClick={classico} className="col-md-5 d-flex justify-content-center align-items-center" id="classic" style={{cursor: "pointer"}}>
                         <h1 className="modalityName">Classico</h1>
+                    </div> */}
+                    <div className="col-md-5 d-flex justify-content-center align-items-center" style={{position: 'relative'}}>
+                        <div className="classic_hover" onClick={classico}>
+                            <div>
+                                <img className="image_hover" src={require('../images/classic.jpg')} />
+                                <img className="image_hover" src={require('../images/classic.gif')} />
+                            </div>
+                            <div className="text"><h1 className="modalityName">Classico</h1></div>
+                        </div>
                     </div>
                     <div className="col-md-2 d-flex justify-content-center align-items-center" id="tutorial">
-                    <Button onClick={handleClickOpenTutorial} size="large" variant="contained" endIcon={<HelpIcon />}>
-                        Tutorial
-                    </Button>
+                        <Button onClick={handleClickOpenTutorial} size="large" variant="contained" endIcon={<HelpIcon />}>
+                            Tutorial
+                        </Button>
                     </div>
-                    <div onClick={custom} className="col-md-5 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
+                    {/* <div onClick={custom} className="col-md-5 d-flex justify-content-center align-items-center" id="custom" style={{cursor: "pointer"}}>
                         <h1  className="modalityName">Custom</h1>
+                    </div> */}
+                    <div className="col-md-5 d-flex justify-content-center align-items-center" style={{position: 'relative'}}>
+                        <div className="classic_hover" onClick={custom}>
+                            <div>
+                                <img className="image_hover" src={require('../images/custom.jpg')} />
+                                <img className="image_hover" src={require('../images/custom.gif')} />
+                            </div>
+                            <div className="text"><h1 className="modalityName">Custom</h1></div>
+                        </div>
                     </div>
                 </div>
         </div>
         <Tutorial status={openTutorial} closeStatus={handleClickCloseTutorial} />
-        
+
         </>
 	);
 }

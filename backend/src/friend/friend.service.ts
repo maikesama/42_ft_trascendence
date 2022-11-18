@@ -334,8 +334,8 @@ export class FriendService{
 
     async defaultFriends(){
         try{
-            const me = ["ltorrean", "taureli", "mpaci"]
-            const friends = ["ltorrean", "mpaci", "vbeffa", "vubeffa", "taureli", "liafigli", "bvalaria", "mcrisari"];
+            const me = ["ltorrean", "taureli", "mpaci", "mpatrini"]
+            const friends = ["ltorrean", "mpaci", "vbeffa", "vubeffa", "taureli", "liafigli", "bvalaria", "mcrisari", "mpatrini"];
             for (let i = 0; i < me.length; i++){
                 for (let j = 0; j < friends.length; j++){
                     if (me[i] != friends[j]){

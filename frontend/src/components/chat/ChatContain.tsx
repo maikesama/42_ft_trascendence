@@ -170,7 +170,7 @@ export const ChatContain = (props: any) => {
             console.log("params.idIntra : " + params.idIntra)
             fetchData();
         }
-    }, []);
+    }, [params.idIntra]);
 
     // const [user, setUser] = useState({} as any);
 
@@ -321,9 +321,9 @@ export const ChatContain = (props: any) => {
         }
     }
 
-    async function newDm(idIntra: any) {
+    async function newDm(index: any) {
+        const user = await search[index];
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
-
         try {
             console.log("newDm");
             const response = await fetch(url, {
@@ -332,14 +332,20 @@ export const ChatContain = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ idIntra: idIntra }),
+                body: JSON.stringify({ idIntra: user.idIntra }),
             });
             const json = await response.json();
+            console.log('matenevai')
             console.log(json);
             if (response.status === 200) {
                 // console.log(json)
                 // window.location.href = ;
-                navigate(`/chat/${idIntra}`);
+                // setonChangeDm(!onChangeDm);
+                // console.log({ idIntra: user.idIntra, userName: user.userName, userImg: user.img, userIdIntra: user.userName });
+                // changeChat('DM', user.userName, json.id, user.img, user.idIntra, '');
+                window.location.assign(`/Chat/${user.idIntra}`);
+                //changeChat('DM', user.userName , json.id, user.img , user.idIntra , ''); 
+                
             }
             console.log(json);
             // window.location.reload();
@@ -350,7 +356,7 @@ export const ChatContain = (props: any) => {
 
     async function toDm(index: any) {
         const idIntra = await search[index]?.idIntra;
-        //console.log(props.idIntra)
+        console.log('ciao' + idIntra)
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
 
         try {
@@ -366,8 +372,11 @@ export const ChatContain = (props: any) => {
             console.log('ciao' + JSON.stringify(json));
             //changeChat('DM', dms[index]?.userName, dms[index]?.id, dms[index]?.img, dms[index]?.idIntra, '')
             if (response.status !== 200) {
-                await newDm(idIntra);
+                await newDm(index);
+                //setUserIntra(idIntra);
+                //window.location.reload()
                 //changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
+                
             }
             else {
                 //  window.location.href = `/chat/${props.idIntra}`;

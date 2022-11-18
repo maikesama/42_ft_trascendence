@@ -60,3 +60,10 @@ game not found error fix
 matchmaking error fix
 
 inviare per game se offline?
+handle not invited?
+handle already invited?
+
+togliere tasto add friend dopo che l'ho inviato
+togliere pulsanti tuo profilo /other profile
+
+capire alert + json error

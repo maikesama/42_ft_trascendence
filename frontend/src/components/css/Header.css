@@ -1,4 +1,5 @@
 .headerButtons:hover{
     color: white;
-    font-weight: bolder;
+    font-weight: bold;
+    text-decoration: none;
 }

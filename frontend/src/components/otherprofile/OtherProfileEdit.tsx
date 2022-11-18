@@ -27,6 +27,7 @@ import "../css/ProfileEdit.css"
 import { SearchBar } from './SearchBar';
 import { MatchesList } from './MatchesList';
 import { Alert, manageError } from '../generic/Alert';
+import { socket } from '../../App';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -312,13 +313,16 @@ async function addInviteFriend(index: any) {
           },
           body: JSON.stringify({idIntra: props.idIntra}),
       })
-      const data = await response.json();
-      manageError(data, response,props.triggerUser ,setAlert);
+      // const data = await response.json();
+      manageError(null, response, props.triggerUser ,setAlert);
+      if (response.status === 200) {
+        socket.emit('notification', {type: 1, idIntra: props.idIntra});
+      }
       // if (response.status === 400) {
       //   alert("You already have a pending request with this user");
       // }
-          
-  
+
+
       //window.location.reload();
   } catch (error) {
       console.log("error", error);
@@ -382,7 +386,7 @@ async function newDm(index: any) {
       if (response.status === 200) {
         // console.log(json)
         // window.location.href = ;
-        navigate(`/chat/${props.idIntra}`); 
+        navigate(`/chat/${props.idIntra}`);
       }
       console.log(json);
       // window.location.reload();
@@ -411,9 +415,9 @@ async function toDm(index: any) {
       }
       else {
       //  window.location.href = `/chat/${props.idIntra}`;
-       navigate(`/chat/${props.idIntra}`); 
+       navigate(`/chat/${props.idIntra}`);
       }
-      
+
       console.log(json);
       // window.location.reload();
   } catch (error) {
@@ -461,21 +465,21 @@ async function toDm(index: any) {
         <IconButton aria-label="message" size="small" onClick={toDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
         {isFriend === false ? <>
           <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
-        </> 
+        </>
 
         : <>
           <IconButton aria-label="addfriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton>
         </>}
         {isBlocked === false ? <>
           <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
-        </> 
+        </>
 
         : <>
           <IconButton aria-label="block" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton>
         </>}
-        
-        
-        
+
+
+
       </CardActions>
     </Card>
     <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />

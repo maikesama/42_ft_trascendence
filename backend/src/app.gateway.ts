@@ -7,14 +7,16 @@ import { AtGuard } from './auth/guards';
 
 import { Cache, caching } from 'cache-manager';
 import { UserService } from './user/user.service';
+import { FriendService } from './friend/friend.service';
 // import { SessionService } from './sessionHandler/session.service';
 
 var jwt = require('jsonwebtoken');
-var users = new Map<string, string>();
+var users = new Map<string, any>();
 @UseGuards(AtGuard)
 @WebSocketGateway(4243, { transports: ['websocket'] })
 export class AppGateway implements OnGatewayInit {
-  constructor(private prisma: PrismaService, private chat: ChatService, private userService: UserService) { }
+  constructor(private prisma: PrismaService, private chat: ChatService, private userService: UserService, private friendSerice : FriendService
+    ) { }
 
   @WebSocketServer() server: Server;
 
@@ -85,7 +87,7 @@ export class AppGateway implements OnGatewayInit {
 
     const user = await this.wsGuard(client)
     if (user) {
-      users.set(user.idIntra, client.id);
+      users.set(user.idIntra, client);
       if (await this.userService.changeUserStatus(user.idIntra, 1))
         // this.server.emit('status', { idIntra: user.idIntra, status: 1 })
         this.server.emit('trigger')
@@ -181,18 +183,17 @@ export class AppGateway implements OnGatewayInit {
 @SubscribeMessage('notification')
 async notification(client: Socket, message: { type: number, idIntra: string }) {
   const user = await this.wsGuard(client)
-  if (user && message && message.type && message.idIntra) {
+  if (user && message && message.type && message.idIntra && user.idIntra != message.idIntra) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
-    if (user2) {
+    if (user2 && users.has(message.idIntra)) {
       console.log("notification", message)
       if (message.type == 1) {
         //friend request
+        this.server.to(users.get(message.idIntra).id).emit('notify', { type: 1, idIntra: user.idIntra, userName: user.userName, img: user.img })
       }
       else if (message.type == 2) {
         //game invite
-        if (users.has(message.idIntra)) {
-          this.server.to(users.get(message.idIntra)).emit('notify', { type: 2, idIntra: user.idIntra, userName: user.userName, img: user.img })
-        }
+          this.server.to(users.get(message.idIntra).id).emit('notify', { type: 2, idIntra: user.idIntra, userName: user.userName, img: user.img })
       }
     }
   }
@@ -201,11 +202,11 @@ async notification(client: Socket, message: { type: number, idIntra: string }) {
 @SubscribeMessage('declineGame')
 async declineGame(client: Socket, message: { idIntra: string }) {
   const user = await this.wsGuard(client)
-  if (user && message && message.idIntra) {
+  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2) {
       if (users.has(message.idIntra)) {
-        this.server.to(users.get(message.idIntra)).emit('declineGame', { idIntra: user.idIntra })
+        this.server.to(users.get(message.idIntra).id).emit('declineGame', { idIntra: user.idIntra })
       }
     }
   }
@@ -216,6 +217,34 @@ async trigger(client: Socket) {
   const user = await this.wsGuard(client)
   if (user) {
     this.server.emit('trigger')
+  }
+}
+
+@SubscribeMessage('acceptFriend')
+async acceptFriend(client: Socket, message: { idIntra: string }) {
+  const user = await this.wsGuard(client)
+  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2) {
+      this.friendSerice.acceptInvite({idIntra: message.idIntra}, user.id)
+      if (users.has(message.idIntra)) {
+        // this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra })
+      }
+    }
+  }
+}
+
+@SubscribeMessage('declineFriend')
+async declineFriend(client: Socket, message: { idIntra: string }) {
+  const user = await this.wsGuard(client)
+  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2) {
+      this.friendSerice.declineInvite({idIntra: message.idIntra}, user.id)
+      if (users.has(message.idIntra)) {
+        // this.server.to(users.get(message.idIntra).id).emit('declineFriend', { idIntra: user.idIntra })
+      }
+    }
   }
 }
 
@@ -264,6 +293,38 @@ async trigger(client: Socket) {
     }
     catch (e: any) {
       return false
+    }
+  }
+
+  @SubscribeMessage('ban')
+  async ban(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+
+      console.log("ban000000", message)
+      if (await this.chat.isBanned(message.idChat, message.idIntra))
+      {
+        console.log("ban1", message)
+
+        if (users.has(message.idIntra)) {
+          console.log("ban2", message)
+          users.get(message.idIntra).leave(message.idChat.toString())
+        }
+      }
+
+    }
+  }
+
+  @SubscribeMessage('unBan')
+  async unBan(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      if (!await this.chat.isBanned(message.idChat, message.idIntra))
+      {
+        if (users.has(message.idIntra)) {
+          users.get(message.idIntra).join(message.idChat.toString())
+        }
+      }
     }
   }
 

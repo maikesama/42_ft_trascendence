@@ -17,14 +17,15 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import Grid from '@mui/material/Grid';
 import "../css/Header.css"
-
+import { useLocation } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const pages = ['Home', 'Leaderboard', 'Profile', 'Chat'];
 const settings = ['Logout'];
 
 export function Header(props: any) {
-
+  const location = useLocation();
+  // console.log("location", location.pathname)
   const [user, setUser] = useState({} as any);
 
   async function logout()
@@ -69,6 +70,7 @@ export function Header(props: any) {
   };
 
   const handleCloseNavMenu = () => {
+
     setAnchorElNav(null);
   };
 
@@ -186,19 +188,31 @@ export function Header(props: any) {
                 </Typography>
               </Grid>
               <Grid item md={12}>
-                <Box className="headerButtonsBox" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around' } }}>
+                <Box className="headerButtonsBox" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around', marginBottom: '5rem' } }}>
                   {pages.map((page) => (
                     // <Link key={page} component={RouterLink} to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}>
-                    <Link key={page} component={RouterLink} to={`/${page}`}>
+                    <Link key={page} component={RouterLink} to={`/${page}`} style={{ textDecoration: 'none', height: 'auto' }}>
+                      {location.pathname === `/${page}` ? (
                       <Button
-                        sx={{ mt: -2, color: 'white', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
-                        className="headerButtons"
-                        style={{ backgroundColor: 'transparent' }}
+                        sx={{ mt: -2, color: 'red', fontWeight: 'bold', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
+                        className="selected"
+                        style={{ backgroundColor: 'transparent', paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, top: '32px' }}
                         key={page}
                         onClick={handleCloseNavMenu}
                       >
                         {page}
                       </Button>
+                      ) : (
+                      <Button
+                      sx={{ mt: -2, color: 'white', xs: 'none', display: 'block', fontSize: 18, padding: 4}}
+                        className="headerButtons"
+                        style={{ backgroundColor: 'transparent', paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, top: '32px'}}
+                        key={page}
+                        onClick={handleCloseNavMenu}
+                      >
+                        {page}
+                      </Button>
+                      )}
                     </Link>
                   ))}
                 </Box>
@@ -283,7 +297,7 @@ export function Header(props: any) {
         </Container>
       </AppBar>
     </ThemeProvider>
-    
+
    </>
   );
 };
