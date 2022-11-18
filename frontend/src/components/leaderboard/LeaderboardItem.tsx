@@ -7,9 +7,10 @@ import { socket } from "../../App";
 import { useNavigate } from "react-router-dom";
 import IconButton from '@material-ui/core/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import { useAuth } from '../../hooks/useAuth';
 
 export function LeaderboardItem(props: any) {
-
+    const { idIntra } = useAuth();
     let navigate = useNavigate();
 
     const leaderboardItem = {
@@ -67,8 +68,8 @@ export function LeaderboardItem(props: any) {
                     <label>{props.score}</label>
                     <label>{status} {props.status}</label>
                 </Link>
-                {props.status === "online" ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large" onClick={() => window.location.assign("/games/" + props.intra)}/> : <DesktopAccessDisabledIcon fontSize="large" />}
-                
+                {props.status === "online" && props.intra !== idIntra ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" style={{cursor: 'pointer'}} /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer'}} onClick={() => window.location.assign("/games/" + props.intra)} /> : <DesktopAccessDisabledIcon fontSize="large" />}
+
             </div>
         </>
     )

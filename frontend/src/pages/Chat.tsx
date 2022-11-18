@@ -7,7 +7,7 @@ export const Chat = () => {
         <>
         <Header/>
         <React.StrictMode>
-        
+
         <ChatContain status="online"/>
         </React.StrictMode>
         </>

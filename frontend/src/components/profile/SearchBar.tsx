@@ -33,6 +33,7 @@ import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import { Alert, manageError } from '../generic/Alert';
+import { socket } from '../../App';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -134,9 +135,12 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({idIntra: idIntra}),
                 })
-                const data = await response.json();
+                // const data = await response.json();
                 //window.location.reload(); or null
-                manageError(data, response, null, setAlert);
+                manageError(null, response, null, setAlert);
+                if (response.status === 200) {
+                    socket.emit('notification', {type: 1, idIntra: props.idIntra});
+                }
             } catch (error) {
                 console.log("error", error);
             }

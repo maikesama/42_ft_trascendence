@@ -12,19 +12,24 @@ import CloseIcon from '@mui/icons-material/Close';
 import CheckIcon from '@mui/icons-material/Check';
 
 export const manageError = (data: any, response: any, success:any, error:any) => {
-    if ((data !== undefined && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201)
-         || (response.status && response.status !== 200 && response.status !== 201)){
+    if ((data !== undefined && data !== null && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201)
+         || (response !== undefined && response !== null && response.status && response.status !== 200 && response.status !== 201)){
         console.log("error", data);
         console.log("error2", response);
         let message = "Error";
-        if (data.message)
+        if (data !== undefined && data !== null && data.message)
             message = data.message;
         else
             message = response.statusText;
-        error(message);
+
+        if (error)
+            error(message);
     }
     else
-        success(true);
+    {
+        if (success)
+            success(true);
+    }
 
   }
 
@@ -62,7 +67,7 @@ export const Notify = (props: any) => {
           >
             <CheckIcon fontSize="inherit" />
           </IconButton>
-      
+
           <IconButton
               aria-label="close"
               color="inherit"

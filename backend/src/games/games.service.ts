@@ -204,8 +204,11 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 	// when the ball collides with bottom and top walls we inverse the y velocity.
 	if(ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height){
         ball.velocityY = -ball.velocityY;
+        ball.y = ball.y - ball.radius < 0 ? ball.radius : canvas.height - ball.radius;
         // wall.play();
 	}
+    //ball not over the screen
+
 
     if (typeGame === 1)
     {

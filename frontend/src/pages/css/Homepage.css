@@ -1,17 +1,42 @@
 
-#classic{
+/* #classic{
     background-image: url('../../images/classic.jpg') ;
     background-repeat: no-repeat ;
     background-size: 100% 100%;
-    /* scale: 0.55; */
-    width: auto;  
+    width: auto;
     max-height: 100%;
     border-radius: 50px 50px;
     margin-bottom: 5%;
     margin-right: -5%;
     margin: auto;
 
+} */
+
+.classic_hover
+{
+    cursor: pointer;
+    width:auto;
 }
+
+.classic_hover img:last-child {
+    display: none;
+}
+
+.classic_hover:hover img:last-child {
+    display: unset;
+}
+
+.classic_hover:hover img:first-child {
+    display: none;
+}
+
+.image_hover
+{
+    max-width: 700px;
+    width: 100%;
+    border-radius: 2.5rem;
+}
+
 
 .text {
     position: absolute;
@@ -24,19 +49,18 @@
 
 }
 
-#classic:hover{
+/* #classic:hover{
     background-image: url('../../images/classic.gif');
     background-repeat: no-repeat;
     background-size: 100% 100%;
-    /* scale: 0.55; */
-    width: auto;  
+    width: auto;
     max-height: 50%;
     border-radius: 50px 50px;
     margin-bottom: 5%;
     margin: auto;
-}
+} */
 
-#custom{
+/* #custom{
     background-image: url('../../images/custom.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
@@ -53,7 +77,7 @@
     scale: 0.55;
     border-radius: 50px 50px;
     margin-bottom: 5%;
-}
+} */
 
 #bodybox {
     height: calc(100vh - 180px);
@@ -70,11 +94,23 @@
     background-repeat: no-repeat;
 }
 
-.modalityName{
+.modalityName {
     color: white;
-    font-size: 65px;
     font-family: MyWebFont;
-}
+    font-size: 5vw;
+  }
+  @media screen and (min-width: 1200px) {
+    .modalityName {
+       font-size: 65px;
+    }
+  }
+
+/* .modalityName{
+
+    font-size: max(1vw, 65px);
+    font-size: 65px;
+
+} */
 
 .row{
     height: 100%;

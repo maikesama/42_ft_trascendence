@@ -19,6 +19,7 @@ import { socket } from '../../App';
 
 // let ctx:any;
 export const GamesContain = (props: any) => {
+  const isSecondRender = useRef(false);
   // axios.get('api/getinfo').then(data=>data.json() )
   //console.log(props.match.params.username)
   // const [loading, setLoading] = useState(false);
@@ -47,7 +48,12 @@ export const GamesContain = (props: any) => {
       setIsConnectedGames(true);
     });
 
-    socketGames.emit('newPlayer', params.idIntra);
+    if (isSecondRender.current) {
+      socketGames.emit('newPlayer', params.idIntra);
+    }
+    isSecondRender.current = true;
+
+
     socketGames.on('disconnect', () => {
       setIsConnectedGames(false);
     });
@@ -150,14 +156,14 @@ export const GamesContain = (props: any) => {
       }
     }
     // setEsit(null);
-    
+
     socketGames.on('state', (gameState: any) => {
       setStart(true);
       setTextMatchmaking("Matchmaking....");
       console.log("gameState", gameState.players)
       render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
     });
-    
+
     socketGames.on('lose', (gameState: any) => {
       setStart(false);
       setEsit(LoserImage)
@@ -169,23 +175,23 @@ export const GamesContain = (props: any) => {
       setEsit(WinnerImage)
       console.log("win")
     });
-    
+
     socketGames.on('GameNotFound', (gameState: any) => {
       setStart(false);
       setEsit(GameNotFoundImage)
       console.log("GameNotFound")
     });
-    
+
     socketGames.on('trigger', (gameState: any) => {
       socket.emit('trigger');
     });
-    
+
     socketGames.on('gameOver', (gameState: any) => {
       if (!esit) {
         window.location.href = "/";
       }
     });
-    
+
     socketGames.on('invited', () => {
       setStart(false);
       setTextMatchmaking("Waiting for a player to accept the invitation");
@@ -266,8 +272,8 @@ export const GamesContain = (props: any) => {
   };
 
   const handleBack = () => {
-    setEsit(null);
-    setStart(false);
+    // setEsit(null);
+    // setStart(false);
     socketGames.emit('leaveGame');
     // window.location.assign('/')
   }
@@ -286,8 +292,12 @@ export const GamesContain = (props: any) => {
 
       </head>
       <body>
+        {/* danger */}
+        {start && <Link key={"home"} component={RouterLink} to={"/"}>
+        <button style={{position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px"}} onClick={handleBack}>Quit</button>
+        </Link>}
         <canvas id="myCanvas" width="1920" height="1080" ref={canvasRef}/>
-        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div> : 
+        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div> :
         null}
         {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
           <Link key={"home"} component={RouterLink} to={"/"}>
@@ -298,6 +308,7 @@ export const GamesContain = (props: any) => {
           {textMatchmaking}
           <CircularProgress />
         </div>}
+
       </body>
     </>
   );
