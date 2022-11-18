@@ -517,7 +517,7 @@ export const ProfileEdit = (props: any) => {
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Score:
             </Typography>
-            <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
+            <TextField inputProps={fontColor} id="txtScore" placeholder={String(props.score)} variant="standard" disabled />
             <Button sx={{ color: 'black', visibility: 'hidden' }} >
               <EditIcon />
             </Button>

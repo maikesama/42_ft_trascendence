@@ -285,8 +285,6 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                 }
             }
         }
-
-
     }
 
 	// we check if the paddle hit the user or the com paddle

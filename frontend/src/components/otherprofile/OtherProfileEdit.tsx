@@ -457,7 +457,7 @@ async function toDm(index: any) {
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
             Score:
           </Typography>
-          <TextField inputProps={fontColor} id="txtScore" placeholder={props.score} variant="standard" disabled />
+          <TextField inputProps={fontColor} id="txtScore" placeholder={String(props.score)} variant="standard" disabled />
         </div>
 
       </CardContent>

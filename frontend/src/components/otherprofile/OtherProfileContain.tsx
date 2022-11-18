@@ -6,11 +6,23 @@ import "../css/ProfileEdit.css"
 import "../css/Navbar.css"
 import { Achievements } from './Achievements';
 import { useParams } from 'react-router';
+import { useNavigate } from "react-router-dom";
 
 export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
   const [loading, setLoading] = useState(false);
   const params = useParams()
+  let navigate = useNavigate();
+
+//   useEffect(() => {
+//     console.log("parapipoo", params.idUser, user, params === user.idIntra)
+//   if (params === user.idIntra) {
+    
+//     navigate('/profile');
+//   }
+// }, [params]);
+
+  console.log("params", user.idIntra)
   console.log("ciao",loading)
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/${params.idUser}`;
@@ -26,6 +38,9 @@ export const OtherProfileContain = (props: any) => {
         const json = await response.json();
         console.log(json);
         setUser(json);
+        if (json.idIntra === params.idUser) {
+          navigate('/profile');
+        }
         if (response.status !== 200) {
           window.location.replace('/');
         }
@@ -36,7 +51,9 @@ export const OtherProfileContain = (props: any) => {
         console.log("error", error);
       }
     };
+    //console.log("parapipoo", params.idUser, json, params === user.idIntra)
     
+
     fetchData();
   }, [params]);
 
@@ -83,7 +100,7 @@ export const OtherProfileContain = (props: any) => {
 
   const MatchesFriends = {
     color: 'black', backgroundColor: 'white',
-    display: 'flex', alignItems: 'center', justifyContents: 'center'
+    display: 'flex', alignItems: 'center', justifyContents: 'center', justifyContent:'space-around'
   }
   if (!loading) {
     return (
@@ -93,7 +110,7 @@ export const OtherProfileContain = (props: any) => {
     )
   }
   return (
-    <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1100px' }}>
+    <Grid container spacing={4} style={{ margin: 0, maxWidth: '100%', height: '1100px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
         <Typography
           variant="h4"
@@ -195,7 +212,7 @@ export const OtherProfileContain = (props: any) => {
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
-      <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
+      <Grid item xs={12} style={MatchesFriends} >
         <SocialEdit title="FRIENDS" matches={true} user={params}/>
         <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank}/>
         <SocialEdit title="MATCHES" matches={false} user={params}/>
