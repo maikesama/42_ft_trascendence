@@ -287,11 +287,7 @@ export const GamesContain = (props: any) => {
   // }
   return (
     <>
-      <head>
-        <title>Gamedev Canvas Workshop</title>
-
-      </head>
-      <body>
+      
         {/* danger */}
         {start && <Link key={"home"} component={RouterLink} to={"/"}>
         <button style={{position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px"}} onClick={handleBack}>Quit</button>
@@ -309,7 +305,6 @@ export const GamesContain = (props: any) => {
           <CircularProgress />
         </div>}
 
-      </body>
     </>
   );
 

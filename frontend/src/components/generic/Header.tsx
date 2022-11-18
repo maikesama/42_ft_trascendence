@@ -194,7 +194,7 @@ export function Header(props: any) {
                     <Link key={page} component={RouterLink} to={`/${page}`} style={{ textDecoration: 'none', height: 'auto' }}>
                       {location.pathname === `/${page}` ? (
                       <Button
-                        sx={{ mt: -2, color: 'red', fontWeight: 'bold', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
+                        sx={{ mt: -2, color: 'violet', fontWeight: 'bold', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
                         className="selected"
                         style={{ backgroundColor: 'transparent', paddingTop: 0, paddingBottom: 0, paddingLeft: 0, paddingRight: 0, top: '32px' }}
                         key={page}

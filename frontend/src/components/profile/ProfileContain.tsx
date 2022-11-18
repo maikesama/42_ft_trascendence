@@ -77,7 +77,7 @@ export const ProfileContain = (props: any) => {
 
   const MatchesFriends = {
     color: 'black', backgroundColor: 'white',
-    display: 'flex', alignItems: 'center', justifyContents: 'center'
+    display: 'flex', alignItems: 'center', justifyContents: 'center',justifyContent:'space-around'
   }
 
   return (
@@ -183,7 +183,7 @@ export const ProfileContain = (props: any) => {
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
-      <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
+      <Grid item xs={12} style={MatchesFriends} >
         <SocialEdit title="FRIENDS" tot="12" matches={true} />
         <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank} triggerUser={setTriggerUser}/>
         <SocialEdit title="LAST 5 MATCHES" tot="122" matches={false} />

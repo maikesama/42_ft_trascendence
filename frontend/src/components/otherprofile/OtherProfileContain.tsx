@@ -83,7 +83,7 @@ export const OtherProfileContain = (props: any) => {
 
   const MatchesFriends = {
     color: 'black', backgroundColor: 'white',
-    display: 'flex', alignItems: 'center', justifyContents: 'center'
+    display: 'flex', alignItems: 'center', justifyContents: 'center', justifyContent:'space-around'
   }
   if (!loading) {
     return (
@@ -93,7 +93,7 @@ export const OtherProfileContain = (props: any) => {
     )
   }
   return (
-    <Grid container spacing={4} style={{ paddingTop: 35, margin: 0, maxWidth: '100%', height: '1100px' }}>
+    <Grid container spacing={4} style={{ margin: 0, maxWidth: '100%', height: '1100px' }}>
       <Grid item xs={4} style={colors.rankCont} className='rank'>
         <Typography
           variant="h4"
@@ -195,7 +195,7 @@ export const OtherProfileContain = (props: any) => {
       </Grid>
       {/* Side edit profile */}
       {/* Matches and Friends */}
-      <Grid item xs={12} style={MatchesFriends} justifyContent='space-around'>
+      <Grid item xs={12} style={MatchesFriends} >
         <SocialEdit title="FRIENDS" matches={true} user={params}/>
         <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank}/>
         <SocialEdit title="MATCHES" matches={false} user={params}/>
