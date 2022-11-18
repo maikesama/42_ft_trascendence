@@ -6,11 +6,23 @@ import "../css/ProfileEdit.css"
 import "../css/Navbar.css"
 import { Achievements } from './Achievements';
 import { useParams } from 'react-router';
+import { useNavigate } from "react-router-dom";
 
 export const OtherProfileContain = (props: any) => {
   const [user, setUser] = useState({} as any);
   const [loading, setLoading] = useState(false);
   const params = useParams()
+  let navigate = useNavigate();
+
+//   useEffect(() => {
+//     console.log("parapipoo", params.idUser, user, params === user.idIntra)
+//   if (params === user.idIntra) {
+    
+//     navigate('/profile');
+//   }
+// }, [params]);
+
+  console.log("params", user.idIntra)
   console.log("ciao",loading)
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/${params.idUser}`;
@@ -26,6 +38,9 @@ export const OtherProfileContain = (props: any) => {
         const json = await response.json();
         console.log(json);
         setUser(json);
+        if (json.idIntra === params.idUser) {
+          navigate('/profile');
+        }
         if (response.status !== 200) {
           window.location.replace('/');
         }
@@ -36,7 +51,9 @@ export const OtherProfileContain = (props: any) => {
         console.log("error", error);
       }
     };
+    //console.log("parapipoo", params.idUser, json, params === user.idIntra)
     
+
     fetchData();
   }, [params]);
 
