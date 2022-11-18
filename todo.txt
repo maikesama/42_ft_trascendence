@@ -67,3 +67,5 @@ togliere tasto add friend dopo che l'ho inviato
 togliere pulsanti tuo profilo /other profile
 
 capire alert + json error
+
+add in group

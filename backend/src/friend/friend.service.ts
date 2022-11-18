@@ -115,6 +115,8 @@ export class FriendService{
                 }
             })
 
+            if (userToInvite.idIntra === userRequest.idIntra)
+                throw new BadRequestException("You can't invite yourself");
             if (await this.isInvited(userRequest.idIntra, userToInvite.idIntra))
                 throw new BadRequestException("Already invited");
             if (await this.isFriend(userRequest.idIntra, userToInvite.idIntra))

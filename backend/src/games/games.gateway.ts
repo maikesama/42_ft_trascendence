@@ -10,7 +10,8 @@ import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} 
 // var playersNumberClassic = 0;
 // var playersNumberCustom = 0;
 
-var movSpeed = 8
+var movSpeed = 4
+var movSpeedCustom = 7
 var playerClassic = [];
 var playerCustom = [];
 var playerInvited = new Map<string, any>();
@@ -49,6 +50,7 @@ export class GamesGateway implements OnGatewayInit {
 					rooms[players[client.id].roomId].gameState.user.score = (rooms[players[client.id].roomId].type === 0) ? maxScoreClassic : maxScoreCustom;
 				}
 				// await this.userService.changeUserStatus(players[client.id].idIntra, 1);
+				await this.userService.changeUserStatus(players[client.id].idIntra , 1);
 				client.leave(players[client.id].roomId);
 				delete players[client.id];
 			}
@@ -377,28 +379,29 @@ export class GamesGateway implements OnGatewayInit {
 				// console.log("roomId", roomId)
 				let userToMove = (players[client.id].type === 0) ? rooms[roomId].gameState.user : rooms[roomId].gameState.com;
 
+				const movSpeedNow = (rooms[roomId].type === 0) ? movSpeed : movSpeedCustom;
 
 				if(rooms[roomId].type === 1)
 				{
 					let type = players[client.id].type;
 					if (playerMovement.left && userToMove.x > 0) {
-						if ((type === 1 && (userToMove.x - movSpeed) >= canvas.width / 2)|| type === 0 ) {
-							userToMove.x -= movSpeed
+						if ((type === 1 && (userToMove.x - movSpeedNow) >= canvas.width / 2 )|| type === 0 ) {
+							userToMove.x -= movSpeedNow
 						}
 					}
 					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-						if ((type === 0 && (userToMove.x + movSpeed) <= canvas.width / 2 - 10) || type === 1 ) {
-							userToMove.x += movSpeed
+						if ((type === 0 && (userToMove.x + movSpeedNow) <= canvas.width / 2 - 30) || type === 1 ) {
+							userToMove.x += movSpeedNow
 						}
 					}
 				}
 
 
 				if (playerMovement.up && userToMove.y > 0) {
-					userToMove.y -= movSpeed
+					userToMove.y -= movSpeedNow
 				}
 				if (playerMovement.down && userToMove.y < canvas.height - userToMove.height) {
-					userToMove.y += movSpeed
+					userToMove.y += movSpeedNow
 				}
 				// console.log ("userToMove", userToMove)
 			}

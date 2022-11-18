@@ -8,10 +8,10 @@ import { Response } from "express";
 export class UserService {
 	constructor(private prisma: PrismaService, private jwtService: JwtService) {}
 
-	async getBlocked(userId: number){
+	async getBlocked(idIntra: string){
 		try{
 			const user = await this.prisma.user.findUnique({
-				where: { id: userId },
+				where: { idIntra: idIntra },
 				include: {
 					blocked: {
 						include: {
@@ -206,6 +206,34 @@ export class UserService {
 		}
 
 	}
+
+	async getAllBlockUsersFromIdIntra(idIntra: string)
+	{
+		try {
+			var blocked = await this.prisma.blocklist.findMany({
+				where: {
+					OR : [
+						{blockId: idIntra},
+						{blockedId: idIntra}
+					]
+
+				}
+			})
+			var blockArray = []
+			blocked.forEach(block => {
+				if (block.blockId === idIntra)
+					blockArray.push(block.blockedId)
+				else
+					blockArray.push(block.blockId)
+			})
+	
+			return blockArray
+		}
+		catch (e) {
+			throw new HttpException(e, HttpStatus.NOT_FOUND)
+		}
+	}
+
 
 	async getAllUsers()
 	{

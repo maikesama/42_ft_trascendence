@@ -852,8 +852,18 @@ export class ChatService {
                                         select:{
                                             userName: true,
                                             img : true,
+                                            // blockedby:
+                                            // {
+                                            //     where:{
+                                            //             NOT : {
+                                            //                     blockId : idIntra
+                                            //                 }
+                                            //             }
+                                            // },
+
                                         }
                                     },
+                                    
                                 },
                                 orderBy: {
                                     sendedAt: 'asc'
@@ -877,8 +887,16 @@ export class ChatService {
         try {
             let messages = await this.getUserChatsMessages(idIntra, body.count)
 
-            // let ret = new Map(messages.map((message) => [message.chat.id, message.chat.messages]))
-            // console.log(ret)
+            // pretty print JSON stignify
+            // console.log(JSON.stringify(messages, null, 2))
+            // console.log("DIVISORE")
+            let blockedUsers = await this.userService.getAllBlockUsersFromIdIntra(idIntra)
+            messages.forEach(element => {
+                element.chat.messages.forEach(message => {
+                    if (blockedUsers.includes(message.idIntra))
+                        message.message = "censored"
+                });
+            });
             return messages
 
         }

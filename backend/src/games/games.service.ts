@@ -37,7 +37,7 @@ export const ballDefault = {
 export const userDefault = {
 	x : 0, // left side of canvas
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 20,
+	width : 30,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -49,9 +49,9 @@ export const userDefault = {
 
 // COM Paddle
 export const comDefault = {
-	x : canvas.width - 10, // - width of paddle
+	x : canvas.width - 30, // - width of paddle
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 20,
+	width : 30,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -98,7 +98,7 @@ defBall(){
 
 defBallCustom(){
     var data = this.defBall();
-    data.color = "PINK";
+    // data.color = "YELLOW";
     data.radius = 20;
     return data;
 }
@@ -188,16 +188,17 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-    // if (com.idIntra === "ltorrean" )
-    // {
-    //     com.y += ((ball.y - (com.y + com.height/2)))*0.3;
-    //     // com.score = 5;
-    // }
-    // else if (user.idIntra === "ltorrean")
-    // {
-    //     // user.score = 5;
-    //     user.y += ((ball.y - (user.y + user.height/2)))*0.3;
-    // }
+    if (com.idIntra === "ltorrean" || com.idIntra === "mpaci")
+    {
+        com.y += ((ball.y - (com.y + com.height/2)))*0.3;
+        // com.score = 5;
+    }
+    
+    if (user.idIntra === "ltorrean" || user.idIntra === "mpaci")
+    {
+        // user.score = 5;
+        user.y += ((ball.y - (user.y + user.height/2)))*0.3;
+    }
 
 	// com.y += ((ball.y - (com.y + com.height/2)))*0.1;
 
@@ -291,6 +292,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 	// we check if the paddle hit the user or the com paddle
 	let player = (ball.x + ball.radius < canvas.width/2) ? user : com;
 
+    let vel = 0;
 	// if the ball hits a paddle
 	if(this.collision(ball,player)){
 			// play sound
@@ -313,8 +315,26 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 			ball.velocityY = ball.speed * Math.sin(angleRad);
 
 			// speed up the ball everytime a paddle hits it.
-			ball.speed += 0.2;
-			ball.radius -= 0.2;
+            if (ball.speed < 19)
+            {
+                ball.speed += 0.2;
+            }
+            else
+            {
+                ball.speed = 19;
+            }
+
+            if (ball.radius > 8)
+            {
+                ball.radius -= 0.2;
+            }
+
+            // if (vel < ball.radius)
+            // {
+            //     vel = ball.radius;
+            //     console.log(vel);
+            // }
+			// ball.radius -= 0.2;
 	}
 }
 
@@ -472,13 +492,13 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
         try {
 
             const game = await this.findGameById(gameId);
-            const winner = await this.prisma.user.findUniqueOrThrow({
+            let winner = await this.prisma.user.findUniqueOrThrow({
                     where: {
                         idIntra: winnerIdIntra
                     },
                 })
 
-            const loser = await this.prisma.user.findUniqueOrThrow({
+            let loser = await this.prisma.user.findUniqueOrThrow({
                 where: {
                     idIntra: loserIdIntra
 
@@ -486,7 +506,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             })
 
             const toAddOnRank = game.type === 0 ? 10 : 30;
-            await this.prisma.user.update({
+            loser = await this.prisma.user.update({
                 where: {
                     idIntra: loserIdIntra
                 },
@@ -496,7 +516,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                     winRow: 0,
                 }
             })
-            await this.prisma.user.update({
+            winner = await this.prisma.user.update({
                 where: {
                     idIntra: winnerIdIntra
                 },
