@@ -105,7 +105,7 @@ export class UserController{
 	async getBlocked(@Req() req)
 	{
 	   const user = req.user
-	   return await this.userservice.getBlocked(user['sub'])
+	   return await this.userservice.getBlocked(user['idIntra'])
 	}
 
 	@UseGuards(AtGuard)
