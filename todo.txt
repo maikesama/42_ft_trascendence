@@ -71,3 +71,4 @@ capire alert + json error
 add in group
 
 add in group undefined se bloccato?
+bloccare 100 caratteri frontend

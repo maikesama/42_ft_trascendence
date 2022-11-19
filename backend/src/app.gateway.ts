@@ -117,7 +117,7 @@ export class AppGateway implements OnGatewayInit {
   @SubscribeMessage('prova')
   async prova(client: Socket, message: { idChat: number, message: string }) {
     const user = await this.wsGuard(client)
-    if (user) {
+    if (user && message.idChat && message.message ) {
       console.log("provaMessaggi", message)
       if (message.idChat && message.message) {
         const date = new Date()
@@ -141,17 +141,23 @@ export class AppGateway implements OnGatewayInit {
           //prendere tempo di mute
         }
         else {
-          console.log("messaggio messaggio messaggio messaggio")
-          this.saveMessage( user.idIntra, message.idChat, message.message)
-          const data = {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}}
-          const partecipants = await this.chat.getArrayPartecipantsNotBanned(message.idChat)
-          // console.log("partecipants", partecipants)
-          const blockedArray = await this.userService.getAllBlockUsersFromIdIntra(user.idIntra)
-          // console.log("blockedArray", blockedArray)
-          if (blockedArray.length > 0)
-            await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);
+          if (!(message.message.length > 0 && message.message.length <= 100)) {
+            client.emit('provaMessaggi', {errorMessage: "messagge too long (1 - 100)", idChat : message.idChat})
+          }
           else
-            this.server.to(message.idChat.toString()).emit('provaMessaggi', data)
+          {
+            console.log("messaggio messaggio messaggio messaggio")
+            this.saveMessage( user.idIntra, message.idChat, message.message)
+            const data = {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}}
+            const partecipants = await this.chat.getArrayPartecipantsNotBanned(message.idChat)
+            // console.log("partecipants", partecipants)
+            const blockedArray = await this.userService.getAllBlockUsersFromIdIntra(user.idIntra)
+            // console.log("blockedArray", blockedArray)
+            if (blockedArray.length > 0)
+              await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);//testare bloccati
+            else
+              this.server.to(message.idChat.toString()).emit('provaMessaggi', data)
+          }
         }
       }
       else
@@ -341,13 +347,10 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
     const user = await this.wsGuard(client)
     if (user) {
 
-      console.log("ban000000", message)
       if (await this.chat.isBanned(message.idChat, message.idIntra))
       {
-        console.log("ban1", message)
 
         if (users.has(message.idIntra)) {
-          console.log("ban2", message)
           users.get(message.idIntra).leave(message.idChat.toString())
         }
       }

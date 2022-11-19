@@ -194,7 +194,7 @@ export const Messages = (props: any) => {
             <form onSubmit={sendMessage}>
                 <Grid container style={{ padding: '20px' }}>
                     <Grid item xs={11}>
-                        <TextField id="outlined-basic-email" label="Type Something" fullWidth  onChange={e => setMessage(e.target.value)} value={message} />
+                        <TextField id="outlined-basic-email" label="Type Something" fullWidth  onChange={e => setMessage(e.target.value)} value={message} maxLength={100} />
                     </Grid>
                     <Grid item xs={1} >
                         <Fab color="primary" aria-label="add" onClick={sendMessage}><SendIcon /></Fab>
