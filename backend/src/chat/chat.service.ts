@@ -891,14 +891,14 @@ export class ChatService {
             // console.log(JSON.stringify(messages, null, 2))
             // console.log("DIVISORE")
             let blockedUsers = await this.userService.getAllBlockUsersFromIdIntra(idIntra)
+            console.log(blockedUsers)
             messages.forEach(element => {
-                element.chat.messages.forEach(message => {
-                    if (blockedUsers.includes(message.idIntra))
-                    {
-                        message.message = "CENSURED"
-                        delete message.users;
+                for (let i = 0; i < element.chat.messages.length; i++) {
+                    if (blockedUsers.includes(element.chat.messages[i].idIntra)) {
+                        element.chat.messages.splice(i, 1)
+                        i--
                     }
-                });
+                }
             });
             // console.log(JSON.stringify(messages, null, 2))
             return messages

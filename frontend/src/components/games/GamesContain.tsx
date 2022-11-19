@@ -271,11 +271,14 @@ export const GamesContain = (props: any) => {
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);
     socketGames.on('start', () => {
+      start2.current = true;
+      console.log("start2.current", start2.current)
+      console.log("start2.current", start2.current)
       const interval = setInterval(() => {
-        // console.log("cioa");
         socketGames.emit('playerMovement', playerMovement);
         if (!start2.current)
         {
+          console.log("mi sono fermato")
           clearInterval(interval);
         }
      } , 1000 / 60);
@@ -290,6 +293,17 @@ export const GamesContain = (props: any) => {
     setEsit(null);
     setReStart(!restart);
     setStart(false);
+  };
+
+  const handleRestart0 = () => {
+    handleRestart();
+    window.location.href = "/games/0";
+
+  };
+
+  const handleRestart1 = () => {
+    handleRestart();
+    window.location.href = "/games/1";
   };
 
   const handleBack = () => {
@@ -314,7 +328,7 @@ export const GamesContain = (props: any) => {
         <button style={{position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px"}} onClick={handleBack}>Quit</button>
         </Link>}
         <canvas id="myCanvas" width="1920" height="1080" ref={canvasRef}/>
-        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><Link key={"games"} component={RouterLink} to={"/games/0"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Classic</button></Link><Link key={"games"} component={RouterLink} to={"/games/1"}><button id="buttonGameHome" onClick={handleRestart}>Play Again Custom</button></Link></div> :
+        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><button id="buttonGameHome" onClick={handleRestart0}>Play Again Classic</button><button id="buttonGameHome" onClick={handleRestart1}>Play Again Custom</button></div> :
         null}
         {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
           <Link key={"home"} component={RouterLink} to={"/"}>

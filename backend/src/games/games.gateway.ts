@@ -194,6 +194,7 @@ export class GamesGateway implements OnGatewayInit {
 				players[newUsers[i].client.id] = {idIntra: newUsers[i].idIntra, roomId: roomId, type: i, client: newUsers[i].client};
 				await this.userService.changeUserStatus(newUsers[i].idIntra, 2)
 				newUsers[i].client.join(roomId);
+				newUsers[i].client.emit('start');
 				players[newUsers[i].client.id].tmpLast = new Date().getTime();
 				players[newUsers[i].client.id].tmpLast2 = new Date().getTime();
 			}
@@ -214,8 +215,6 @@ export class GamesGateway implements OnGatewayInit {
 				const roomId = await this.createRoom(typeGame, newUsers);
 				if (roomId)
 				{
-					newUsers[0].client.emit("start");
-					newUsers[1].client.emit("start");
 					await this.handleStart(roomId);
 					// console.log("user", rooms[roomId].gameState.user)
 					// console.log("com", rooms[roomId].gameState.com)
