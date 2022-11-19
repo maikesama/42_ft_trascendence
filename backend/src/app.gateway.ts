@@ -82,6 +82,16 @@ export class AppGateway implements OnGatewayInit {
       return user;
   }
 
+  async sendToFriends(idIntra: string, status: number) {
+    await this.friendSerice.getFriends({}, idIntra).then((friends) => {
+      friends.forEach((friend) => {
+        if (users.has(friend.idIntra)) {
+          this.server.to(users.get(friend.idIntra).id).emit('friendStatus', { idIntra: idIntra, status: status })
+        }
+      })
+    })
+  }
+
   @UseGuards(AtGuard)
   async handleConnection(client: Socket, ...args: any[]) {
 
@@ -89,27 +99,26 @@ export class AppGateway implements OnGatewayInit {
     if (user) {
       users.set(user.idIntra, client);
       if (await this.userService.changeUserStatus(user.idIntra, 1))
+      {
         // this.server.emit('status', { idIntra: user.idIntra, status: 1 })
         this.server.emit('trigger')
+        await this.sendToFriends(user.idIntra, 1)
+      }
     }
 
-
-    //     let chats = await this.prisma.partecipant.findMany({
-    //       where: {
-    //         idIntra: me.idIntra
-    //       },
-    //     });
-    //     await Promise.all(chats.map(async (chat) => {
-    //       client.join(chat.idChat.toString());
-    //     }))
-    //   }
-
-    // }
-    // catch(e: any)
-    // {
-    //   throw new BadRequestException(e)
-    // }
   }
+
+  @SubscribeMessage('inGame')
+  async inGame(client: Socket) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      if (await this.userService.changeUserStatus(user.idIntra, 2))
+      {
+        await this.sendToFriends(user.idIntra, 2)
+      }
+    }
+  }
+        // this.server.emit('status', { idIntra: user.idIntra, status: 2 })
 
 //prova
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -270,6 +279,7 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
       {
         // this.server.emit('status', { idIntra: user.idIntra, status: 0 })
         this.server.emit('trigger')
+        await this.sendToFriends(user.idIntra, 0)
       }
     }
     // this.sessionService.saveSession((client as any).idIntra, {

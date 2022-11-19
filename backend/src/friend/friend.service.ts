@@ -264,6 +264,7 @@ export class FriendService{
                         idIntra: true,
                         userName: true,
                         img: true,
+                        status: true,
                     }
                 })
 

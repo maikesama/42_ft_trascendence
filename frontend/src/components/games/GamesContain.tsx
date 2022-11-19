@@ -189,6 +189,7 @@ export const GamesContain = (props: any) => {
 
     socketGames.on('trigger', (gameState: any) => {
       socket.emit('trigger');
+      socket.emit('inGame');
     });
 
     socketGames.on('gameOver', (gameState: any) => {

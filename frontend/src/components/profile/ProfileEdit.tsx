@@ -95,16 +95,26 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
+  }, []);
+
+  useEffect(() => {
     socket.on("friendStatus", (data: any) => {
-      console.log(data);
-      // idIntra
-      // status
-      // id
-      // idUser
-      setFriends(data);
+      console.log("friendStatus", data);
+      //  edit status where idIntra = data.idIntra
+      setFriends((friends: any) => {
+        const newFriends = friends.map((friend: any) => {
+          if (friend.idIntra === data.idIntra) {
+            friend.status = data.status;
+          }
+          return friend;
+        });
+        return newFriends;
+      });
+
       }
     );
-  }, []);
+  });
+
 
   async function block(index: any) {
     const idIntra = await friends[index]?.idIntra;
@@ -256,6 +266,7 @@ export const SocialEdit = (props: any) => {
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
           <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.status)}</Typography>
           <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
         </Link>
         <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
