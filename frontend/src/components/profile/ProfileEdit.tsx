@@ -33,6 +33,7 @@ import ImageUploading, { ImageListType } from "react-images-uploading";
 import { Alert, manageError } from '../generic/Alert';
 import { Twofa } from '../../pages/Twofa';
 import { TwofaOn } from './TwofaOn';
+import { socket } from '../../App';
 
 
 const fontColor = {
@@ -94,6 +95,15 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
+    socket.on("friendStatus", (data: any) => {
+      console.log(data);
+      // idIntra
+      // status
+      // id
+      // idUser
+      setFriends(data);
+      }
+    );
   }, []);
 
   async function block(index: any) {

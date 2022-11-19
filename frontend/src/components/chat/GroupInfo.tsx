@@ -35,11 +35,17 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { UserActions } from './UserActions';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
+import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from "react-router-dom";
+import { socket } from '../../App';
+
 
 export const GroupInfo = (props: any) => {
 
     const partecipants = props.partecipants;
-
+    const { idIntra } = useAuth();
+    let navigate = useNavigate();
 
     const [openUserActions, setopenUserActions] = React.useState(false);
     const handleClickOpenUserActions = () => {
@@ -68,11 +74,18 @@ export const GroupInfo = (props: any) => {
 
     }
 
+    const handleInvite = (intra : any) => {
+        socket.emit('notification', { type: 2, idIntra: intra });
+        navigate('/games/1' + intra);
+        // window.location.assign("/games/1" + props.idIntra);
+    };
+
     function renderGroupRow(props: ListChildComponentProps) {
         const { index, style } = props;
 
         return (
             <ListItem style={style} key={index} >
+                <div style={{float: 'left', width: '80%'}}>
                 <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${partecipants[index]?.idIntra}`} underline="none" color="inherit">
                 <ListItemButton>
                     <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
@@ -81,6 +94,10 @@ export const GroupInfo = (props: any) => {
                     <Divider />
                 </ListItemButton>
                 </Link>
+                </div>
+                <div style={{textAlign: 'center'}}>
+                {partecipants[index]?.idIntra !== idIntra ? <Button onClick={() => handleInvite(partecipants[index]?.idIntra)}><SportsEsportsOutlinedIcon/></Button> :  <Button disabled ><SportsEsportsOutlinedIcon/></Button>}
+                </div>
             </ListItem>
         );
     }

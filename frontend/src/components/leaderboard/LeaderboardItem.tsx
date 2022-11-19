@@ -83,7 +83,7 @@ export function LeaderboardItem(props: any) {
                         </span>
                     </label>
                 </Link>
-                {props.status === "online" && props.intra !== idIntra ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" style={{cursor: 'pointer'}} /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer'}} onClick={() => window.location.assign("/games/" + props.intra)} /> : <DesktopAccessDisabledIcon fontSize="large" />}
+                {props.status === "online" && props.intra !== idIntra ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" style={{cursor: 'pointer'}} /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer'}} onClick={() => window.location.assign("/games/" + props.intra)} /> : <SportsEsportsOutlinedIcon disabled style={{color: 'grey'}} fontSize="large"  />}
 
             </div>
         </>

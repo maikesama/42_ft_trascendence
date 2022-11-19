@@ -512,7 +512,7 @@ export const ChatContain = (props: any) => {
         // console.log("DMSSS INDEX", JSON.stringify(dms[index]));
         // console.log("DMSSS userName", dms[index]["partecipant"][0]["user"]);
         return (
-            <ListItem style={style} key={index} onClick={() => changeChat('DM', dms[index]["partecipant"][0]["user"]?.userName, dms[index]?.id, dms[index]["partecipant"][0]["user"]?.img, dms[index]["partecipant"][0]["user"]?.idIntra, '')}>
+            <ListItem style={style} key={index} onClick={() => navigate(`/Chat/` + dms[index]["partecipant"][0]["user"]?.idIntra)}>
                 <img width="50px" height="50px" style={{borderRadius: '100%'}} src={dms[index]["partecipant"][0]["user"]?.img} />
                 <Divider variant='middle' />
                 <h5>{(dms[index]["partecipant"][0]["user"]?.userName)}</h5>
