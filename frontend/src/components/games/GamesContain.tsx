@@ -211,6 +211,7 @@ export const GamesContain = (props: any) => {
       left: false,
       right: false
     };
+
     const keyDownHandler = (e: any) => {
       if (e.keyCode === 39) {
         playerMovement.right = true;
@@ -275,7 +276,9 @@ export const GamesContain = (props: any) => {
       console.log("start2.current", start2.current)
       console.log("start2.current", start2.current)
       const interval = setInterval(() => {
-        socketGames.emit('playerMovement', playerMovement);
+        if (playerMovement.up || playerMovement.down || playerMovement.left || playerMovement.right) {
+          socketGames.emit('playerMovement', playerMovement);
+        }
         if (!start2.current)
         {
           console.log("mi sono fermato")
@@ -296,13 +299,13 @@ export const GamesContain = (props: any) => {
   };
 
   const handleRestart0 = () => {
-    handleRestart();
+    // handleRestart();
     window.location.href = "/games/0";
 
   };
 
   const handleRestart1 = () => {
-    handleRestart();
+    // handleRestart();
     window.location.href = "/games/1";
   };
 

@@ -85,15 +85,15 @@ export class GamesGateway implements OnGatewayInit {
 		}
 
 		async handleDisconnect(client: Socket) {
-				this.logger.log(`Client disconnected: ${client.id}`)
-				await this.leaveGame(client);
+			await this.leaveGame(client);
+			this.logger.log(`Client disconnected: ${client.id}`)
 		}
 
 		@SubscribeMessage('leaveGame')
 		async leaveGameHandler(client: Socket) {
 			console.log("leaveGameHandler");
-			this.logger.log(`Client leave: ${client.id}`)
 			await this.leaveGame(client);
+			this.logger.log(`Client leave: ${client.id}`)
 		}
 
 		isAlreadyInRoom(idIntra: string) {
@@ -233,6 +233,7 @@ export class GamesGateway implements OnGatewayInit {
 		@UseGuards(AtGuard)
 		@SubscribeMessage('newPlayer')
 		async handleNewPlayer(client: Socket, idIntraSpect : any) {
+				// console.log("newPlayer", idIntraSpect);
 				//not viewer but player and idIntra
 				//check if already in players map
 				const user = await this.userService.getUserByIdIntra(client["user"]["idIntra"]);
@@ -375,6 +376,7 @@ export class GamesGateway implements OnGatewayInit {
 
 		@SubscribeMessage('playerMovement')
 		async handlePlayerMovement(client: Socket, playerMovement: any){
+			// console.log("playerMovement", playerMovement)
 
 			// console.log("playerMovement", playerMovement)
 			if (players[client.id] !== undefined) {
