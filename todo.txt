@@ -69,3 +69,5 @@ togliere pulsanti tuo profilo /other profile
 capire alert + json error
 
 add in group
+
+add in group undefined se bloccato?

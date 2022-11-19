@@ -40,11 +40,11 @@ export class ChatService {
             if (chatId === undefined) {
                 throw new BadRequestException('Chat not found')
             }
-            // if (chat === undefined) 
+            // if (chat === undefined)
             // {
             //     const newChat = await this.newDm({ idIntra: body.idIntra }, idIntra)
             //     chatId = newChat?.id
-            //     if (newChat === undefined) 
+            //     if (newChat === undefined)
             //     {
             //         throw new BadRequestException("chat non trovata")
             //     }
@@ -528,7 +528,7 @@ export class ChatService {
                 return chat
             }
             return null
-            
+
         }
         catch (err) {
             throw new BadRequestException(err)
@@ -863,7 +863,7 @@ export class ChatService {
 
                                         }
                                     },
-                                    
+
                                 },
                                 orderBy: {
                                     sendedAt: 'asc'
@@ -894,9 +894,13 @@ export class ChatService {
             messages.forEach(element => {
                 element.chat.messages.forEach(message => {
                     if (blockedUsers.includes(message.idIntra))
-                        message.message = "censored"
+                    {
+                        message.message = "CENSURED"
+                        delete message.users;
+                    }
                 });
             });
+            // console.log(JSON.stringify(messages, null, 2))
             return messages
 
         }
@@ -1466,6 +1470,33 @@ export class ChatService {
         catch (err) {
             console.log(err)
             throw new BadRequestException(err);
+        }
+    }
+
+    async getArrayPartecipantsNotBanned(id: number) {
+        try {
+            // get from partecipant where idChat = id and (bannedUntil < now or bannedUntil = null)
+            const partecipants = await this.prismaService.partecipant.findMany({
+                where: {
+                    idChat: id,
+                    OR : [
+                        {bannedUntil: {
+                            lt: new Date()
+                        }},
+                        {bannedUntil: null}
+                    ]
+
+
+                }
+            })
+            const idIntra = []
+            partecipants.forEach(partecipant => {
+                idIntra.push(partecipant.idIntra)
+            })
+            return idIntra
+        }
+        catch (err) {
+            throw new BadRequestException(err)
         }
     }
 

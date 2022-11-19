@@ -143,7 +143,15 @@ export class AppGateway implements OnGatewayInit {
         else {
           console.log("messaggio messaggio messaggio messaggio")
           this.saveMessage( user.idIntra, message.idChat, message.message)
-          this.server.to(message.idChat.toString()).emit('provaMessaggi', {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}})
+          const data = {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}}
+          const partecipants = await this.chat.getArrayPartecipantsNotBanned(message.idChat)
+          // console.log("partecipants", partecipants)
+          const blockedArray = await this.userService.getAllBlockUsersFromIdIntra(user.idIntra)
+          // console.log("blockedArray", blockedArray)
+          if (blockedArray.length > 0)
+            await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);
+          else
+            this.server.to(message.idChat.toString()).emit('provaMessaggi', data)
         }
       }
       else
@@ -264,6 +272,38 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
     //   });
     //   this.server.sockets.emit("offline", client.handshake.query.auth)
   }
+
+  async getMapOnlineFromIdIntraArray(idIntra: string[]) {
+    var map = new Map<string, any>()
+    for (let i = 0; i < idIntra.length; i++) {
+      if (users.has(idIntra[i])) {
+        map.set(idIntra[i], users.get(idIntra[i]))
+      }
+    }
+    return map
+  }
+
+  async getMapNotBlockedIdIntraFromIdIntraMap(idIntra: string[], map: Map<string, any>) {
+    for (let i = 0; i < idIntra.length; i++) {
+      if (map.has(idIntra[i])) {
+        map.delete(idIntra[i])
+      }
+    }
+    return map
+  }
+
+
+  async emitToUsersArray(idIntra: string[], idIntraBanned: string[], event: string, data: any) {
+    var map = await this.getMapOnlineFromIdIntraArray(idIntra)
+    // console.log("emitToUsersArray", map)
+    var map2 = await this.getMapNotBlockedIdIntraFromIdIntraMap(idIntraBanned, map)
+    // console.log("emitToUsersArray", map2)
+    map2.forEach((value, key) => {
+      this.server.to(value.id).emit(event, data)
+    }
+    )
+  }
+
 
   // async verifyPartecipant(idIntra: string, idChat: number) {
   //   try {
