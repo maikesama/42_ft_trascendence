@@ -7,23 +7,15 @@ import "../css/Navbar.css"
 import { Achievements } from './Achievements';
 import { useParams } from 'react-router';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../hooks/useAuth';
 
 export const OtherProfileContain = (props: any) => {
+  const { idIntra } = useAuth();
   const [user, setUser] = useState({} as any);
   const [loading, setLoading] = useState(false);
   const params = useParams()
   let navigate = useNavigate();
-
-//   useEffect(() => {
-//     console.log("parapipoo", params.idUser, user, params === user.idIntra)
-//   if (params === user.idIntra) {
-    
-//     navigate('/profile');
-//   }
-// }, [params]);
-
-  console.log("params", user.idIntra)
-  console.log("ciao",loading)
+ 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/${params.idUser}`;
     
@@ -37,15 +29,12 @@ export const OtherProfileContain = (props: any) => {
         });
         const json = await response.json();
         console.log(json);
-        setUser(json);
-        if (json.idIntra === params.idUser) {
+        if (response.status !== 200 || idIntra === params.idUser) {
           navigate('/profile');
-        }
-        if (response.status !== 200) {
-          window.location.replace('/');
         }
         else {
           setLoading(true);
+          setUser(json);
         }
       } catch (error) {
         console.log("error", error);
@@ -53,8 +42,6 @@ export const OtherProfileContain = (props: any) => {
     };
     fetchData();
   }, [params]);
-
-  //retrigger
 
   const [rank, setRank] = useState({} as any);
   
