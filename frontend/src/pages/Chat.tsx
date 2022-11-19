@@ -6,10 +6,8 @@ export const Chat = () => {
     return (
         <>
         <Header/>
-        <React.StrictMode>
 
-        <ChatContain status="online"/>
-        </React.StrictMode>
+        <ChatContain />
         </>
     );
 }
