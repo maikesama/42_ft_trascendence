@@ -525,7 +525,7 @@ export const ChatContain = (props: any) => {
         const { index, style } = props;
         return (
             <ListItem style={style} key={index} onClick={() => toDm(index)}>
-                <Avatar src={search[index].img} />
+                <img width="50px" height="50px" style={{borderRadius: '100%'}} src={search[index].img} alt="" />
                 <Divider variant='middle' />
                 <h5>{(search[index]?.userName)}</h5>
                 {/* <Typography variant='h6'></Typography> */}
