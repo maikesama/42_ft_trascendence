@@ -14,7 +14,7 @@ export function LeaderboardItem(props: any) {
     let navigate = useNavigate();
 
     const leaderboardItem = {
-        width: '80%',
+        width: '60%',
         backgroundColor: '#f5f4f2',
         borderRadius: 8,
         height: 50,
@@ -22,8 +22,10 @@ export function LeaderboardItem(props: any) {
         marginTop: 15,
         alignItems: 'space-between',
         padding: 5,
+    }
 
-
+    const leaderboardItemCliccable = {
+        cursor: 'pointer',
     }
 
     const img = {
@@ -61,12 +63,25 @@ export function LeaderboardItem(props: any) {
         <>
             <div className='d-flex justify-content-evenly align-items-center' style={leaderboardItem}>
                 <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.intra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-                    <label style={{ marginRight: '34px' }}>{props.index + 1}</label>
-                    <img src={props.image} style={img} />
-                    <label>{props.nickname}</label>
-                    <label>{props.win}</label>
-                    <label>{props.score}</label>
-                    <label>{status} {props.status}</label>
+                    <label style={{width: '6%'}}>
+                        <span style={{width: '100%', float: 'left', textAlign: 'right'}}>
+                            <span style={leaderboardItemCliccable}>{props.index + 1}</span>
+                        </span>
+                    </label>
+                        <span style={{width: '8%', textAlign: 'left'}}>
+                            <img src={props.image} style={img} />
+                        </span>
+                    <label  style={{width: '20%'}}><span style={leaderboardItemCliccable}>{props.nickname}</span></label>
+                    <label  style={{width: '15%'}}><span style={leaderboardItemCliccable}>{props.win}</span></label>
+                    <label  style={{width: '15%'}}><span style={leaderboardItemCliccable}>{props.score}</span></label>
+                    <label  style={{width: '15%'}}>
+                        <span style={{width: '40%', float: 'left', paddingRight: '0.5rem', textAlign: 'right'}}>
+                            <span style={leaderboardItemCliccable}>{status}</span>
+                        </span>
+                        <span style={{width: '60%',  float: 'left', textAlign: 'left'}}>
+                            <span style={leaderboardItemCliccable}>{props.status}</span>
+                        </span>
+                    </label>
                 </Link>
                 {props.status === "online" && props.intra !== idIntra ? <SportsEsportsOutlinedIcon onClick={handleInvite} fontSize="large" style={{cursor: 'pointer'}} /> : props.status === "in game" ? <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer'}} onClick={() => window.location.assign("/games/" + props.intra)} /> : <DesktopAccessDisabledIcon fontSize="large" />}
 

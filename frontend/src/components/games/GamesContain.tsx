@@ -34,7 +34,7 @@ export const GamesContain = (props: any) => {
   // const [userRight, setUserRight] = useState(null);
 
   const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
-
+  const start2 = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   console.log("Games", isConnectedGames)
 
@@ -43,7 +43,9 @@ export const GamesContain = (props: any) => {
   //   setEsit(null);
   // })
 
+  var start3 = false;
   useEffect(() => {
+
     socketGames.on('connect', () => {
       setIsConnectedGames(true);
     });
@@ -158,26 +160,29 @@ export const GamesContain = (props: any) => {
     // setEsit(null);
 
     socketGames.on('state', (gameState: any) => {
+      start2.current = true;
       setStart(true);
       setTextMatchmaking("Matchmaking....");
-      console.log("gameState", gameState.players)
       render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
     });
 
     socketGames.on('lose', (gameState: any) => {
       setStart(false);
+      start2.current = false;
       setEsit(LoserImage)
       console.log("lose")
     });
 
     socketGames.on('win', (gameState: any) => {
       setStart(false);
+      start2.current = false;
       setEsit(WinnerImage)
       console.log("win")
     });
 
     socketGames.on('GameNotFound', (gameState: any) => {
       setStart(false);
+      start2.current = false;
       setEsit(GameNotFoundImage)
       console.log("GameNotFound")
     });
@@ -194,6 +199,7 @@ export const GamesContain = (props: any) => {
 
     socketGames.on('invited', () => {
       setStart(false);
+      start2.current = false;
       setTextMatchmaking("Waiting for a player to accept the invitation");
       // setEsit(WinnerImage)
       // console.log("win")
@@ -256,9 +262,24 @@ export const GamesContain = (props: any) => {
       // }
     };
 
-    setInterval(() => {
-      socketGames.emit('playerMovement', playerMovement);
-    }, 1000 / 60);
+    // while (start2.current) {
+    //   socket.emit('movement', playerMovement);
+    // }
+    // setInterval(() => {
+    //   console.log("start2.current", start2.current)
+    //   if (start2.current)
+    //     socketGames.emit('playerMovement', playerMovement);
+    // }, 1000 / 60);
+    socketGames.on('start', () => {
+      const interval = setInterval(() => {
+        // console.log("cioa");
+        socketGames.emit('playerMovement', playerMovement);
+        if (!start2.current)
+        {
+          clearInterval(interval);
+        }
+     } , 1000 / 60);
+    });
     document.addEventListener('keydown', keyDownHandler, false);
     document.addEventListener('keyup', keyUpHandler, false);
 
@@ -287,7 +308,7 @@ export const GamesContain = (props: any) => {
   // }
   return (
     <>
-      
+
         {/* danger */}
         {start && <Link key={"home"} component={RouterLink} to={"/"}>
         <button style={{position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px"}} onClick={handleBack}>Quit</button>

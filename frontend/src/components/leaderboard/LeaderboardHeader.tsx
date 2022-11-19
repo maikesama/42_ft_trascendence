@@ -1,9 +1,9 @@
 import '../css/Navbar.css';
 
 export function LeaderboardHeader(props:any) {
-  
+
     const leaderboardItem = {
-        width: '80%',
+        width: '60%',
         color: 'white',
         borderRadius: 8,
         height: 50,
@@ -25,14 +25,14 @@ export function LeaderboardHeader(props:any) {
 	return(
     <>
         <div className='d-flex justify-content-evenly align-items-end' style={leaderboardItem}>
-            <label style={{marginRight:20}}>{props.id}</label>
-            
-            <label>{props.nickname}</label>
-            <label>{props.win}</label>
-            <label>{props.score}</label>
-            <label>{props.status}</label>
+            <label style={{marginRight: '2%', width: '15%'}}>{props.id}</label>
+            <label style={{width: '20%'}}>{props.nickname}</label>
+            <label style={{width: '15%'}}>{props.win}</label>
+            <label style={{width: '15%'}}>{props.score}</label>
+            <label style={{width: '15%'}}>{props.status}</label>
             <label>Invite</label>
         </div>
+
     </>
 	)
 }

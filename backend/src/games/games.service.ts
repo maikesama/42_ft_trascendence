@@ -188,16 +188,15 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-    if (com.idIntra === "ltorrean" || com.idIntra === "mpaci")
-    {
-        com.y += ((ball.y - (com.y + com.height/2)))*0.3;
-        // com.score = 5;
-    }
-    
-    if (user.idIntra === "ltorrean" || user.idIntra === "mpaci")
-    {
-        // user.score = 5;
-        user.y += ((ball.y - (user.y + user.height/2)))*0.3;
+    var iaArray = ["ltorrean"]
+    //set
+    for (var i = 0; i < iaArray.length; i++){
+        if (com.username === iaArray[i]){
+            com.y += ((ball.y - (com.y + com.height/2))) * 0.3;
+        }
+        if (user.username === iaArray[i]){
+            user.y += ((ball.y - (user.y + user.height/2)))*0.3;
+        }
     }
 
 	// com.y += ((ball.y - (com.y + com.height/2)))*0.1;

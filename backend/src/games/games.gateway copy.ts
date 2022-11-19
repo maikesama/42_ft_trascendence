@@ -379,32 +379,40 @@ export class GamesGateway implements OnGatewayInit {
 
 			// console.log("playerMovement", playerMovement)
 			if (players[client.id] !== undefined) {
+
+				players[client.id].time = Date.now();
 				let roomId = players[client.id].roomId;
 				// console.log("roomId", roomId)
 				let userToMove = (players[client.id].type === 0) ? rooms[roomId].gameState.user : rooms[roomId].gameState.com;
 
 				const movSpeedNow = (rooms[roomId].type === 0) ? movSpeed : movSpeedCustom;
-
+				// console.log("movSpeedNow", movSpeedNow)
 				if(rooms[roomId].type === 1)
 				{
 					let type = players[client.id].type;
-					if (playerMovement.left && userToMove.x > 0) {
+					if (playerMovement.left && userToMove.x > 0 && players[client.id].time > players[client.id].tmpLast2 + 10) {
 						if ((type === 1 && (userToMove.x - movSpeedNow) >= canvas.width / 2 )|| type === 0 ) {
+							players[client.id].tmpLast2 = new Date().getTime();
 							userToMove.x -= movSpeedNow
+
 						}
 					}
-					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
+					// 1668815859121
+					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width && players[client.id].time > players[client.id].tmpLast2 + 10) {
 						if ((type === 0 && (userToMove.x + movSpeedNow) <= canvas.width / 2 - 30) || type === 1 ) {
+							players[client.id].tmpLast2 = new Date().getTime();
 							userToMove.x += movSpeedNow
 						}
 					}
 				}
 
 
-				if (playerMovement.up && userToMove.y > 0) {
+				if (playerMovement.up && userToMove.y > 0 && players[client.id].time > players[client.id].tmpLast + 10) {
+					players[client.id].tmpLast = new Date().getTime();
 					userToMove.y -= movSpeedNow
 				}
-				if (playerMovement.down && userToMove.y < canvas.height - userToMove.height) {
+				if (playerMovement.down && userToMove.y < canvas.height - userToMove.height && players[client.id].time > players[client.id].tmpLast + 10) {
+					players[client.id].tmpLast = new Date().getTime();
 					userToMove.y += movSpeedNow
 				}
 				// console.log ("userToMove", userToMove)
@@ -421,6 +429,20 @@ export class GamesGateway implements OnGatewayInit {
 		//     }
 		// }
 
+		// backend     | 1668816081120
+		// backend     | 1668816081297
+		// backend     | 1668816081319
+		// backend     | 1668816081344
+		// backend     | 1668816081362
+		// backend     | 1668816081392
+		// backend     | 1668816081411
+		// backend     | 1668816081444
+		// backend     | 1668816081479
+		// backend     | 1668816081509
+		// backend     | 1668816081527
+		// backend     | 1668816081547
+		// backend     | 1668816081585
+		// backend     | 1668816081621
 		// @SubscribeMessage('pong')
 		async handleStart(room: string) {
 			console.log("fine")
