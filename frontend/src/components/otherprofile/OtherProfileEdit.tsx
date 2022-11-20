@@ -100,9 +100,9 @@ export const SocialEdit = (props: any) => {
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
           <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
-          <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+          {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
-        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
+        {/* <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton> */}
       </ListItem>
     );
   }

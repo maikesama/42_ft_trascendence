@@ -113,19 +113,22 @@ export const SocialEdit = (props: any) => {
 
     });
 
-    socket.on("acceptFriend", (data: any) => {
-      const newFriends = friends.map((friend: any) => {
-        if (friend.idIntra === data.idIntra) {
-          friend = data;
-        }
-        return friend;
-      });
-      if (newFriends.length === friends.length) {
-        newFriends.push(data);
-      }
-      console.log("acceptFriend", newFriends);
-      setFriends(newFriends);
-    });
+    // socket.on("acceptFriend", (data: any) => {
+    //   var isAlreadyFriend = false;
+    //   const newFriends = friends.map((friend: any) => {
+    //     if (friend.idIntra === data.idIntra) {
+    //       isAlreadyFriend = true;
+    //     }
+    //     return friend;
+    //   });
+    //   if (!isAlreadyFriend) {
+    //     newFriends.push(data);
+    //     setFriends(newFriends);
+    //   }
+    //   console.log("acceptFriend data", data);
+    //   console.log("acceptFriend newFriends", newFriends);
+    //   setFriends(newFriends);
+    // });
 
   });
 
