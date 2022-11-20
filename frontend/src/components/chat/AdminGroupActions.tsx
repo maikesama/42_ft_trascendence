@@ -150,10 +150,11 @@ export const AdminGroupActions = (props: any) => {
             })
             const data = await response.json();
             manageError(data, response, null, setAlert);
+            
         } catch (error) {
             console.log("error", error);
         }
-
+        //window.location.reload();
     }
 
     async function ban() {

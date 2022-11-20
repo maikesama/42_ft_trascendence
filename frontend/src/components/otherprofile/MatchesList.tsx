@@ -25,7 +25,8 @@ export const MatchesList = (props: any) => {
                     credentials: 'include',
                     headers: {
                         'Content-Type': 'application/json',
-                    }
+                    },
+                    body: JSON.stringify({ idIntra: props.user.idUser }),
                 });
                 const json = await response.json();
                 console.log(json);
@@ -66,7 +67,6 @@ export const MatchesList = (props: any) => {
         const { index, style, matches } = props;
 
         return (
-            <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
                 <ListItem button style={style} key={index} >
                     {games[index]?.user1 === user?.idIntra ? <>
                         <Avatar src={games[index]?.img1} />
@@ -84,7 +84,6 @@ export const MatchesList = (props: any) => {
                     }
 
                 </ListItem>
-            </Link>
         );
     }
 
