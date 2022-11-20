@@ -29,7 +29,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
-
+import { useNavigate } from "react-router-dom";
 
 export const AdminGroupActions = (props: any) => {
 
@@ -302,7 +302,6 @@ export const AdminGroupActions = (props: any) => {
     }
 
     async function promote(index: any) {
-        const idIntra = await muted[index]?.idIntra;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/addAdmin`;
 
         try {
@@ -498,6 +497,14 @@ export const AdminGroupActions = (props: any) => {
         setMuteButton(false);
     }
 
+    let navigate = useNavigate();
+
+    const handleInvite = () => {
+        socket.emit('notification', { type: 2, idIntra: selectedName });
+        navigate('/games/1' + selectedName);
+        // window.location.assign("/games/1" + props.idIntra);
+    };
+
     const handleToggle = (index: number, init: boolean) => () => {
         let value;
 
@@ -639,6 +646,7 @@ export const AdminGroupActions = (props: any) => {
                                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
                                         </> : clickLists === '' ?
                                             <>
+                                                <Button variant="outlined" onClick={handleInvite} style={{ border: '2px solid purple', color: 'purple', right: 7}}>Gioca</Button>
                                                 <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${selectedName}`} underline="none" color="inherit" >
                                                     <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
                                                 </Link>
