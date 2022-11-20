@@ -172,6 +172,9 @@ export const AdminGroupActions = (props: any) => {
             manageError(null, response, null, setAlert);
             if (response.status == 200)
             {
+                setBanButton(false);
+                // remove user from Partecipants
+                props.setPartecipants(props.partecipants.filter((user: any) => user.idIntra !== selectedName));
                 socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
@@ -191,8 +194,12 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: mutetime.current.value }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            // const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status == 200)
+            {
+                setMuteButton(false);
+            }
         } catch (error) {
             console.log("error", error);
         }

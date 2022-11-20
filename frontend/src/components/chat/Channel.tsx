@@ -55,6 +55,7 @@ export const Channel = (props: any) => {
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
     const partecipants = props.partecipants;
     const permission = props.permission;
+    const setPartecipants = props.setPartecipants;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
     // const [message, setMessage] = useState('Haloa');
 
@@ -148,7 +149,7 @@ export const Channel = (props: any) => {
             {/*MODAL GROUP INFO */}
             <GroupInfo status={openGroupInfo} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseGroupInfo} idChat={props.idChat} channelName={props.name} />
             {/*MODAL ADMIN INFO */}
-            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} partecipants={partecipants} closeStatus={handleCloseAdminActions} idChat={props.idChat} channelName={props.name} type={props.type}/>
+            <AdminGroupActions status={openAdminActions} user={permission?.owner ? 'Owner' : permission?.admin ? 'Admin' : 'User'} setPartecipants={setPartecipants} partecipants={partecipants} closeStatus={handleCloseAdminActions} idChat={props.idChat} channelName={props.name} type={props.type}/>
         </>
     );
 }
