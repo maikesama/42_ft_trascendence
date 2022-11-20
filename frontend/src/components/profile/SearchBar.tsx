@@ -139,7 +139,7 @@ export const SearchBar = (props: any) => {
                 //window.location.reload(); or null
                 manageError(null, response, null, setAlert);
                 if (response.status === 200) {
-                    socket.emit('notification', {type: 1, idIntra: props.idIntra});
+                    socket.emit('notification', {type: 1, idIntra: idIntra});
                 }
             } catch (error) {
                 console.log("error", error);

@@ -198,6 +198,12 @@ export const AdminGroupActions = (props: any) => {
             manageError(null, response, null, setAlert);
             if (response.status == 200)
             {
+                // set partecipant muted partecipants[index]?.muted ? " [ muted ]" : ""
+                props.setPartecipants(props.partecipants.map((user: any) => {
+                    if (user.idIntra === selectedName)
+                        user.muted = true;
+                    return user;
+                }));
                 setMuteButton(false);
             }
         } catch (error) {
