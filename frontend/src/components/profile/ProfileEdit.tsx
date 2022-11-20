@@ -252,7 +252,7 @@ export const SocialEdit = (props: any) => {
     // console.log("vaffanc" + JSON.stringify(style2))
 
     return (
-       <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+       <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
         <ListItem key={index}  style={style2}>
           {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />

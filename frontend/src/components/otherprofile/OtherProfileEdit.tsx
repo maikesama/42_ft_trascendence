@@ -70,7 +70,7 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
         <ListItem button style={style} key={index} >
           {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />
