@@ -22,6 +22,7 @@ import UploadIcon from '@mui/icons-material/Upload';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 
 import "../css/ProfileEdit.css"
@@ -34,6 +35,7 @@ import { Alert, manageError } from '../generic/Alert';
 import { Twofa } from '../../pages/Twofa';
 import { TwofaOn } from './TwofaOn';
 import { socket } from '../../App';
+
 
 
 const fontColor = {
@@ -49,6 +51,8 @@ export const SocialEdit = (props: any) => {
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const [openInvited, setOpenInvited] = React.useState(false);
 
+  let navigate = useNavigate();
+  const isSecondRender = useRef(false);
 
   const [user, setUser] = useState({} as any);
 
@@ -113,22 +117,24 @@ export const SocialEdit = (props: any) => {
 
     });
 
-    // socket.on("acceptFriend", (data: any) => {
-    //   var isAlreadyFriend = false;
-    //   const newFriends = friends.map((friend: any) => {
-    //     if (friend.idIntra === data.idIntra) {
-    //       isAlreadyFriend = true;
-    //     }
-    //     return friend;
-    //   });
-    //   if (!isAlreadyFriend) {
-    //     newFriends.push(data);
-    //     setFriends(newFriends);
-    //   }
-    //   console.log("acceptFriend data", data);
-    //   console.log("acceptFriend newFriends", newFriends);
-    //   setFriends(newFriends);
-    // });
+    socket.on("acceptFriend", (data: any) => {
+      var isAlreadyFriend = false;
+      if (friends.length > 0) {
+        friends.forEach((friend: any) => {
+          if (friend.idIntra === data.idIntra) {
+            isAlreadyFriend = true;
+          }
+        });
+      }
+      if (!isSecondRender.current && !isAlreadyFriend) {
+          setFriends((friends: any) => {
+            const newFriends = [...friends, data];
+            return newFriends;
+          });
+          isAlreadyFriend = false;
+      }
+      isSecondRender.current = true;
+    });
 
   });
 
@@ -283,10 +289,14 @@ export const SocialEdit = (props: any) => {
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
           <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
-          <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.status)}</Typography>
-          <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+          {friends[index]?.status === 0 ?  <><i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /></> : null}
+          {friends[index]?.status === 1 ?  <><i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /></> : null}
+          {friends[index]?.status === 2 ?  <>
+          {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
+          <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer', color: 'grey'}} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
+          </> : null}
+          
         </Link>
-        <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
       </ListItem>

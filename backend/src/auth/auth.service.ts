@@ -180,12 +180,12 @@ export class AuthService {
 	async generateJwtTokens(user: any) {
 		// console.log(user);
 		if (user && user.id && user.idIntra && user.email) {
-			const bannedList = ["ffrau", "effefrau", "mpatrini"];
-			if (bannedList.includes(user.idIntra)) {
-				throw new HttpException("not found", HttpStatus.UNAUTHORIZED);
-			}
+			// const bannedList = ["ffrau", "effefrau", "mpatrini"];
+			// if (bannedList.includes(user.idIntra)) {
+			// 	throw new HttpException("not found", HttpStatus.UNAUTHORIZED);
+			// }
 			const payload = { sub: user.id, idIntra: user.idIntra};
-			// const payload = { sub: 2, idIntra: "mpaci"};
+			// const payload = { sub: 7, idIntra: "gscala"};
 			return {
 				access_token: this.jwtService.sign(payload),
 			};

@@ -243,6 +243,7 @@ export class FriendService{
                 select:
                 {
                     friendId: true,
+                    addedAt: true
                     
                 }
             })
@@ -276,7 +277,7 @@ export class FriendService{
                     userName: friendInfo.userName,
                     img: friendInfo.img,
                     status: friendInfo.status,
-                    addedAt: friends2.find((friend2) => friend2.friendById === friendInfo.idIntra)?.addedAt
+                    addedAt: friends2.find((friend2) => friend2.friendById === friendInfo.idIntra)?.addedAt || friends.find((friend) => friend.friendId === friendInfo.idIntra)?.addedAt,
                 }
                 return friendInfo
             })

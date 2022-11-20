@@ -96,11 +96,23 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     let date = friends[index]?.addedAt;
+    
     // date = String(date.split("T"));
     // console.log(date[1].split("."));
     // let hour = String(date[1].split("."));
-    let data = date.split("T");
-    let hour = data[1].split(".");
+    let data;
+    let hour;
+  
+    if (date !== undefined || date !== null)
+    {
+      data = date.split("T");
+      hour = data[1].split(".");
+    }
+    else
+    {
+      data = ["stai zitto"];
+      hour = [" ora "];
+    }
     //date = date.split("-").reverse().join("/");
     return (
       <ListItem style={style} key={index} >
