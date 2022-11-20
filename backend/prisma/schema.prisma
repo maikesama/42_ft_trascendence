@@ -15,6 +15,7 @@ model User {
 	idIntra         String          @unique
 	userName        String          @unique
 	email           String          @default("")
+	tel             String          @default("")
 	img             String  	  	@db.Text()
 	firstName       String
 	lastName        String
@@ -44,7 +45,6 @@ model User {
 	messages		Message[]
 	accessToken		String			@default("")
 	firstLogin		Int				@default(0)
-
 }
 
 model Friend {
