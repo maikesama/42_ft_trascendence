@@ -111,8 +111,22 @@ export const SocialEdit = (props: any) => {
         return newFriends;
       });
 
+    });
+
+    socket.on("acceptFriend", (data: any) => {
+      const newFriends = friends.map((friend: any) => {
+        if (friend.idIntra === data.idIntra) {
+          friend = data;
+        }
+        return friend;
+      });
+      if (newFriends.length === friends.length) {
+        newFriends.push(data);
       }
-    );
+      console.log("acceptFriend", newFriends);
+      setFriends(newFriends);
+    });
+
   });
 
 

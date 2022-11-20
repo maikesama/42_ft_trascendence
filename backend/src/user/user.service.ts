@@ -66,6 +66,7 @@ export class UserService {
 					idIntra: true,
 					userName : true,
 					img : true,
+					status: true,
 				}
 			})
 			return user

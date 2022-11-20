@@ -251,7 +251,8 @@ async acceptFriend(client: Socket, message: { idIntra: string }) {
     if (user2) {
       this.friendSerice.acceptInvite({idIntra: message.idIntra}, user.id)
       if (users.has(message.idIntra)) {
-        // this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra })
+        this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
+        client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
       }
     }
   }
