@@ -241,7 +241,8 @@ export class FriendService{
                 },
                 select:
                 {
-                    friendId: true
+                    friendId: true,
+                    
                 }
             })
             const friends2 = await this.prisma.friend.findMany({
@@ -250,7 +251,8 @@ export class FriendService{
                 },
                 select:
                 {
-                    friendById: true
+                    friendById: true,
+                    addedAt: true
                 }
             })
 
@@ -265,9 +267,16 @@ export class FriendService{
                         userName: true,
                         img: true,
                         status: true,
+                        rank : true,
                     }
                 })
-
+                return {
+                    idIntra: friendInfo.idIntra,
+                    userName: friendInfo.userName,
+                    img: friendInfo.img,
+                    status: friendInfo.status,
+                    addedAt: friends2.find((friend2) => friend2.friendById === friendInfo.idIntra)?.addedAt
+                }
                 return friendInfo
             })
             return Promise.all(allFriendsInfo)

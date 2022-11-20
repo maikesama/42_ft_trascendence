@@ -95,11 +95,19 @@ export const SocialEdit = (props: any) => {
   function renderSocialRow(props: any) {
     const { index, style, matches } = props;
 
+    let date = friends[index]?.addedAt;
+    // date = String(date.split("T"));
+    // console.log(date[1].split("."));
+    // let hour = String(date[1].split("."));
+    let data = date.split("T");
+    let hour = data[1].split(".");
+    //date = date.split("-").reverse().join("/");
     return (
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-          <Avatar src={friends[index]?.img} />
+          <Avatar src={friends[index]?.img}/>
           <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
+          <ListItemText id="rankFriend" secondary={` From ${String(data[0])} ${String(hour[0])}`}/>
           {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
         {/* <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton> */}
