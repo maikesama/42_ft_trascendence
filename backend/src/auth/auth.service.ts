@@ -60,6 +60,23 @@ export class AuthService {
 		return username
 	}
 
+	async changeFirstLogin(id: number){
+		try{
+			await this.prisma.user.update({
+				where: {
+					id: id
+				},
+				data: {
+					firstLogin: 1
+				}
+			})
+		}
+		catch (e) {
+			console.log(e)
+		}
+
+	}
+
 	private async getToken(token: string, @Res() res) {
 		let first = false;
 		try{
@@ -112,7 +129,16 @@ export class AuthService {
 				{
 					const tokens = await this.generateJwtTokens(user);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
-					res.redirect(`http://${process.env.HOST}/middleware`)
+					if (!user.firstLogin)
+					{
+						res.redirect(`http://${process.env.HOST}/middleware`)
+						await this.changeFirstLogin(user.id);
+					}
+					else
+					{
+						res.redirect(`http://${process.env.HOST}/`)
+					}
+
 				}
 			})
 		}
