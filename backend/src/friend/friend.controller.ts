@@ -77,6 +77,27 @@ export class FriendController{
 
     @UseGuards(AtGuard)
     @HttpCode(200)
+    @Post('isInvitedByMe')
+    async isInvitedByMe(@Req() req, @Body() body){
+        const user = req.user
+        const idIntra = body['idIntra']
+        const friends = await this.friendService.getInvitedByMe(user['sub'])
+        console.log("friends")
+        console.log("friends")
+        console.log("friends")
+        console.log("friends")
+        console.log("friends")
+        console.log(friends)
+        for (let i = 0; i < friends.length; i++){
+            console.log("friends[i].idIntra", friends[i].idIntra)
+            if (friends[i].idIntra === idIntra)
+                return true
+        }
+        return false
+    }
+
+    @UseGuards(AtGuard)
+    @HttpCode(200)
     @Post('removeFriend')
     async removeFriend(@Body() body, @Req() req){
         const user = req.user

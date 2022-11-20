@@ -41,6 +41,7 @@ export const SocialEdit = (props: any) => {
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const user = props.user;
+  console.log(user);
 
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
@@ -70,7 +71,7 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     return (
-      <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+      
         <ListItem button style={style} key={index} >
           {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />
@@ -88,18 +89,25 @@ export const SocialEdit = (props: any) => {
           }
 
         </ListItem>
-      </Link>
     );
   }
 
   function renderSocialRow(props: any) {
     const { index, style, matches } = props;
 
+    let date = friends[index]?.addedAt;
+    // date = String(date.split("T"));
+    // console.log(date[1].split("."));
+    // let hour = String(date[1].split("."));
+    let data = date.split("T");
+    let hour = data[1].split(".");
+    //date = date.split("-").reverse().join("/");
     return (
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-          <Avatar src={friends[index]?.img} />
+          <Avatar src={friends[index]?.img}/>
           <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
+          <ListItemText id="rankFriend" secondary={` From ${String(data[0])} ${String(hour[0])}`}/>
           {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
         {/* <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton> */}
@@ -192,7 +200,7 @@ export const SocialEdit = (props: any) => {
       {/*Search Bar Modal*/}
       <SearchBar status={openSearchBar} closeStatus={handleCloseSearchBar} />
       {/*matches List Modal*/}
-      <MatchesList status={openMatchesList} closeStatus={handleCloseMatchesList} />
+      <MatchesList user={user} status={openMatchesList} closeStatus={handleCloseMatchesList} />
     </div>
   );
 }
@@ -209,6 +217,7 @@ export const ProfileEdit =  (props: any) => {
 
   const [isBlocked, setIsBlocked] = useState(false);
   const [isFriend, setIsFriend] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const [alert, setAlert] = useState("");
 
   useEffect(() => {
@@ -229,6 +238,30 @@ export const ProfileEdit =  (props: any) => {
         setIsFriend(json);
         //window.location.reload();
         //console.log(json.friends)
+      } catch (error) {
+        console.log("error", error);
+      }
+    };
+
+    fetchData();
+  }, [props.idIntra]);
+
+  useEffect(() => {
+    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isInvitedByMe`;
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(url, {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({idIntra: props.idIntra}),
+        });
+        const json = await response.json();
+        console.log(json);
+        setIsPending(json);
       } catch (error) {
         console.log("error", error);
       }
@@ -323,7 +356,7 @@ async function addInviteFriend(index: any) {
       // }
 
 
-      //window.location.reload();
+      window.location.reload();
   } catch (error) {
       console.log("error", error);
   }
@@ -463,23 +496,11 @@ async function toDm(index: any) {
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
         <IconButton aria-label="message" size="small" onClick={toDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-        {isFriend === false ? <>
-          <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton>
-        </>
-
-        : <>
-          <IconButton aria-label="addfriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton>
-        </>}
-        {isBlocked === false ? <>
-          <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton>
-        </>
-
-        : <>
-          <IconButton aria-label="block" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton>
-        </>}
-
-
-
+        {isFriend === false && isPending === false ? <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
+        {isFriend === false && isPending === true ? <IconButton aria-label="removeinvite" size="small" onClick={removeInviteFriend} style={{ color: 'orange' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
+        {isFriend === true ? <IconButton aria-label="removefriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
+        {isBlocked === false ? <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton> : null}
+        {isBlocked === true ? <IconButton aria-label="unblock" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton> : null}
       </CardActions>
     </Card>
     <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />

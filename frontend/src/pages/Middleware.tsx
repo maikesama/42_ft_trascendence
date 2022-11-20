@@ -120,7 +120,7 @@ export const Middleware = () => {
                             }) => (
                                 // write your building UI
                                 <button onClick={onImageUpload} style={{ padding: 0, margin: 0, border: 'none', backgroundColor: 'transparent' }}>
-                                    <img src={user.img} width="100%" height="100%" style={{borderRadius: '20px 0px 0px 20px'}} alt="" />
+                                    <img src={user.img} width="100%" height="100%" style={{borderRadius: '20px 0px 0px 20px', maxWidth: 700, maxHeight: 700}} alt="" />
                                 </button>
                             )}
                         </ImageUploading>

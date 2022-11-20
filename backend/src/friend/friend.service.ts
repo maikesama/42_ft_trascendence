@@ -48,24 +48,25 @@ export class FriendService{
             const me = await this.prisma.user.findUnique({
                 where: { id: userId },
                 include: {
-                    invited: {
+                    invitedBy: 
+                    {
                         include: {
                             invited: true
                         }
                     }
                 }
             })
-            const InvitedInfo = me.invited.map((invited) => {
-                return {
-                    idIntra: invited.invited.idIntra,
-                    img: invited.invited.img,
-                }})
-            return InvitedInfo
+            const invitedByMe = me.invitedBy.map((user) => {
+                return user.invited
+            })
+            
+            return invitedByMe
         }
         catch(e){
             throw new BadRequestException(e)
         }
     }
+
 
     async getInvited(userId: number){
         try{
@@ -241,7 +242,8 @@ export class FriendService{
                 },
                 select:
                 {
-                    friendId: true
+                    friendId: true,
+                    
                 }
             })
             const friends2 = await this.prisma.friend.findMany({
@@ -250,7 +252,8 @@ export class FriendService{
                 },
                 select:
                 {
-                    friendById: true
+                    friendById: true,
+                    addedAt: true
                 }
             })
 
@@ -265,9 +268,16 @@ export class FriendService{
                         userName: true,
                         img: true,
                         status: true,
+                        rank : true,
                     }
                 })
-
+                return {
+                    idIntra: friendInfo.idIntra,
+                    userName: friendInfo.userName,
+                    img: friendInfo.img,
+                    status: friendInfo.status,
+                    addedAt: friends2.find((friend2) => friend2.friendById === friendInfo.idIntra)?.addedAt
+                }
                 return friendInfo
             })
             return Promise.all(allFriendsInfo)

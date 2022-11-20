@@ -227,9 +227,9 @@ export function Header(props: any) {
                 </IconButton>
               </Tooltip>
 
-              <Tooltip title="Open notify">
+              {/* <Tooltip title="Open notify">
                 <IconButton onClick={handleOpenUserNotify} sx={{ ml: 2, width: 50, height: 50 }}><NotificationsIcon></NotificationsIcon></IconButton>
-              </Tooltip>
+              </Tooltip> */}
               <Menu
                 sx={{ mt: '45px' }}
                 id="menu-appbar"
@@ -263,7 +263,7 @@ export function Header(props: any) {
 
               {/*NOTIFICHE WEB E MOBILE */}
 
-              <Menu
+              {/* <Menu
                 sx={{ mt: '45px', ml: '100px' }}
                 id="menu-appbar"
                 anchorEl={notify}
@@ -278,7 +278,7 @@ export function Header(props: any) {
                 }}
                 open={Boolean(notify)}
                 onClose={handleCloseUserNotify}
-              >
+              > */}
                 {/* {notify.map((notify) => (
                   <MenuItem key={notify} onClick={handleCloseUserMenu} >
                     <Link href={notify.toLowerCase()} style={{ textDecoration: 'none', color: 'white' }}>
@@ -287,12 +287,12 @@ export function Header(props: any) {
 
                   </MenuItem>
                 ))} */}
-                <MenuItem  >
-                <Link style={{ textDecoration: 'none', color: 'white' }}>
+                {/* <MenuItem  > */}
+                {/* <Link style={{ textDecoration: 'none', color: 'white' }}>
                   <Typography textAlign="center">mpaci ti ha invitato</Typography>
-                </Link>
-                </MenuItem>
-              </Menu>
+                </Link> */}
+                {/* </MenuItem> */}
+              {/* </Menu> */}
             </Box>
           </Toolbar>
         </Container>
