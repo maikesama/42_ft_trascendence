@@ -62,7 +62,10 @@ export const GamesContain = (props: any) => {
 
     socket.on('declineGame', (data) => {
       socketGames.emit('declineGame', data.idIntra);
-      setEsit(DelcineImage);
+      let idIntranew = data.idIntra.slice(1);
+      if (data.idIntra === idIntranew) {
+        setEsit(DelcineImage);
+      }
     });
 
     const canvas = canvasRef.current;
@@ -187,16 +190,12 @@ export const GamesContain = (props: any) => {
       console.log("GameNotFound")
     });
 
-    socketGames.on('trigger', (gameState: any) => {
+    socketGames.on('trigger', (data) => {
       socket.emit('trigger');
-      socket.emit('inGame');
+      socket.emit('inGame', data);
     });
 
-    socketGames.on('gameOver', (gameState: any) => {
-      if (!esit) {
-        window.location.href = "/";
-      }
-    });
+
 
     socketGames.on('invited', () => {
       setStart(false);
@@ -293,8 +292,17 @@ export const GamesContain = (props: any) => {
 
   }, [restart]);
 
+  useEffect(() => {
+    socketGames.on('gameOver', () => {
+      console.log("gameOver")
+      if (esit === null || esit === undefined) {
+        window.location.href = "/";
+      }
+    });
+  });
+
   const handleRestart = () => {
-    setEsit(null);
+    // setEsit(null);
     setReStart(!restart);
     setStart(false);
   };

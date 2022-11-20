@@ -109,15 +109,16 @@ export class AppGateway implements OnGatewayInit {
   }
 
   @SubscribeMessage('inGame')
-  async inGame(client: Socket) {
+  async inGame(client: Socket, n : number) {
     const user = await this.wsGuard(client)
     if (user) {
-      if (await this.userService.changeUserStatus(user.idIntra, 2))
-      {
+      if (n === 2)
         await this.sendToFriends(user.idIntra, 2)
-      }
+      else if (n === 1)
+        await this.sendToFriends(user.idIntra, 1)
     }
   }
+
         // this.server.emit('status', { idIntra: user.idIntra, status: 2 })
 
 //prova

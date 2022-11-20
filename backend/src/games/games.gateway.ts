@@ -203,7 +203,7 @@ export class GamesGateway implements OnGatewayInit {
 			const games = await this.gameService.createGame({user1: rooms[roomId].gameState.user.idIntra, user2: rooms[roomId].gameState.com.idIntra, type: type});
 			rooms[roomId].realId = games;
 			rooms[roomId].invited = (newUsers[0]?.invited?.invited !== undefined) ? newUsers[0]?.invited?.invited : undefined;
-			this.server.emit("trigger");
+			this.server.emit("trigger", 2);
 			this.consoleLog()
 			return roomId;
 		}
@@ -454,15 +454,19 @@ export class GamesGateway implements OnGatewayInit {
 							this.server.to(room).emit('state', rooms[room].gameState)
 							if (rooms[room].status === 1) {
 								if (players[rooms[room].gameState.user.socketId] !== undefined) {
+									console.log("delete useer socket ", rooms[room].gameState.user.idIntra)
 									players[rooms[room].gameState.user.socketId].client.leave(room);
 									await this.userService.changeUserStatus(rooms[room].gameState.user.idIntra, 1);
 								}
 								if (players[rooms[room].gameState.com.socketId] !== undefined) {
-									players[rooms[room].gameState.com.socketId].client.leave(room);
+									console.log("delete useer socket ", rooms[room].gameState.com.idIntra)
 									await this.userService.changeUserStatus(rooms[room].gameState.com.idIntra, 1);
+									players[rooms[room].gameState.com.socketId].client.leave(room);
+									console.log("delete user")
 								}
+								console.log("delete room")
 								this.server.to(room).emit('gameOver');
-								this.server.emit('trigger');
+								this.server.emit('trigger', 1);
 								delete players[rooms[room].gameState.user.socketId];
 								delete players[rooms[room].gameState.com.socketId];
 								if (rooms[room]?.invited !== undefined) {
