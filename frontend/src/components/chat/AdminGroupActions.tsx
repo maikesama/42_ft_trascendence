@@ -155,13 +155,14 @@ export const AdminGroupActions = (props: any) => {
             manageError(null, response, null, setAlert);
 
             //addUser dinamico da correggere
-            // if (response.status === 200) {
-            //     props.setPartecipants(props.partecipants.concat(search));
-            //     setSearch([]);
-            //     setUserGroup([]);
-            //     setSelectedName('');
-            //     setClickLists('');
-            // }
+            if (response.status === 200) {
+                // props.setPartecipants(props.partecipants.concat(search));
+                props.setPartecipants(props.partecipants.concat(search.filter((user: any) => userGroup.includes(user.idIntra))));
+                setSearch([]);
+                setUserGroup([]);
+                setSelectedName('');
+                setClickLists('');
+            }
             
         } catch (error) {
             console.log("error", error);
