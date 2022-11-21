@@ -52,7 +52,8 @@ export const SocialEdit = (props: any) => {
   const [openInvited, setOpenInvited] = React.useState(false);
 
   let navigate = useNavigate();
-  const isSecondRender = useRef(false);
+  const isAddFriendNew = useRef(true);
+  const isDelFriendNew = useRef(true);
 
   const [user, setUser] = useState({} as any);
 
@@ -117,7 +118,28 @@ export const SocialEdit = (props: any) => {
 
     });
 
-    socket.on("acceptFriend", (data: any) => {
+    if (isAddFriendNew.current) {
+      socket.on("acceptFriend", (data: any) => {
+        var isAlreadyFriend = false;
+        if (friends.length > 0) {
+          friends.forEach((friend: any) => {
+            if (friend.idIntra === data.idIntra) {
+              isAlreadyFriend = true;
+            }
+          });
+        }
+        if (!isAlreadyFriend) {
+            setFriends((friends: any) => {
+              const newFriends = [...friends, data];
+              return newFriends;
+            });
+            isAlreadyFriend = false;
+        }
+      });
+    }
+    isAddFriendNew.current = false;
+    // if (isDelFriendNew.current) {
+    socket.on("removeFriend", (data: any) => {
       var isAlreadyFriend = false;
       if (friends.length > 0) {
         friends.forEach((friend: any) => {
@@ -126,15 +148,17 @@ export const SocialEdit = (props: any) => {
           }
         });
       }
-      if (!isSecondRender.current && !isAlreadyFriend) {
-          setFriends((friends: any) => {
-            const newFriends = [...friends, data];
-            return newFriends;
-          });
-          isAlreadyFriend = false;
+      if (isAlreadyFriend) {
+        setFriends((friends: any) => {
+          const newFriends = friends.filter((friend: any) => friend.idIntra !== data.idIntra);
+          return newFriends;
+        });
+        isAlreadyFriend = false;
       }
-      isSecondRender.current = true;
     });
+
+    // }
+    // isDelFriendNew.current = false;
 
   });
 
@@ -174,15 +198,19 @@ export const SocialEdit = (props: any) => {
           idIntra: idIntra
         })
       });
+      if (response.status === 200) {
+        socket.emit("removeFriend", { idIntra: idIntra });
+        // window..reload();
+      }
       //const json = await response.json();
       //console.log(json);
-      window.location.reload();
+      // window.location.reload();
     } catch (error) {
       console.log("error", error);
     }
   }
 
-  
+
 
   const [games, setGames] = useState({} as any);
 
@@ -251,9 +279,9 @@ export const SocialEdit = (props: any) => {
       display: 'flex',
       justifyContent: 'space-between',
     }
-    
+
     // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
-    
+
 
     // console.log("vaffanc" + JSON.stringify(style2))
 
@@ -295,7 +323,7 @@ export const SocialEdit = (props: any) => {
           {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
           <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer', color: 'grey'}} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
           </> : null}
-          
+
         </Link>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
@@ -450,7 +478,7 @@ export const ProfileEdit = (props: any) => {
       } catch (error) {
         console.log("error", error);
       }
-    } 
+    }
     generate2faQr();
   }, []);
 

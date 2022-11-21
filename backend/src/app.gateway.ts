@@ -268,6 +268,22 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
       this.friendSerice.declineInvite({idIntra: message.idIntra}, user.id)
       if (users.has(message.idIntra)) {
         // this.server.to(users.get(message.idIntra).id).emit('declineFriend', { idIntra: user.idIntra })
+        // client.emit('declineFriend', { idIntra: user2.idIntra })
+      }
+    }
+  }
+}
+
+
+@SubscribeMessage('removeFriend')
+async removeFriend(client: Socket, message: { idIntra: string }) {
+  const user = await this.wsGuard(client)
+  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2) {
+      if (users.has(message.idIntra)) {
+        this.server.to(users.get(message.idIntra).id).emit('removeFriend', { idIntra: user.idIntra })
+        client.emit('removeFriend', { idIntra: user2.idIntra })
       }
     }
   }
