@@ -303,23 +303,18 @@ async removeFriend(client: Socket, message: { idIntra: string }) {
 @SubscribeMessage('newChannel')
 async newChannel(client: Socket, data: any) {
   const user = await this.wsGuard(client)
-  // console.log("newChannel", data)
   if (user) {
-    if (data && data.id)
+    if (data && data.id && data.partecipant && data.partecipant.length > 0)
     {
-      if (data.partecipant && data.partecipant.length > 0)
+      for( let i = 0; i < data.partecipant.length; i++)
       {
-        for( let i = 0; i < data.partecipant.length; i++)
+        if (users.has(data.partecipant[i].idIntra))
         {
-          if (users.has(data.partecipant[i].idIntra))
-          {
-            // console.log("newChannel", data.partecipant[i].idIntra)
-            this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannel', data)
-          }
+          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannel', data)
         }
-       }
       }
     }
+  }
 }
 
 
@@ -331,15 +326,55 @@ async addUsers(client: Socket, data: any) {
     {
       const user2 = await this.userService.getUserByIdIntra(data.idIntra.toString())
       const chat = await this.chat.getChanInfo({id: data.idChat}, user.id)
-      // dopo a tutti gli utenti del canale
-      if (chat && user2 && users.get(user2.idIntra))
+      if (chat)
       {
-        this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+        if (user2 && users.get(user2.idIntra))
+        {
+          this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+        }
+        await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
       }
-      
     }
   }
 }
+
+@SubscribeMessage('removeUser')
+async removeUsers(client: Socket, data: any) {
+  const user = await this.wsGuard(client)
+  if (user) {
+    if (data && data.idChat && data.idIntra)
+    {
+      const user2 = await this.userService.getUserByIdIntra(data.idIntra.toString())
+      const chat = await this.chat.getChanInfo({id: data.idChat}, user.id)
+      if (chat)
+      {
+        if (user2 && users.get(user2.idIntra))
+        {
+          this.server.to(users.get(user2.idIntra).id).emit('removeUser', {id: chat.id, idIntra : user2.idIntra})
+        }
+        if (data.idIntra !== user.idIntra)
+        {
+          await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
+        }
+      }
+    }
+  }
+}
+
+async refreshPartecipants(client: Socket, data:{idChat: any, idUser: any}) {
+  const chat = await this.chat.getChanUsers({id: data.idChat}, data.idUser)
+  if (chat && chat.partecipants && chat.partecipants.length > 0)
+  {
+    for (let i = 0; i < chat.partecipants.length; i++)
+    {
+      if (users.has(chat.partecipants[i].idIntra))
+      {
+        this.server.to(users.get(chat.partecipants[i].idIntra).id).emit('refreshPartecipants', {id: data.idChat, partecipants: chat.partecipants})
+      }
+    }
+  }
+}
+
 
 @SubscribeMessage('newDm')
 async newDm(client: Socket, data: any) {

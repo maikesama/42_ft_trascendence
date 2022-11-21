@@ -475,7 +475,7 @@ export const ChatContain = (props: any) => {
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.on('newChannel', (data: any) => {
-                if (chats !== undefined) {
+                if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
                         if (chats[i].id !== data.id) {
@@ -499,7 +499,7 @@ export const ChatContain = (props: any) => {
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.on('addUser', (data: any) => {
-                if (chats !== undefined) {
+                if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
                         if (chats[i].id !== data.id) {
@@ -512,9 +512,7 @@ export const ChatContain = (props: any) => {
                     newMap.set(data.id, []);
                     setMap(newMap);
                     setTriggerMessage(!triggerMessage);
-
                 }
-                //message.current?.scrollIntoView({ behavior: 'smooth' });
             });
         }
         isSecondRender.current = true;
@@ -522,15 +520,55 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
+            socket.on('removeUser', (data: any) => {
+                if (chats !== undefined && data.id !== undefined) {
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    console.log("removeUser", data);
+                    var newChats = [];
+                    for (let i = 0; i < chats.length; i++) {
+                        if (chats[i].id !== data.id) {
+                            newChats.push(chats[i]);
+                        }
+                    }
+                    setChats(newChats);
+                    if (map !== undefined) {
+                        var newMap = new Map(map);
+                        console.log("newMap")
+                        console.log(newMap)
+                        if (newMap.has(data.id)) {
+                            newMap.delete(data.id);
+                            if (data.idIntra === idIntra) {
+                                // changeChat('DM', '', '', '', '', '');
+                                setChatView("Blank");
+                            }
+                            setMap(newMap);
+                        }
+                    }
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
+    console.log("map", map);
+    React.useEffect(() => {
+        if (isSecondRender.current) {
             socket.on('newDm', (data: any) => {
-                if (dms !== undefined) {
+                if (dms !== undefined && data.id !== undefined && data.partecipant) {
                     var newDms = [];
                     for (let i = 0; i < dms.length; i++) {
                         if (dms[i].id !== data.id) {
                             newDms.push(dms[i]);
                         }
                     }
-                    // remove me (idIntra )in data.parteciipant 
+                    // remove me (idIntra )in data.parteciipant
                     var newpartecipant = [];
                     for ( let i = 0; i < data.partecipant.length; i++) {
                         if (data.partecipant[i].user.idIntra !== idIntra) {

@@ -131,9 +131,12 @@ export const AdminGroupActions = (props: any) => {
             })
             //const data = await response.json();
             manageError(null, response, null, setAlert);
-            props.setPartecipants(props.partecipants.filter((user: any) => user.idIntra !== selectedName));
-            setSelectedName('');
-            
+            if (response.status === 200) {
+                socket.emit('removeUser', { idChat: props.idChat, idIntra: selectedName });
+                props.setPartecipants(props.partecipants.filter((user: any) => user.idIntra !== selectedName));
+                setSelectedName('');
+            }
+
         } catch (error) {
             console.log("error", error);
         }
@@ -164,7 +167,7 @@ export const AdminGroupActions = (props: any) => {
                 setSelectedName('');
                 setClickLists('');
             }
-            
+
         } catch (error) {
             console.log("error", error);
         }

@@ -67,7 +67,11 @@ export const GroupInfo = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat }),
             })
-           window.location.reload();
+        //    window.location.reload();
+            if (response.status === 200) {
+                socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
+            }
+
         } catch (error) {
             console.log("error", error);
         }

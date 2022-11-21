@@ -37,6 +37,7 @@ import { GroupInfo } from './GroupInfo';
 import { AdminGroupActions } from './AdminGroupActions';
 import { JoinGroup } from './JoinGroup';
 import { UserActions } from './UserActions';
+import { socket } from '../../App';
 
 const useStyles = makeStyles({
     messageArea: {
@@ -57,6 +58,18 @@ export const Channel = (props: any) => {
     const permission = props.permission;
     const setPartecipants = props.setPartecipants;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
+    const isSecondRender = React.useRef(false);
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.on('refreshPartecipants', (data: any) => {
+                if (props.id === data.idChat) {
+                    setPartecipants(data.partecipants);
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
     // const [message, setMessage] = useState('Haloa');
 
     // function MessageSent(props: any) {

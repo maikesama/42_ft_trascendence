@@ -74,3 +74,19 @@ add in group undefined se bloccato?
 bloccare 100 caratteri frontend
 
 controllare se sta guardando puo joinare new game
+
+problema bottoni css
+leave admin
+password required
+password wrong
+array search user not set null dopo che gia aggiunto in new group
+
+bug se admin o owner seleziona un utente e schiaccia fuori poi entra in un altro gruppo che è admin o owner
+
+dopo leave canale togliere informazioni
+
+fare join group e cerca group dinamico
+e leave da pannello admin
+
+errori nell'inserimento password
+dm not found error
