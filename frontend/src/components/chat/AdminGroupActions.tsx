@@ -354,8 +354,18 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             });
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200)
+            {
+                setClickLists('');
+                setSelectedName('');
+                props.setPartecipants(props.partecipants.map((user: any) => {
+                    if (user.idIntra === selectedName)
+                        user.admin = true;
+                    return user;
+                }));
+            }
         } catch (error) {
             console.log("error", error);
         }
