@@ -56,6 +56,9 @@ export const ChatContain = (props: any) => {
     // console.log("params : " + JSON.stringify(params))
     let status;
 
+    const [triggerMessage, setTriggerMessage] = useState(false);
+
+
     if (onstatus && onstatus === "online") {
         status = (
             <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill"></i>
@@ -175,7 +178,7 @@ export const ChatContain = (props: any) => {
     // const [user, setUser] = useState({} as any);
 
     // useEffect(() => {
-    //     if (!(params)) 
+    //     if (!(params))
     //         return;
     //     const [triggerUser, setTriggerUser] = useState(false);
 
@@ -344,8 +347,8 @@ export const ChatContain = (props: any) => {
                 // console.log({ idIntra: user.idIntra, userName: user.userName, userImg: user.img, userIdIntra: user.userName });
                 // changeChat('DM', user.userName, json.id, user.img, user.idIntra, '');
                 window.location.assign(`/Chat/${user.idIntra}`);
-                //changeChat('DM', user.userName , json.id, user.img , user.idIntra , ''); 
-                
+                //changeChat('DM', user.userName , json.id, user.img , user.idIntra , '');
+
             }
             console.log(json);
             // window.location.reload();
@@ -376,7 +379,7 @@ export const ChatContain = (props: any) => {
                 //setUserIntra(idIntra);
                 //window.location.reload()
                 //changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
-                
+
             }
             else {
                 //  window.location.href = `/chat/${props.idIntra}`;
@@ -445,7 +448,7 @@ export const ChatContain = (props: any) => {
         }
         isSecondRender.current = true;
 
-    }, []);
+    }, [triggerMessage]);
 
     React.useEffect(() => {
         const updateMap = (key: any, value: any) => {
@@ -465,6 +468,31 @@ export const ChatContain = (props: any) => {
         isSecondRender.current = true;
 
     });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.on('newChannel', (data: any) => {
+                if (chats !== undefined) {
+                    var newChats = [ ];
+                    for (let i = 0; i < chats.length; i++) {
+                        if (chats[i].id !== data.id) {
+                            newChats.push(chats[i]);
+                        }
+                    }
+                    newChats.push(data);
+                    setChats(newChats);
+                    var newMap = new Map(map);
+                    newMap.set(data.id, []);
+                    setMap(newMap);
+                    // setTriggerMessage(!triggerMessage);
+
+                }
+                //message.current?.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+        isSecondRender.current = true;
+    });
+
 
     // console.log (map);
 
@@ -535,7 +563,7 @@ export const ChatContain = (props: any) => {
 
     function renderChannelRow(props: any) {
         const { index, style } = props;
-
+        console.log("CHANNELS INDEX", JSON.stringify(chats[index]));
         return (
             <ListItem style={style} key={index} onClick={() => changeChat('Channel', chats[index]?.name, chats[index]?.id, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII=', '', chats[index]?.type)}>
                 <img width="50px" height="50px" style={{borderRadius: '100%'}} src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII=' />

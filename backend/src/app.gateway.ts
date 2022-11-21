@@ -163,10 +163,12 @@ export class AppGateway implements OnGatewayInit {
             // console.log("partecipants", partecipants)
             const blockedArray = await this.userService.getAllBlockUsersFromIdIntra(user.idIntra)
             // console.log("blockedArray", blockedArray)
-            if (blockedArray.length > 0)
-              await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);//testare bloccati
-            else
-              this.server.to(message.idChat.toString()).emit('provaMessaggi', data)
+
+            // if (blockedArray.length > 0)
+            //   await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);//testare bloccati
+            // else
+            //   this.server.to(message.idChat.toString()).emit('provaMessaggi', data)
+            await this.emitToUsersArray(partecipants, blockedArray, "provaMessaggi", data);//testare bloccati
           }
         }
       }
@@ -287,6 +289,28 @@ async removeFriend(client: Socket, message: { idIntra: string }) {
       }
     }
   }
+}
+
+@SubscribeMessage('newChannel')
+async newChannel(client: Socket, data: any) {
+  const user = await this.wsGuard(client)
+  // console.log("newChannel", data)
+  if (user) {
+    if (data && data.id)
+    {
+      if (data.partecipant && data.partecipant.length > 0)
+      {
+        for( let i = 0; i < data.partecipant.length; i++)
+        {
+          if (users.has(data.partecipant[i].idIntra))
+          {
+            // console.log("newChannel", data.partecipant[i].idIntra)
+            this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannel', data)
+          }
+        }
+       }
+      }
+    }
 }
 
   async handleDisconnect(client: Socket) {

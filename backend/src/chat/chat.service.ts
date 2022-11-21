@@ -669,6 +669,18 @@ export class ChatService {
                     return part
                 }))
             }
+
+            return await this.prismaService.chat.findUnique({
+                where: {
+                    id: channel.id
+                },
+                include: {
+                    partecipant: true,
+                }
+
+            })
+
+
         }
         catch (err) {
 

@@ -36,6 +36,7 @@ import Checkbox from '@mui/material/Checkbox';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import { FriendsCheckList } from './FriendsCheckList';
+import { socket } from '../../App';
 
 export const CreateChannel = (props: any) => {
 
@@ -63,7 +64,12 @@ export const CreateChannel = (props: any) => {
                     partecipants: userGroup
                 }),
             });
-            window.location.reload()
+            const data = await response.json();
+            if (response.status === 200) {
+                socket.emit('newChannel', data);
+                handleCancel();
+            }
+            // window.location.reload()
             //const json = await response.json();
             //console.log(json);
         } catch (error) {
