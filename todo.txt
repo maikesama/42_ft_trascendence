@@ -72,3 +72,5 @@ add in group
 
 add in group undefined se bloccato?
 bloccare 100 caratteri frontend
+
+controllare se sta guardando puo joinare new game

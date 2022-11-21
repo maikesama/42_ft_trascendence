@@ -15,6 +15,8 @@ var movSpeedCustom = 7
 var playerClassic = [];
 var playerCustom = [];
 var playerInvited = new Map<string, any>();
+var playerVisit = new Map<string, any>();
+
 @WebSocketGateway(4244, { namespace: '/games', transports: ['websocket'] })
 export class GamesGateway implements OnGatewayInit {
 		constructor(
@@ -80,7 +82,13 @@ export class GamesGateway implements OnGatewayInit {
 					break;
 				}
 			}
-
+			for (let key in playerVisit) {
+				if (playerVisit[key].client.id === client.id) {
+					delete playerVisit[key];
+					console.log("leave room visit");
+					break;
+				}
+			}
 			this.consoleLog()
 		}
 
@@ -293,10 +301,14 @@ export class GamesGateway implements OnGatewayInit {
 						const idIntraSpectator = this.isAlreadyInRoom(idIntraSpect);
 						if (idIntraSpectator && idIntraSpect !== user.idIntra)
 						{
+							// add in a map the spectator
+							playerVisit[client.id] = {client: client, idIntra: user.idIntra, roomId: players[idIntraSpectator].roomId, type: 1, status : 0, img: user.img, userName: user.userName};
 							client.join(players[idIntraSpectator].roomId);
+
 						}
 						else
 						{
+							
 							client.emit("GameNotFound");
 						}
 						// return;
@@ -360,6 +372,7 @@ export class GamesGateway implements OnGatewayInit {
 		console.log("PlaerCustom: ");
 		console.log(playerCustom);
 		console.log("playerInvited", playerInvited)
+		console.log("playerVisit", playerVisit)
 	}
 
 	@SubscribeMessage('declineGame')
