@@ -80,6 +80,9 @@ export const SearchBar = (props: any) => {
     const [search, setSearch] = useState({} as any);
     const initials = useRef<any>('');
     const [alert, setAlert] = useState("");
+    // const [isBlocked, setIsBlocked] = useState(false);
+    // const [isFriend, setIsFriend] = useState(false);
+    // const [isPending, setIsPending] = useState(false);
 
     async function searchUser() {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
@@ -93,7 +96,7 @@ export const SearchBar = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            console.log("ciao :"  + JSON.stringify(json));
+            console.log("ciao :" + JSON.stringify(json));
             setSearch(json);
         } catch (error) {
             console.log("error", error);
@@ -133,13 +136,13 @@ export const SearchBar = (props: any) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({idIntra: idIntra}),
+                    body: JSON.stringify({ idIntra: idIntra }),
                 })
                 // const data = await response.json();
                 //window.location.reload(); or null
                 manageError(null, response, null, setAlert);
                 if (response.status === 200) {
-                    socket.emit('notification', {type: 1, idIntra: idIntra});
+                    socket.emit('notification', { type: 1, idIntra: idIntra });
                 }
             } catch (error) {
                 console.log("error", error);
@@ -157,7 +160,7 @@ export const SearchBar = (props: any) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({idIntra: idIntra}),
+                    body: JSON.stringify({ idIntra: idIntra }),
                 });
                 window.location.reload();
             } catch (error) {
@@ -165,56 +168,161 @@ export const SearchBar = (props: any) => {
             }
         }
 
-        const test = true;
-        return (
-            <ListItem style={style} key={index} >
-                {search[index]?.img ? <><Avatar src={search[index]?.img} />
-                <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
-                <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
-                <Divider variant="middle" />
-                {console.log("test " + search[index]?.invited)}
-                <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-                { (!(search[index]?.invited) && !(search[index]?.invited)) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> :
-                 <IconButton aria-label="removefriend" size="small" style={{ color: 'red' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>}
-                <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton> </>: null}
 
-            </ListItem>
+        async function removeFriend(index: any) {
+            const idIntra = await search[index]?.idIntra;
+            const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/removeFriend/`;
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ idIntra: idIntra }),
+                });
+                window.location.reload();
+            } catch (error) {
+                console.log("error", error);
+            }
+        }
+        // useEffect(() => {
+        //     const fetchData = async () => {
+        //         const idIntra = await search[index]?.idIntra;
+        //         const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isFriend`;
+        //         try {
+        //             const response = await fetch(url, {
+        //                 method: 'POST',
+        //                 credentials: 'include',
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify({ idIntra: idIntra }),
+        //             });
+        //             const json = await response.json();
+        //             console.log("isF" + json);
+        //             setIsFriend(json);
+        //             //window.location.reload();
+        //             //console.log(json.friends)
+        //         } catch (error) {
+        //             console.log("error", error);
+        //         }
+        //         fetchData();
+        //     };
+        // }, [search[index]?.idIntra]);
+
+
+        // useEffect(() => {
+        //     const fetchData = async () => {
+        //         const idIntra = await search[index]?.idIntra;
+        //         const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isInvitedByMe`;
+        //         try {
+        //             const response = await fetch(url, {
+        //                 method: 'POST',
+        //                 credentials: 'include',
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify({ idIntra: idIntra }),
+        //             });
+        //             const json = await response.json();
+        //             console.log(json);
+        //             setIsPending(json);
+        //         } catch (error) {
+        //             console.log("error", error);
+        //         }
+        //         fetchData();
+        //     };
+        // }, [search[index]?.idIntra]);
+
+
+
+        // useEffect(() => {
+        //     const fetchData = async () => {
+        //         const idIntra = await search[index]?.idIntra;
+        //         const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/isBlocked`;
+        //         try {
+        //             const response = await fetch(url, {
+        //                 method: 'POST',
+        //                 credentials: 'include',
+        //                 headers: {
+        //                     'Content-Type': 'application/json',
+        //                 },
+        //                 body: JSON.stringify({ idIntra: idIntra }),
+        //             });
+        //             const json = await response.json();
+        //             console.log("isB" + json);
+        //             setIsBlocked(json);
+        //             //window.location.reload();
+        //             //console.log(json.friends)
+        //         } catch (error) {
+        //             console.log("error", error);
+        //         }
+        //         fetchData();
+        //     };
+        // }, [search[index]?.idIntra]);
+
+        return (
+            <>
+                <ListItem style={style} key={index} >
+                    {search[index]?.img ? <><Avatar src={search[index]?.img} />
+                        <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
+                        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+                        <Divider variant="middle" />
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+                        {console.log('Invitati??????????')}
+
+                        {console.log(search[index]?.invited)}
+                        {console.log(search[index]?.friend)}
+                        <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+                        {(!(search[index]?.friend) && !search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
+                        {(!(search[index]?.friend) && search[index]?.invited) ?    <IconButton aria-label="removefriend" size="small" style={{ color: 'orange' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton> : null}
+                        {(search[index]?.friend) ?    <IconButton aria-label="removefriend" size="small" style={{ color: 'red' }} onClick={() => removeFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton> : null}
+                        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton> </> : null}
+
+                </ListItem>
+            </>
         );
     }
 
     return (
         <>
-        <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle textAlign="center">Search Friends</DialogTitle>
-            <DialogContent>
-                <Search>
-                    <SearchIconWrapper>
-                        <SearchIcon />
-                    </SearchIconWrapper>
-                    <StyledInputBase
-                        placeholder="Search…"
-                        inputRef={initials}
-                        onChange={searchUser}
-                        inputProps={{ 'aria-label': 'search' }}
-                    />
-                </Search>
-                <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
-                    <FixedSizeList
-                        height={400}
-                        width={400}
-                        itemSize={80}
-                        itemCount={Object.values(search).length % 5} /*Qui deve essere restituito il numero di amici nella lista*/
-                        overscanCount={5}
-                    >
-                        {renderSearchRow}
-                    </FixedSizeList>
-                </div>
-                <DialogActions style={{ justifyContent: 'center' }}>
-                    <Button variant="contained" onClick={props.closeStatus}>Close</Button>
-                </DialogActions>
-            </DialogContent>
-        </Dialog>
-        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+            <Dialog open={props.status} onClose={props.closeStatus}>
+                <DialogTitle textAlign="center">Search Friends</DialogTitle>
+                <DialogContent>
+                    <Search>
+                        <SearchIconWrapper>
+                            <SearchIcon />
+                        </SearchIconWrapper>
+                        <StyledInputBase
+                            placeholder="Search…"
+                            inputRef={initials}
+                            onChange={searchUser}
+                            inputProps={{ 'aria-label': 'search' }}
+                        />
+                    </Search>
+                    <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
+                        <FixedSizeList
+                            height={400}
+                            width={400}
+                            itemSize={80}
+                            itemCount={Object.values(search).length % 5} /*Qui deve essere restituito il numero di amici nella lista*/
+                            overscanCount={5}
+                        >
+                            {renderSearchRow}
+                        </FixedSizeList>
+                    </div>
+                    <DialogActions style={{ justifyContent: 'center' }}>
+                        <Button variant="contained" onClick={props.closeStatus}>Close</Button>
+                    </DialogActions>
+                </DialogContent>
+            </Dialog>
+            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

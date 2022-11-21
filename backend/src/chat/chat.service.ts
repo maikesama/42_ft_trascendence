@@ -412,7 +412,20 @@ export class ChatService {
                 }
             })
 
+            // const addFriendRet = await users.map(async (user: any) => {
+            //     const friend = await this.prismaService.friend.findUnique({
+            //         where: {
+            //             friendId_friendById: {
 
+            //                 friendId: user.idIntra,
+            //                 friendById: me.idIntra
+            //             }
+            //         }
+            //     })
+            //     return {
+            //         friend: friend ? true : false,
+            //     }
+            // })
 
             const addInvetedRet = await users.map(async (user: any) => {
                 const invited = await this.prismaService.invited.findUnique({
@@ -421,9 +434,41 @@ export class ChatService {
 
                             invitedId: user.idIntra,
                             invitedById: me.idIntra
+                        },
+                    }
+                })
+
+                //added friends logic
+                const friend = await this.prismaService.friend.findUnique({
+                    where: {
+                        friendId_friendById: {
+
+                            friendId: user.idIntra,
+                            friendById: me.idIntra
                         }
                     }
                 })
+                // const addFriendRet = await users.map(async (user: any) => {
+                //     const friend = await this.prismaService.friend.findUnique({
+                //         where: {
+                //             friendId_friendById: {
+    
+                //                 friendId: user.idIntra,
+                //                 friendById: me.idIntra
+                //             }
+                //         }
+                //     })
+
+                // const addFriendRet = await users.map(async (user: any) => {
+                //     const friend = await this.prismaService.friend.findUnique({
+                //         where: {
+                //             friendId_friendById: {
+    
+                //                 friendId: user.idIntra,
+                //                 friendById: me.idIntra
+                //             }
+                //         }
+                //     })
 
                 // const addFriendRet = await users.map(async(user: any) => {
                 //     const friend = await this.prismaService.friend.findUnique({
@@ -434,6 +479,7 @@ export class ChatService {
                 //             }
                 //         }
                 //     })
+                
 
 
                 const ret = {
@@ -441,7 +487,7 @@ export class ChatService {
                     userName: user.userName,
                     img: user.img,
                     invited: invited ? true : false,
-                    //friend: friend ? true : false
+                    friend: friend ? true : false,
                 }
                 console.log(ret)
                 return ret
