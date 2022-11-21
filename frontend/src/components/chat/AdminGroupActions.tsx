@@ -151,8 +151,17 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+
+            //addUser dinamico da correggere
+            // if (response.status === 200) {
+            //     props.setPartecipants(props.partecipants.concat(search));
+            //     setSearch([]);
+            //     setUserGroup([]);
+            //     setSelectedName('');
+            //     setClickLists('');
+            // }
             
         } catch (error) {
             console.log("error", error);
@@ -294,7 +303,11 @@ export const AdminGroupActions = (props: any) => {
             // const data = await response.json();
             manageError(null, response, null, setAlert);
             if (response.status === 200)
-            socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
+            {
+                setClickLists('');
+                props.setPartecipants(partecipants.concat(banned[index]));
+                socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
+            }
         } catch (error) {
             console.log("error", error);
         }
