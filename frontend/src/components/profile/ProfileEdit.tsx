@@ -514,6 +514,7 @@ export const ProfileEdit = (props: any) => {
     if (reason && reason == "backdropClick")
       return;
     setOpen2FA(false);
+    setCheck(false)
   }
 
   const handleOpen2FA = () => {

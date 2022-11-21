@@ -70,20 +70,25 @@ export const SocialEdit = (props: any) => {
   function renderMatchesRowPreview(props: any) {
     const { index, style, matches } = props;
 
+    var style2 = {
+      ...style,
+      display: 'flex',
+      justifyContent: 'space-between',
+    }
     return (
       
-        <ListItem button style={style} key={index} >
+        <ListItem style={style2} key={index} >
           {games[index]?.user1 === user?.idIntra ? <>
             <Avatar src={games[index]?.img1} />
-            <ListItemText primary={games[index]?.user1} />
-            <ListItemText primary={games[index]?.scoreP1 + " - " + games[index]?.scoreP2} />
-            <ListItemText primary={games[index]?.user2} />
+            <Typography sx={{color: 'black', textDecoration: 'none'}}>{games[index]?.user1}</Typography>
+            <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
+            <Typography>{games[index]?.user2}</Typography>
             <Avatar src={games[index]?.img2} /> </> :
             <>
               <Avatar src={games[index]?.img2} />
-              <ListItemText primary={games[index]?.user2} />
-              <ListItemText primary={games[index]?.scoreP2 + " - " + games[index]?.scoreP1} />
-              <ListItemText primary={games[index]?.user1} />
+              <Typography>{games[index]?.user2}</Typography>
+              <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
+              <Typography>{games[index]?.user1}</Typography>
               <Avatar src={games[index]?.img1} />
             </>
           }
@@ -118,8 +123,8 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img}/>
-          <ListItemText id="idIntraFriend" primary={(friends[index]?.idIntra)} />
-          <ListItemText id="rankFriend" secondary={` From ${String(data[0])} ${String(hour[0])}`}/>
+          <Typography style={{paddingLeft: "0.5rem"}}>{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{fontSize: 12, paddingLeft: "0.5rem"}}>{` From ${String(data[0])} ${String(hour[0])}`}</Typography>
           {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
         {/* <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton> */}

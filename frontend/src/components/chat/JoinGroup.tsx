@@ -34,6 +34,7 @@ import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { CreateChannel } from './CreateChannel';
 import { GroupInfo } from './GroupInfo';
+import { manageError, Alert } from '../generic/Alert';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -80,6 +81,8 @@ export const JoinGroup = (props: any) => {
     const [chats, setChats] = React.useState({} as any);
     const [join, setJoin] = React.useState(-1);
     const pass = useRef<any>([]);
+    const [alert, setAlert] = useState("");
+
 
     React.useEffect(() => {
 
@@ -120,7 +123,9 @@ export const JoinGroup = (props: any) => {
                 },
                 body: JSON.stringify({id: id, password: pwd})
             });
-            window.location.reload();
+            if (response.status === 200) 
+                window.location.reload();
+            
         } catch (error) {
             console.log("error", error);
         }
@@ -129,6 +134,8 @@ export const JoinGroup = (props: any) => {
     function handleJoin(index: any)
     {
         console.log("pass: ", pass.current[index].value);
+        console.log("\n\n")
+        console.log(JSON.stringify(pass.current));
 
     }
 
@@ -150,6 +157,7 @@ export const JoinGroup = (props: any) => {
     }
 
     return (
+        <>
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Join Group</DialogTitle>
             <DialogContent>
@@ -176,5 +184,7 @@ export const JoinGroup = (props: any) => {
                 </div>
             </DialogContent>
         </Dialog>
+        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        </>
     );
 }
