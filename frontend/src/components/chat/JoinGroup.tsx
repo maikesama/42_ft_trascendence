@@ -34,6 +34,7 @@ import InputBase from '@mui/material/InputBase';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { CreateChannel } from './CreateChannel';
 import { GroupInfo } from './GroupInfo';
+import { manageError, Alert } from '../generic/Alert';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -79,7 +80,9 @@ export const JoinGroup = (props: any) => {
 
     const [chats, setChats] = React.useState({} as any);
     const [join, setJoin] = React.useState(-1);
-    const pass = useRef<any>('');
+    const pass = useRef<any>([]);
+    const [alert, setAlert] = useState("");
+
 
     React.useEffect(() => {
 
@@ -104,11 +107,12 @@ export const JoinGroup = (props: any) => {
     }, []);
 
 
-    async function joinChannel(id : number) {
+    async function joinChannel(id : number, index: any) {
         let pwd = "";
 
-        if (pass.current.value)
-            pwd = pass.current.value;
+        
+        pwd = pass.current[index].value;
+        console.log(pwd);
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
@@ -119,15 +123,19 @@ export const JoinGroup = (props: any) => {
                 },
                 body: JSON.stringify({id: id, password: pwd})
             });
-            window.location.reload();
+            if (response.status === 200) 
+                window.location.reload();
+            
         } catch (error) {
             console.log("error", error);
         }
     }
 
-    function handleJoin()
+    function handleJoin(index: any)
     {
-        console.log("pass: " + pass.current.value )
+        console.log("pass: ", pass.current[index].value);
+        console.log("\n\n")
+        console.log(JSON.stringify(pass.current));
 
     }
 
@@ -140,8 +148,8 @@ export const JoinGroup = (props: any) => {
                 <ListItemButton>
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
-                <TextField onChange={handleJoin} inputRef={pass} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
-                <Button color="primary" onClick={() => joinChannel(chats[index]?.id)}>Join</Button>
+                <TextField onChange={() => handleJoin(index)} inputRef={(element) => pass.current.push(element)} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
+                <Button color="primary" onClick={() => joinChannel(chats[index]?.id, index)}>Join</Button>
             </ListItem>
 
             </>
@@ -149,6 +157,7 @@ export const JoinGroup = (props: any) => {
     }
 
     return (
+        <>
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Join Group</DialogTitle>
             <DialogContent>
@@ -175,5 +184,7 @@ export const JoinGroup = (props: any) => {
                 </div>
             </DialogContent>
         </Dialog>
+        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        </>
     );
 }

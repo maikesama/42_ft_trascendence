@@ -129,8 +129,11 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+            props.setPartecipants(props.partecipants.filter((user: any) => user.idIntra !== selectedName));
+            setSelectedName('');
+            
         } catch (error) {
             console.log("error", error);
         }
@@ -148,10 +151,18 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            // const data = await response.json();
+            //const data = await response.json();
             manageError(null, response, null, setAlert);
+
+            //addUser dinamico da correggere
             if (response.status === 200) {
+                // props.setPartecipants(props.partecipants.concat(search));
                 socket.emit('addUser', { idChat: props.idChat, idIntra: userGroup });
+                props.setPartecipants(props.partecipants.concat(search.filter((user: any) => userGroup.includes(user.idIntra))));
+                setSearch([]);
+                setUserGroup([]);
+                setSelectedName('');
+                setClickLists('');
             }
             
         } catch (error) {
@@ -176,6 +187,7 @@ export const AdminGroupActions = (props: any) => {
             if (response.status == 200)
             {
                 setBanButton(false);
+                setSelectedName('');
                 // remove user from Partecipants
                 props.setPartecipants(props.partecipants.filter((user: any) => user.idIntra !== selectedName));
                 socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
@@ -201,13 +213,14 @@ export const AdminGroupActions = (props: any) => {
             manageError(null, response, null, setAlert);
             if (response.status == 200)
             {
+                setMuteButton(false);
+                setSelectedName('');
                 // set partecipant muted partecipants[index]?.muted ? " [ muted ]" : ""
                 props.setPartecipants(props.partecipants.map((user: any) => {
                     if (user.idIntra === selectedName)
                         user.muted = true;
                     return user;
                 }));
-                setMuteButton(false);
             }
         } catch (error) {
             console.log("error", error);
@@ -292,7 +305,11 @@ export const AdminGroupActions = (props: any) => {
             // const data = await response.json();
             manageError(null, response, null, setAlert);
             if (response.status === 200)
-            socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
+            {
+                setClickLists('');
+                props.setPartecipants(partecipants.concat(banned[index]));
+                socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
+            }
         } catch (error) {
             console.log("error", error);
         }
@@ -311,8 +328,17 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200)
+            {
+                setClickLists('');
+                props.setPartecipants(props.partecipants.map((user: any) => {
+                    if (user.idIntra === idIntra)
+                        user.muted = false;
+                    return user;
+                }));
+            }
         } catch (error) {
             console.log("error", error);
         }
@@ -330,8 +356,18 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: selectedName }),
             });
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200)
+            {
+                setClickLists('');
+                setSelectedName('');
+                props.setPartecipants(props.partecipants.map((user: any) => {
+                    if (user.idIntra === selectedName)
+                        user.admin = true;
+                    return user;
+                }));
+            }
         } catch (error) {
             console.log("error", error);
         }
@@ -350,8 +386,18 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: idIntra }),
             });
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            //const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200)
+            {
+                setClickLists('');
+                setSelectedName('');
+                props.setPartecipants(props.partecipants.map((user: any) => {
+                    if (user.idIntra === idIntra)
+                        user.admin = false;
+                    return user;
+                }));
+            }
         } catch (error) {
             console.log("error", error);
         }
