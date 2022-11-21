@@ -498,11 +498,31 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
+            socket.on('addUser', (data: any) => {
+                if (chats !== undefined) {
+                    var newChats = [ ];
+                    for (let i = 0; i < chats.length; i++) {
+                        if (chats[i].id !== data.id) {
+                            newChats.push(chats[i]);
+                        }
+                    }
+                    newChats.push(data);
+                    setChats(newChats);
+                    var newMap = new Map(map);
+                    newMap.set(data.id, []);
+                    setMap(newMap);
+                    setTriggerMessage(!triggerMessage);
+
+                }
+                //message.current?.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
             socket.on('newDm', (data: any) => {
-                console.log("data: ", data);
-                console.log("data: ", data);
-                console.log("data: ", data);
-                console.log("data: ", data);
                 if (dms !== undefined) {
                     var newDms = [];
                     for (let i = 0; i < dms.length; i++) {
@@ -519,17 +539,11 @@ export const ChatContain = (props: any) => {
                     }
                     data.partecipant = newpartecipant;
                     newDms.push(data);
-                    console.log("newDms", newDms);
-                    console.log("newDms", newDms);
-                    console.log("newDms", newDms);
                     setDms(newDms);
                     var newMap = new Map(map);
                     newMap.set(data.id, []);
                     setMap(newMap);
-                    // setTriggerMessage(!triggerMessage);
-
                 }
-                //message.current?.scrollIntoView({ behavior: 'smooth' });
             });
         }
         isSecondRender.current = true;

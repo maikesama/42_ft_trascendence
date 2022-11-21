@@ -322,6 +322,25 @@ async newChannel(client: Socket, data: any) {
     }
 }
 
+
+@SubscribeMessage('addUser')
+async addUsers(client: Socket, data: any) {
+  const user = await this.wsGuard(client)
+  if (user) {
+    if (data && data.idChat && data.idIntra)
+    {
+      const user2 = await this.userService.getUserByIdIntra(data.idIntra.toString())
+      const chat = await this.chat.getChanInfo({id: data.idChat}, user.id)
+      // dopo a tutti gli utenti del canale
+      if (chat && user2 && users.get(user2.idIntra))
+      {
+        this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+      }
+      
+    }
+  }
+}
+
 @SubscribeMessage('newDm')
 async newDm(client: Socket, data: any) {
   await this.newDm2(client, data)

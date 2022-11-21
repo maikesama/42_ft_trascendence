@@ -148,8 +148,11 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            // const data = await response.json();
+            manageError(null, response, null, setAlert);
+            if (response.status === 200) {
+                socket.emit('addUser', { idChat: props.idChat, idIntra: userGroup });
+            }
             
         } catch (error) {
             console.log("error", error);
