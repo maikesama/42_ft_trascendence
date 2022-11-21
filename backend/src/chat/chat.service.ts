@@ -507,7 +507,22 @@ export class ChatService {
 
             if (user.idIntra !== body.idIntra) {
 
-
+                // if not exist dm whit partecipant idIntra and user.idIntra and type dm
+                const chatExist = await this.prismaService.chat.findFirst({
+                    where: {
+                        type: 'dm',
+                        partecipant: {
+                            every: {
+                                idIntra: {
+                                    in: [user.idIntra, body.idIntra]
+                                }
+                            }
+                        }
+                    }
+                })
+                if (chatExist) {
+                    return chatExist
+                }
 
                 const chat = await this.prismaService.chat.create({
                     data: {
