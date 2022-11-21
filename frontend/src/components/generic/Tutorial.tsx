@@ -42,7 +42,7 @@ const steps = [
     },
     {
         label: 'Quitting',
-        description: `Quitters are puny losers, don't do that. It's not fun. -42 points.`,
+        description: `Quitters are puny losers, don't do that.`,
     },
 ];
 
