@@ -123,8 +123,8 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img}/>
-          <Typography style={{paddingLeft: "0.5rem"}}>{(friends[index]?.idIntra)}</Typography>
-          <Typography style={{fontSize: 12, paddingLeft: "0.5rem"}}>{` From ${String(data[0])} ${String(hour[0])}`}</Typography>
+          <Typography style={{paddingLeft: "0.25rem", width: '30%'}}>{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{fontSize: 12, paddingLeft: "0.75rem", width: "55%"}}>{` From ${String(data[0])} ${String(hour[0])}`}</Typography>
           {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
         {/* <IconButton aria-label="chat" size="small" style={{ color: 'green' }}><RemoveRedEyeIcon fontSize="large" /></IconButton> */}
@@ -200,7 +200,7 @@ export const SocialEdit = (props: any) => {
             <FixedSizeList
 
               height={460}
-              width={310}
+              width={'90%'}
               itemSize={90}
               itemCount={props.matches ? Object.values(friends).length : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}

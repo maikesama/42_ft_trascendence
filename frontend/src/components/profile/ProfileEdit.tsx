@@ -316,17 +316,21 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
-          <Typography style={{marginLeft: 10, marginRight: 10}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{paddingLeft: "0.25rem", width: '30%'}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
+          <div style={{paddingLeft: '0.75rem' ,width: '15%'}}>
           {friends[index]?.status === 0 ?  <><i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /></> : null}
           {friends[index]?.status === 1 ?  <><i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /></> : null}
           {friends[index]?.status === 2 ?  <>
           {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
           <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer', color: 'grey'}} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
           </> : null}
-
+          
+          </div>
         </Link>
+        <div style={{paddingLeft: '0.75rem' ,width: '40%'}}>
         <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
+        </div>
       </ListItem>
     );
   }
@@ -347,7 +351,7 @@ export const SocialEdit = (props: any) => {
             <FixedSizeList
 
               height={460}
-              width={310}
+              width={'90%'}
               itemSize={90}
               itemCount={props.matches ? Object.values(friends).length : (Object.values(games).length < 5) ? Object.values(games).length : 5}
               overscanCount={5}
