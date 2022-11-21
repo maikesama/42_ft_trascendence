@@ -7,7 +7,7 @@ import * as argon from 'argon2'
 @Injectable()
 export class ChatService {
 
-    constructor(private prismaService: PrismaService, private userService: UserService, private appGateway: AppGateway ) { }
+    constructor(private prismaService: PrismaService, private userService: UserService) { }
 
 
     async getChatFromOtherProfile(body, idIntra: string)
@@ -567,12 +567,27 @@ export class ChatService {
                             }
                         }
                     },
-                    include : {
-                        partecipant: true
+                    select: {
+                        id: true,
+                        type: true,
+                        name: true,
+                        partecipant:
+                        {
+                            select: {
+                                user: {
+                                    select: {
+                                        idIntra: true,
+                                        userName: true,
+                                        img: true
+                                    },
+                                }
+                            }
+                        }
+
                     }
                 })
                 if (chatExist) {
-                    this.appGateway.newDm(chatExist)
+                    // this.appGateway.newDm(chatExist)
                     return chatExist
                 }
 
@@ -590,11 +605,26 @@ export class ChatService {
                             ]
                         }
                     },
-                    include : {
-                        partecipant: true
+                    select: {
+                        id: true,
+                        type: true,
+                        name: true,
+                        partecipant:
+                        {
+                            select: {
+                                user: {
+                                    select: {
+                                        idIntra: true,
+                                        userName: true,
+                                        img: true
+                                    },
+                                }
+                            }
+                        }
+
                     }
                 })
-                this.appGateway.newDm(chat)
+                // this.appGateway.newDm(chat)
                 return chat
             }
             return null

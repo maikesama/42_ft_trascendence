@@ -430,6 +430,7 @@ async function newDm(index: any) {
       console.log(json);
       if (response.status === 200) {
         // console.log(json)
+        socket.emit('newDm', json);
         // window.location.href = ;
         navigate(`/chat/${props.idIntra}`);
       }

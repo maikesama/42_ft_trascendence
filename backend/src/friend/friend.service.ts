@@ -198,7 +198,7 @@ export class FriendService{
                     friendById: invitedMe.idIntra,
                 }
             })
-            this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.idIntra)
+            await this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.idIntra)
             return friendshipCreation;
         }
         catch(e){
@@ -367,7 +367,7 @@ export class FriendService{
                                     friendById: friends[j]
                                 }
                             })
-                            this.chatService.newDm({idIntra: friends[j]}, me[i]);
+                            await this.chatService.newDm({idIntra: friends[j]}, me[i]);
                             console.log("friendship", friends[j] + " " + me[i])
                         }
                     }

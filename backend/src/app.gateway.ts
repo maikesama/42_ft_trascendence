@@ -255,6 +255,7 @@ async acceptFriend(client: Socket, message: { idIntra: string }) {
       if (user2) {
         if (await this.friendSerice.acceptInvite({idIntra: message.idIntra}, user.id))
         {
+          this.newDm2(client, await this.chat.newDm({idIntra : message.idIntra}, user.idIntra))
           if (users.has(message.idIntra)) {
             this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
             client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
@@ -321,47 +322,30 @@ async newChannel(client: Socket, data: any) {
     }
 }
 
-// @SubscribeMessage('newDm')
-// async newDm(client: Socket, data: any) {
-//   const user = await this.wsGuard(client)
-//   if (user) {
-//     if (data && data.id)
-//     {
-//       if (data.partecipant && data.partecipant.length > 0)
-//       {
-//         for( let i = 0; i < data.partecipant.length; i++)
-//         {
-//           if (users.has(data.partecipant[i].idIntra))
-//           {
-//             this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newDm', data)
-//           }
-//         }
-//        }
-//       }
-//     }
-// }
+@SubscribeMessage('newDm')
+async newDm(client: Socket, data: any) {
+  await this.newDm2(client, data)
+}
 
-async newDm(data: any) {
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  console.log("newDm", data)
-  if (data && data.id)
-  {
-    if (data.partecipant && data.partecipant.length > 0)
+async newDm2(client: Socket, data: any) {
+  const user = await this.wsGuard(client)
+  if (user) {
+    if (data && data.id)
     {
-      for( let i = 0; i < data.partecipant.length; i++)
+      console.log(data.partecipant)
+      if (data.partecipant && data.partecipant.length > 0)
       {
-        if (users.has(data.partecipant[i].idIntra))
+        for( let i = 0; i < data.partecipant.length; i++)
         {
-          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newDm', data)
+          console.log("user ", data.partecipant[i].user.idIntra)
+          if (users.has(data.partecipant[i].user.idIntra))
+          {
+            console.log("newDm", data.partecipant[i].user.idIntra)
+            this.server.to(users.get(data.partecipant[i].user.idIntra).id).emit('newDm', data)
+          }
         }
       }
-      }
+    }
   }
 }
 

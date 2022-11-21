@@ -24,6 +24,7 @@ import { socket } from "../../App";
 import Alert from '@mui/material/Alert';
 import { useParams } from 'react-router';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../hooks/useAuth';
 
 
 const useStyles = makeStyles({
@@ -49,6 +50,7 @@ const useStyles = makeStyles({
 
 
 export const ChatContain = (props: any) => {
+    const { idIntra } = useAuth();
     let navigate = useNavigate();
     const classes = useStyles();
     const onstatus = props.status;
@@ -342,6 +344,7 @@ export const ChatContain = (props: any) => {
             console.log(json);
             if (response.status === 200) {
                 // console.log(json)
+                socket.emit('newDm', json);
                 // window.location.href = ;
                 // setonChangeDm(!onChangeDm);
                 // console.log({ idIntra: user.idIntra, userName: user.userName, userImg: user.img, userIdIntra: user.userName });
@@ -500,16 +503,25 @@ export const ChatContain = (props: any) => {
                 console.log("data: ", data);
                 console.log("data: ", data);
                 console.log("data: ", data);
-                console.log("data: ", data);
-                console.log("data: ", data);
                 if (dms !== undefined) {
-                    var newDms = [ ];
+                    var newDms = [];
                     for (let i = 0; i < dms.length; i++) {
                         if (dms[i].id !== data.id) {
                             newDms.push(dms[i]);
                         }
                     }
+                    // remove me (idIntra )in data.parteciipant 
+                    var newpartecipant = [];
+                    for ( let i = 0; i < data.partecipant.length; i++) {
+                        if (data.partecipant[i].user.idIntra !== idIntra) {
+                            newpartecipant.push(data.partecipant[i]);
+                        }
+                    }
+                    data.partecipant = newpartecipant;
                     newDms.push(data);
+                    console.log("newDms", newDms);
+                    console.log("newDms", newDms);
+                    console.log("newDms", newDms);
                     setDms(newDms);
                     var newMap = new Map(map);
                     newMap.set(data.id, []);
@@ -522,7 +534,7 @@ export const ChatContain = (props: any) => {
         }
         isSecondRender.current = true;
     });
-
+    console.log("dms", dms);
     // console.log (map);
 
 
