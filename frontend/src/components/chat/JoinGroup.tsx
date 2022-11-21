@@ -79,7 +79,7 @@ export const JoinGroup = (props: any) => {
 
     const [chats, setChats] = React.useState({} as any);
     const [join, setJoin] = React.useState(-1);
-    const pass = useRef<any>('');
+    const pass = useRef<any>([]);
 
     React.useEffect(() => {
 
@@ -104,11 +104,12 @@ export const JoinGroup = (props: any) => {
     }, []);
 
 
-    async function joinChannel(id : number) {
+    async function joinChannel(id : number, index: any) {
         let pwd = "";
 
-        if (pass.current.value)
-            pwd = pass.current.value;
+        
+        pwd = pass.current[index].value;
+        console.log(pwd);
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
@@ -125,9 +126,9 @@ export const JoinGroup = (props: any) => {
         }
     }
 
-    function handleJoin()
+    function handleJoin(index: any)
     {
-        console.log("pass: " + pass.current.value )
+        console.log("pass: ", pass.current[index].value);
 
     }
 
@@ -140,8 +141,8 @@ export const JoinGroup = (props: any) => {
                 <ListItemButton>
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
-                <TextField onChange={handleJoin} inputRef={pass} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
-                <Button color="primary" onClick={() => joinChannel(chats[index]?.id)}>Join</Button>
+                <TextField onChange={() => handleJoin(index)} inputRef={(element) => pass.current.push(element)} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
+                <Button color="primary" onClick={() => joinChannel(chats[index]?.id, index)}>Join</Button>
             </ListItem>
 
             </>

@@ -67,6 +67,7 @@ export const CreateChannel = (props: any) => {
             const data = await response.json();
             if (response.status === 200) {
                 socket.emit('newChannel', data);
+                setUserGroup([]);
                 handleCancel();
             }
             // window.location.reload()
