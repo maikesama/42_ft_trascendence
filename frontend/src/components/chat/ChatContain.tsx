@@ -493,6 +493,35 @@ export const ChatContain = (props: any) => {
         isSecondRender.current = true;
     });
 
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.on('newDm', (data: any) => {
+                console.log("data: ", data);
+                console.log("data: ", data);
+                console.log("data: ", data);
+                console.log("data: ", data);
+                console.log("data: ", data);
+                console.log("data: ", data);
+                if (dms !== undefined) {
+                    var newDms = [ ];
+                    for (let i = 0; i < dms.length; i++) {
+                        if (dms[i].id !== data.id) {
+                            newDms.push(dms[i]);
+                        }
+                    }
+                    newDms.push(data);
+                    setDms(newDms);
+                    var newMap = new Map(map);
+                    newMap.set(data.id, []);
+                    setMap(newMap);
+                    // setTriggerMessage(!triggerMessage);
+
+                }
+                //message.current?.scrollIntoView({ behavior: 'smooth' });
+            });
+        }
+        isSecondRender.current = true;
+    });
 
     // console.log (map);
 

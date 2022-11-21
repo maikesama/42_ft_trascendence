@@ -1,13 +1,13 @@
 import { Injectable, BadRequestException } from '@nestjs/common'
 import { PrismaService } from 'src/prisma/prisma.service'
 import { UserService } from 'src/user/user.service'
+import { AppGateway } from 'src/app.gateway'
 import * as argon from 'argon2'
-
 
 @Injectable()
 export class ChatService {
 
-    constructor(private prismaService: PrismaService, private userService: UserService) { }
+    constructor(private prismaService: PrismaService, private userService: UserService, private appGateway: AppGateway ) { }
 
 
     async getChatFromOtherProfile(body, idIntra: string)
@@ -543,6 +543,8 @@ export class ChatService {
     // 	return name
     // }
 
+    
+
     async newDm(body: any, idIntra: string) {
         try {
             const user = await this.prismaService.user.findUniqueOrThrow({
@@ -564,9 +566,13 @@ export class ChatService {
                                 }
                             }
                         }
+                    },
+                    include : {
+                        partecipant: true
                     }
                 })
                 if (chatExist) {
+                    this.appGateway.newDm(chatExist)
                     return chatExist
                 }
 
@@ -583,9 +589,12 @@ export class ChatService {
                                 }
                             ]
                         }
+                    },
+                    include : {
+                        partecipant: true
                     }
                 })
-
+                this.appGateway.newDm(chat)
                 return chat
             }
             return null

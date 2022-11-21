@@ -1,5 +1,5 @@
-import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER, HttpException, HttpStatus, Body } from '@nestjs/common';
-import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
+import { Logger, BadRequestException, UseGuards, Req, Inject, CACHE_MANAGER, HttpStatus, Body } from '@nestjs/common';
+import { ConnectedSocket, MessageBody, OnGatewayInit, SubscribeMessage, WebSocketGateway, WsException,  WebSocketServer, OnGatewayConnection, OnGatewayDisconnect } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 import { PrismaService } from './prisma/prisma.service';
 import { ChatService } from './chat/chat.service';
@@ -66,12 +66,12 @@ export class AppGateway implements OnGatewayInit {
         }
       // }
       // else
-      //   throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+      //   throw new WsException('Unauthorized', HttpStatus.UNAUTHORIZED);
 
     }
     catch (e) {
       // console.log(e)
-      // throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED); da capire come gestire
+      // throw new WsException('Unauthorized', HttpStatus.UNAUTHORIZED); da capire come gestire
     }
     return null
   }
@@ -157,7 +157,7 @@ export class AppGateway implements OnGatewayInit {
           else
           {
             console.log("messaggio messaggio messaggio messaggio")
-            this.saveMessage( user.idIntra, message.idChat, message.message)
+            await this.saveMessage( user.idIntra, message.idChat, message.message)
             const data = {message : message.message, idIntra : user.idIntra, sendedAt : date, idChat : message.idChat, users: { userName : user.userName, img : user.img}}
             const partecipants = await this.chat.getArrayPartecipantsNotBanned(message.idChat)
             // console.log("partecipants", partecipants)
@@ -248,16 +248,24 @@ async trigger(client: Socket) {
 
 @SubscribeMessage('acceptFriend')
 async acceptFriend(client: Socket, message: { idIntra: string }) {
-  const user = await this.wsGuard(client)
-  if (user && message && message.idIntra && user.idIntra != message.idIntra) {
-    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
-    if (user2) {
-      this.friendSerice.acceptInvite({idIntra: message.idIntra}, user.id)
-      if (users.has(message.idIntra)) {
-        this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
-        client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
+  try {
+    const user = await this.wsGuard(client)
+    if (user && message && message.idIntra && user.idIntra != message.idIntra) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (user2) {
+        if (await this.friendSerice.acceptInvite({idIntra: message.idIntra}, user.id))
+        {
+          if (users.has(message.idIntra)) {
+            this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
+            client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
+          }
+        }
       }
     }
+  }
+  catch (e) {
+    console.log(e)
+    throw new WsException(e)
   }
 }
 
@@ -267,7 +275,7 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
   if (user && message && message.idIntra && user.idIntra != message.idIntra) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2) {
-      this.friendSerice.declineInvite({idIntra: message.idIntra}, user.id)
+      await this.friendSerice.declineInvite({idIntra: message.idIntra}, user.id)
       if (users.has(message.idIntra)) {
         // this.server.to(users.get(message.idIntra).id).emit('declineFriend', { idIntra: user.idIntra })
         // client.emit('declineFriend', { idIntra: user2.idIntra })
@@ -311,6 +319,50 @@ async newChannel(client: Socket, data: any) {
        }
       }
     }
+}
+
+// @SubscribeMessage('newDm')
+// async newDm(client: Socket, data: any) {
+//   const user = await this.wsGuard(client)
+//   if (user) {
+//     if (data && data.id)
+//     {
+//       if (data.partecipant && data.partecipant.length > 0)
+//       {
+//         for( let i = 0; i < data.partecipant.length; i++)
+//         {
+//           if (users.has(data.partecipant[i].idIntra))
+//           {
+//             this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newDm', data)
+//           }
+//         }
+//        }
+//       }
+//     }
+// }
+
+async newDm(data: any) {
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  console.log("newDm", data)
+  if (data && data.id)
+  {
+    if (data.partecipant && data.partecipant.length > 0)
+    {
+      for( let i = 0; i < data.partecipant.length; i++)
+      {
+        if (users.has(data.partecipant[i].idIntra))
+        {
+          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newDm', data)
+        }
+      }
+      }
+  }
 }
 
   async handleDisconnect(client: Socket) {

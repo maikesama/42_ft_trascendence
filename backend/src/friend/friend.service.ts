@@ -1,4 +1,4 @@
-import {Injectable, BadRequestException} from '@nestjs/common'
+import {Injectable, BadRequestException, HttpException, HttpStatus} from '@nestjs/common';
 import { ChatService } from 'src/chat/chat.service'
 import { PrismaService } from 'src/prisma/prisma.service'
 
@@ -175,11 +175,16 @@ export class FriendService{
                     id: userId
                 }
             })
-            if (await this.isFriend(Me.idIntra, invitedMe.idIntra))
-                throw new BadRequestException("Already accepted");
-            if (!await this.isInvited(invitedMe.idIntra, Me.idIntra))
-                throw new BadRequestException("Not invited");
 
+            if (await this.isFriend(Me.idIntra, invitedMe.idIntra))
+            {
+                throw new HttpException("Already friend", HttpStatus.BAD_REQUEST);
+            }
+            if (!await this.isInvited(invitedMe.idIntra, Me.idIntra))
+            {
+                throw new HttpException("Not invited", HttpStatus.BAD_REQUEST);
+                return null
+            }
             //controllo se vengono eseguite entrambre altrimenti reserver error
             const inviteAccept = await this.prisma.invited.delete({
                 where:{
@@ -194,9 +199,11 @@ export class FriendService{
                 }
             })
             this.chatService.newDm({idIntra: invitedMe.idIntra}, Me.idIntra)
+            return friendshipCreation;
         }
         catch(e){
-            throw new BadRequestException(e)
+            console.log(e)
+            throw new HttpException(e, HttpStatus.BAD_REQUEST);
         }
     }
 
