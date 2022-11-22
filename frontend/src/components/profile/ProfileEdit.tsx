@@ -23,6 +23,7 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import DoneIcon from '@mui/icons-material/Done';
 
 
 import "../css/ProfileEdit.css"
@@ -71,7 +72,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setUser(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
@@ -93,10 +94,10 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         setFriends(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
     fetchData();
@@ -104,7 +105,7 @@ export const SocialEdit = (props: any) => {
 
   useEffect(() => {
     socket.on("friendStatus", (data: any) => {
-      console.log("friendStatus", data);
+      //console.log("friendStatus", data);
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {
         const newFriends = friends.map((friend: any) => {
@@ -129,11 +130,11 @@ export const SocialEdit = (props: any) => {
           });
         }
         if (!isAlreadyFriend) {
-            setFriends((friends: any) => {
-              const newFriends = [...friends, data];
-              return newFriends;
-            });
-            isAlreadyFriend = false;
+          setFriends((friends: any) => {
+            const newFriends = [...friends, data];
+            return newFriends;
+          });
+          isAlreadyFriend = false;
         }
       });
     }
@@ -180,7 +181,7 @@ export const SocialEdit = (props: any) => {
       // window.location.reload();
       //
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -204,10 +205,10 @@ export const SocialEdit = (props: any) => {
         // window..reload();
       }
       //const json = await response.json();
-      //console.log(json);
+      ////console.log(json);
       // window.location.reload();
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -230,7 +231,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
@@ -271,9 +272,9 @@ export const SocialEdit = (props: any) => {
   };
 
   function renderMatchesRowPreview(props: any) {
-    let { index,style, matches } = props;
+    let { index, style, matches } = props;
 
-    console.log(style)
+    //console.log(style)
 
     var style2 = {
       ...style,
@@ -284,29 +285,35 @@ export const SocialEdit = (props: any) => {
     // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
 
 
-    // console.log("vaffanc" + JSON.stringify(style2))
+    // //console.log("vaffanc" + JSON.stringify(style2))
 
     return (
-       <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
-        <ListItem key={index}  style={style2}>
-          {games[index]?.user1 === user?.idIntra ? <>
-            <Avatar src={games[index]?.img1} />
-            <Typography sx={{color: 'black', textDecoration: 'none'}}>{games[index]?.user1}</Typography>
-            <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
-            <Typography>{games[index]?.user2}</Typography>
-            <Avatar src={games[index]?.img2} />
-          </> :
-            <>
-
-              <Avatar src={games[index]?.img2} />
-              <Typography>{games[index]?.user2}</Typography>
-              <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
-              <Typography>{games[index]?.user1}</Typography>
+      <>
+        {games[index]?.user1 === user?.idIntra ? <>
+          <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+            <ListItem key={index} style={style2}>
               <Avatar src={games[index]?.img1} />
-            </>
-          }
-        </ListItem>
-       </Link>
+              <Typography sx={{ color: 'black', textDecoration: 'none' }}>{games[index]?.user1}</Typography>
+              <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
+              <Typography>{games[index]?.user2}</Typography>
+              <Avatar src={games[index]?.img2} />
+            </ListItem>
+          </Link>
+        </> :
+          <>
+
+            <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
+              <ListItem key={index} style={style2}>
+                <Avatar src={games[index]?.img2} />
+                <Typography>{games[index]?.user2}</Typography>
+                <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
+                <Typography>{games[index]?.user1}</Typography>
+                <Avatar src={games[index]?.img1} />
+              </ListItem>
+            </Link>
+          </>
+        }
+      </>
     );
   }
 
@@ -317,20 +324,20 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
-          <Typography style={{paddingLeft: "0.25rem", width: '30%'}} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
-          <div style={{paddingLeft: '0.75rem' ,width: '15%'}}>
-          {friends[index]?.status === 0 ?  <><i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /></> : null}
-          {friends[index]?.status === 1 ?  <><i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /></> : null}
-          {friends[index]?.status === 2 ?  <>
-          {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
-          <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer', color: 'grey'}} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
-          </> : null}
+          <Typography style={{ paddingLeft: "0.25rem", width: '30%' }} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
+          <div style={{ paddingLeft: '0.75rem', width: '15%' }}>
+            {friends[index]?.status === 0 ? <><i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /></> : null}
+            {friends[index]?.status === 1 ? <><i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /></> : null}
+            {friends[index]?.status === 2 ? <>
+              {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
+              <RemoveRedEyeIcon fontSize="large" style={{ cursor: 'pointer', color: 'grey' }} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
+            </> : null}
 
           </div>
         </Link>
-        <div style={{paddingLeft: '0.75rem' ,width: '40%'}}>
-        <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
-        <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
+        <div style={{ paddingLeft: '0.75rem', width: '40%' }}>
+          <IconButton aria-label="unfriend" size="small" style={{ color: '#f30000' }} onClick={() => unfriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton>
+          <IconButton aria-label="block" size="small" style={{ color: '#f30000' }} onClick={() => block(index)}><BlockIcon fontSize="large" /></IconButton>
         </div>
       </ListItem>
     );
@@ -386,13 +393,12 @@ export const ProfileEdit = (props: any) => {
   const [images, setImages] = React.useState([]);
   const [alert, setAlert] = React.useState("");
 
-  //const [user, setUser] = useState({} as any);
-
   const clickSave = async () => {
-    //return console.log(nick.current.value)
 
     let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
-
+    const inputbox = document.getElementById('txtNick');
+    inputbox?.setAttribute('disabled', 'true');
+    inputbox?.removeAttribute('placeholder');
 
     try {
       const response = await fetch(url, {
@@ -403,12 +409,16 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ userName: nick.current.value })
       });
+      if (response.status === 200 || response.status === 201) {
+        window.location.reload();
+      }
+      else {
+        inputbox?.removeAttribute('disabled');
+        inputbox?.removeAttribute('placeholder');
+      }
       const data = await response.json();
       manageError(data, response, props.triggerUser, setAlert);
-      console.log(alert)
-
     } catch (error) {
-      console.log("error", error);
     }
 
   }
@@ -422,7 +432,7 @@ export const ProfileEdit = (props: any) => {
   };
 
   const uploadImage = async (imageList: ImageListType) => {
-    console.log(JSON.stringify(imageList[0].dataURL))
+    //console.log(JSON.stringify(imageList[0].dataURL))
     try {
       const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
         method: "POST",
@@ -434,9 +444,9 @@ export const ProfileEdit = (props: any) => {
       });
       manageError({}, response, props.triggerUser, setAlert);
       // setAlert(c);
-      //console.log(json);
+      ////console.log(json);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
     // window.location.reload()
   };
@@ -445,10 +455,12 @@ export const ProfileEdit = (props: any) => {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+    const save = document.getElementById('saveButton');
+    save?.removeAttribute('hidden')
   }
 
   const fontColor = {
-    style: { color: 'rgb(0, 0, 0)' }
+    style: { color: 'rgba(0, 0, 0, 0.38)' }
   }
 
 
@@ -462,7 +474,7 @@ export const ProfileEdit = (props: any) => {
       //window.location.reload();
       manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
 
   }
@@ -478,10 +490,10 @@ export const ProfileEdit = (props: any) => {
           credentials: 'include',
         })
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         setQr(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     }
     generate2faQr();
@@ -505,14 +517,14 @@ export const ProfileEdit = (props: any) => {
         setUser(json);
         setCheck(json.twoFa);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
     fetchData();
   }, []);
 
-  console.log(user.twoFa)
+  //console.log(user.twoFa)
   const [open2FA, setOpen2FA] = React.useState(false);
 
   const close2FA = (event: any, reason: any) => {
@@ -526,8 +538,7 @@ export const ProfileEdit = (props: any) => {
     setOpen2FA(true);
   }
 
-  async function turnOff2FA()
-  {
+  async function turnOff2FA() {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/turn-off`;
     try {
       const response = await fetch(url, {
@@ -535,10 +546,10 @@ export const ProfileEdit = (props: any) => {
         credentials: 'include',
       })
       const json = await response.json();
-      console.log(json);
+      //console.log(json);
       setCheck(false);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -557,7 +568,7 @@ export const ProfileEdit = (props: any) => {
       }
     }
     catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -585,37 +596,34 @@ export const ProfileEdit = (props: any) => {
         <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large" /></button>
 
         <CardContent>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Nickname:
             </Typography>
-            <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
-            <Button sx={{ color: 'black' }} onClick={handleNick}>
+            <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
+            <button style={{ backgroundColor: 'white', color: 'black', border: 0 }} onClick={handleNick}>
               <EditIcon />
-            </Button>
+            </button>
+            <button hidden id="saveButton" style={{ backgroundColor: 'white', color: 'black', border: 0 }} onClick={clickSave}>
+              <DoneIcon />
+            </button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Username:
             </Typography>
             <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
-            <Button sx={{ color: 'black', visibility: 'hidden' }} >
-              <EditIcon />
-            </Button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Score:
             </Typography>
-            <TextField inputProps={fontColor} id="txtScore" placeholder={String(props.score)} variant="standard" disabled />
-            <Button sx={{ color: 'black', visibility: 'hidden' }} >
-              <EditIcon />
-            </Button>
+            <TextField inputProps={fontColor} id="txtScore" style={{ width: '62%' }} placeholder={String(props.score)} variant="standard" disabled />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>

@@ -22,6 +22,14 @@ import { socket } from '../../App';
 var cw = window.innerWidth;
 var ch = window.innerHeight;
 
+//Images array
+var images = new Array();
+images.push("../../images/tie.jpg")
+images.push("../../images/diablo.jpg")
+images.push("../../images/minecraft.jpg")
+images.push("../../images/lenovo.jpg")
+images.push("../../images/doodle.jpg")
+
 // set canvas dimensions
 export const canvasDim = {
   width: 1920,
@@ -140,8 +148,10 @@ export const GamesContain = (props: any) => {
 
     const render = (user: any, ball: any, net: any, com: any, powerUp: any) => {
 
+      
       // clear the canvas
-      drawRect(0, 0, canvas.width, canvas.height, 'black');
+      // drawRect(0, 0, canvas.width, canvas.height, 'black');
+      drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
@@ -381,24 +391,24 @@ export const GamesContain = (props: any) => {
   // }
   return (
     <>
-
-      {/* danger */}
-      {start && <Link key={"home"} component={RouterLink} to={"/"}>
-        <button style={{ position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px" }} onClick={handleBack}>Quit</button>
-      </Link>}
-      <canvas id="myCanvas" width={canvasDim.width} height={canvasDim.height} ref={canvasRef} />
-      {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><button id="buttonGameHome" onClick={handleRestart0}>Play Again Classic</button><button id="buttonGameHome" onClick={handleRestart1}>Play Again Custom</button></div> :
-        null}
-      {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
-        <Link key={"home"} component={RouterLink} to={"/"}>
-          <button onClick={handleBack}>
-            <KeyboardBackspaceIcon />
-          </button>
-        </Link>
-        {textMatchmaking}
-        <CircularProgress />
-      </div>}
-
+      <div id="gameBG">
+        {/* danger */}
+        {start && <Link key={"home"} component={RouterLink} to={"/"}>
+          <button style={{ position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px" }} onClick={handleBack}>Quit</button>
+        </Link>}
+        <canvas id="myCanvas" width={canvasDim.width} height={canvasDim.height} ref={canvasRef} />
+        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><button id="buttonGameHome" onClick={handleRestart0}>Play Again Classic</button><button id="buttonGameHome" onClick={handleRestart1}>Play Again Custom</button></div> :
+          null}
+        {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
+          <Link key={"home"} component={RouterLink} to={"/"}>
+            <button onClick={handleBack}>
+              <KeyboardBackspaceIcon />
+            </button>
+          </Link>
+          {textMatchmaking}
+          <CircularProgress />
+        </div>}
+      </div>
     </>
   );
 
