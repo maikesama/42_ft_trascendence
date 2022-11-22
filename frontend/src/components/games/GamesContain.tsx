@@ -22,6 +22,14 @@ import { socket } from '../../App';
 var cw = window.innerWidth;
 var ch = window.innerHeight;
 
+//Images array
+var images = new Array();
+images.push("../../images/tie.jpg")
+images.push("../../images/diablo.jpg")
+images.push("../../images/minecraft.jpg")
+images.push("../../images/lenovo.jpg")
+images.push("../../images/doodle.jpg")
+
 // set canvas dimensions
 export const canvasDim = {
   width: 1920,
@@ -140,8 +148,10 @@ export const GamesContain = (props: any) => {
 
     const render = (user: any, ball: any, net: any, com: any, powerUp: any) => {
 
+      
       // clear the canvas
-      drawRect(0, 0, canvas.width, canvas.height, 'black');
+      // drawRect(0, 0, canvas.width, canvas.height, 'black');
+      drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
