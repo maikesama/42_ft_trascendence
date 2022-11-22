@@ -591,7 +591,7 @@ export const ProfileEdit = (props: any) => {
         <button style={{ backgroundColor: 'transparent', border: '0px', marginTop: 10, marginBottom: -5 }} onClick={deleteImg}><DisabledByDefaultIcon fontSize="large" /></button>
 
         <CardContent>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Nickname:
@@ -605,26 +605,20 @@ export const ProfileEdit = (props: any) => {
             </button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: '100%',display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Username:
             </Typography>
             <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
-            <Button sx={{ color: 'black', visibility: 'hidden' }} >
-              <EditIcon />
-            </Button>
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{  display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Score:
             </Typography>
-            <TextField inputProps={fontColor} id="txtScore" placeholder={String(props.score)} variant="standard" disabled />
-            <Button sx={{ color: 'black', visibility: 'hidden' }} >
-              <EditIcon />
-            </Button>
+            <TextField inputProps={fontColor} id="txtScore" style={{width: '62%'}} placeholder={String(props.score)} variant="standard" disabled />
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
