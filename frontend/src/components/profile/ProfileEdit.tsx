@@ -177,7 +177,8 @@ export const SocialEdit = (props: any) => {
       });
       //const json = await response.json();
       //console.log(json);
-      window.location.reload();
+      // window.location.reload();
+      //
     } catch (error) {
       console.log("error", error);
     }
@@ -324,7 +325,7 @@ export const SocialEdit = (props: any) => {
           {/* <i style={{ fontSize: 8, color: 'grey' }} className="bi bi-circle-fill" /> */}
           <RemoveRedEyeIcon fontSize="large"  style={{cursor: 'pointer', color: 'grey'}} onClick={() => window.location.assign("/games/" + friends[index]?.idIntra)} />
           </> : null}
-          
+
           </div>
         </Link>
         <div style={{paddingLeft: '0.75rem' ,width: '40%'}}>

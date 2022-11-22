@@ -119,7 +119,7 @@ export const SearchBar = (props: any) => {
                         'Content-Type': 'application/json',
                     }
                 });
-                window.location.reload();
+                // window.location.reload();
             } catch (error) {
                 console.log("error", error);
             }

@@ -123,3 +123,14 @@ prova ban refresh
 
 unban da solo admin?
 checkare se è admin o owner in azioni admin
+
+added friend after block
+
+Trigger messages dopo block / unbloc
+
+socket block
+
+se ti hanno bloccato togliere button
+chat in SearchBar
+
+close search + set null search
