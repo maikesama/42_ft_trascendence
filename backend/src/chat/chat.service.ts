@@ -954,7 +954,13 @@ export class ChatService {
         try {
             const chats = await this.prismaService.partecipant.findMany({
                 where: {
-                    idIntra: idIntra
+                    idIntra: idIntra,
+                    OR : [
+                        {bannedUntil: {
+                            lt: new Date()
+                        }},
+                        {bannedUntil: null}
+                    ]
                 },
                 select: {
                     chat: {
@@ -970,14 +976,6 @@ export class ChatService {
                                         select:{
                                             userName: true,
                                             img : true,
-                                            // blockedby:
-                                            // {
-                                            //     where:{
-                                            //             NOT : {
-                                            //                     blockId : idIntra
-                                            //                 }
-                                            //             }
-                                            // },
 
                                         }
                                     },
@@ -987,7 +985,7 @@ export class ChatService {
                                     sendedAt: 'asc'
                                 },
                                 take: -count,
-                            },
+                            }
                         }
                     }
                 }
@@ -1018,7 +1016,7 @@ export class ChatService {
                     }
                 }
             });
-            // console.log(JSON.stringify(messages, null, 2))
+            console.log(JSON.stringify(messages, null, 2))
             return messages
 
         }
