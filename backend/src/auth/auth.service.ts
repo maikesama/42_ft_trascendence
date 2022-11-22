@@ -100,6 +100,8 @@ export class AuthService {
 					//campus: datiJson.campus[0].name,
 
 				});
+				if (ret.img === null || ret.img === undefined)
+					ret.img = process.env.DEFAULTIMG
 				return ret;
 			})
 			.then( async ret => {
@@ -127,6 +129,13 @@ export class AuthService {
 				}
 				else
 				{
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
+					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
 					const tokens = await this.generateJwtTokens(user);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
 					if (!user.firstLogin)
@@ -178,7 +187,6 @@ export class AuthService {
 	// 	}
 	// }
 	async generateJwtTokens(user: any) {
-		// console.log(user);
 		if (user && user.id && user.idIntra && user.email) {
 			const payload = { sub: user.id, idIntra: user.idIntra};
 			// const payload = { sub: 6, idIntra: "vubeffa"};
