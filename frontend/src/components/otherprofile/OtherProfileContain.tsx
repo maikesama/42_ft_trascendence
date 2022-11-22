@@ -197,9 +197,9 @@ export const OtherProfileContain = (props: any) => {
       {/* Side edit profile */}
       {/* Matches and Friends */}
       <Grid item xs={12} style={MatchesFriends} >
-        <SocialEdit title="FRIENDS" matches={true} user={params}/>
+        <SocialEdit title="FRIENDS" matches={true} user={params} />
         <ProfileEdit img={user.img} idIntra={user.idIntra} username={user.userName} score={user.rank}/>
-        <SocialEdit title="MATCHES" matches={false} user={params}/>
+        <SocialEdit title="MATCHES" matches={false} user={params} idIntra={user.idIntra}/>
       </Grid>
     </Grid>
   );

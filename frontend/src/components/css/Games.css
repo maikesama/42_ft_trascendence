@@ -27,6 +27,14 @@ body{
     /* height: 100%; */
 }
 
+#gameBG {
+    height: calc(100vh);
+    background-image: url("../../images/animaImg.gif");
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+
+}
+
 #esit {
     position: absolute;
     margin :auto;

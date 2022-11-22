@@ -718,6 +718,11 @@ export const AdminGroupActions = (props: any) => {
                                             <Button variant="outlined" onClick={() => Lists("MutedList")}>Muted</Button>
                                             <Button variant="outlined" onClick={() => Lists("BannedList")}>Banned</Button>
                                             <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
+                                            {/* <button onClick={() => Lists("AddUser")} className="button button1">Add User</button>
+                                            <button onClick={() => Lists("PromotedList")} className="button button2">Promoted</button>
+                                            <button onClick={() => Lists("MutedList")} className="button button3">Muted</button>
+                                            <button onClick={() => Lists("BannedList")} className="button button4">Banned</button>
+                                            <button onClick={leaveChannel} className="button button5">Leave</button> */}
                                         </> : clickLists === '' ?
                                             <>
                                                 <Button variant="outlined" onClick={handleInvite} style={{ border: '2px solid purple', color: 'purple', right: 7}}>Gioca</Button>

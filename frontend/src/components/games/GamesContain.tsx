@@ -381,24 +381,24 @@ export const GamesContain = (props: any) => {
   // }
   return (
     <>
-
-      {/* danger */}
-      {start && <Link key={"home"} component={RouterLink} to={"/"}>
-        <button style={{ position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px" }} onClick={handleBack}>Quit</button>
-      </Link>}
-      <canvas id="myCanvas" width={canvasDim.width} height={canvasDim.height} ref={canvasRef} />
-      {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><button id="buttonGameHome" onClick={handleRestart0}>Play Again Classic</button><button id="buttonGameHome" onClick={handleRestart1}>Play Again Custom</button></div> :
-        null}
-      {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
-        <Link key={"home"} component={RouterLink} to={"/"}>
-          <button onClick={handleBack}>
-            <KeyboardBackspaceIcon />
-          </button>
-        </Link>
-        {textMatchmaking}
-        <CircularProgress />
-      </div>}
-
+      <div id="gameBG">
+        {/* danger */}
+        {start && <Link key={"home"} component={RouterLink} to={"/"}>
+          <button style={{ position: "absolute", top: "0", right: "0", zIndex: 1000, backgroundColor: "red", color: "white", fontSize: "20px" }} onClick={handleBack}>Quit</button>
+        </Link>}
+        <canvas id="myCanvas" width={canvasDim.width} height={canvasDim.height} ref={canvasRef} />
+        {esit ? <div id="esit"><div><img src={esit} alt="lose" width="20%" height="20%" /></div><Link key={"home"} component={RouterLink} to={"/"}><button id="buttonGameHome">Home</button></Link><button id="buttonGameHome" onClick={handleRestart0}>Play Again Classic</button><button id="buttonGameHome" onClick={handleRestart1}>Play Again Custom</button></div> :
+          null}
+        {!start && !esit && <div id="textMatchmaking" style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100vh", background: "black", color: "white !important" }}>
+          <Link key={"home"} component={RouterLink} to={"/"}>
+            <button onClick={handleBack}>
+              <KeyboardBackspaceIcon />
+            </button>
+          </Link>
+          {textMatchmaking}
+          <CircularProgress />
+        </div>}
+      </div>
     </>
   );
 
