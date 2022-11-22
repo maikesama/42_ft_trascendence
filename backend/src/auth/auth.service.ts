@@ -93,7 +93,7 @@ export class AuthService {
 					userName: await this.checkUsername(datiJson.login),
 					firstName: datiJson.first_name,
 					lastName: datiJson.last_name,
-					img: datiJson.image_url,
+					img: datiJson.image.link,
 					email: datiJson.email,
 					accessToken : token
 
