@@ -162,7 +162,7 @@ export const ChatContain = (props: any) => {
                 });
                 const json = await response.json();
                 console.log(json);
-                if (response.status) {
+                if (response.status === 200 || response.status === 201) {
                     setUserChat(json);
                     changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
                 }
