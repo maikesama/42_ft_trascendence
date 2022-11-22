@@ -257,8 +257,8 @@ async acceptFriend(client: Socket, message: { idIntra: string }) {
           this.newDm2(client, await this.chat.newDm({idIntra : message.idIntra}, user.idIntra))
           if (users.has(message.idIntra)) {
             this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
-            client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
           }
+          client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
         }
       }
     }
@@ -293,8 +293,8 @@ async removeFriend(client: Socket, message: { idIntra: string }) {
     if (user2) {
       if (users.has(message.idIntra)) {
         this.server.to(users.get(message.idIntra).id).emit('removeFriend', { idIntra: user.idIntra })
-        client.emit('removeFriend', { idIntra: user2.idIntra })
       }
+      client.emit('removeFriend', { idIntra: user2.idIntra })
     }
   }
 }
