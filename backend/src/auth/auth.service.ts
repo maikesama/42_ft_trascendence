@@ -93,13 +93,15 @@ export class AuthService {
 					userName: await this.checkUsername(datiJson.login),
 					firstName: datiJson.first_name,
 					lastName: datiJson.last_name,
-					img: datiJson.image_url,
+					img: datiJson.image.link,
 					email: datiJson.email,
 					accessToken : token
 
 					//campus: datiJson.campus[0].name,
 
 				});
+				if (ret.img === null || ret.img === undefined)
+					ret.img = process.env.DEFAULTIMG
 				return ret;
 			})
 			.then( async ret => {
@@ -178,7 +180,6 @@ export class AuthService {
 	// 	}
 	// }
 	async generateJwtTokens(user: any) {
-		// console.log(user);
 		if (user && user.id && user.idIntra && user.email) {
 			const payload = { sub: user.id, idIntra: user.idIntra};
 			// const payload = { sub: 6, idIntra: "vubeffa"};
