@@ -129,13 +129,6 @@ export class AuthService {
 				}
 				else
 				{
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
-					console.log("saddjksdhjkdfsbhjdfbhjdfsfdhbssbdhdfsbhdsfbh")
 					const tokens = await this.generateJwtTokens(user);
 					res.cookie('at', tokens.access_token, { httpOnly: true })
 					if (!user.firstLogin)

@@ -538,7 +538,7 @@ export class UserService {
 					firstName: newUser['first_name'],
 					lastName: newUser['last_name'],
 					idIntra: newUser['login'],
-					img: newUser['image_url'],
+					img: newUser['image']['link'],
 					userName: newUser['login'],
 					email: newUser['email'],
 				}
