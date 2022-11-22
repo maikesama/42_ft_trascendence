@@ -1,6 +1,7 @@
 import { Controller, Post, Body, Req, UseGuards, HttpCode, Get } from '@nestjs/common'
 import { AtGuard } from 'src/auth/guards';
 import { ChatService } from './chat.service';
+import { createChannelDTO } from './dto/chat.dto';
 
 @Controller('chat')
 export class ChatController{
@@ -10,7 +11,7 @@ export class ChatController{
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('newChannel')
-    async newChannel(@Body() body, @Req() req){
+    async newChannel(@Body() body: createChannelDTO, @Req() req){
         const user = req.user
         return await this.chatService.newChannel(body, user['sub'])
     }
@@ -235,7 +236,7 @@ export class ChatController{
     @Post('getMessages')
     async getMessages(@Body() body, @Req() req){
         const user = req.user
-        //body.count 
+        //body.count
         if (body.count == undefined){
             body.count = 50
         }

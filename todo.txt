@@ -107,8 +107,19 @@ join /dopo il close e anche alert
 
 dto o contollo createChannel
 friend button socket otherprofile / profile
-ban socket + prote / demote / mute / ban 
-friend 
+ban socket + prote / demote / mute / ban
+friend
 message ban
 
 scrivere in inglese message error chat
+friend addfriend
+
+
+join work password error
+protected poi di nuovo creare chat
+togliere join and leave
+
+prova ban refresh
+
+unban da solo admin?
+checkare se è admin o owner in azioni admin

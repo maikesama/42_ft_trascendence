@@ -599,7 +599,6 @@ export const ChatContain = (props: any) => {
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.on('unBanUser', (data: any) => {
-                console.log("unBanUser" , data);
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
                     for (let i = 0; i < chats.length; i++) {
@@ -615,6 +614,7 @@ export const ChatContain = (props: any) => {
         }
         isSecondRender.current = true;
     });
+
     // console.log("dms", dms);
     // console.log (map);
 
@@ -754,7 +754,7 @@ export const ChatContain = (props: any) => {
                         </>}
                 </Grid>
                 <Grid item xs={9}>
-                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} setPartecipants={setPartecipants} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
+                    {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} setPermission={setPermission} setPartecipants={setPartecipants} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
                     {map.get(idChat) === undefined && chatView !== 'Blank' ? <><div>Sei un coglione</div></> : chatView !== 'Blank' ? <Messages idChat={idChat} messages={map.get(idChat)} /> : null}
                     {}
                 </Grid>

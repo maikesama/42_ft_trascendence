@@ -56,6 +56,7 @@ export const Channel = (props: any) => {
     const [openGroupInfo, setopenGroupInfo] = React.useState(false);
     const partecipants = props.partecipants;
     const permission = props.permission;
+    const setPermission = props.setPermission;
     const setPartecipants = props.setPartecipants;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
     const isSecondRender = React.useRef(false);
@@ -70,6 +71,34 @@ export const Channel = (props: any) => {
         }
         isSecondRender.current = true;
     });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.on('demoteUser', (data: any) => {
+                if (props.id === data.idChat) {
+                    setPermission({owner: false, admin: false});
+                    setopenAdminActions(false);
+                    // setopenGroupInfo(false);
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.on('promoteUser', (data: any) => {
+                if (props.id === data.idChat) {
+                    setPermission({owner: false, admin: true});
+                    // setopenAdminActions(false);
+                    setopenGroupInfo(false);
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+
     // const [message, setMessage] = useState('Haloa');
 
     // function MessageSent(props: any) {

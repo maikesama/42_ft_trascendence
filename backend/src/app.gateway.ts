@@ -494,16 +494,16 @@ async newDm2(client: Socket, data: any) {
   async ban(client: Socket, message: { idIntra: string, idChat: number }) {
     const user = await this.wsGuard(client)
     if (user) {
-
-      if (await this.chat.isBanned(message.idChat, message.idIntra))
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (await this.chat.isBanned(message.idChat, user2.idIntra))
       {
 
         if (users.has(message.idIntra)) {
           users.get(message.idIntra).leave(message.idChat.toString())
           this.server.to(users.get(message.idIntra).id).emit('banUser', { id: message.idChat })
         }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
       }
-      await this.refreshPartecipants(client, {idChat : message.idChat.toString(), idUser: user.id})
     }
   }
 
@@ -512,16 +512,75 @@ async newDm2(client: Socket, data: any) {
     const user = await this.wsGuard(client)
     console.log("unBan", message)
     if (user) {
-      if (!await this.chat.isBanned(message.idChat, message.idIntra))
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (!await this.chat.isBanned(message.idChat, user2.idIntra))
       {
-        console.log("unBan2", message)
         if (users.has(message.idIntra)) {
-          console.log("unBanUser", message.idChat)
           users.get(message.idIntra).join(message.idChat.toString())
           this.server.to(users.get(message.idIntra).id).emit('unBanUser', { id: message.idChat })
         }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
       }
-      await this.refreshPartecipants(client, {idChat : message.idChat.toString(), idUser: user.id})
+    }
+  }
+
+  @SubscribeMessage('muteUser')
+  async muteUser(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (await this.chat.isMuted(message.idChat, user2.idIntra))
+      {
+        // if (users.has(message.idIntra)) {
+        //   this.server.to(users.get(message.idIntra).id).emit('muteUser', { id: message.idChat })
+        // }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
+      }
+    }
+  }
+
+  @SubscribeMessage('unMuteUser')
+  async unUser(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (!await this.chat.isMuted(message.idChat, user2.idIntra))
+      {
+        // if (users.has(message.idIntra)) {
+        //   this.server.to(users.get(message.idIntra).id).emit('unUser', { id: message.idChat })
+        // }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
+      }
+    }
+  }
+
+  @SubscribeMessage('promoteUser')
+  async promoteUser(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (await this.chat.isAdmin(message.idChat, user2.id))
+      {
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra).id).emit('promoteUser', { id: message.idChat })
+        }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
+      }
+    }
+  }
+
+  @SubscribeMessage('demoteUser')
+  async demoteUser(client: Socket, message: { idIntra: string, idChat: number }) {
+    const user = await this.wsGuard(client)
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+      if (!await this.chat.isAdmin(message.idChat, user2.id))
+      {
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra).id).emit('demoteUser', { id: message.idChat })
+        }
+        await this.refreshPartecipants(client, {idChat : message.idChat, idUser: user.id})
+      }
     }
   }
 

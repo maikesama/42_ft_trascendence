@@ -37,34 +37,47 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import { FriendsCheckList } from './FriendsCheckList';
 import { socket } from '../../App';
+import { manageError, Alert } from '../generic/Alert';
 
 export const CreateChannel = (props: any) => {
 
+    const [alert, setAlert] = useState("");
     const name = useRef<any>('');
     const pass = useRef<any>('');
     const [type, setType] = useState('Public');
 
     async function createChannel() {
-        let pwd = "";
 
-        if (pass.current.value)
-            pwd = pass.current.value;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newChannel`;
         try {
+            var sendData;
+            if ((type.toLowerCase() === "protected")) {
+                sendData = {
+                    name: name.current.value,
+                    password: pass.current.value,
+                    type: type.toLowerCase(),
+                    partecipants: userGroup
+                }
+            }
+            else
+            {
+                sendData = {
+                    name: name.current.value,
+                    type: type.toLowerCase(),
+                    partecipants: userGroup
+                }
+            }
+
             const response = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    name: name.current.value,
-                    type: type.toLowerCase(),
-                    password: pwd,
-                    partecipants: userGroup
-                }),
+                body: JSON.stringify(sendData)
             });
             const data = await response.json();
+            manageError(data, response , null, setAlert);
             if (response.status === 200) {
                 socket.emit('newChannel', data);
                 setUserGroup([]);
@@ -207,6 +220,7 @@ export const CreateChannel = (props: any) => {
     }
 
     return (
+        <>
         <Dialog open={props.status} onClose={props.closeStatus}>
             <DialogTitle>Create Group</DialogTitle>
             <DialogContent>
@@ -289,5 +303,8 @@ export const CreateChannel = (props: any) => {
                 <Button onClick={createChannel}>Create</Button>
             </DialogActions>
         </Dialog>
+
+        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        </>
     );
 }

@@ -3,6 +3,7 @@ import { PrismaService } from 'src/prisma/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { AppGateway } from 'src/app.gateway'
 import * as argon from 'argon2'
+import { createChannelDTO } from './dto/chat.dto';
 
 @Injectable()
 export class ChatService {
@@ -710,11 +711,15 @@ export class ChatService {
     }
 
 
-    async newChannel(body: any, userId: number) {
+    async newChannel(body: createChannelDTO, userId: number) {
 
         try {
+            console.log(body)
+
+            if (body.type !== 'public' && body.type !== 'protected' && body.type !== 'private')
+                throw new HttpException('type is not valid', HttpStatus.BAD_REQUEST)
             if (body.name === '')
-                throw new BadRequestException('name is empty')
+                throw new HttpException('name is empty', HttpStatus.BAD_REQUEST)
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     id: userId
@@ -774,8 +779,7 @@ export class ChatService {
 
         }
         catch (err) {
-
-            throw new BadRequestException(err)
+            throw new HttpException(err, HttpStatus.BAD_REQUEST)
         }
     }
 

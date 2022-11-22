@@ -232,6 +232,7 @@ export const AdminGroupActions = (props: any) => {
                         user.muted = true;
                     return user;
                 }));
+                socket.emit('muteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
             console.log("error", error);
@@ -349,6 +350,7 @@ export const AdminGroupActions = (props: any) => {
                         user.muted = false;
                     return user;
                 }));
+                socket.emit('unMuteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
             console.log("error", error);
@@ -378,6 +380,7 @@ export const AdminGroupActions = (props: any) => {
                         user.admin = true;
                     return user;
                 }));
+                socket.emit('promoteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
             console.log("error", error);
@@ -408,6 +411,7 @@ export const AdminGroupActions = (props: any) => {
                         user.admin = false;
                     return user;
                 }));
+                socket.emit('demoteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
             console.log("error", error);
