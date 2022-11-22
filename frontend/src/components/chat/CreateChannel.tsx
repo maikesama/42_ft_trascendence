@@ -215,7 +215,7 @@ export const CreateChannel = (props: any) => {
     function handleCancel()
     {
         //initials.current.value = useRef<any>(undefined);
-
+        setType('Public');
         props.closeStatus();
     }
 
