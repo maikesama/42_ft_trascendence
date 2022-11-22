@@ -305,6 +305,7 @@ async newChannel(client: Socket, data: any) {
   if (user) {
     if (data && data.id && data.partecipant && data.partecipant.length > 0)
     {
+      this.server.emit('newJoin', data)
       for( let i = 0; i < data.partecipant.length; i++)
       {
         if (users.has(data.partecipant[i].idIntra))
@@ -323,15 +324,19 @@ async addUsers(client: Socket, data: any) {
   if (user) {
     if (data && data.idChat && data.idIntra)
     {
-      const user2 = await this.userService.getUserByIdIntra(data.idIntra.toString())
       const chat = await this.chat.getChanInfo({id: data.idChat}, user.id)
-      if (chat)
+      for (let i = 0; i < data.idIntra.length; i++)
       {
-        if (user2 && users.get(user2.idIntra))
+        console.log("addUser", data.idIntra[i])
+        const user2 = await this.userService.getUserByIdIntra(data.idIntra[i].toString())
+        if (chat)
         {
-          this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+          if (user2 && users.get(data.idIntra[i]))
+          {
+            this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+          }
+          await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
         }
-        await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
       }
     }
   }
@@ -351,17 +356,19 @@ async removeUsers(client: Socket, data: any) {
         {
           this.server.to(users.get(user2.idIntra).id).emit('removeUser', {id: chat.id, idIntra : user2.idIntra})
         }
-        if (data.idIntra !== user.idIntra)
-        {
+        // if (data.idIntra !== user.idIntra)
+        // {
           await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
-        }
+        // }
       }
     }
   }
 }
 
 async refreshPartecipants(client: Socket, data:{idChat: any, idUser: any}) {
-  const chat = await this.chat.getChanUsers({id: data.idChat}, data.idUser)
+  console.log("removeUser", data)
+  const chat = await this.chat.getChanUsers({id: data.idChat, notFound: true}, data.idUser)
+  console.log("chat", chat)
   if (chat && chat.partecipants && chat.partecipants.length > 0)
   {
     for (let i = 0; i < chat.partecipants.length; i++)

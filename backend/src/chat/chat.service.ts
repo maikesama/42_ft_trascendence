@@ -1,4 +1,4 @@
-import { Injectable, BadRequestException } from '@nestjs/common'
+import { Injectable, BadRequestException,HttpException, HttpStatus } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service'
 import { UserService } from 'src/user/user.service'
 import { AppGateway } from 'src/app.gateway'
@@ -248,16 +248,22 @@ export class ChatService {
                     partecipant: true
                 }
             });
-
-            const part = await this.prismaService.partecipant.findUniqueOrThrow({
-                where: {
-                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                },
-                select: {
-                    owner: true,
-                    admin: true
-                }
-            })
+            var part;
+            if (body.notFound === undefined)
+            {
+                part = await this.prismaService.partecipant.findUniqueOrThrow({
+                    where: {
+                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                    },
+                    select: {
+                        owner: true,
+                        admin: true
+                    }
+                })
+            }
+            else {
+                part = { owner: false, admin: false }
+            }
 
             const ret = await channel.partecipant.map(async (part: any) => {
                 if (part.bannedUntil === null || part.bannedUntil < new Date()) {
@@ -493,7 +499,7 @@ export class ChatService {
                 return ret
             })
 
-            const tmp = await Promise.all(addInvetedRet)
+            const tmp = await (await Promise.all(addInvetedRet)).filter((el: any) => el !== undefined)
 
 
 
@@ -518,7 +524,7 @@ export class ChatService {
             })
 
 
-            const ret = await Promise.all(removeBlocked);
+            const ret = await (await Promise.all(removeBlocked)).filter((el: any) => el !== undefined);
 
 
 
@@ -1197,9 +1203,11 @@ export class ChatService {
                 })
 
             }
+            // return statusCode 200 + message
+            return { message: 'User joined the channel', statusCode: 200 }
         }
         catch (err) {
-            throw new BadRequestException(err)
+            throw new HttpException(err, HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -1413,7 +1421,7 @@ export class ChatService {
             })
 
             body.idIntra = [...new Set(body.idIntra)];
-            body.idIntra.map(async (idIntra: string) => {
+            const map = await body.idIntra.map(async (idIntra: string) => {
 
                 const user = await this.prismaService.user.findUniqueOrThrow({
                     where: {
@@ -1426,23 +1434,25 @@ export class ChatService {
                     }
                 })
                 if (user.idIntra !== idIntra)
-                    throw new BadRequestException("Can't add yorself")
+                    throw new HttpException("Can't add yorself", HttpStatus.BAD_REQUEST)
                 if (!await this.isAdmin(body.id, userId) && ! await this.isChanOwner(channel.id, reqUser.idIntra))
-                    throw new BadRequestException('not enough rights');
+                    throw new HttpException("Not enough rights", HttpStatus.BAD_REQUEST)
                 if (await this.isAlreadyIn(body.id, user.idIntra))
-                    throw new BadRequestException('User is already in the channel');
+                    throw new HttpException("User is already in the channel", HttpStatus.BAD_REQUEST)
 
 
-                const partecipant = await this.prismaService.partecipant.create({
+                await this.prismaService.partecipant.create({
                     data: {
                         idChat: channel.id,
                         idIntra: user.idIntra,
                     }
                 })
             })
+
+            return await Promise.all(map)
         }
         catch (err) {
-            throw new BadRequestException(err)
+            throw new HttpException(err, HttpStatus.BAD_REQUEST)
         }
     }
 

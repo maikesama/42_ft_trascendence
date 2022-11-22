@@ -162,14 +162,14 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            //const data = await response.json();
-            manageError(null, response, null, setAlert);
+            console.log(response)
+            const data = await response.json();
+            manageError(data, response, null, setAlert);
 
             //addUser dinamico da correggere
             if (response.status === 200) {
-                // props.setPartecipants(props.partecipants.concat(search));
                 socket.emit('addUser', { idChat: props.idChat, idIntra: userGroup });
-                props.setPartecipants(props.partecipants.concat(search.filter((user: any) => userGroup.includes(user.idIntra))));
+                // props.setPartecipants(props.partecipants.concat(search.filter((user: any) => userGroup.includes(user.idIntra))));
                 setSearch([]);
                 setUserGroup([]);
                 setSelectedName('');

@@ -101,3 +101,12 @@ mettere httpRequest + return in tutto il back a rimettere data in alert
 controllare form max length? name channel ecc
 
 friends otherprofile
+
+join /dopo il close e anche alert
+
+
+dto o contollo createChannel
+friend button socket otherprofile / profile
+ban socket + prote / demote / mute / ban 
+friend 
+message ban

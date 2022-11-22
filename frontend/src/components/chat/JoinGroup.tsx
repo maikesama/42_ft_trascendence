@@ -35,6 +35,8 @@ import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { CreateChannel } from './CreateChannel';
 import { GroupInfo } from './GroupInfo';
 import { manageError, Alert } from '../generic/Alert';
+import { socket } from '../../App';
+import { useAuth } from '../../hooks/useAuth';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -82,6 +84,8 @@ export const JoinGroup = (props: any) => {
     const [join, setJoin] = React.useState(-1);
     const pass = useRef<any>([]);
     const [alert, setAlert] = useState("");
+    const isSecondRender = useRef(false);
+    const { idIntra } = useAuth();
 
 
     React.useEffect(() => {
@@ -104,7 +108,25 @@ export const JoinGroup = (props: any) => {
         }
         };
         fetchData();
+        if (isSecondRender.current) {
+            socket.on('newChannel', (data: any) => {
+                fetchData();
+            });  
+            socket.on('removeUser', (data: any) => {
+                fetchData();
+            });  
+            socket.on('addUser', (data: any) => {
+                fetchData();
+            });  
+            socket.on('newJoin', (data: any) => {
+                fetchData();
+            });  
+        }
+        isSecondRender.current = true;
     }, []);
+
+
+        
 
 
     async function joinChannel(id : number, index: any) {
@@ -123,8 +145,15 @@ export const JoinGroup = (props: any) => {
                 },
                 body: JSON.stringify({id: id, password: pwd})
             });
+            const data = await response.json();
+            manageError(data, response , null, setAlert);
             if (response.status === 200) 
-                window.location.reload();
+            {
+                // console.log(idIntra)
+                socket.emit('addUser', { idChat: id, idIntra: [idIntra] });
+                props.closeStatus();
+                //dopo il close e anche alert
+            }
             
         } catch (error) {
             console.log("error", error);
@@ -146,6 +175,7 @@ export const JoinGroup = (props: any) => {
             <>
             <ListItem style={style} key={index} >
                 <ListItemButton>
+                    <Avatar img={chats[index]?.img} />
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
                 <TextField onChange={() => handleJoin(index)} inputRef={(element) => pass.current.push(element)} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
