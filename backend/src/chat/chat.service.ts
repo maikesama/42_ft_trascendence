@@ -452,7 +452,7 @@ export class ChatService {
                 //     const friend = await this.prismaService.friend.findUnique({
                 //         where: {
                 //             friendId_friendById: {
-    
+
                 //                 friendId: user.idIntra,
                 //                 friendById: me.idIntra
                 //             }
@@ -463,7 +463,7 @@ export class ChatService {
                 //     const friend = await this.prismaService.friend.findUnique({
                 //         where: {
                 //             friendId_friendById: {
-    
+
                 //                 friendId: user.idIntra,
                 //                 friendById: me.idIntra
                 //             }
@@ -479,7 +479,7 @@ export class ChatService {
                 //             }
                 //         }
                 //     })
-                
+
 
 
                 const ret = {
@@ -543,7 +543,7 @@ export class ChatService {
     // 	return name
     // }
 
-    
+
 
     async newDm(body: any, idIntra: string) {
         try {
@@ -1311,22 +1311,22 @@ export class ChatService {
             })
 
 
-            if (await this.isChanOwner(channel.id, user.idIntra)) {
-                await this.prismaService.partecipant.delete({
-                    where: {
-                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                    }
-                })
-                await this.destroyChannel(body.id);
-            }
-            else {
+            // if (await this.isChanOwner(channel.id, user.idIntra)) {
+            //     await this.prismaService.partecipant.delete({
+            //         where: {
+            //             idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+            //         }
+            //     })
+            //     await this.destroyChannel(body.id);
+            // }
+            // else {
 
-                await this.prismaService.partecipant.delete({
-                    where: {
-                        idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
-                    }
-                })
-            }
+            await this.prismaService.partecipant.delete({
+                where: {
+                    idIntra_idChat: { idIntra: user.idIntra, idChat: channel.id }
+                }
+            })
+            // }
         }
         catch (err) {
 

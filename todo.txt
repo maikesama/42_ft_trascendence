@@ -90,3 +90,14 @@ e leave da pannello admin
 
 errori nell'inserimento password
 dm not found error
+
+fixare css button admin !important
+
+
+//cosa fare quando owner lascia il gruppo?
+
+mettere httpRequest + return in tutto il back a rimettere data in alert
+
+controllare form max length? name channel ecc
+
+friends otherprofile

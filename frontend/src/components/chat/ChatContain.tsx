@@ -522,16 +522,6 @@ export const ChatContain = (props: any) => {
         if (isSecondRender.current) {
             socket.on('removeUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
-                    console.log("removeUser", data);
                     var newChats = [];
                     for (let i = 0; i < chats.length; i++) {
                         if (chats[i].id !== data.id) {

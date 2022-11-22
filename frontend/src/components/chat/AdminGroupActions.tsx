@@ -30,6 +30,7 @@ import Link from '@mui/material/Link';
 import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
 import { useNavigate } from "react-router-dom";
+import { useAuth } from '../../hooks/useAuth';
 
 export const AdminGroupActions = (props: any) => {
 
@@ -52,6 +53,7 @@ export const AdminGroupActions = (props: any) => {
     const [openSettings, setOpenSettings] = React.useState(false);
     const [chan, setChan] = useState({} as any);
     const [alert, setAlert] = useState("");
+    const { idIntra } = useAuth() ;
 
     const handleOpenSettings = () => {
         setOpenSettings(true);
@@ -110,8 +112,14 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat }),
             })
-            const data = await response.json();
-            manageError(data, response, null, setAlert);
+            // const data = await response.json();
+            // console.log(data);
+            // console.log(data);
+            // console.log(data);
+            manageError(null, response, null, setAlert);
+            if (response.status === 200) {
+                socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
+            }
         } catch (error) {
             console.log("error", error);
         }

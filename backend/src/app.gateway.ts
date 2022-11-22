@@ -184,7 +184,6 @@ export class AppGateway implements OnGatewayInit {
   @UseGuards(AtGuard)
   @SubscribeMessage('provaJoin')
   async provaJoin(client: Socket, message: { idChat: number }) {
-    console.log("ciaooosjdsjjdnnjasndnjasdnjansj")
     const user = await this.wsGuard(client)
     //controllare se l'utente va bene
     //nickname ? o idIntra ?
