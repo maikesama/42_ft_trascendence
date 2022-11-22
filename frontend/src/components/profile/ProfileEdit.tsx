@@ -23,6 +23,7 @@ import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
+import DoneIcon from '@mui/icons-material/Done';
 
 
 import "../css/ProfileEdit.css"
@@ -71,7 +72,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setUser(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
@@ -93,10 +94,10 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         setFriends(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
     fetchData();
@@ -104,7 +105,7 @@ export const SocialEdit = (props: any) => {
 
   useEffect(() => {
     socket.on("friendStatus", (data: any) => {
-      console.log("friendStatus", data);
+      //console.log("friendStatus", data);
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {
         const newFriends = friends.map((friend: any) => {
@@ -176,10 +177,10 @@ export const SocialEdit = (props: any) => {
         }
       });
       //const json = await response.json();
-      //console.log(json);
+      ////console.log(json);
       window.location.reload();
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -203,10 +204,10 @@ export const SocialEdit = (props: any) => {
         // window..reload();
       }
       //const json = await response.json();
-      //console.log(json);
+      ////console.log(json);
       // window.location.reload();
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -229,7 +230,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
@@ -272,7 +273,7 @@ export const SocialEdit = (props: any) => {
   function renderMatchesRowPreview(props: any) {
     let { index,style, matches } = props;
 
-    console.log(style)
+    //console.log(style)
 
     var style2 = {
       ...style,
@@ -283,7 +284,7 @@ export const SocialEdit = (props: any) => {
     // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
 
 
-    // console.log("vaffanc" + JSON.stringify(style2))
+    // //console.log("vaffanc" + JSON.stringify(style2))
 
     return (
        <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
@@ -385,13 +386,12 @@ export const ProfileEdit = (props: any) => {
   const [images, setImages] = React.useState([]);
   const [alert, setAlert] = React.useState("");
 
-  //const [user, setUser] = useState({} as any);
-
   const clickSave = async () => {
-    //return console.log(nick.current.value)
 
     let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
-
+    const inputbox = document.getElementById('txtNick');
+    inputbox?.setAttribute('disabled', 'true');
+    inputbox?.removeAttribute('placeholder');
 
     try {
       const response = await fetch(url, {
@@ -402,12 +402,17 @@ export const ProfileEdit = (props: any) => {
         },
         body: JSON.stringify({ userName: nick.current.value })
       });
+      if (response.status === 200 || response.status === 201) {
+        window.location.reload();
+      }
+      else
+      {
+        inputbox?.removeAttribute('disabled');
+        inputbox?.removeAttribute('placeholder');
+      }
       const data = await response.json();
       manageError(data, response, props.triggerUser, setAlert);
-      console.log(alert)
-
     } catch (error) {
-      console.log("error", error);
     }
 
   }
@@ -421,7 +426,7 @@ export const ProfileEdit = (props: any) => {
   };
 
   const uploadImage = async (imageList: ImageListType) => {
-    console.log(JSON.stringify(imageList[0].dataURL))
+    //console.log(JSON.stringify(imageList[0].dataURL))
     try {
       const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
         method: "POST",
@@ -433,9 +438,9 @@ export const ProfileEdit = (props: any) => {
       });
       manageError({}, response, props.triggerUser, setAlert);
       // setAlert(c);
-      //console.log(json);
+      ////console.log(json);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
     // window.location.reload()
   };
@@ -444,10 +449,12 @@ export const ProfileEdit = (props: any) => {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+    const save = document.getElementById('saveButton');
+    save?.removeAttribute('hidden')
   }
 
   const fontColor = {
-    style: { color: 'rgb(0, 0, 0)' }
+    style: { color: 'rgba(0, 0, 0, 0.38)' }
   }
 
 
@@ -461,7 +468,7 @@ export const ProfileEdit = (props: any) => {
       //window.location.reload();
       manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
 
   }
@@ -477,10 +484,10 @@ export const ProfileEdit = (props: any) => {
           credentials: 'include',
         })
         const json = await response.json();
-        console.log(json);
+        //console.log(json);
         setQr(json);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     }
     generate2faQr();
@@ -504,14 +511,14 @@ export const ProfileEdit = (props: any) => {
         setUser(json);
         setCheck(json.twoFa);
       } catch (error) {
-        console.log("error", error);
+        //console.log("error", error);
       }
     };
 
     fetchData();
   }, []);
 
-  console.log(user.twoFa)
+  //console.log(user.twoFa)
   const [open2FA, setOpen2FA] = React.useState(false);
 
   const close2FA = (event: any, reason: any) => {
@@ -534,10 +541,10 @@ export const ProfileEdit = (props: any) => {
         credentials: 'include',
       })
       const json = await response.json();
-      console.log(json);
+      //console.log(json);
       setCheck(false);
     } catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -556,7 +563,7 @@ export const ProfileEdit = (props: any) => {
       }
     }
     catch (error) {
-      console.log("error", error);
+      //console.log("error", error);
     }
   }
 
@@ -589,10 +596,13 @@ export const ProfileEdit = (props: any) => {
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
               Nickname:
             </Typography>
-            <TextField inputProps={fontColor} onBlur={clickSave} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
-            <Button sx={{ color: 'black' }} onClick={handleNick}>
+            <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
+            <button style={{backgroundColor:'white',color: 'black', border: 0 }} onClick={handleNick}>
               <EditIcon />
-            </Button>
+            </button>
+            <button hidden id="saveButton" style={{backgroundColor:'white', color: 'black', border: 0 }} onClick={clickSave}>
+              <DoneIcon />
+            </button>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
