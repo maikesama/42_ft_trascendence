@@ -366,9 +366,9 @@ async removeUsers(client: Socket, data: any) {
 }
 
 async refreshPartecipants(client: Socket, data:{idChat: any, idUser: any}) {
-  console.log("removeUser", data)
+  // console.log("removeUser", data)
   const chat = await this.chat.getChanUsers({id: data.idChat, notFound: true}, data.idUser)
-  console.log("chat", chat)
+  // console.log("chat", chat)
   if (chat && chat.partecipants && chat.partecipants.length > 0)
   {
     for (let i = 0; i < chat.partecipants.length; i++)
@@ -500,22 +500,28 @@ async newDm2(client: Socket, data: any) {
 
         if (users.has(message.idIntra)) {
           users.get(message.idIntra).leave(message.idChat.toString())
+          this.server.to(users.get(message.idIntra).id).emit('banUser', { id: message.idChat })
         }
       }
-
+      await this.refreshPartecipants(client, {idChat : message.idChat.toString(), idUser: user.id})
     }
   }
 
   @SubscribeMessage('unBan')
   async unBan(client: Socket, message: { idIntra: string, idChat: number }) {
     const user = await this.wsGuard(client)
+    console.log("unBan", message)
     if (user) {
       if (!await this.chat.isBanned(message.idChat, message.idIntra))
       {
+        console.log("unBan2", message)
         if (users.has(message.idIntra)) {
+          console.log("unBanUser", message.idChat)
           users.get(message.idIntra).join(message.idChat.toString())
+          this.server.to(users.get(message.idIntra).id).emit('unBanUser', { id: message.idChat })
         }
       }
+      await this.refreshPartecipants(client, {idChat : message.idChat.toString(), idUser: user.id})
     }
   }
 

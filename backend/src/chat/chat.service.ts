@@ -315,7 +315,7 @@ export class ChatService {
             })
 
             const chats = await user.partecipant.map(async (partecipant: any) => {
-                if (partecipant.bannedUntil === null || partecipant.bannedUntil < new Date()) {
+                // if (partecipant.bannedUntil === null || partecipant.bannedUntil < new Date()) {
                     const chat = await this.prismaService.chat.findUnique({
                         where: {
                             id: partecipant.idChat
@@ -323,7 +323,7 @@ export class ChatService {
                     })
                     if (chat.type !== 'dm')
                         return chat
-                }
+                // }
             })
 
             const ret = await (await Promise.all(chats)).filter((el: any) => el !== undefined)
@@ -1016,7 +1016,7 @@ export class ChatService {
                     }
                 }
             });
-            console.log(JSON.stringify(messages, null, 2))
+            // console.log(JSON.stringify(messages, null, 2))
             return messages
 
         }
@@ -1447,6 +1447,8 @@ export class ChatService {
                 })
             })
 
+            // supreme fix
+            await this.getChanUsers({id: body.id, notFound: true}, userId)
             return await Promise.all(map)
         }
         catch (err) {

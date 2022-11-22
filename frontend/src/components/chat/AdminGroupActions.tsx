@@ -319,7 +319,7 @@ export const AdminGroupActions = (props: any) => {
             {
                 setClickLists('');
                 props.setPartecipants(partecipants.concat(banned[index]));
-                socket.emit('unBan', { idIntra: selectedName, idChat: props.idChat, });
+                socket.emit('unBan', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
             console.log("error", error);

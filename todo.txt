@@ -110,3 +110,5 @@ friend button socket otherprofile / profile
 ban socket + prote / demote / mute / ban 
 friend 
 message ban
+
+scrivere in inglese message error chat
