@@ -267,16 +267,7 @@ export const SearchBar = (props: any) => {
                 <ListItem style={style} key={index} >
                     {search[index]?.img ? <><Avatar src={search[index]?.img} />
                         <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
-                        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
                         <Divider variant="middle" />
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-
                         {console.log(search[index]?.invited)}
                         {console.log(search[index]?.friend)}
                         <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
