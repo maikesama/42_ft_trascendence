@@ -164,10 +164,8 @@ export const DM = (props: any) => {
 			{/* <List className={classes.messageArea}> */}
 				<ListItem key="">
 					<Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${props.idIntra}`} underline="none" color="inherit" sx={{display: "contents"}}>
-						<ListItemIcon >
-							<Avatar alt="Avatar" src={props.img} style={{ width: '50px', height: '50px' }} />
-						</ListItemIcon>
-						<Typography variant='h5' className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</Typography>
+						<img src={props.img} style={{ width: '50px', height: '50px' }} />
+						<h5 className="userNameChat" style={{ width: '150px', marginLeft: '50px'}}>{props.nickname}</h5>
 					</Link>
 					<IconButton aria-label="inviteGame" onClick={handleInvite} style={{ color: 'green', width: '50px', height: '50px' }} size="large" ><SportsEsportsOutlinedIcon fontSize="large" /></IconButton>
 				</ListItem>
