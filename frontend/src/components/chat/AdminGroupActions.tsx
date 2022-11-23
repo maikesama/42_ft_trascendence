@@ -626,7 +626,7 @@ export const AdminGroupActions = (props: any) => {
 
     return (
         <>
-            <Dialog open={props.status} onClose={props.closeStatus}>
+            <Dialog open={props.status}>
                 <DialogTitle>Admin Actions<IconButton onClick={handleOpenSettings}><SettingsIcon /></IconButton><button style={closeX} onClick={closeFunction}>X</button> </DialogTitle>
 
                 <DialogContent>
