@@ -184,6 +184,7 @@ export function Header(props: any) {
                     color: 'inherit',
                     textDecoration: 'none',
                   }}
+                  style={{fontFamily: 'MyWebFont', fontWeight: 700, letterSpacing: '.3rem', color: 'inherit', textDecoration: 'none', marginTop: '60px'}}
                 >
                   TRANSCENDENCE
                 </Typography>
@@ -192,7 +193,7 @@ export function Header(props: any) {
                 <Box className="headerButtonsBox" sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex', justifyContent: 'space-around', marginBottom: '5rem' } }}>
                   {pages.map((page) => (
                     // <Link key={page} component={RouterLink} to={page === 'Home' ? '/' : `/${page.toLowerCase()}`}>
-                    <Link key={page} component={RouterLink} to={`/${page}`} style={{ textDecoration: 'none', height: 'auto' }}>
+                    <Link key={page} component={RouterLink} to={`/${page}`} style={{ textDecoration: 'none', height: 'auto', color: 'white' }}>
                       {location.pathname === `/${page}` ? (
                       <Button
                         sx={{ mt: -2, color: 'violet', fontWeight: 'bold', xs: 'none', display: 'block', fontSize: 18, padding: 4 }}
