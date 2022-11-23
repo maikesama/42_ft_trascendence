@@ -16,7 +16,10 @@ import Box from '@mui/material/Box';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useParams } from 'react-router';
 import { socket } from '../../App';
-
+import  stella  from "../../images/stella.png";
+import  fungo  from "../../images/fungo.png";
+import  fiore  from "../../images/fiore.png";
+import  fantasma  from "../../images/fantasma.png";
 // let ctx:any;
 
 var cw = window.innerWidth;
@@ -131,7 +134,18 @@ export const GamesContain = (props: any) => {
     const drawImg = (img: any, x: any, y: any, width: any, height: any) => {
       //size of image
       var newImg = new Image(100, 100);
-      newImg.src = img;
+      if (img === 1) {
+        newImg.src = stella;
+      }
+      else if (img === 2) {
+        newImg.src = fungo;
+      }
+      else if (img === 3) {
+        newImg.src = fiore;
+      }
+      else if (img === 4) {
+        newImg.src = fantasma;
+      }
       newImg.onload = function () {
         ctx.drawImage(newImg, x, y, width, height);
       }
@@ -150,8 +164,8 @@ export const GamesContain = (props: any) => {
 
       
       // clear the canvas
-      // drawRect(0, 0, canvas.width, canvas.height, 'black');
-      drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
+      drawRect(0, 0, canvas.width, canvas.height, 'black');
+      //drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
@@ -179,7 +193,7 @@ export const GamesContain = (props: any) => {
       // if active
       if (powerUp.active) {
         // drawRect(powerUp.x, powerUp.y, powerUp.width, powerUp.height, powerUp.color);
-        drawImg(powerUp.color, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
+        drawImg(powerUp.type, powerUp.x, powerUp.y, powerUp.width, powerUp.height);
       }
     }
 
