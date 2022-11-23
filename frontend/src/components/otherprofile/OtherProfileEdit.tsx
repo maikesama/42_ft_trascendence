@@ -241,7 +241,7 @@ export const ProfileEdit =  (props: any) => {
     style: { color: 'rgb(0, 0, 0)' }
   }
 
-  const [isBlocked, setIsBlocked] = useState(false);
+  const [isBlocked, setIsBlocked] = useState(0);
   const [isFriend, setIsFriend] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [alert, setAlert] = useState("");
@@ -585,8 +585,9 @@ async function toDm(index: any) {
         {isFriend === false && isPending === false ? <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
         {isFriend === false && isPending === true ? <IconButton aria-label="removeinvite" size="small" onClick={removeInviteFriend} style={{ color: 'orange' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
         {isFriend === true ? <IconButton aria-label="removefriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
-        {isBlocked === false ? <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton> : null}
-        {isBlocked === true ? <IconButton aria-label="unblock" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton> : null}
+        {isBlocked === 0 ? <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton> : null}
+        {isBlocked === 1 ? <IconButton aria-label="unblock" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton> : null}
+        {isBlocked === 2 ? <><IconButton aria-label="block" size="small" disabled style={{ color: 'black' }}><BlockIcon fontSize="large" /></IconButton></> : null}
       </CardActions>
     </Card>
     <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />

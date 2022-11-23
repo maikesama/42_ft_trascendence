@@ -174,8 +174,13 @@ export class UserService {
                 }
             })
             if (blocked.length > 0)
-                return true
-            return false
+            {
+				if (blocked[0].blockId === userId)
+					return 2
+				else
+					return 1
+			}
+            return 0
         }
         catch(e){
 			throw new HttpException(e.message, HttpStatus.BAD_REQUEST);

@@ -15,6 +15,10 @@ import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
+import  stella  from "../../images/stella.png";
+import  fungo  from "../../images/fungo.png";
+import  fiore  from "../../images/fiore.png";
+import  fantasma  from "../../images/fantasma.png";
 
 const steps = [
     {
@@ -35,10 +39,10 @@ const steps = [
     {
         label: 'Custom Power Ups/Downs',
         description: ``,
-        img1: 'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Star_with_eyes.svg/1920px-Star_with_eyes.svg.png',
-        img2: 'https://www.clipartmax.com/png/full/27-274934_new-super-mario-bros-mario-power-up-mushroom.png',
-        img3: 'https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png',
-        img4: 'https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png',
+        img1: stella,
+        img2: fungo,
+        img3: fiore,
+        img4: fantasma,
     },
     {
         label: 'Quitting',

@@ -221,7 +221,6 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
         "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
         "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"
     ]
-
         if (powerUp.active === false || powerUp.time <= 0)
         {
             // random from 5 to 10 seconds

@@ -82,7 +82,7 @@ export const JoinGroup = (props: any) => {
 
     const [chats, setChats] = React.useState({} as any);
     const [join, setJoin] = React.useState(-1);
-    const pass = useRef<any>([]);
+    const [password, setPassword] = React.useState([] as any);
     const [alert, setAlert] = useState("");
     const isSecondRender = useRef(false);
     const { idIntra } = useAuth();
@@ -133,7 +133,7 @@ export const JoinGroup = (props: any) => {
         let pwd = "";
 
         
-        pwd = pass.current[index].value;
+        // pwd = pass.current[index].value;
         console.log(pwd);
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
@@ -143,16 +143,16 @@ export const JoinGroup = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({id: id, password: pwd})
+                body: JSON.stringify({id: id, password: password[index]}),
             });
             const data = await response.json();
             manageError(data, response , null, setAlert);
+
             if (response.status === 200) 
             {
-                // console.log(idIntra)
+                
                 socket.emit('addUser', { idChat: id, idIntra: [idIntra] });
                 props.closeStatus();
-                //dopo il close e anche alert
             }
             
         } catch (error) {
@@ -162,11 +162,13 @@ export const JoinGroup = (props: any) => {
 
     function handleJoin(index: any)
     {
-        console.log("pass: ", pass.current[index].value);
-        console.log("\n\n")
-        console.log(JSON.stringify(pass.current));
-
+        var pass = document.getElementById(String(index)) as HTMLInputElement | null;
+        console.log(pass?.value);
+        var newPassArray = password;
+        newPassArray[index] = pass?.value;
+        setPassword(newPassArray);
     }
+    console.log(password);
 
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;
@@ -175,10 +177,10 @@ export const JoinGroup = (props: any) => {
             <>
             <ListItem style={style} key={index} >
                 <ListItemButton>
-                    <Avatar img={chats[index]?.img} />
+                    <img width="50px" height="50px" src={"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAaVBMVEX///8AAAD29vahoaGQkJBra2sqKioFBQWqqqrv7+/c3NxcXFzFxcVlZWX6+vpoaGgkJCQ8PDzk5OQ3NzcvLy/W1taDg4MdHR2JiYkWFhZRUVHe3t58fHxZWVlPT0+ampro6OgQEBDKysrhb0krAAADGklEQVR4nO3c21YaQRBA0QGVqKgkRBOiMSb+/0dGQHRm+lZOXynPeWOt6l6zH/SFYrqOiIiIiIiIiIiIiIiIiIjI11zSxXzSsZdzom5yAq9nkr4azyA6NjuXjT1VB34zDy4k5/6uZcKTBoEi4bq7rC2cDpQI1111YQRQIHwB1hbGAMPCLbCyMAoYFO6AdYVxwJBwD6wqjAQGhK/AmsJYoF94AFYURgO9woe3qWrCeKBP+A6sJpQBv3vvcAt7wFrCFEC3sA+sJEwCdAoHwDrCNECXcAisIkwEdAhHwBrCVEC7cAysIEwGtAoNYHlhOqBNeGlOlRYmBFqEFmBpYUqgKbQBCwtlwFvhbWOhFVhWmBY4FtqBRYWJgSOhA1hSmBo4FLqABYXJgQOhE1hOmB7YF965p0oJV+mBPaEHWEqYA/gu9AELCbMA34ReYBlhHuBB6AcWEcqAiw/fu5AASwhl/0U/DtwLQ8ACwmzAnTAIzC/MB9wKw8Dswlx/g9sWEmBuoRA4bRFCBOwesgqzAjsRsLuTCc8nPUJeoKwLGfD3pMsB7jIXgVIGEKAngO0Af0y6HCDA+AAC9CQD/gQYE8BPAtxMuhwgwPgAAvQEcNcvgDEBBOhJCDR+ApoyIfB00uUAAcYHMD/wH8CYAAL0dAbwUwCn7clIywoUvk7j8Sxd11fjhxC9F2N2LxM9jz6fyIRJMzZeZMKlCLgcv9tEm3Bl7EQpE67MrS9dwu3+pGrhbkFUs3C/AatY+Lriq1d42GFWK3xb0tYqfN9CVyrsrdnrFC57YyqFfaBK4QCoUTgEKhSOgPqEY6A6oQHUJjSByoSPljFVQhtQldAK1CS0AxUJHUA9QhdQjdAJ1CK8d4/pEHqAOoQ+oAqhF2gInzen6doUEfqBOd8633XzEsI/gbGsQuF3uVHCEPDohUHgsQvDwCMXCoDHLZQA2xTezr6Emy2XorEmhccTQoTthxBh+yFE2H4IEbYfQoTthxBh+yFE2H4IEbYfQoTth/DTCLN+/5W3mytR6/BNRERERERERERERERERERERERENOg/dzVckyodV/gAAAAASUVORK5CYII="} />
                     <ListItemText primary={chats[index]?.name} secondary={chats[index]?.type === 'protected' ? 'Protected' : 'Public'} />
                 </ListItemButton>
-                <TextField onChange={() => handleJoin(index)} inputRef={(element) => pass.current.push(element)} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
+                <input type="text" id={String(index)} onChange={() => handleJoin(index)} style={{visibility: chats[index]?.type === 'protected' ? 'visible' : 'hidden'}} />
                 <Button color="primary" onClick={() => joinChannel(chats[index]?.id, index)}>Join</Button>
             </ListItem>
 
@@ -186,10 +188,14 @@ export const JoinGroup = (props: any) => {
         );
     }
 
+    const closeX = {
+        backgroundColor: 'white', color: 'red', marginLeft: '65%',fontSize: 13, border: '2px solid red', width: '30px', height: '30px', borderRadius: '50%', cursor: 'pointer'
+     }
+
     return (
         <>
-        <Dialog open={props.status} onClose={props.closeStatus}>
-            <DialogTitle>Join Group</DialogTitle>
+        <Dialog open={props.status} >
+            <DialogTitle>Join Group <button style={closeX} onClick={props.closeStatus}>X</button></DialogTitle>
             <DialogContent>
                 <Search>
                     <SearchIconWrapper>

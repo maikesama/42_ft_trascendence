@@ -677,7 +677,7 @@ export const AdminGroupActions = (props: any) => {
                         <DialogContentText paddingTop={"10px"} paddingBottom={"5px"}>
                             Add members to your channel group:
                         </DialogContentText>
-                        <TextField className="friendBar" id="outlined-basic-email" label="Add a member" variant="outlined" fullWidth inputRef={initials} onChange={searchUser} />
+                        <TextField className="friendBar" id="outlined-basic-email" label="Add a member" fullWidth inputRef={initials} onChange={searchUser} />
                         <FixedSizeList
                             height={230}
                             width={500}
@@ -704,51 +704,47 @@ export const AdminGroupActions = (props: any) => {
                     {banButton ? <>
                         <Typography>How many minutes would you like to ban him/her?</Typography>
                         <TextField style={{ width: 250 }} inputRef={bantime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
-                        <Button variant="outlined" onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
-                        <Button variant="outlined" onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
+                        <Button onClick={() => setBanButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
+                        <Button onClick={ban}><CheckCircleOutlinedIcon fontSize="large" /></Button>
                     </> :
                         muteButton ? <>
                             <Typography>How many minutes would you like to mute him/her?</Typography>
                             <TextField style={{ width: 250 }} inputRef={mutetime} type="number" InputProps={{ inputProps: { max: 100, min: 10 } }} label="Minutes" />
-                            <Button variant="outlined" onClick={() => setMuteButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
-                            <Button variant="outlined" onClick={mute}><CheckCircleOutlinedIcon fontSize="large" /></Button>
+                            <Button onClick={() => setMuteButton(false)}><CancelOutlinedIcon fontSize="large" /></Button>
+                            <Button onClick={mute}><CheckCircleOutlinedIcon fontSize="large" /></Button>
                         </> :
                             <>
                                 <DialogActions>
                                     {selectedName === '' && clickLists === '' ?
                                         <>
-                                            <Button variant="outlined" onClick={() => Lists("AddUser")} style={{ border: '2px solid green', color: 'green' }}>Add User</Button>
-                                            <Button variant="outlined" onClick={() => Lists("PromotedList")}>Promoted</Button>
-                                            <Button variant="outlined" onClick={() => Lists("MutedList")}>Muted</Button>
-                                            <Button variant="outlined" onClick={() => Lists("BannedList")}>Banned</Button>
-                                            <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red' }}>Leave</Button>
-                                            {/* <button onClick={() => Lists("AddUser")} className="button button1">Add User</button>
-                                            <button onClick={() => Lists("PromotedList")} className="button button2">Promoted</button>
-                                            <button onClick={() => Lists("MutedList")} className="button button3">Muted</button>
-                                            <button onClick={() => Lists("BannedList")} className="button button4">Banned</button>
-                                            <button onClick={leaveChannel} className="button button5">Leave</button> */}
+                                            <Button onClick={() => Lists("AddUser")} style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5 }}>Add User</Button>
+                                            <Button onClick={() => Lists("PromotedList")} style={{ padding: 5, border: '2px solid black', color: 'black', borderRadius: 5 }}>Promoted</Button>
+                                            <Button onClick={() => Lists("MutedList")} style={{ padding: 5, border: '2px solid black', color: 'black', borderRadius: 5 }}>Muted</Button>
+                                            <Button onClick={() => Lists("BannedList")} style={{ padding: 5, border: '2px solid black', color: 'black', borderRadius: 5 }}>Banned</Button>
+                                            <Button onClick={leaveChannel} style={{ padding: 5, border: '2px solid red', color: 'red', borderRadius: 5 }}>Leave</Button>
+                                            
                                         </> : clickLists === '' ?
                                             <>
-                                                <Button variant="outlined" onClick={handleInvite} style={{ border: '2px solid purple', color: 'purple', right: 7}}>Gioca</Button>
+                                                <Button onClick={handleInvite} style={{ padding: 5, border: '2px solid purple', color: 'purple', borderRadius: 5, right: 7 }}>Gioca</Button>
                                                 <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${selectedName}`} underline="none" color="inherit" >
-                                                    <Button variant="outlined" /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ border: '2px solid green', color: 'green' }}>Visit</Button>
+                                                    <Button /*onClick={() => window.location.replace("/profile/" + selectedName)}*/ style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5}}>Visit</Button>
                                                 </Link>
                                                 {selectedNamePower === "user" ? <>
 
-                                                    <Button variant="outlined" onClick={promote} style={{ border: '2px solid green', color: 'green' }}>Promote</Button>
+                                                    <Button onClick={promote} style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5}}>Promote</Button>
 
                                                 </> : null}
-                                                <Button variant="outlined" onClick={() => setMuteButton(true)}>Mute</Button>
-                                                <Button variant="outlined" onClick={() => setBanButton(true)}>Ban</Button>
-                                                <Button variant="outlined" onClick={kick}>Kick</Button>
+                                                <Button onClick={() => setMuteButton(true)} style={{ padding: 5, border: '2px solid blue', color: 'blue', borderRadius: 5}}>Mute</Button>
+                                                <Button onClick={() => setBanButton(true)} style={{ padding: 5, border: '2px solid blue', color: 'blue', borderRadius: 5}}>Ban</Button>
+                                                <Button onClick={kick} style={{ padding: 5, border: '2px solid blue', color: 'blue', borderRadius: 5}}>Kick</Button>
                                             </> : clickLists === "AddUser" ?
                                                 <>
-                                                    <Button variant="outlined" onClick={addUsers} style={{ border: '2px solid green', color: 'green' }}>Add</Button>
-                                                    <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
+                                                    <Button onClick={addUsers} style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5}}>Add</Button>
+                                                    <Button onClick={back} style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5}}>Back</Button>
                                                 </>
                                                 : clickLists !== "" ?
                                                     <>
-                                                        <Button variant="outlined" onClick={back} style={{ border: '2px solid green', color: 'green' }}>Back</Button>
+                                                        <Button onClick={back} style={{ padding: 5, border: '2px solid green', color: 'green', borderRadius: 5}}>Back</Button>
                                                     </>
                                                     : null}
 
@@ -762,5 +758,5 @@ export const AdminGroupActions = (props: any) => {
     );
 }
 
-//<Button variant="outlined" onClick={props.closeStatus}>Promote</Button>
-//<Button variant="outlined" onClick={props.closeStatus}>Demote</Button>
+//<Button onClick={props.closeStatus}>Promote</Button>
+//<Button onClick={props.closeStatus}>Demote</Button>

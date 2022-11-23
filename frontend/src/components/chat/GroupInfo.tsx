@@ -133,7 +133,7 @@ export const GroupInfo = (props: any) => {
                     </FixedSizeList>
                 </DialogContent>
                 <DialogActions>
-                    <Button variant="outlined" onClick={leaveChannel} style={{ border: '2px solid red', color: 'red', marginBottom: '3%', marginRight: '5%' }}>Leave</Button>
+                    <Button variant="outlined" onClick={leaveChannel} style={{ padding: 5, border: '2px solid red', color: 'red', borderRadius: 5, marginBottom: '3%', marginRight: '5%' }}>Leave</Button>
                 </DialogActions>
             </Dialog>
             <UserActions status={openUserActions} closeStatus={handleCloseUserActions} />
