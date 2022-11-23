@@ -32,6 +32,7 @@ import { styled, alpha } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
+import { useNavigate } from "react-router-dom";
 import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
 
@@ -81,6 +82,7 @@ export const SearchBar = (props: any) => {
     const initials = useRef<any>('');
     const [alert, setAlert] = useState("");
     const isSecondRender = useRef(false);
+    let navigate = useNavigate();
     // const [isBlocked, setIsBlocked] = useState(false);
     // const [isFriend, setIsFriend] = useState(false);
     // const [isPending, setIsPending] = useState(false);
@@ -303,6 +305,63 @@ export const SearchBar = (props: any) => {
         //     };
         // }, [search[index]?.idIntra]);
 
+
+        async function newDm(index: any) {
+            const idIntra = await search[index]?.idIntra;
+            const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
+          
+            try {
+                console.log("newDm");
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({idIntra: idIntra}),
+                });
+                const json = await response.json();
+                if (response.status === 200) {
+                  // console.log(json)
+                  socket.emit('newDm', json);
+                  // window.location.href = ;
+                  navigate(`/chat/${idIntra}`);
+                }
+                // window.location.reload();
+            } catch (error) {
+                console.log("error", error);
+            }
+          }
+          
+          async function toDm(index: any) {
+            const idIntra = await search[index]?.idIntra;
+            const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
+          
+            try {
+                const response = await fetch(url, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({idIntra: idIntra}),
+                });
+                const json = await response.json();
+                if (response.status !== 200) {
+                  await newDm(index);
+                }
+                else {
+                    console.log(json);
+                    //  window.location.href = `/chat/${props.idIntra}`;
+                 navigate(`/chat/${idIntra}`);
+                }
+          
+                // window.location.reload();
+            } catch (error) {
+                console.log("error", error);
+            }
+          }
+
         return (
             <>
                 <ListItem style={style} key={index} >
@@ -311,7 +370,7 @@ export const SearchBar = (props: any) => {
                         { search[index]?.status === 0 ? <i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /> : search[index]?.status === 1 ? <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> : search[index]?.status === 2 ? <i style={{ fontSize: 8, color: 'gray' }} className="bi bi-circle-fill" /> : null }
                         
                         <Divider variant="middle" />
-                        <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
+                        <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} onClick={() => toDm(index)}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
                         {(!(search[index]?.friend) && !search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
                         {(!(search[index]?.friend) && search[index]?.invited) ?    <IconButton aria-label="removefriend" size="small" style={{ color: 'orange' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton> : null}
                         {(search[index]?.friend) ?    <IconButton aria-label="removefriend" size="small" style={{ color: 'red' }} onClick={() => removeFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton> : null}
