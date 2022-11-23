@@ -136,3 +136,9 @@ chat in SearchBar
 close search + set null search
 
 notifiche achivment
+
+friend otherProfile?
+
+socket.off on games
+
+collegare tastino dm in serch frien

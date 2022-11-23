@@ -415,7 +415,8 @@ export class ChatService {
                 select: {
                     idIntra: true,
                     userName: true,
-                    img: true
+                    img: true,
+                    status: true
                 }
             })
 
@@ -493,6 +494,7 @@ export class ChatService {
                     idIntra: user.idIntra,
                     userName: user.userName,
                     img: user.img,
+                    status: user.status,
                     invited: invited ? true : false,
                     friend: friend ? true : false,
                 }

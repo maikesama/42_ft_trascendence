@@ -182,7 +182,7 @@ export class AuthService {
 	async generateJwtTokens(user: any) {
 		if (user && user.id && user.idIntra && user.email) {
 			const payload = { sub: user.id, idIntra: user.idIntra};
-			// const payload = { sub: 6, idIntra: "vubeffa"};
+			// const payload = { sub: 7, idIntra: "gscala"};
 			return {
 				access_token: this.jwtService.sign(payload),
 			};

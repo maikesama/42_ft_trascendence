@@ -12,10 +12,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
+import { socket } from '../../App';
 
 export const InvitedList = (props: any) => {
 
   const [invited, setInvited] = useState({} as any);
+  const isSecondRender = useRef(false);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getInvite`;
@@ -39,35 +41,24 @@ export const InvitedList = (props: any) => {
     };
 
     fetchData();
+    if (isSecondRender.current) {
+      socket.off('friendHandler').on('friendHandler', (data: any) => {
+        fetchData();
+      });
+  }
+  isSecondRender.current = true;
   }, []);
 
 
   async function acceptInvite(index: any)
   {
-    const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/acceptInvite`;
     const idIntra = await invited[index]?.idIntra;
-
     const fetchData = async () => {
-      try {
-        const response = await fetch(url, {
-          method: 'POST',
-          credentials: 'include',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            idIntra: idIntra,
-          })
-        });
-        //const json = await response.json();
-        //console.log(json);
-        window.location.reload();
-        // setInvited(json);
-        //console.log(json.friends)
-      } catch (error) {
-        console.log("error", error);
-      }
+      console.log(idIntra);
+        socket.emit('acceptFriend', {idIntra: idIntra});
+        setInvited(invited.filter((_: any, i: any) => i !== index));
     };
+
     fetchData();
   }
 
@@ -90,7 +81,9 @@ export const InvitedList = (props: any) => {
         });
         //const json = await response.json();
         //console.log(json);
-        window.location.reload();
+        if (response.status === 200){
+          socket.emit("friendHandler", {idIntra: idIntra, type: 3});
+         }
         // setInvited(json);
         //console.log(json.friends)
       } catch (error) {

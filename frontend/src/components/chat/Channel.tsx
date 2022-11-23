@@ -63,7 +63,7 @@ export const Channel = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('refreshPartecipants', (data: any) => {
+            socket.off('refreshPartecipants').on('refreshPartecipants', (data: any) => {
                 if (props.id === data.idChat) {
                     setPartecipants(data.partecipants);
                 }
@@ -74,7 +74,7 @@ export const Channel = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('demoteUser', (data: any) => {
+            socket.off('demoteUser').on('demoteUser', (data: any) => {
                 if (props.id === data.idChat) {
                     setPermission({owner: false, admin: false});
                     setopenAdminActions(false);
@@ -87,7 +87,7 @@ export const Channel = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('promoteUser', (data: any) => {
+            socket.off('promoteUser').on('promoteUser', (data: any) => {
                 if (props.id === data.idChat) {
                     setPermission({owner: false, admin: true});
                     // setopenAdminActions(false);

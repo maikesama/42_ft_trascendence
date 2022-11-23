@@ -16,6 +16,7 @@ services:
       # - "4243"
     environment:
       REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
+      WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
     container_name: frontend
     depends_on:
       - "backend"
@@ -40,6 +41,7 @@ services:
     environment:
       HOST: ${REACT_APP_HOST_URI}
       DATABASE_URL: ${DATABASE_URL}
+      WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
     container_name: backend
     depends_on:
       - "database"

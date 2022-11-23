@@ -136,7 +136,7 @@ export class AppGateway implements OnGatewayInit {
         else if (await this.chat.isBanned(message.idChat, user.idIntra))
         {
           console.log("banned banned banned banned")
-          client.emit('provaMessaggi', {errorMessage: "sei bannato vai via ", idChat : message.idChat})
+          client.emit('provaMessaggi', {errorMessage: "You've been banned, go fuck yourself", idChat : message.idChat})
           //capire se tenere chat bannate
         }
         else if (await this.chat.isMuted(message.idChat, user.idIntra))
@@ -146,13 +146,13 @@ export class AppGateway implements OnGatewayInit {
           const now = new Date();
           const diff = muted[0].time - now.getTime();
           const minutes = Math.floor(diff / 60000);
-          const messageError = "devi stare MUTOOOO ancora per " + minutes + " minuti"
+          const messageError = "You need to shut up for " + minutes + " minutes"
           client.emit('provaMessaggi', {errorMessage: messageError, idChat : message.idChat})
           //prendere tempo di mute
         }
         else {
           if (!(message.message.length > 0 && message.message.length <= 100)) {
-            client.emit('provaMessaggi', {errorMessage: "messagge too long (1 - 100)", idChat : message.idChat})
+            client.emit('provaMessaggi', {errorMessage: "message too long (max 100 characters)", idChat : message.idChat})
           }
           else
           {
@@ -215,6 +215,7 @@ async notification(client: Socket, message: { type: number, idIntra: string }) {
       if (message.type == 1) {
         //friend request
         this.server.to(users.get(message.idIntra).id).emit('notify', { type: 1, idIntra: user.idIntra, userName: user.userName, img: user.img })
+        // client.emit("inviteFriend2", {ciao : "ciao", idIntra : user2.idIntra})
       }
       else if (message.type == 2) {
         //game invite
@@ -242,6 +243,20 @@ async trigger(client: Socket) {
   const user = await this.wsGuard(client)
   if (user) {
     this.server.emit('trigger')
+  }
+}
+@SubscribeMessage('friendHandler')
+async friendHandler(client: Socket, message: { idIntra: string, type: number }) {
+  console.log("friendHandler ---------------------------------------------------------------", message)
+  const user = await this.wsGuard(client)
+  if (user && message && message.idIntra && message.type) {
+    const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+    if (user2 && message.type) {
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra).id).emit('friendHandler', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+        }
+        client.emit("friendHandler", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+    }
   }
 }
 
@@ -487,6 +502,35 @@ async newDm2(client: Socket, data: any) {
     }
     catch (e: any) {
       return false
+    }
+  }
+
+  @SubscribeMessage('blockUser')
+  async blockUser(client: Socket, message: { idIntra: string }) {
+    const user = await this.wsGuard(client)
+    
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra).id).emit('blockUser', { ciao : "ciao" , idIntra: user.idIntra })
+        }
+        client.emit('blockUser', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('blockUser2', { ciao : "ciao" , idIntra: user2.idIntra})
+    }
+  }
+
+  @SubscribeMessage('unBlockUser')
+  async unBlockUser(client: Socket, message: { idIntra: string }) {
+    const user = await this.wsGuard(client)
+    
+    if (user) {
+      const user2 = await this.userService.getUserByIdIntra(message.idIntra)
+        if (users.has(message.idIntra)) {
+          this.server.to(users.get(message.idIntra).id).emit('unBlockUser', { ciao : "ciao" , idIntra: user.idIntra })
+        }
+        client.emit('unBlockUser', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('unBlockUser2', { ciao : "ciao" , idIntra: user2.idIntra})
+
     }
   }
 

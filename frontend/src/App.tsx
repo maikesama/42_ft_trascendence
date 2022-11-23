@@ -54,7 +54,7 @@ function App() {
     // }
 
     if (isSecondRender.current) {
-      socket.on('notify', (data) => {
+      socket.off('notify').on('notify', (data: any) => {
         if (data)
         {
           if (data.type === 1)
@@ -64,10 +64,12 @@ function App() {
               <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to become friend</Typography>
               <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("acceptFriend", data);
+                socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Accept</Button>
               <Button variant="outline-danger" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("declineFriend", data);
+                socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Decline</Button>
             </>);

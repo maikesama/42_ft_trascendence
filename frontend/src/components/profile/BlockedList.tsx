@@ -11,11 +11,12 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
+import { socket } from '../../App';
 
 export const BlockedList = (props: any) => {
 
   const [blocked, setBlocked] = useState({} as any);
-
+  const isSecondRender = useRef(false);
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/getBlocked`;
 
@@ -38,6 +39,15 @@ export const BlockedList = (props: any) => {
     };
 
     fetchData();
+      if (isSecondRender.current) {
+        socket.off('blockUser2').on('blockUser2', (data: any) => {
+            fetchData();
+          });
+          socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+            fetchData();
+          });
+      }
+      isSecondRender.current = true;
   }, []);
 
   async function unblock(index: any) {
@@ -52,7 +62,15 @@ export const BlockedList = (props: any) => {
           'Content-Type': 'application/json',
         }
       });
-      window.location.reload();
+      
+      console.log(response.status);
+      if (response.status === 201) {
+        // setAlert("User unblocked");
+        // setIsBlocked(false);
+        socket.emit("unBlockUser", {idIntra: idIntra});
+        setBlocked(blocked.filter((_: any, i: any) => i !== index));
+      }
+
     } catch (error) {
       console.log("error", error);
     }

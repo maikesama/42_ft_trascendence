@@ -245,6 +245,9 @@ export const ProfileEdit =  (props: any) => {
   const [isFriend, setIsFriend] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [alert, setAlert] = useState("");
+  const isSecondRender = useRef(false);
+  const [friendHandler, setFriendHandler] = useState(false);
+  const [blockHandler, setBlockHandler] = useState(false);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isFriend`;
@@ -270,7 +273,40 @@ export const ProfileEdit =  (props: any) => {
     };
 
     fetchData();
-  }, [props.idIntra]);
+  }, [props.idIntra, friendHandler]);
+
+  React.useEffect(() => {
+    if (isSecondRender.current) {
+      socket.off('friendHandler').on('friendHandler', (data: any) => {
+        if (data.idIntra === props.idIntra) {
+            setFriendHandler(!friendHandler);
+          }
+      });
+    }
+    isSecondRender.current = true;
+  });
+
+  React.useEffect(() => {
+    if (isSecondRender.current) {
+      socket.off('blockUser').on('blockUser', (data: any) => {
+        if (data.idIntra === props.idIntra) {
+            setBlockHandler(!blockHandler);
+          }
+      });
+    }
+    isSecondRender.current = true;
+  });
+
+  React.useEffect(() => {
+    if (isSecondRender.current) {
+      socket.off('unBlockUser').on('unBlockUser', (data: any) => {
+        if (data.idIntra === props.idIntra) {
+            setBlockHandler(!blockHandler);
+          }
+      });
+    }
+    isSecondRender.current = true;
+  });
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/isInvitedByMe`;
@@ -294,7 +330,7 @@ export const ProfileEdit =  (props: any) => {
     };
 
     fetchData();
-  }, [props.idIntra]);
+  }, [props.idIntra, friendHandler]);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/isBlocked`;
@@ -320,7 +356,7 @@ export const ProfileEdit =  (props: any) => {
     };
 
     fetchData();
-  }, [props.idIntra]);
+  }, [props.idIntra, blockHandler]);
 
   async function block(index: any) {
     //const idIntra = await search[index]?.idIntra;
@@ -335,7 +371,13 @@ export const ProfileEdit =  (props: any) => {
             },
             body: JSON.stringify({idIntra: props.idIntra}),
         });
-        window.location.reload();
+        // window.location.reload();
+        console.log(response.status);
+        if (response.status === 201) {
+          // setAlert("User blocked");
+          // setIsBlocked(true);
+          socket.emit("blockUser", {idIntra: props.idIntra});
+        }
     } catch (error) {
         console.log("error", error);
     }
@@ -352,7 +394,14 @@ async function unblock(index: any) {
         'Content-Type': 'application/json',
       }
     });
-    window.location.reload();
+    // window.location.reload();
+    console.log(response.status);
+    if (response.status === 201) {
+      // setAlert("User unblocked");
+      // setIsBlocked(false);
+      socket.emit("unBlockUser", {idIntra: props.idIntra});
+    }
+
   } catch (error) {
     console.log("error", error);
   }
@@ -376,13 +425,14 @@ async function addInviteFriend(index: any) {
       manageError(null, response, props.triggerUser ,setAlert);
       if (response.status === 200) {
         socket.emit('notification', {type: 1, idIntra: props.idIntra});
+        socket.emit('friendHandler', {type: 1, idIntra: props.idIntra});
       }
       // if (response.status === 400) {
       //   alert("You already have a pending request with this user");
       // }
 
 
-      window.location.reload();
+      // window.location.reload();
   } catch (error) {
       console.log("error", error);
   }
@@ -401,7 +451,12 @@ async function removeInviteFriend(index: any) {
           },
           body: JSON.stringify({idIntra: props.idIntra}),
       });
-      window.location.reload();
+      console.log(response.status);
+      if (response.status === 200) {
+        console.log("removeInviteFriend");
+        socket.emit('friendHandler', {type: 4, idIntra: props.idIntra});
+      }
+      // window.location.reload();
   } catch (error) {
       console.log("error", error);
   }
@@ -420,7 +475,11 @@ async function removeFriend(index: any) {
           },
           body: JSON.stringify({idIntra: props.idIntra}),
       });
-      window.location.reload();
+      if (response.status === 200) {
+        socket.emit("removeFriend", { idIntra: props.idIntra });
+        socket.emit("friendHandler", { idIntra: props.idIntra, type: 5});
+        // window..reload();
+      }
   } catch (error) {
       console.log("error", error);
   }

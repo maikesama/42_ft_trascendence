@@ -51,6 +51,7 @@ export const SocialEdit = (props: any) => {
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const [openInvited, setOpenInvited] = React.useState(false);
+  const isSecondRender = useRef(false);
 
   let navigate = useNavigate();
   const isAddFriendNew = useRef(true);
@@ -104,7 +105,7 @@ export const SocialEdit = (props: any) => {
   }, []);
 
   useEffect(() => {
-    socket.on("friendStatus", (data: any) => {
+    socket.off('friendStatus').on("friendStatus", (data: any) => {
       //console.log("friendStatus", data);
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {
@@ -120,7 +121,7 @@ export const SocialEdit = (props: any) => {
     });
 
     if (isAddFriendNew.current) {
-      socket.on("acceptFriend", (data: any) => {
+      socket.off('acceptFriend').on("acceptFriend", (data: any) => {
         var isAlreadyFriend = false;
         if (friends.length > 0) {
           friends.forEach((friend: any) => {
@@ -140,7 +141,7 @@ export const SocialEdit = (props: any) => {
     }
     isAddFriendNew.current = false;
     // if (isDelFriendNew.current) {
-    socket.on("removeFriend", (data: any) => {
+      socket.off('removeFriend').on("removeFriend", (data: any) => {
       var isAlreadyFriend = false;
       if (friends.length > 0) {
         friends.forEach((friend: any) => {
@@ -180,6 +181,10 @@ export const SocialEdit = (props: any) => {
       //console.log(json);
       // window.location.reload();
       //
+      if (response.status === 201) {
+        // Alert("User blocked", "success");
+        socket.emit("blockUser", { idIntra: idIntra });
+      }
     } catch (error) {
       //console.log("error", error);
     }
@@ -202,6 +207,7 @@ export const SocialEdit = (props: any) => {
       });
       if (response.status === 200) {
         socket.emit("removeFriend", { idIntra: idIntra });
+        socket.emit("friendHandler", { idIntra: idIntra, type: 5});
         // window..reload();
       }
       //const json = await response.json();

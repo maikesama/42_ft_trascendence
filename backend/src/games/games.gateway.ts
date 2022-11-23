@@ -10,7 +10,7 @@ import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} 
 // var playersNumberClassic = 0;
 // var playersNumberCustom = 0;
 
-var movSpeed = 4
+var movSpeed = 3
 var movSpeedCustom = 7
 var playerClassic = [];
 var playerCustom = [];

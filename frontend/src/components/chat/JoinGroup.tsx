@@ -109,16 +109,16 @@ export const JoinGroup = (props: any) => {
         };
         fetchData();
         if (isSecondRender.current) {
-            socket.on('newChannel', (data: any) => {
+            socket.off('newChannel').on('newChannel', (data: any) => {
                 fetchData();
             });  
-            socket.on('removeUser', (data: any) => {
+            socket.off('removeUser').on('removeUser', (data: any) => {
                 fetchData();
             });  
-            socket.on('addUser', (data: any) => {
+            socket.off('addUser').on('addUser', (data: any) => {
                 fetchData();
             });  
-            socket.on('newJoin', (data: any) => {
+            socket.off('newJoin').on('newJoin', (data: any) => {
                 fetchData();
             });  
         }

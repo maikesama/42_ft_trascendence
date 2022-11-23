@@ -79,7 +79,7 @@ export const GamesContain = (props: any) => {
       setIsConnectedGames(false);
     });
 
-    socket.on('declineGame', (data: { idIntra: string | any[]; }) => {
+    socket.off('declineGame').on('declineGame', (data: { idIntra: string | any[]; }) => {
       socketGames.emit('declineGame', data.idIntra);
       let idIntranew = data.idIntra.slice(1);
       if (data.idIntra === idIntranew) {
@@ -150,8 +150,8 @@ export const GamesContain = (props: any) => {
 
       
       // clear the canvas
-      // drawRect(0, 0, canvas.width, canvas.height, 'black');
-      drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
+      drawRect(0, 0, canvas.width, canvas.height, 'black');
+      // drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
@@ -238,7 +238,7 @@ export const GamesContain = (props: any) => {
       start2.current = false;
       setEsit(WinnerImage)
       console.log("win")
-      fireworks();
+      // fireworks();
     });
 
     socketGames.on('GameNotFound', (gameState: any) => {

@@ -412,7 +412,7 @@ export const ChatContain = (props: any) => {
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ count: 50 }),
+                    body: JSON.stringify({ count: 300 }),
                 });
                 const json = await response.json();
                 let ret = new Map(json.map((json: any) => [json.chat.id, json.chat.messages]))
@@ -435,16 +435,16 @@ export const ChatContain = (props: any) => {
 
         const updateMap = (key: any, value: any) => {
             // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-            console.log(map)
+            // console.log(map)
             const currentValues = map.get(key);
-            console.log("currentValues", currentValues);
-            console.log("key", key);
+            // console.log("currentValues", currentValues);
+            // console.log("key", key);
             // setMap(map2 => new Map(map.set(key, [...currentValues, value])));
 
         }
 
         if (isSecondRender.current) {
-            socket.on('provaMessaggi', (data: any) => {
+            socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
                 console.log("data: ", data);
                 updateMap(data.idChat, data);
             });
@@ -463,7 +463,7 @@ export const ChatContain = (props: any) => {
         }
 
         if (isSecondRender.current) {
-            socket.on('provaMessaggi', (data: any) => {
+            socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
                 console.log("data: ", data);
                 updateMap(data.idChat, data);
             });
@@ -474,7 +474,7 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('newChannel', (data: any) => {
+            socket.off('newChannel').on('newChannel', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
@@ -498,7 +498,7 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('addUser', (data: any) => {
+            socket.off('addUser').on('addUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
@@ -520,7 +520,7 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('removeUser', (data: any) => {
+            socket.off('removeUser').on('removeUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [];
                     for (let i = 0; i < chats.length; i++) {
@@ -547,10 +547,10 @@ export const ChatContain = (props: any) => {
         }
         isSecondRender.current = true;
     });
-    console.log("map", map);
+    // console.log("map", map);
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('newDm', (data: any) => {
+            socket.off('newDm').on('newDm', (data: any) => {
                 if (dms !== undefined && data.id !== undefined && data.partecipant) {
                     var newDms = [];
                     for (let i = 0; i < dms.length; i++) {
@@ -579,7 +579,30 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('banUser', (data: any) => {
+            socket.off('blockUser').on('blockUser', (data: any) => {
+                if (data.ciao === "ciao" && data.idIntra) {
+                        setTriggerMessage(!triggerMessage);
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.off('unBlockUser').on('unBlockUser', (data: any) => {
+                if (data.ciao === "ciao" && data.idIntra ) {
+                        setTriggerMessage(!triggerMessage);
+                }
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.off('banUser').on('banUser', (data: any) => {
+                console.log("banUser");
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
                     for (let i = 0; i < chats.length; i++) {
@@ -598,7 +621,7 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
         if (isSecondRender.current) {
-            socket.on('unBanUser', (data: any) => {
+                socket.off('unBanUser').on('unBanUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
                     for (let i = 0; i < chats.length; i++) {
@@ -755,9 +778,11 @@ export const ChatContain = (props: any) => {
                 </Grid>
                 <Grid item xs={9}>
                     {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} setPermission={setPermission} setPartecipants={setPartecipants} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
-                    {map.get(idChat) === undefined && chatView !== 'Blank' ? <><div>Sei un coglione</div></> : chatView !== 'Blank' ? <Messages idChat={idChat} messages={map.get(idChat)} /> : null}
-                    {}
-                </Grid>
+                    {map.get(idChat) === undefined && chatView !== 'Blank' ? <>
+                    <div style={{ color : 'red', textAlign : 'center', marginTop : '20px' , fontSize : '20px' }}>
+                        You've been banned, just go away.</div> </>
+                    : chatView !== 'Blank' ? <Messages idChat={idChat} messages={map.get(idChat)} /> : null}
+               </Grid>
             </Grid>
 
             {/*MODAL JOIN GROUP */}

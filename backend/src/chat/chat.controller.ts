@@ -238,7 +238,7 @@ export class ChatController{
         const user = req.user
         //body.count
         if (body.count == undefined){
-            body.count = 50
+            body.count = 300
         }
         return await this.chatService.getMessages(body, user['idIntra'])
     }

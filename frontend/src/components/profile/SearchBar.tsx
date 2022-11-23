@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';;
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -80,6 +80,7 @@ export const SearchBar = (props: any) => {
     const [search, setSearch] = useState({} as any);
     const initials = useRef<any>('');
     const [alert, setAlert] = useState("");
+    const isSecondRender = useRef(false);
     // const [isBlocked, setIsBlocked] = useState(false);
     // const [isFriend, setIsFriend] = useState(false);
     // const [isPending, setIsPending] = useState(false);
@@ -96,12 +97,40 @@ export const SearchBar = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            console.log("ciao :" + JSON.stringify(json));
+            // console.log("ciao :" + JSON.stringify(json));
             setSearch(json);
         } catch (error) {
             console.log("error", error);
         }
     }
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.off('blockUser2').on('blockUser2', (data: any) => {
+                searchUser();
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+                searchUser();
+            });
+        }
+        isSecondRender.current = true;
+    });
+
+    React.useEffect(() => {
+        if (isSecondRender.current) {
+            socket.off('friendHandler').on('friendHandler', (data: any) => {
+                console.log("friendHandler");
+                searchUser();
+            });
+        }
+        isSecondRender.current = true;
+    });
 
     function renderSearchRow(props: any) {
 
@@ -119,6 +148,10 @@ export const SearchBar = (props: any) => {
                         'Content-Type': 'application/json',
                     }
                 });
+                if (response.status === 201) {
+                    // setAlert("User blocked");
+                    socket.emit("blockUser", { idIntra: idIntra });
+                }
                 // window.location.reload();
             } catch (error) {
                 console.log("error", error);
@@ -143,6 +176,7 @@ export const SearchBar = (props: any) => {
                 manageError(null, response, null, setAlert);
                 if (response.status === 200) {
                     socket.emit('notification', { type: 1, idIntra: idIntra });
+                    socket.emit('friendHandler', { type: 1, idIntra: idIntra });
                 }
             } catch (error) {
                 console.log("error", error);
@@ -162,7 +196,10 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({ idIntra: idIntra }),
                 });
-                window.location.reload();
+                console.log("response", response);
+                if (response.status === 200) {
+                    socket.emit('friendHandler', {type: 4, idIntra: idIntra});
+                }
             } catch (error) {
                 console.log("error", error);
             }
@@ -181,7 +218,11 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({ idIntra: idIntra }),
                 });
-                window.location.reload();
+                if (response.status === 200) {
+                    socket.emit("removeFriend", { idIntra: idIntra });
+                    socket.emit("friendHandler", { idIntra: idIntra, type: 5});
+                    // window..reload();
+                  }
             } catch (error) {
                 console.log("error", error);
             }
@@ -267,18 +308,9 @@ export const SearchBar = (props: any) => {
                 <ListItem style={style} key={index} >
                     {search[index]?.img ? <><Avatar src={search[index]?.img} />
                         <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
-                        <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" />
+                        { search[index]?.status === 0 ? <i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /> : search[index]?.status === 1 ? <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> : search[index]?.status === 2 ? <i style={{ fontSize: 8, color: 'gray' }} className="bi bi-circle-fill" /> : null }
+                        
                         <Divider variant="middle" />
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-                        {console.log('Invitati??????????')}
-
-                        {console.log(search[index]?.invited)}
-                        {console.log(search[index]?.friend)}
                         <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} ><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
                         {(!(search[index]?.friend) && !search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
                         {(!(search[index]?.friend) && search[index]?.invited) ?    <IconButton aria-label="removefriend" size="small" style={{ color: 'orange' }} onClick={() => removeInviteFriend(index)}><PersonRemoveOutlinedIcon fontSize="large" /></IconButton> : null}
