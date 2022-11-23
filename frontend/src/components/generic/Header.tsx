@@ -224,7 +224,7 @@ export function Header(props: any) {
             <Box sx={{ display: 'inline-flex' }}>
               <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src={user.img} sx={{ width: 50, height: 50 }} />
+                  <Avatar alt="Remy Sharp" src={user.img} style={{ width: 50, height: 50 }} />
                 </IconButton>
               </Tooltip>
 
