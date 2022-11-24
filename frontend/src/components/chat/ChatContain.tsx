@@ -755,7 +755,7 @@ export const ChatContain = (props: any) => {
                 </Grid>
                 <Grid item xs={9}>
                     {chatView === 'Blank' ? <Blank /> : chatView === 'DM' ? <DM nickname={userNameIntra} img={userImg} idIntra={userIdIntra} idChat={idChat} messages={map.get(idChat)} /> : <Channel permission={permission} setPermission={setPermission} setPartecipants={setPartecipants} partecipants={partecipants} name={userNameIntra} img={userImg} idChat={idChat} messages={map.get(idChat)} type={chanType} />}
-                    {map.get(idChat) === undefined && chatView !== 'Blank' ? <><div>Sei un coglione</div></> : chatView !== 'Blank' ? <Messages idChat={idChat} messages={map.get(idChat)} /> : null}
+                    {map.get(idChat) === undefined && chatView !== 'Blank' ? <><div>Sei stato bannato</div></> : chatView !== 'Blank' ? <Messages idChat={idChat} messages={map.get(idChat)} /> : null}
                     {}
                 </Grid>
             </Grid>
