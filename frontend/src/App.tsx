@@ -93,10 +93,11 @@ function App() {
           {
             toast(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} you have a new Achievement</Typography>
+              {/* <Typography style={{ marginLeft: "10px" }}>{data.userName} You have a new Achievement</Typography> */}
+              <Typography style={{ marginLeft: "10px" }}>You have a new Achievement</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
                 navigate(`/profile`);
-              }}>go to your profile to see</Button>
+              }}>Go see it!</Button>
             </>);
           }
 

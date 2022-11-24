@@ -277,8 +277,22 @@ export const GamesContain = (props: any) => {
       // console.log("win")
     });
 
-    socketGames.off('newAchievement').on('newAchievement', () => {
-      socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!" });
+    socketGames.off('newAchievement').on('newAchievement', (data: any) => {
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      console.log("newAchievement")
+      socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!", idIntra: data.idIntra });
       // setEsit(WinnerImage)
       // console.log("win")
     });
@@ -349,7 +363,7 @@ export const GamesContain = (props: any) => {
     //   if (start2.current)
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);
-    socketGames.off('start').on('start', () => {
+    socketGames.on('start', () => {
       start2.current = true;
       console.log("start2.current", start2.current)
       console.log("start2.current", start2.current)

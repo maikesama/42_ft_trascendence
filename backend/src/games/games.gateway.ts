@@ -465,11 +465,11 @@ export class GamesGateway implements OnGatewayInit {
 									{
 										if (updateUserStats.loser)
 										{
-											this.server.to(loser.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.loser})
+											this.server.to(loser.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.loser, idIntra: loser.idIntra})
 										}
 										if (updateUserStats.winner)
 										{
-											this.server.to(winner.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.winner})
+											this.server.to(winner.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.winner, idIntra: winner.idIntra})
 										}
 
 									}

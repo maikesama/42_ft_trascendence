@@ -188,7 +188,8 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-    var iaArray = ["ltorrean", "gscala"]
+    // var iaArray = ["ltorrean", "gscala"]
+    var iaArray = [ "gscala"]
     //set
     for (var i = 0; i < iaArray.length; i++){
         if (com.username === iaArray[i]){
