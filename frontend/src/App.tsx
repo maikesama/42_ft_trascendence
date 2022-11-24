@@ -59,9 +59,9 @@ function App() {
         {
           if (data.type === 1)
           {
-            toast(<>
+            toast(<div style={{}}>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to become friend</Typography>
+              <Typography style={{ textAlign: "center" }}>{data.userName} invited you to become friend</Typography>
               <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("acceptFriend", data);
                 socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
@@ -72,13 +72,13 @@ function App() {
                 socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Decline</Button>
-            </>);
+            </div>);
           }
           else if (data.type === 2)
           {
             toast(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to a game</Typography>
+              <Typography style={{ textAlign: "center" }}>{data.userName} invited you to a game</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
                 // navigate(`/games/2${data.idIntra}`);
                 // window.location.assign("/games/2" + data.idIntra);
@@ -94,7 +94,7 @@ function App() {
             toast(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
               {/* <Typography style={{ marginLeft: "10px" }}>{data.userName} You have a new Achievement</Typography> */}
-              <Typography style={{ marginLeft: "10px" }}>You have a new Achievement</Typography>
+              <Typography style={{ textAlign: "center" }}>You have a new Achievement</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
                 navigate(`/profile`);
               }}>Go see it!</Button>

@@ -27,11 +27,11 @@ var ch = window.innerHeight;
 
 //Images array
 var images = new Array();
-images.push("../../images/tie.jpg")
-images.push("../../images/diablo.jpg")
-images.push("../../images/minecraft.jpg")
-images.push("../../images/lenovo.jpg")
-images.push("../../images/doodle.jpg")
+images.push("../../images/tie.png")
+images.push("../../images/diablo.png")
+images.push("../../images/minecraft.png")
+images.push("../../images/lenovo.png")
+images.push("../../images/doodle.png")
 
 // set canvas dimensions
 export const canvasDim = {
@@ -165,7 +165,7 @@ export const GamesContain = (props: any) => {
 
       // clear the canvas
       drawRect(0, 0, canvas.width, canvas.height, 'black');
-      // drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
+      // drawImg("../../images/tie.png", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));

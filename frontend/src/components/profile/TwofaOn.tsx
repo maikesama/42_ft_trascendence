@@ -77,15 +77,15 @@ export const TwofaOn = (props: any) => {
   console.log(props.qr)
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
-      <DialogTitle>Use Google Authenticator</DialogTitle>
-      <DialogTitle><img src={props?.qr?.QRcode} /></DialogTitle>
-      <DialogContent>
-        <TextField placeholder='insert code' variant='standard' inputRef={code} />
-      </DialogContent>
-      <DialogContent>
-        <Button variant="outlined" onClick={props.closeStatus}>Cancel</Button>
-        <Button variant="contained" onClick={verifyCode}>Submit</Button>
-      </DialogContent>
+        <DialogTitle>Use Google Authenticator</DialogTitle>
+        <DialogTitle><img src={props?.qr?.QRcode} /></DialogTitle>
+        <DialogContent>
+          <TextField placeholder='insert code' variant='standard' inputRef={code} />
+        </DialogContent>
+        <DialogContent>
+          <Button variant="outlined" onClick={props.closeStatus}>Cancel</Button>
+          <Button variant="contained" onClick={verifyCode}>Submit</Button>
+        </DialogContent>
     </Dialog>
   );
 }
