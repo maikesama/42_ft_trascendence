@@ -151,8 +151,8 @@ export class AppGateway implements OnGatewayInit {
           //prendere tempo di mute
         }
         else {
-          if (!(message.message.length > 0 && message.message.length <= 100)) {
-            client.emit('provaMessaggi', {errorMessage: "message too long (max 100 characters)", idChat : message.idChat})
+          if (!(message.message.length > 0 && message.message.length <= 50)) {
+            client.emit('provaMessaggi', {errorMessage: "message too long (max 50 characters)", idChat : message.idChat})
           }
           else
           {
