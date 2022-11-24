@@ -182,7 +182,11 @@ export class AuthService {
 	async generateJwtTokens(user: any) {
 		if (user && user.id && user.idIntra && user.email) {
 			const payload = { sub: user.id, idIntra: user.idIntra};
+<<<<<<< HEAD
 			// const payload = { sub: 7, idIntra: "gscala"};
+=======
+			//const payload = { sub: 4, idIntra: "ltorrean"};
+>>>>>>> link
 			return {
 				access_token: this.jwtService.sign(payload),
 			};

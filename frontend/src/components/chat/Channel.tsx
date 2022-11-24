@@ -173,7 +173,7 @@ export const Channel = (props: any) => {
         <>
             {/* <List className={classes.messageArea}> */}
                 <ListItem button key="" onClick={chanInfo}>
-                    <img src={props.img} style={{ width: '51px', height: '51px' }}/>
+                    <img src={props.img} style={{ width: '51px', height: '51px', borderRadius: '100%' }}/>
                     <h5 className="groupNameChat" style={{ width: '150px', marginLeft: '50px' }}>{props.name}</h5>
                 </ListItem>
             {/* </List>
