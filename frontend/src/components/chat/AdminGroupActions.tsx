@@ -510,7 +510,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={banned[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={banned[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unBan(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} onClick={() => unBan(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -525,7 +525,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={muted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={muted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unMute(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }}  onClick={() => unMute(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -540,7 +540,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={promoted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={promoted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => demote(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} onClick={() => demote(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -636,10 +636,10 @@ export const AdminGroupActions = (props: any) => {
                     {clickLists === "" ? <>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
+                            height={partecipants?.length > 9 ? 450 : partecipants?.length <= 9 ? partecipants?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={partecipants?.length}
+                            itemCount={Object.values(partecipants).length}
                             overscanCount={5}
                         >
 
@@ -651,10 +651,10 @@ export const AdminGroupActions = (props: any) => {
                         </DialogContentText>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={banned?.length > 9 ? 450 : banned?.length * 70}
+                            height={banned?.length > 9 ? 450 : banned?.length <= 9 ? banned?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={banned?.length}
+                            itemCount={Object.values(banned).length}
                             overscanCount={5}
                         >
                             {BannedUserItem}
@@ -665,10 +665,10 @@ export const AdminGroupActions = (props: any) => {
                         </DialogContentText>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={muted?.length > 9 ? 450 : muted?.length * 70}
+                            height={muted?.length > 9 ? 450 : muted?.length <= 9 ? muted?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={muted?.length}
+                            itemCount={Object.values(muted).length}
                             overscanCount={5}
                         >
                             {MutedUserItem}

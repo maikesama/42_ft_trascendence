@@ -197,7 +197,7 @@ export const JoinGroup = (props: any) => {
         <Dialog open={props.status} >
             <DialogTitle>Join Group <button style={closeX} onClick={props.closeStatus}>X</button></DialogTitle>
             <DialogContent>
-                <Search>
+                {/* <Search>
                     <SearchIconWrapper>
                         <SearchIcon />
                     </SearchIconWrapper>
@@ -205,7 +205,7 @@ export const JoinGroup = (props: any) => {
                         placeholder="Search…"
                         inputProps={{ 'aria-label': 'search' }}
                     />
-                </Search>
+                </Search> */}
                 <div style={{ textAlignLast: 'center', border: '2px solid lightgrey', borderRadius: '3%', marginTop: '7px' }}>
                     <FixedSizeList
 
