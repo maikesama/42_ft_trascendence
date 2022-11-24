@@ -56,6 +56,7 @@ export const InvitedList = (props: any) => {
     const fetchData = async () => {
       console.log(idIntra);
         socket.emit('acceptFriend', {idIntra: idIntra});
+        socket.emit("friendHandler", {idIntra: idIntra, type: 1});
         setInvited(invited.filter((_: any, i: any) => i !== index));
     };
 

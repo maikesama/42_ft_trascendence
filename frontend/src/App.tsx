@@ -92,7 +92,7 @@ function App() {
           else if (data.type === 3)
           {
             toast(<>
-              <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+              <img src={"https://png2.cleanpng.com/sh/04c32f7f6682dfa282c3e3e6d1036a56/L0KzQYm3U8MyN5N4j5H0aYP2gLBuTfRiepwyi9HAbIOwebrwTgdqc5oyf9N2ZT3nccPyTgNwfZ14RadqYnblSYGBUfI6P5Q4Rqg8MUm4R4a4UcUzOmY2TKMDNEG0Q4K1kP5o/kisspng-dark-souls-iii-wiki-game-dark-souls-5abfb9081b97c3.6319575115225141841131.png"} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
               {/* <Typography style={{ marginLeft: "10px" }}>{data.userName} You have a new Achievement</Typography> */}
               <Typography style={{ marginLeft: "10px" }}>You have a new Achievement</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {

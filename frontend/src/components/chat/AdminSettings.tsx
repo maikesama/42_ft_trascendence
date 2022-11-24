@@ -43,21 +43,21 @@ export const AdminSettings = (props: any) => {
             setRealType(props.type)
             setId(props.idChat)
         }
-    }), [props.type];
-
+    }, [props.type]);
+    
     function handleCancel()
     {
         setRealType(undefined);
         props.closeStatus();
     }
-
+    
     async function changeSettings() {
         let pwd = "";
-
+        
         if (realType === "protected" && type !== "protected")
-           pwd = ""
+        pwd = ""
         else
-            pwd = pass.current.value;
+        pwd = pass.current.value;
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/changeVisibility`;
         try {
             const response = await fetch(url, {
@@ -75,7 +75,7 @@ export const AdminSettings = (props: any) => {
             console.log("error", error);
         }
     }
-
+    
     return (
         <>
             <Dialog open={props.status} onClose={props.closeStatus}>

@@ -1,0 +1,15 @@
+FROM node:16-slim
+
+WORKDIR /home/node/app
+
+COPY ./ ./
+
+RUN npm install --legacy-peer-deps
+
+    
+CMD sh -c "npm run build;npm install serve --legacy-peer-deps;npx serve -s build"  
+    
+    
+    
+    
+# command: sh -c "npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"

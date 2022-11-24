@@ -5,12 +5,7 @@ import "../css/Games.css";
 import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
-export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
-const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
-const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
-const GameNotFoundImage = "https://media.tenor.com/GuqY6L8lsBoAAAAC/not-found.gif"
-const DelcineImage = "https://media.tenor.com/7oJfe_AbYbkAAAAd/offer-declined-declined.gif"
-import * as React from 'react';
+// import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
@@ -21,6 +16,11 @@ import  fungo  from "../../images/fungo.png";
 import  fiore  from "../../images/fiore.png";
 import  fantasma  from "../../images/fantasma.png";
 // let ctx:any;
+export const socketGames = io(`http://${process.env.REACT_APP_HOST_URI}:8003/games`, { transports: ['websocket'] });
+const LoserImage = "https://media.tenor.com/d3zUdl35mIcAAAAC/jeremy-clarkson-loser.gif"
+const WinnerImage = "https://media.tenor.com/pb2ufwunHIwAAAAC/mario-kart-ds-mario-kart.gif"
+const GameNotFoundImage = "https://media.tenor.com/GuqY6L8lsBoAAAAC/not-found.gif"
+const DelcineImage = "https://media.tenor.com/7oJfe_AbYbkAAAAd/offer-declined-declined.gif"
 
 var cw = window.innerWidth;
 var ch = window.innerHeight;
@@ -278,20 +278,6 @@ export const GamesContain = (props: any) => {
     });
 
     socketGames.off('newAchievement').on('newAchievement', (data: any) => {
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
       socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!", idIntra: data.idIntra });
       // setEsit(WinnerImage)
       // console.log("win")
