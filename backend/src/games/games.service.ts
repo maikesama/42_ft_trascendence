@@ -486,7 +486,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
     async updateUserStats(winnerIdIntra: any, loserIdIntra: any, gameId: any)
     {
         try {
-
+            var newAchievement = {winner:false , loser:false};
             const game = await this.findGameById(gameId);
             let winner = await this.prisma.user.findUniqueOrThrow({
                     where: {
@@ -525,6 +525,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
             if (loser.rank < 0 && loser.achRealLoser === false)
             {
+                newAchievement.loser = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: loserIdIntra
@@ -537,6 +538,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
             if (winner.win === 1 && winner.achFirstWin === false)
             {
+                newAchievement.winner = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: winnerIdIntra
@@ -550,6 +552,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             }
             if (winner.winRow === 5 && winner.achFiveinRow === false)
             {
+                newAchievement.winner  = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: winnerIdIntra
@@ -563,6 +566,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             }
             if (winner.winRow === 10 && winner.achTeninRow === false)
             {
+                newAchievement.winner  = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: winnerIdIntra
@@ -576,6 +580,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             }
             if (winner.winRow === 20 && winner.achTwentyinRow === false)
             {
+                newAchievement.winner  = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: winnerIdIntra
@@ -589,6 +594,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
             }
             if (((game.scoreP2 === 0) || (game.scoreP1 === 0)) && winner.achAce === false)
             {
+                newAchievement.winner  = true;
                 await this.prisma.user.update({
                     where: {
                         idIntra: winnerIdIntra
@@ -599,6 +605,7 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                 })
                 //emit event to user
             }
+            return newAchievement;
         }
         catch(e)
         {

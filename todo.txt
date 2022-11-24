@@ -1,100 +1,34 @@
 gestire solo nuova registrazione?
-websocket in una porta diversa?
-ProtectedRoute? -> https://www.jeffedmondson.dev/blog/react-protected-routes/
 mettere <Link> al posto di href nel menu (l'ho fatto ma si rompe il css della chat)
-login + cancel
-copy dto fondamentali
 cambiare error
 
-add new user
 /api/user/new/all
 /api/user/new/:idIntra
 
 
 
-///////////////////////////////
-// 2021-03-18
-///////////////////////////////
-// TODO
-gameHistory w/body.idIntra
-
-if no user in Profile -> redirect to / home
 friend in profilo?
 
-mettere a posto messaggi lunghi in chat
-mettere a posto scoll messaggi in chat
 mettere a posto data messaggi in chat
 controllare connessione in chat
-togliere bannati da chat join
-togliere scritta dopo che hai inviato il messagio
-far funzionare invio
 
 qunado cambi scena si scollega?
-capire se tenere chat bannate
-loading ?
-limite messaggi chat lunghezza?
-messaggio vuoto?
-
-
-fare funziona esterna guardie gataway
-inviti a partite
-pagina di errore partite
-in games status
-socket chat + game
-
-pallina sparisce sopra o sotto
-
-
- //speed      "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a5/Star_with_eyes.svg/1920px-Star_with_eyes.svg.png",
- //size       "https://www.clipartmax.com/png/full/27-274934_new-super-mario-bros-mario-power-up-mushroom.png",
- //reverse    "https://www.clipartmax.com/png/full/202-2029979_boomerang-mario-boomerang-mario.png",
- //ball black "https://www.clipartmax.com/png/full/373-3735636_blooper-weird-very-hard-to-destroy-creature-blooper-weird-very-hard-to.png"
-
 
 2ltorrean entra in coda
-chat con me stesso
-add notification in db
 
-game not found error fix
-
-matchmaking error fix
-
-inviare per game se offline?
 handle not invited?
 handle already invited?
 
-togliere tasto add friend dopo che l'ho inviato
-togliere pulsanti tuo profilo /other profile
-
 capire alert + json error
 
-add in group
-
-add in group undefined se bloccato?
-bloccare 100 caratteri frontend
-
 controllare se sta guardando puo joinare new game
-
-problema bottoni css
-leave admin
-password required
-password wrong
-array search user not set null dopo che gia aggiunto in new group
 
 bug se admin o owner seleziona un utente e schiaccia fuori poi entra in un altro gruppo che è admin o owner
 
 dopo leave canale togliere informazioni
 
-fare join group e cerca group dinamico
-e leave da pannello admin
-
-errori nell'inserimento password
 dm not found error
 
-fixare css button admin !important
-
-
-//cosa fare quando owner lascia il gruppo?
 
 mettere httpRequest + return in tutto il back a rimettere data in alert
 
@@ -105,40 +39,8 @@ friends otherprofile
 join /dopo il close e anche alert
 
 
-dto o contollo createChannel
-friend button socket otherprofile / profile
-ban socket + prote / demote / mute / ban
-friend
-message ban
-
-scrivere in inglese message error chat
-friend addfriend
-
-
-join work password error
-protected poi di nuovo creare chat
 togliere join and leave
-
-prova ban refresh
-
-unban da solo admin?
-checkare se è admin o owner in azioni admin
 
 added friend after block
 
-Trigger messages dopo block / unbloc
-
-socket block
-
-se ti hanno bloccato togliere button
-chat in SearchBar
-
-close search + set null search
-
 notifiche achivment
-
-friend otherProfile?
-
-socket.off on games
-
-collegare tastino dm in serch frien

@@ -74,7 +74,7 @@ function App() {
               }}>Decline</Button>
             </>);
           }
-          if (data.type === 2)
+          else if (data.type === 2)
           {
             toast(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
@@ -87,6 +87,16 @@ function App() {
               <Button style={{ marginLeft: "10px" }} variant="danger" onClick={() => {
                 socket.emit("declineGame", {idIntra :data.idIntra});
               }}>Decline</Button>
+            </>);
+          }
+          else if (data.type === 3)
+          {
+            toast(<>
+              <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
+              <Typography style={{ marginLeft: "10px" }}>{data.userName} you have a new Achievement</Typography>
+              <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
+                navigate(`/profile`);
+              }}>go to your profile to see</Button>
             </>);
           }
 

@@ -221,6 +221,10 @@ async notification(client: Socket, message: { type: number, idIntra: string }) {
         //game invite
           this.server.to(users.get(message.idIntra).id).emit('notify', { type: 2, idIntra: user.idIntra, userName: user.userName, img: user.img })
       }
+      else if (message.type == 3) {
+        //game invite
+          client.emit('notify', { type: 3, idIntra: user.idIntra, userName: user.userName, img: user.img })
+      }
     }
   }
 }
@@ -508,7 +512,7 @@ async newDm2(client: Socket, data: any) {
   @SubscribeMessage('blockUser')
   async blockUser(client: Socket, message: { idIntra: string }) {
     const user = await this.wsGuard(client)
-    
+
     if (user) {
       const user2 = await this.userService.getUserByIdIntra(message.idIntra)
         if (users.has(message.idIntra)) {
@@ -522,7 +526,7 @@ async newDm2(client: Socket, data: any) {
   @SubscribeMessage('unBlockUser')
   async unBlockUser(client: Socket, message: { idIntra: string }) {
     const user = await this.wsGuard(client)
-    
+
     if (user) {
       const user2 = await this.userService.getUserByIdIntra(message.idIntra)
         if (users.has(message.idIntra)) {

@@ -162,7 +162,7 @@ export const GamesContain = (props: any) => {
 
     const render = (user: any, ball: any, net: any, com: any, powerUp: any) => {
 
-      
+
       // clear the canvas
       drawRect(0, 0, canvas.width, canvas.height, 'black');
       // drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
@@ -233,21 +233,21 @@ export const GamesContain = (props: any) => {
       }, 1000 / 60);
     }
 
-    socketGames.on('state', (gameState: any) => {
+    socketGames.off('state').on('state', (gameState: any) => {
       start2.current = true;
       setStart(true);
       setTextMatchmaking("Matchmaking....");
       render(gameState.user, gameState.ball, gameState.net, gameState.com, gameState.powerUp);
     });
 
-    socketGames.on('lose', (gameState: any) => {
+    socketGames.off('lose').on('lose', (gameState: any) => {
       setStart(false);
       start2.current = false;
       setEsit(LoserImage)
       console.log("lose")
     });
 
-    socketGames.on('win', (gameState: any) => {
+    socketGames.off('win').on('win', (gameState: any) => {
       setStart(false);
       start2.current = false;
       setEsit(WinnerImage)
@@ -255,24 +255,30 @@ export const GamesContain = (props: any) => {
       // fireworks();
     });
 
-    socketGames.on('GameNotFound', (gameState: any) => {
+    socketGames.off('GameNotFound').on('GameNotFound', (gameState: any) => {
       setStart(false);
       start2.current = false;
       setEsit(GameNotFoundImage)
       console.log("GameNotFound")
     });
 
-    socketGames.on('trigger', (data: any) => {
+    socketGames.off('trigger').on('trigger', (data: any) => {
       socket.emit('trigger');
       socket.emit('inGame', data);
     });
 
 
 
-    socketGames.on('invited', () => {
+    socketGames.off('invited').on('invited', () => {
       setStart(false);
       start2.current = false;
       setTextMatchmaking("Waiting for a player to accept the invitation");
+      // setEsit(WinnerImage)
+      // console.log("win")
+    });
+
+    socketGames.off('newAchievement').on('newAchievement', () => {
+      socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!" });
       // setEsit(WinnerImage)
       // console.log("win")
     });
@@ -343,7 +349,7 @@ export const GamesContain = (props: any) => {
     //   if (start2.current)
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);
-    socketGames.on('start', () => {
+    socketGames.off('start').on('start', () => {
       start2.current = true;
       console.log("start2.current", start2.current)
       console.log("start2.current", start2.current)
@@ -364,7 +370,7 @@ export const GamesContain = (props: any) => {
   }, [restart]);
 
   useEffect(() => {
-    socketGames.on('gameOver', () => {
+    socketGames.off('gameOver').on('gameOver', () => {
       console.log("gameOver")
       if (esit === null || esit === undefined) {
         window.location.href = "/";

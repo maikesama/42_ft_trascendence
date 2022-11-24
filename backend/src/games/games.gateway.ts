@@ -308,7 +308,7 @@ export class GamesGateway implements OnGatewayInit {
 						}
 						else
 						{
-							
+
 							client.emit("GameNotFound");
 						}
 						// return;
@@ -461,6 +461,18 @@ export class GamesGateway implements OnGatewayInit {
 									}
 									const update = await this.gameService.updateGame({idGame: rooms[room].realId, scoreP1: rooms[room].gameState.user.score, scoreP2: rooms[room].gameState.com.score});
 									const updateUserStats = await this.gameService.updateUserStats(winner.idIntra, loser.idIntra, rooms[room].realId);
+									if (updateUserStats)
+									{
+										if (updateUserStats.loser)
+										{
+											this.server.to(loser.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.loser})
+										}
+										if (updateUserStats.winner)
+										{
+											this.server.to(winner.socketId).emit('newAchievement', { ciao : "ciao", achievement: updateUserStats.winner})
+										}
+
+									}
 
 
 								}
