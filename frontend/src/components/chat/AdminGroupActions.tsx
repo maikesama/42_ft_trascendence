@@ -31,6 +31,10 @@ import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/useAuth';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import PersonAddDisabledIcon from '@mui/icons-material/PersonAddDisabled';
+
 
 export const AdminGroupActions = (props: any) => {
 
@@ -510,7 +514,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={banned[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={banned[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} onClick={() => unBan(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} onClick={() => unBan(index)}><LockOpenIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -525,7 +529,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={muted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={muted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }}  onClick={() => unMute(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }}  onClick={() => unMute(index)}><VolumeUpIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -540,7 +544,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={promoted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={promoted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} onClick={() => demote(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
+                <IconButton aria-label="Demote" size="small" style={{ color: 'red' }} onClick={() => demote(index)}><PersonAddDisabledIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
