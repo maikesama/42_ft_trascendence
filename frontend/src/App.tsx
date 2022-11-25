@@ -123,8 +123,6 @@ function App() {
         <Routes>
           {!authed ? <Route path="/" element={<Landing />} /> : <Route path="/" element={<Homepage />} />}
           {!authed ? <Route path="/twofa" element={<Twofa />} /> : <Route path="/twofa" element={<Homepage />} />}
-          
-
           <Route element={<PrivateRoutes />}>
             <Route path="/Middleware" element={<Middleware />} />
             <Route path='/home' element={<Homepage />} />
@@ -137,7 +135,6 @@ function App() {
             <Route path="/matches" element={<Matches />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/games/:idIntra" element={<Games />} />
-            
             <Route path="/" element={<Homepage />} />
           </Route>
           <Route path="*" element={<Error404 />} />
