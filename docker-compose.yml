@@ -2,44 +2,44 @@ version: '3.8'
 
 services:
 
-  frontend:
-    image: "frontend2"
-    build:
-      dockerfile: 'Dockerfile'
-      context: ./frontend
-    volumes:
-      - ./frontend/src:/app/src
-    expose:
-      - "3000"
-    environment:
-      REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
-      # WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
-    container_name: frontend
-    depends_on:
-      - "backend"
-    networks:
-      - trascendecne
   # frontend:
-  #   image: "node:16-slim"
-  #   user: "node"
+  #   image: "frontend2"
   #   build:
-  #     dockerfile: 'Dockerfile.prod'
+  #     dockerfile: 'Dockerfile'
   #     context: ./frontend
-  #   working_dir: /home/node/app
-  #   restart: unless-stopped
   #   volumes:
-  #     - ./frontend:/home/node/app
+  #     - ./frontend/src:/app/src
   #   expose:
   #     - "3000"
   #   environment:
   #     REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
+  #     # WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
   #   container_name: frontend
-  #   # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
-  #  # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm audit fix --force --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
   #   depends_on:
   #     - "backend"
   #   networks:
   #     - trascendecne
+  frontend:
+    image: "node:16-slim"
+    user: "node"
+    build:
+      dockerfile: 'Dockerfile.prod'
+      context: ./frontend
+    working_dir: /home/node/app
+    restart: unless-stopped
+    volumes:
+      - ./frontend:/home/node/app
+    expose:
+      - "3000"
+    environment:
+      REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
+    container_name: frontend
+    # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
+   # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm audit fix --force --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
+    depends_on:
+      - "backend"
+    networks:
+      - trascendecne
 
     # command: sh -c "npm install; npm run build; npm install serve; npx serve -s build"
     # command: "npm install --legacy-peer-deps; react-scripts start;"

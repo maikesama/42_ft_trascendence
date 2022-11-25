@@ -71,3 +71,5 @@ search bar
 togliere join leave
 
 username error
+
+palla attraverso
