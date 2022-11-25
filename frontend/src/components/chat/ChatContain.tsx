@@ -161,18 +161,18 @@ export const ChatContain = (props: any) => {
                     })
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 if (response.status === 200 || response.status === 201) {
                     setUserChat(json);
                     changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
                 }
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
         if (params.idIntra) {
-            console.log("params.idIntra : " + params.idIntra)
+            
             fetchData();
         }
     }, [params.idIntra]);
@@ -247,7 +247,7 @@ export const ChatContain = (props: any) => {
                 const json = await response.json();
                 setDms(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
         fetchDataDms();
@@ -266,10 +266,10 @@ export const ChatContain = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setChats(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
         fetchData();
@@ -294,7 +294,7 @@ export const ChatContain = (props: any) => {
             setPermission(json.me);
             setPartecipants(json.partecipants);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -319,10 +319,10 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            console.log(json)
+            
             setSearch(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -330,7 +330,7 @@ export const ChatContain = (props: any) => {
         const user = await search[index];
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
         try {
-            console.log("newDm");
+            
             const response = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',
@@ -340,8 +340,8 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ idIntra: user.idIntra }),
             });
             const json = await response.json();
-            console.log('matenevai')
-            console.log(json);
+            
+            
             if (response.status === 200) {
                 
                 socket.emit('newDm', json);
@@ -353,16 +353,16 @@ export const ChatContain = (props: any) => {
                 //changeChat('DM', user.userName , json.id, user.img , user.idIntra , '');
 
             }
-            console.log(json);
+            
             // window.location.reload();
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
     async function toDm(index: any) {
         const idIntra = await search[index]?.idIntra;
-        console.log('ciao' + idIntra)
+        
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
 
         try {
@@ -375,7 +375,7 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ idIntra: idIntra }),
             });
             const json = await response.json();
-            console.log('ciao' + JSON.stringify(json));
+            
             //changeChat('DM', dms[index]?.userName, dms[index]?.id, dms[index]?.img, dms[index]?.idIntra, '')
             if (response.status !== 200) {
                 await newDm(index);
@@ -390,10 +390,10 @@ export const ChatContain = (props: any) => {
                 changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
             }
 
-            console.log(json);
+            
             // window.location.reload();
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -416,17 +416,17 @@ export const ChatContain = (props: any) => {
                 });
                 const json = await response.json();
                 let ret = new Map(json.map((json: any) => [json.chat.id, json.chat.messages]))
-                console.log(ret);
+                
                 for (let entry of Array.from(ret.entries())) {
 
                     socket.emit('provaJoin', { idChat: entry[0] });
-                    console.log(JSON.stringify(entry[1]));
+                    
                 }
                 setMap(ret);
                 setJoin(true);
                 return ret;
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
         if (isSecondRender.current) {
@@ -445,7 +445,7 @@ export const ChatContain = (props: any) => {
 
         if (isSecondRender.current) {
             socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
-                console.log("data: ", data);
+                
                 updateMap(data.idChat, data);
             });
         }
@@ -456,15 +456,15 @@ export const ChatContain = (props: any) => {
     React.useEffect(() => {
         const updateMap = (key: any, value: any) => {
             const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-            console.log("currentValues", currentValues);
-            console.log("key", key);
+            
+            
             setMap(map2 => new Map(map.set(key, [...currentValues, value])));
 
         }
 
         if (isSecondRender.current) {
             socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
-                console.log("data: ", data);
+                
                 updateMap(data.idChat, data);
             });
         }
@@ -531,8 +531,8 @@ export const ChatContain = (props: any) => {
                     setChats(newChats);
                     if (map !== undefined) {
                         var newMap = new Map(map);
-                        console.log("newMap")
-                        console.log(newMap)
+                        
+                        
                         if (newMap.has(data.id)) {
                             newMap.delete(data.id);
                             if (data.idIntra === idIntra) {
@@ -602,7 +602,7 @@ export const ChatContain = (props: any) => {
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.off('banUser').on('banUser', (data: any) => {
-                console.log("banUser");
+                
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
                     for (let i = 0; i < chats.length; i++) {

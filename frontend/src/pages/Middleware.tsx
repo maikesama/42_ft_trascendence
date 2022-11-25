@@ -30,10 +30,10 @@ export const Middleware = () => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setUser(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -71,7 +71,7 @@ export const Middleware = () => {
             
 
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -84,7 +84,7 @@ export const Middleware = () => {
     };
 
     const uploadImage = async (imageList: ImageListType) => {
-        console.log(JSON.stringify(imageList[0].dataURL))
+        
         try {
             const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
                 method: "POST",
@@ -97,7 +97,7 @@ export const Middleware = () => {
             const json = await response.json();
             
         } catch (error) {
-            console.log("error", error);
+            
         }
         window.location.reload()
     };

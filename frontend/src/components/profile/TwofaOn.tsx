@@ -64,17 +64,17 @@ export const TwofaOn = (props: any) => {
           })
         });
         const json = await response.json();
-        console.log(json);
+        
         window.location.reload();
         // setInvited(json);
         
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();
   }
-  console.log(props.qr)
+  
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
         <DialogTitle style={{fontSize: 18}}>Use Google Authenticator</DialogTitle>

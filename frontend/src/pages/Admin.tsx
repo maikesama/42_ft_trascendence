@@ -20,7 +20,7 @@ export const Admin = () => {
             responseType: "json",
         })
         .then(function (response) {
-            console.log(response.data);
+            
         });
 }
     richiedi();

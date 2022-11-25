@@ -29,10 +29,10 @@ export const MatchesList = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setGames(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -53,10 +53,10 @@ export const MatchesList = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setUser(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 

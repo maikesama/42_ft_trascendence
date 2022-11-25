@@ -28,7 +28,7 @@ export const OtherProfileContain = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         if (response.status !== 200 || idIntra === params.idUser) {
           navigate('/profile');
         }
@@ -37,7 +37,7 @@ export const OtherProfileContain = (props: any) => {
           setUser(json);
         }
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();
@@ -59,10 +59,10 @@ export const OtherProfileContain = (props: any) => {
           body: JSON.stringify({idIntra: params.idUser}),
         });
         const json = await response.json();
-        console.log(json);
+        
         setRank(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 

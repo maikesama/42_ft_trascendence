@@ -72,7 +72,7 @@ export const AdminSettings = (props: any) => {
             
             window.location.reload();
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 

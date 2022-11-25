@@ -31,12 +31,12 @@ export const InvitedList = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         setInvited(json);
         // setInvited(json);
         
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -54,7 +54,7 @@ export const InvitedList = (props: any) => {
   {
     const idIntra = await invited[index]?.idIntra;
     const fetchData = async () => {
-      console.log(idIntra);
+      
         socket.emit('acceptFriend', {idIntra: idIntra});
         setInvited(invited.filter((_: any, i: any) => i !== index));
     };
@@ -87,7 +87,7 @@ export const InvitedList = (props: any) => {
         // setInvited(json);
         
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();

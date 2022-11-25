@@ -29,12 +29,12 @@ export const BlockedList = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         setBlocked(json);
         //window.location.reload();
         
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -63,7 +63,7 @@ export const BlockedList = (props: any) => {
         }
       });
       
-      console.log(response.status);
+      
       if (response.status === 201) {
         // setAlert("User unblocked");
         // setIsBlocked(false);
@@ -72,7 +72,7 @@ export const BlockedList = (props: any) => {
       }
 
     } catch (error) {
-      console.log("error", error);
+      
     }
   }
 

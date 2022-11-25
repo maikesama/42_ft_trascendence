@@ -32,10 +32,10 @@ export const MatchesList = (props: any) => {
                     body: JSON.stringify({ idIntra: props.user.idUser }),
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setGames(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -56,10 +56,10 @@ export const MatchesList = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setUser(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 

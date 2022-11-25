@@ -58,7 +58,7 @@ export const GamesContain = (props: any) => {
   const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
   const start2 = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  console.log("Games", isConnectedGames)
+  
 
 
   // useEffect(() => {
@@ -198,7 +198,7 @@ export const GamesContain = (props: any) => {
     }
 
     const fireworks = () => {
-      console.log("fireworks")
+      
       let particles: any;
       let loop = setInterval(() => {
         ctx.globalAlpha -= 0.01;
@@ -214,7 +214,7 @@ export const GamesContain = (props: any) => {
             vy: Math.random() * 10 - 5,
           });
         }
-        console.log(particles)
+        
 
         particles.forEach((p: any) => {
           ctx.beginPath();
@@ -244,14 +244,14 @@ export const GamesContain = (props: any) => {
       setStart(false);
       start2.current = false;
       setEsit(LoserImage)
-      console.log("lose")
+      
     });
 
     socketGames.off('win').on('win', (gameState: any) => {
       setStart(false);
       start2.current = false;
       setEsit(WinnerImage)
-      console.log("win")
+      
       // fireworks();
     });
 
@@ -259,7 +259,7 @@ export const GamesContain = (props: any) => {
       setStart(false);
       start2.current = false;
       setEsit(GameNotFoundImage)
-      console.log("GameNotFound")
+      
     });
 
     socketGames.off('trigger').on('trigger', (data: any) => {
@@ -278,20 +278,20 @@ export const GamesContain = (props: any) => {
     });
 
     socketGames.off('newAchievement').on('newAchievement', (data: any) => {
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
-      console.log("newAchievement")
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!", idIntra: data.idIntra });
       // setEsit(WinnerImage)
       
@@ -365,14 +365,14 @@ export const GamesContain = (props: any) => {
     // }, 1000 / 60);
     socketGames.on('start', () => {
       start2.current = true;
-      console.log("start2.current", start2.current)
-      console.log("start2.current", start2.current)
+      
+      
       const interval = setInterval(() => {
         if (playerMovement.up || playerMovement.down || playerMovement.left || playerMovement.right) {
           socketGames.emit('playerMovement', playerMovement);
         }
         if (!start2.current) {
-          console.log("mi sono fermato")
+          
           clearInterval(interval);
         }
       }, 1000 / 60);
@@ -385,7 +385,7 @@ export const GamesContain = (props: any) => {
 
   useEffect(() => {
     socketGames.off('gameOver').on('gameOver', () => {
-      console.log("gameOver")
+      
       if (esit === null || esit === undefined) {
         window.location.href = "/";
       }
@@ -416,8 +416,8 @@ export const GamesContain = (props: any) => {
     // window.location.assign('/')
   }
 
-  console.log("esit", esit)
-  console.log("start", start)
+  
+  
 
   // function back(){
   //   // window.history.back();

@@ -14,8 +14,8 @@ import CheckIcon from '@mui/icons-material/Check';
 export const manageError = (data: any, response: any, success:any, error:any) => {
     if ((data !== undefined && data !== null && data.statusCode  && data.statusCode !== 200 && data.statusCode !== 201)
          || (response !== undefined && response !== null && response.status && response.status !== 200 && response.status !== 201)){
-        console.log("error", data);
-        console.log("error2", response);
+        
+        
         let message = "Error";
         if (data !== undefined && data !== null && data.message)
             message = data.message;

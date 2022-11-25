@@ -102,7 +102,7 @@ export const SearchBar = (props: any) => {
             
             setSearch(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -127,7 +127,7 @@ export const SearchBar = (props: any) => {
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.off('friendHandler').on('friendHandler', (data: any) => {
-                console.log("friendHandler");
+                
                 searchUser();
             });
         }
@@ -156,7 +156,7 @@ export const SearchBar = (props: any) => {
                 }
                 // window.location.reload();
             } catch (error) {
-                console.log("error", error);
+                
             }
         }
 
@@ -181,7 +181,7 @@ export const SearchBar = (props: any) => {
                     socket.emit('friendHandler', { type: 1, idIntra: idIntra });
                 }
             } catch (error) {
-                console.log("error", error);
+                
             }
         }
 
@@ -198,12 +198,12 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({ idIntra: idIntra }),
                 });
-                console.log("response", response);
+                
                 if (response.status === 200) {
                     socket.emit('friendHandler', {type: 4, idIntra: idIntra});
                 }
             } catch (error) {
-                console.log("error", error);
+                
             }
         }
 
@@ -226,7 +226,7 @@ export const SearchBar = (props: any) => {
                     // window..reload();
                   }
             } catch (error) {
-                console.log("error", error);
+                
             }
         }
         // useEffect(() => {
@@ -311,7 +311,7 @@ export const SearchBar = (props: any) => {
             const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
           
             try {
-                console.log("newDm");
+                
                 const response = await fetch(url, {
                     method: 'POST',
                     credentials: 'include',
@@ -329,7 +329,7 @@ export const SearchBar = (props: any) => {
                 }
                 // window.location.reload();
             } catch (error) {
-                console.log("error", error);
+                
             }
           }
           
@@ -351,14 +351,14 @@ export const SearchBar = (props: any) => {
                   await newDm(index);
                 }
                 else {
-                    console.log(json);
+                    
                     //  window.location.href = `/chat/${props.idIntra}`;
                  navigate(`/chat/${idIntra}`);
                 }
           
                 // window.location.reload();
             } catch (error) {
-                console.log("error", error);
+                
             }
           }
 

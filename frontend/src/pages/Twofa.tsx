@@ -40,7 +40,7 @@ export const Twofa = () => {
 
         const fetchData = async () => {
             try {
-                console.log("ciao");
+                
                 const response = await fetch(url, {
                     method: 'POST',
                     credentials: 'include',
@@ -54,14 +54,14 @@ export const Twofa = () => {
                 const json = await response.json();
                 if (json.status === 200) {
                     // window.location.replace('/middleware');
-                    console.log("ciao");
+                    
                 }
                 else {
                     setMesage(json.message);
                 }
             } catch (error) {
                 window.location.replace('/middleware');
-                console.log("error", error);
+                
             }
         };
             fetchData();

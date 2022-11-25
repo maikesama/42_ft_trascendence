@@ -36,7 +36,7 @@ function App() {
   const { authed, loading } = useAuth();
   const isSecondRender = useRef(false);
   let navigate = useNavigate();
-  console.log(authed);
+  
 
   //toast("Wow so easy!");
   React.useEffect(() => {
@@ -112,7 +112,7 @@ function App() {
 
   function pippo()
   {
-    console.log("poppoo");
+    
   }
 
   return (

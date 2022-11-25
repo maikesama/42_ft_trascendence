@@ -98,10 +98,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value, id: props.idChat }),
             });
             const json = await response.json();
-            console.log(json);
+            
             setSearch(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -125,7 +125,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -150,7 +150,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -166,7 +166,7 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            console.log(response)
+            
             const data = await response.json();
             manageError(data, response, null, setAlert);
 
@@ -181,7 +181,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            console.log("error", error);
+            
         }
         //window.location.reload();
     }
@@ -208,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -239,7 +239,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('muteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -257,10 +257,10 @@ export const AdminGroupActions = (props: any) => {
             })
 
             const data = await response.json();
-            console.log(data)
+            
             setBanned(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -277,10 +277,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            console.log(data)
+            
             setMuted(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -297,10 +297,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            console.log(data)
+            
             setPromoted(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -327,7 +327,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unBan', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -357,7 +357,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unMuteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -387,7 +387,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('promoteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -418,7 +418,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('demoteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -434,10 +434,10 @@ export const AdminGroupActions = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setMySelf(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -461,7 +461,7 @@ export const AdminGroupActions = (props: any) => {
                 
                 setChan(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -536,7 +536,7 @@ export const AdminGroupActions = (props: any) => {
 
     function PromotedUserItem(props: any) {
         const { index, style } = props;
-        console.log('promoted', promoted);
+        
         let isMuted = promoted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
@@ -601,12 +601,12 @@ export const AdminGroupActions = (props: any) => {
             newGroup.splice(index, 1);
         }
         setUserGroup(newGroup);
-        console.log('newGroup', newGroup);
+        
     };
 
     function searchRow(props: ListChildComponentProps) {
         const { index, style } = props;
-        console.log('search', search);
+        
         return (
             <ListItem key={index}>
 

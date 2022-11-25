@@ -101,10 +101,10 @@ export const JoinGroup = (props: any) => {
             }
             });
             const json = await response.json();
-            console.log(json);
+            
             setChats(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
         };
         fetchData();
@@ -134,7 +134,7 @@ export const JoinGroup = (props: any) => {
 
         
         // pwd = pass.current[index].value;
-        console.log(pwd);
+        
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
@@ -156,19 +156,19 @@ export const JoinGroup = (props: any) => {
             }
             
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
     function handleJoin(index: any)
     {
         var pass = document.getElementById(String(index)) as HTMLInputElement | null;
-        console.log(pass?.value);
+        
         var newPassArray = password;
         newPassArray[index] = pass?.value;
         setPassword(newPassArray);
     }
-    console.log(password);
+    
 
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;

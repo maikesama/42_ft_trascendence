@@ -53,7 +53,7 @@ export function LeaderboardItem(props: any) {
     }
 
     const handleInvite = () => {
-        console.log("Invite");
+        
         socket.emit('notification', { type: 2, idIntra: props.intra });
         navigate('/games/1' + props.intra);
         // window.location.assign("/games/1" + props.idIntra);

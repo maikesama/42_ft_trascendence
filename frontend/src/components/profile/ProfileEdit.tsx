@@ -496,11 +496,11 @@ export const ProfileEdit = (props: any) => {
           credentials: 'include',
         })
         const json = await response.json();
-        console.log('newcode')
-        console.log(json);
+        
+        
         setQr(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     }
 
@@ -541,13 +541,13 @@ export const ProfileEdit = (props: any) => {
   }
 
   const handleOpen2FA = () => {
-    console.log('newcod1')
-    console.log('newcod1')
-    console.log('newcod1')
-    console.log('newcod1')
-    console.log('newcod1')
-    console.log('newcod1')
-    console.log('newcod1')
+    
+    
+    
+    
+    
+    
+    
     setOpen2FA(true);
     generate2faQr();
   }
