@@ -120,7 +120,7 @@ export const SocialEdit = (props: any) => {
     });
 
     if (isAddFriendNew.current) {
-      socket.on("acceptFriend", (data: any) => {
+      socket.off('acceptFriend').on("acceptFriend", (data: any) => {
         var isAlreadyFriend = false;
         if (friends.length > 0) {
           friends.forEach((friend: any) => {
@@ -140,7 +140,7 @@ export const SocialEdit = (props: any) => {
     }
     isAddFriendNew.current = false;
     // if (isDelFriendNew.current) {
-      socket.on("removeFriend", (data: any) => {
+      socket.off('removeFriend').on("removeFriend", (data: any) => {
       var isAlreadyFriend = false;
       if (friends.length > 0) {
         friends.forEach((friend: any) => {

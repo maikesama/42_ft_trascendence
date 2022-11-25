@@ -107,10 +107,10 @@ export const JoinGroup = (props: any) => {
         }
         };
         fetchData();
-            socket.on('newChannel', (data: any) => {
+            socket.off('newChannel').on('newChannel', (data: any) => {
                 fetchData();
             });  
-            socket.on('removeUser', (data: any) => {
+            socket.off('removeUser').on('removeUser', (data: any) => {
                 fetchData();
             });  
             socket.off('addUser').on('addUser', (data: any) => {

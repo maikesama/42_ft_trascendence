@@ -191,7 +191,7 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
-    socket.on('friendHandler', (data: any) => {
+    socket.off('friendHandler').on('friendHandler', (data: any) => {
       console.log("qui");
       console.log(data);
       console.log(user.idUser);
@@ -285,7 +285,7 @@ export const ProfileEdit =  (props: any) => {
   }, [props.idIntra, friendHandler]);
 
   React.useEffect(() => {
-      socket.on('friendHandler', (data: any) => {
+      socket.off('friendHandler').on('friendHandler', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setFriendHandler(!friendHandler);
           }

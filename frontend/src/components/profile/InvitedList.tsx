@@ -40,7 +40,7 @@ export const InvitedList = (props: any) => {
     };
 
     fetchData();
-      socket.on('friendHandler', (data: any) => {
+      socket.off('friendHandler').on('friendHandler', (data: any) => {
         fetchData();
       });
   }, []);

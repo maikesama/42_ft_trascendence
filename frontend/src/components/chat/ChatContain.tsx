@@ -464,7 +464,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.on('newChannel', (data: any) => {
+            socket.off('newChannel').on('newChannel', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
@@ -504,7 +504,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.on('removeUser', (data: any) => {
+            socket.off('removeUser').on('removeUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [];
                     for (let i = 0; i < chats.length; i++) {

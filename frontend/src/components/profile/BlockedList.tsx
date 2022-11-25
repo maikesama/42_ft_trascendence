@@ -38,10 +38,10 @@ export const BlockedList = (props: any) => {
     };
 
     fetchData();
-        socket.on('blockUser2', (data: any) => {
+          socket.off('blockUser2').on('blockUser2', (data: any) => {
             fetchData();
           });
-          socket.on('unBlockUser2', (data: any) => {
+          socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
             fetchData();
           });
   }, []);
