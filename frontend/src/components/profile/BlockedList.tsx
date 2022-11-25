@@ -28,20 +28,20 @@ export const BlockedList = (props: any) => {
           }
         });
         const json = await response.json();
-        
+
         setBlocked(json);
         //window.location.reload();
-        
+
       } catch (error) {
-        
+
       }
     };
 
     fetchData();
-          socket.off('blockUser2').on('blockUser2', (data: any) => {
+          socket.off('blockUserBlockedList').on('blockUserBlockedList', (data: any) => {
             fetchData();
           });
-          socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+          socket.off('unBlockUserBlockedList').on('unBlockUserBlockedList', (data: any) => {
             fetchData();
           });
   }, []);
@@ -58,8 +58,8 @@ export const BlockedList = (props: any) => {
           'Content-Type': 'application/json',
         }
       });
-      
-      
+
+
       if (response.status === 201) {
         // setAlert("User unblocked");
         // setIsBlocked(false);
@@ -68,7 +68,7 @@ export const BlockedList = (props: any) => {
       }
 
     } catch (error) {
-      
+
     }
   }
 

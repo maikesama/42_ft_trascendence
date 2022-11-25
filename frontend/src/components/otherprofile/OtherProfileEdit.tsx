@@ -43,7 +43,7 @@ export const SocialEdit = (props: any) => {
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const { idIntra } = useAuth();
   const user = props.user;
-  
+
 
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
@@ -112,13 +112,13 @@ export const SocialEdit = (props: any) => {
     const { index, style, matches } = props;
 
     let date = friends[index]?.addedAt;
-    
+
     // date = String(date.split("T"));
-    
+
     // let hour = String(date[1].split("."));
     let data;
     let hour;
-  
+
     if (date !== undefined || date !== null)
     {
       data = date.split("T");
@@ -161,7 +161,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        
+
       }
     };
 
@@ -184,14 +184,14 @@ export const SocialEdit = (props: any) => {
           body: JSON.stringify({ idIntra: user.idUser }),
         });
         const json = await response.json();
-        
+
         setFriends(json);
       } catch (error) {
-        
+
       }
     };
     fetchData();
-    socket.off('friendHandler').on('friendHandler', (data: any) => {
+    socket.off('friendHandlerOtherProfileEditSocialEdit').on('friendHandlerOtherProfileEditSocialEdit', (data: any) => {
       console.log("qui");
       console.log(data);
       console.log(user.idUser);
@@ -272,12 +272,12 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        
+
         setIsFriend(json);
         //window.location.reload();
-        
+
       } catch (error) {
-        
+
       }
     };
 
@@ -285,7 +285,7 @@ export const ProfileEdit =  (props: any) => {
   }, [props.idIntra, friendHandler]);
 
   React.useEffect(() => {
-      socket.off('friendHandler').on('friendHandler', (data: any) => {
+      socket.off('friendHandlerOtherProfileEditProfileEdit').on('friendHandlerOtherProfileEditProfileEdit', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setFriendHandler(!friendHandler);
           }
@@ -293,7 +293,7 @@ export const ProfileEdit =  (props: any) => {
   });
 
   React.useEffect(() => {
-      socket.off('blockUser').on('blockUser', (data: any) => {
+      socket.off('blockUserOtherProfileEdit').on('blockUserOtherProfileEdit', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setBlockHandler(!blockHandler);
           }
@@ -301,7 +301,7 @@ export const ProfileEdit =  (props: any) => {
   });
 
   React.useEffect(() => {
-      socket.off('unBlockUser').on('unBlockUser', (data: any) => {
+      socket.off('unBlockUserOtherProfileEdit').on('unBlockUserOtherProfileEdit', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setBlockHandler(!blockHandler);
           }
@@ -322,10 +322,10 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        
+
         setIsPending(json);
       } catch (error) {
-        
+
       }
     };
 
@@ -346,12 +346,12 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        
+
         setIsBlocked(json);
         //window.location.reload();
-        
+
       } catch (error) {
-        
+
       }
     };
 
@@ -372,14 +372,14 @@ export const ProfileEdit =  (props: any) => {
             body: JSON.stringify({idIntra: props.idIntra}),
         });
         // window.location.reload();
-        
+
         if (response.status === 201) {
           // setAlert("User blocked");
           // setIsBlocked(true);
           socket.emit("blockUser", {idIntra: props.idIntra});
         }
     } catch (error) {
-        
+
     }
 }
 
@@ -395,7 +395,7 @@ async function unblock(index: any) {
       }
     });
     // window.location.reload();
-    
+
     if (response.status === 201) {
       // setAlert("User unblocked");
       // setIsBlocked(false);
@@ -403,7 +403,7 @@ async function unblock(index: any) {
     }
 
   } catch (error) {
-    
+
   }
 }
 
@@ -434,7 +434,7 @@ async function addInviteFriend(index: any) {
 
       // window.location.reload();
   } catch (error) {
-      
+
   }
 }
 
@@ -451,14 +451,14 @@ async function removeInviteFriend(index: any) {
           },
           body: JSON.stringify({idIntra: props.idIntra}),
       });
-      
+
       if (response.status === 200) {
-        
+
         socket.emit('friendHandler', {type: 4, idIntra: props.idIntra});
       }
       // window.location.reload();
   } catch (error) {
-      
+
   }
 }
 
@@ -481,7 +481,7 @@ async function removeFriend(index: any) {
         // window..reload();
       }
   } catch (error) {
-      
+
   }
 }
 
@@ -490,7 +490,7 @@ async function newDm(index: any) {
   const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
 
   try {
-      
+
       const response = await fetch(url, {
           method: 'POST',
           credentials: 'include',
@@ -500,17 +500,17 @@ async function newDm(index: any) {
           body: JSON.stringify({idIntra: props.idIntra}),
       });
       const json = await response.json();
-      
+
       if (response.status === 200) {
-        
+
         socket.emit('newDm', json);
         // window.location.href = ;
         navigate(`/chat/${props.idIntra}`);
       }
-      
+
       // window.location.reload();
   } catch (error) {
-      
+
   }
 }
 
@@ -528,7 +528,7 @@ async function toDm(index: any) {
           body: JSON.stringify({idIntra: props.idIntra}),
       });
       const json = await response.json();
-      
+
       if (response.status !== 200) {
         await newDm(index);
       }
@@ -537,10 +537,10 @@ async function toDm(index: any) {
        navigate(`/chat/${props.idIntra}`);
       }
 
-      
+
       // window.location.reload();
   } catch (error) {
-      
+
   }
 }
   return (

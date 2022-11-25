@@ -30,10 +30,10 @@ export const Middleware = () => {
                     }
                 });
                 const json = await response.json();
-                
+
                 setUser(json);
             } catch (error) {
-                
+
             }
         };
 
@@ -48,7 +48,7 @@ export const Middleware = () => {
     //const [user, setUser] = useState({} as any);
 
     const clickSave = async () => {
-        
+
 
         let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
 
@@ -65,13 +65,13 @@ export const Middleware = () => {
             const data = await response.json();
             manageError(data, response, null, setAlert)
             // const json = await response.json();
-            
+
             // // setUser(json);
             // if (json && json.status === 400) {
-            
+
 
         } catch (error) {
-            
+
         }
     }
 
@@ -84,7 +84,7 @@ export const Middleware = () => {
     };
 
     const uploadImage = async (imageList: ImageListType) => {
-        
+
         try {
             const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
                 method: "POST",
@@ -95,9 +95,9 @@ export const Middleware = () => {
                 body: JSON.stringify({ dataURL: imageList[0].dataURL }),
             });
             const json = await response.json();
-            
+
         } catch (error) {
-            
+
         }
         window.location.reload()
     };
@@ -105,7 +105,7 @@ export const Middleware = () => {
     function handleNick() {
         const inputbox = document.getElementById('txtNick');
         inputbox?.removeAttribute('disabled')
-        inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+        inputbox?.setAttribute('placeholder', 'Inserisci Username');
     }
 
     return (

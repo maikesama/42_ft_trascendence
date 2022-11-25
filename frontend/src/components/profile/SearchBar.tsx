@@ -98,27 +98,27 @@ export const SearchBar = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            
+
             setSearch(json);
         } catch (error) {
-            
+
         }
     }
 
     React.useEffect(() => {
-            socket.off('blockUser2').on('blockUser2', (data: any) => {
+            socket.off('blockUserSearchBar').on('blockUserSearchBar', (data: any) => {
                 searchUser();
             });
     });
 
     React.useEffect(() => {
-            socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+            socket.off('unBlockUserSearchBar').on('unBlockUserSearchBar', (data: any) => {
                 searchUser();
             });
     });
 
     React.useEffect(() => {
-            socket.off('friendHandler').on('friendHandler', (data: any) => {
+            socket.off('friendHandlerSearchBar').on('friendHandlerSearchBar', (data: any) => {
                 console.log("friendHandler");
                 searchUser();
             });
@@ -146,7 +146,7 @@ export const SearchBar = (props: any) => {
                 }
                 // window.location.reload();
             } catch (error) {
-                
+
             }
         }
 
@@ -171,7 +171,7 @@ export const SearchBar = (props: any) => {
                     socket.emit('friendHandler', { type: 1, idIntra: idIntra });
                 }
             } catch (error) {
-                
+
             }
         }
 
@@ -188,12 +188,12 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({ idIntra: idIntra }),
                 });
-                
+
                 if (response.status === 200) {
                     socket.emit('friendHandler', {type: 4, idIntra: idIntra});
                 }
             } catch (error) {
-                
+
             }
         }
 
@@ -216,7 +216,7 @@ export const SearchBar = (props: any) => {
                     // window..reload();
                   }
             } catch (error) {
-                
+
             }
         }
         // useEffect(() => {
@@ -233,12 +233,12 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        
+
         //             setIsFriend(json);
         //             //window.location.reload();
-        
+
         //         } catch (error) {
-        
+
         //         }
         //         fetchData();
         //     };
@@ -259,10 +259,10 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        
+
         //             setIsPending(json);
         //         } catch (error) {
-        
+
         //         }
         //         fetchData();
         //     };
@@ -284,12 +284,12 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        
+
         //             setIsBlocked(json);
         //             //window.location.reload();
-        
+
         //         } catch (error) {
-        
+
         //         }
         //         fetchData();
         //     };
@@ -299,9 +299,9 @@ export const SearchBar = (props: any) => {
         async function newDm(index: any) {
             const idIntra = await search[index]?.idIntra;
             const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
-          
+
             try {
-                
+
                 const response = await fetch(url, {
                     method: 'POST',
                     credentials: 'include',
@@ -312,21 +312,21 @@ export const SearchBar = (props: any) => {
                 });
                 const json = await response.json();
                 if (response.status === 200) {
-                  
+
                   socket.emit('newDm', json);
                   // window.location.href = ;
                   navigate(`/chat/${idIntra}`);
                 }
                 // window.location.reload();
             } catch (error) {
-                
+
             }
           }
-          
+
           async function toDm(index: any) {
             const idIntra = await search[index]?.idIntra;
             const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
-          
+
             try {
                 const response = await fetch(url, {
                     method: 'POST',
@@ -341,14 +341,14 @@ export const SearchBar = (props: any) => {
                   await newDm(index);
                 }
                 else {
-                    
+
                     //  window.location.href = `/chat/${props.idIntra}`;
                  navigate(`/chat/${idIntra}`);
                 }
-          
+
                 // window.location.reload();
             } catch (error) {
-                
+
             }
           }
 
@@ -358,7 +358,7 @@ export const SearchBar = (props: any) => {
                     {search[index]?.img ? <><Avatar src={search[index]?.img} />
                         <ListItemText id="idIntraSearch" primary={search[index]?.userName} />
                         { search[index]?.status === 0 ? <i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /> : search[index]?.status === 1 ? <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> : search[index]?.status === 2 ? <i style={{ fontSize: 8, color: 'gray' }} className="bi bi-circle-fill" /> : null }
-                        
+
                         <Divider variant="middle" />
                         <IconButton aria-label="watch" size="small" style={{ color: 'lightrey' }} onClick={() => toDm(index)}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
                         {(!(search[index]?.friend) && !search[index]?.invited) ? <IconButton aria-label="addfriend" size="small" style={{ color: 'green' }} onClick={() => addInviteFriend(index)}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}

@@ -209,11 +209,6 @@ export class AppGateway implements OnGatewayInit {
 
 @SubscribeMessage('notification')
 async notification(client: Socket, message: { type: number, idIntra: string }) {
-  console.log(message)
-  console.log(message)
-  console.log(message)
-  console.log(message)
-  console.log(message)
   const user = await this.wsGuard(client)
   if (user && message && message.type && message.idIntra && (user.idIntra != message.idIntra || message.type === 3)) {
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
@@ -264,9 +259,15 @@ async friendHandler(client: Socket, message: { idIntra: string, type: number }) 
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2 && message.type) {
         if (users.has(message.idIntra)) {
-          this.server.to(users.get(message.idIntra).id).emit('friendHandler', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+          this.server.to(users.get(message.idIntra).id).emit('friendHandlerOtherProfileEditSocialEdit', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+          this.server.to(users.get(message.idIntra).id).emit('friendHandlerOtherProfileEditProfileEdit', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+          this.server.to(users.get(message.idIntra).id).emit('friendHandlerSearchBar', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+          this.server.to(users.get(message.idIntra).id).emit('friendHandlerInviteList', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
         }
-        client.emit("friendHandler", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+        client.emit("friendHandlerOtherProfileEditSocialEdit", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+        client.emit("friendHandlerOtherProfileEditProfileEdit", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+        client.emit("friendHandlerSearchBar", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+        client.emit("friendHandlerInviteList", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
     }
   }
 }
@@ -336,7 +337,8 @@ async newChannel(client: Socket, data: any) {
       {
         if (users.has(data.partecipant[i].idIntra))
         {
-          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannel', data)
+          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannelChatContain', data)
+          this.server.to(users.get(data.partecipant[i].idIntra).id).emit('newChannelJoinGroup', data)
         }
       }
     }
@@ -359,7 +361,8 @@ async addUsers(client: Socket, data: any) {
         {
           if (user2 && users.get(data.idIntra[i]))
           {
-            this.server.to(users.get(user2.idIntra).id).emit('addUser', chat)
+            this.server.to(users.get(user2.idIntra).id).emit('addUserChatContain', chat)
+            this.server.to(users.get(user2.idIntra).id).emit('addUserJoinGroup', chat)
           }
           await this.refreshPartecipants(client, {idChat : data.idChat, idUser: user.id})
         }
@@ -380,7 +383,8 @@ async removeUsers(client: Socket, data: any) {
       {
         if (user2 && users.get(user2.idIntra))
         {
-          this.server.to(users.get(user2.idIntra).id).emit('removeUser', {id: chat.id, idIntra : user2.idIntra})
+          this.server.to(users.get(user2.idIntra).id).emit('removeUserChatContain', {id: chat.id, idIntra : user2.idIntra})
+          this.server.to(users.get(user2.idIntra).id).emit('removeUserJoinGroup', {id: chat.id, idIntra : user2.idIntra})
         }
         // if (data.idIntra !== user.idIntra)
         // {
@@ -523,10 +527,13 @@ async newDm2(client: Socket, data: any) {
     if (user) {
       const user2 = await this.userService.getUserByIdIntra(message.idIntra)
         if (users.has(message.idIntra)) {
-          this.server.to(users.get(message.idIntra).id).emit('blockUser', { ciao : "ciao" , idIntra: user.idIntra })
+          this.server.to(users.get(message.idIntra).id).emit('blockUserChatContain', { ciao : "ciao" , idIntra: user.idIntra })
+          this.server.to(users.get(message.idIntra).id).emit('blockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user.idIntra })
         }
-        client.emit('blockUser', { ciao : "ciao" , idIntra: user2.idIntra})
-        client.emit('blockUser2', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('blockUserChatContain', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('blockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('blockUserBlockedList', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('blockUserSearchBar', { ciao : "ciao" , idIntra: user2.idIntra})
     }
   }
 
@@ -537,10 +544,13 @@ async newDm2(client: Socket, data: any) {
     if (user) {
       const user2 = await this.userService.getUserByIdIntra(message.idIntra)
         if (users.has(message.idIntra)) {
-          this.server.to(users.get(message.idIntra).id).emit('unBlockUser', { ciao : "ciao" , idIntra: user.idIntra })
+          this.server.to(users.get(message.idIntra).id).emit('unBlockUserChatContain', { ciao : "ciao" , idIntra: user.idIntra })
+          this.server.to(users.get(message.idIntra).id).emit('unBlockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user.idIntra })
         }
-        client.emit('unBlockUser', { ciao : "ciao" , idIntra: user2.idIntra})
-        client.emit('unBlockUser2', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('unBlockUserChatContain', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('unBlockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('unBlockUserBlockedList', { ciao : "ciao" , idIntra: user2.idIntra})
+        client.emit('unBlockUserSearchBar', { ciao : "ciao" , idIntra: user2.idIntra})
 
     }
   }

@@ -72,7 +72,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setUser(json);
       } catch (error) {
-        
+
       }
     };
 
@@ -94,10 +94,10 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        
+
         setFriends(json);
       } catch (error) {
-        
+
       }
     };
     fetchData();
@@ -105,7 +105,7 @@ export const SocialEdit = (props: any) => {
 
   useEffect(() => {
     socket.off('friendStatus').on("friendStatus", (data: any) => {
-      
+
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {
         const newFriends = friends.map((friend: any) => {
@@ -177,7 +177,7 @@ export const SocialEdit = (props: any) => {
         }
       });
       //const json = await response.json();
-      
+
       // window.location.reload();
       //
       if (response.status === 201) {
@@ -185,7 +185,7 @@ export const SocialEdit = (props: any) => {
         socket.emit("blockUser", { idIntra: idIntra });
       }
     } catch (error) {
-      
+
     }
   }
 
@@ -210,10 +210,10 @@ export const SocialEdit = (props: any) => {
         // window..reload();
       }
       //const json = await response.json();
-      
+
       // window.location.reload();
     } catch (error) {
-      
+
     }
   }
 
@@ -236,7 +236,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        
+
       }
     };
 
@@ -279,7 +279,7 @@ export const SocialEdit = (props: any) => {
   function renderMatchesRowPreview(props: any) {
     let { index, style, matches } = props;
 
-    
+
 
     var style2 = {
       ...style,
@@ -290,7 +290,7 @@ export const SocialEdit = (props: any) => {
     // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
 
 
-    
+
 
     return (
       <>
@@ -403,7 +403,7 @@ export const ProfileEdit = (props: any) => {
     let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
     const inputbox = document.getElementById('txtNick') as HTMLInputElement;
     const save = document.getElementById('saveButton');
-    
+
     inputbox?.setAttribute('disabled', 'true');
     inputbox?.removeAttribute('placeholder');
 
@@ -443,7 +443,7 @@ export const ProfileEdit = (props: any) => {
   };
 
   const uploadImage = async (imageList: ImageListType) => {
-    
+
     try {
       const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
         method: "POST",
@@ -455,9 +455,9 @@ export const ProfileEdit = (props: any) => {
       });
       manageError({}, response, props.triggerUser, setAlert);
       // setAlert(c);
-      
+
     } catch (error) {
-      
+
     }
     // window.location.reload()
   };
@@ -465,7 +465,7 @@ export const ProfileEdit = (props: any) => {
   function handleNick() {
     const inputbox = document.getElementById('txtNick');
     inputbox?.removeAttribute('disabled')
-    inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
+    inputbox?.setAttribute('placeholder', 'Inserisci Username');
     const save = document.getElementById('saveButton');
     save?.removeAttribute('hidden')
     if (inputbox) {
@@ -489,7 +489,7 @@ export const ProfileEdit = (props: any) => {
       //window.location.reload();
       manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
-      
+
     }
 
   }
@@ -505,11 +505,11 @@ export const ProfileEdit = (props: any) => {
           credentials: 'include',
         })
         const json = await response.json();
-        
-        
+
+
         setQr(json);
       } catch (error) {
-        
+
       }
     }
 
@@ -532,14 +532,14 @@ export const ProfileEdit = (props: any) => {
         setUser(json);
         setCheck(json.twoFa);
       } catch (error) {
-        
+
       }
     };
 
     fetchData();
   }, []);
 
-  
+
   const [open2FA, setOpen2FA] = React.useState(false);
 
   const close2FA = (event: any, reason: any) => {
@@ -550,13 +550,13 @@ export const ProfileEdit = (props: any) => {
   }
 
   const handleOpen2FA = () => {
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
     setOpen2FA(true);
     generate2faQr();
   }
@@ -569,10 +569,10 @@ export const ProfileEdit = (props: any) => {
         credentials: 'include',
       })
       const json = await response.json();
-      
+
       setCheck(false);
     } catch (error) {
-      
+
     }
   }
 
@@ -590,10 +590,10 @@ export const ProfileEdit = (props: any) => {
       }
       setCheck(!isCheck);
 
-      
+
     }
     catch (error) {
-      
+
     }
   }
 
@@ -670,7 +670,7 @@ export const ProfileEdit = (props: any) => {
         </CardActions>
       </Card >
       <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
-      
+
       <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr} />
     </>
   );

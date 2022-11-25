@@ -98,10 +98,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value, id: props.idChat }),
             });
             const json = await response.json();
-            
+
             setSearch(json);
         } catch (error) {
-            
+
         }
     }
 
@@ -117,15 +117,15 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             // const data = await response.json();
-            
-            
-            
+
+
+
             manageError(null, response, null, setAlert);
             if (response.status === 200) {
                 socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
             }
         } catch (error) {
-            
+
         }
 
     }
@@ -150,7 +150,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            
+
         }
 
     }
@@ -166,7 +166,7 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            
+
             const data = await response.json();
             manageError(data, response, null, setAlert);
 
@@ -181,7 +181,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            
+
         }
         //window.location.reload();
     }
@@ -217,7 +217,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
 
     }
@@ -259,7 +259,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('muteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
 
     }
@@ -277,10 +277,10 @@ export const AdminGroupActions = (props: any) => {
             })
 
             const data = await response.json();
-            
+
             setBanned(data);
         } catch (error) {
-            
+
         }
 
     }
@@ -297,10 +297,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            
+
             setMuted(data);
         } catch (error) {
-            
+
         }
 
     }
@@ -317,10 +317,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            
+
             setPromoted(data);
         } catch (error) {
-            
+
         }
 
     }
@@ -347,7 +347,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unBan', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -377,7 +377,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unMuteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -407,7 +407,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('promoteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -438,7 +438,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('demoteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            
+
         }
     }
 
@@ -454,10 +454,10 @@ export const AdminGroupActions = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                
+
                 setMySelf(json);
             } catch (error) {
-                
+
             }
         };
 
@@ -478,10 +478,10 @@ export const AdminGroupActions = (props: any) => {
                     body: JSON.stringify({ id: props.idChat }),
                 });
                 const json = await response.json();
-                
+
                 setChan(json);
             } catch (error) {
-                
+
             }
         };
 
@@ -498,7 +498,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar alt={partecipants[index]?.userName} src={partecipants[index]?.img} />
                 <Divider variant='middle' />
                 <ListItemText primary={partecipants[index]?.idIntra} secondary={partecipants[index]?.owner === true ? `Owner` : partecipants[index]?.admin === true ? `Admin` : `User ${isMuted}`} />
-                <ListItemText primary={partecipants[index]?.userName} secondary="Nickname"/>
+                <ListItemText primary={partecipants[index]?.userName} secondary="Username"/>
                 <Divider />
 
                 {partecipants[index]?.idIntra === mySelf.idIntra || partecipants[index]?.owner ? <>
@@ -556,7 +556,7 @@ export const AdminGroupActions = (props: any) => {
 
     function PromotedUserItem(props: any) {
         const { index, style } = props;
-        
+
         let isMuted = promoted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
@@ -621,12 +621,12 @@ export const AdminGroupActions = (props: any) => {
             newGroup.splice(index, 1);
         }
         setUserGroup(newGroup);
-        
+
     };
 
     function searchRow(props: ListChildComponentProps) {
         const { index, style } = props;
-        
+
         return (
             <ListItem key={index}>
 
@@ -746,7 +746,7 @@ export const AdminGroupActions = (props: any) => {
                                             <Button onClick={() => Lists("MutedList")} style={{ padding: 5, border: '2px solid black', color: 'black', borderRadius: 5 }}>Muted</Button>
                                             <Button onClick={() => Lists("BannedList")} style={{ padding: 5, border: '2px solid black', color: 'black', borderRadius: 5 }}>Banned</Button>
                                             <Button onClick={leaveChannel} style={{ padding: 5, border: '2px solid red', color: 'red', borderRadius: 5 }}>Leave</Button>
-                                            
+
                                         </> : clickLists === '' ?
                                             <>
                                                 <Button onClick={handleInvite} style={{ padding: 5, border: '2px solid purple', color: 'purple', borderRadius: 5, right: 7 }}>Gioca</Button>

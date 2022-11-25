@@ -55,7 +55,7 @@ export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     const params = useParams()
-    
+
     let status;
 
     const [triggerMessage, setTriggerMessage] = useState(false);
@@ -161,18 +161,18 @@ export const ChatContain = (props: any) => {
                     })
                 });
                 const json = await response.json();
-                
+
                 if (response.status === 200 || response.status === 201) {
                     setUserChat(json);
                     changeChat('DM', json.userName, json.id, json.img, json.idIntra, '');
                 }
             } catch (error) {
-                
+
             }
         };
 
         if (params.idIntra) {
-            
+
             fetchData();
         }
     }, [params.idIntra]);
@@ -195,10 +195,10 @@ export const ChatContain = (props: any) => {
     //                 }
     //             });
     //             const json = await response.json();
-    
+
     //             setUser(json);
     //         } catch (error) {
-    
+
     //         }
     //     };
 
@@ -221,10 +221,10 @@ export const ChatContain = (props: any) => {
     //                 }
     //             });
     //             const json = await response.json();
-    
+
     //             setFriends(json);
     //         } catch (error) {
-    
+
     //         }
     //     };
     //     fetchData();
@@ -247,7 +247,7 @@ export const ChatContain = (props: any) => {
                 const json = await response.json();
                 setDms(json);
             } catch (error) {
-                
+
             }
         };
         fetchDataDms();
@@ -266,10 +266,10 @@ export const ChatContain = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                
+
                 setChats(json);
             } catch (error) {
-                
+
             }
         };
         fetchData();
@@ -294,7 +294,7 @@ export const ChatContain = (props: any) => {
             setPermission(json.me);
             setPartecipants(json.partecipants);
         } catch (error) {
-            
+
         }
 
     }
@@ -319,10 +319,10 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            
+
             setSearch(json);
         } catch (error) {
-            
+
         }
     }
 
@@ -330,7 +330,7 @@ export const ChatContain = (props: any) => {
         const user = await search[index];
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
         try {
-            
+
             const response = await fetch(url, {
                 method: 'POST',
                 credentials: 'include',
@@ -340,29 +340,29 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ idIntra: user.idIntra }),
             });
             const json = await response.json();
-            
-            
+
+
             if (response.status === 200) {
-                
+
                 socket.emit('newDm', json);
                 // window.location.href = ;
                 // setonChangeDm(!onChangeDm);
-                
+
                 // changeChat('DM', user.userName, json.id, user.img, user.idIntra, '');
                 window.location.assign(`/Chat/${user.idIntra}`);
                 //changeChat('DM', user.userName , json.id, user.img , user.idIntra , '');
 
             }
-            
+
             // window.location.reload();
         } catch (error) {
-            
+
         }
     }
 
     async function toDm(index: any) {
         const idIntra = await search[index]?.idIntra;
-        
+
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getChatFromOtherProfile/`;
 
         try {
@@ -375,7 +375,7 @@ export const ChatContain = (props: any) => {
                 body: JSON.stringify({ idIntra: idIntra }),
             });
             const json = await response.json();
-            
+
             //changeChat('DM', dms[index]?.userName, dms[index]?.id, dms[index]?.img, dms[index]?.idIntra, '')
             if (response.status !== 200) {
                 await newDm(index);
@@ -390,10 +390,10 @@ export const ChatContain = (props: any) => {
                 changeChat('DM', json?.userName, json?.id, json?.img, json?.idIntra, '')
             }
 
-            
+
             // window.location.reload();
         } catch (error) {
-            
+
         }
     }
 
@@ -415,56 +415,56 @@ export const ChatContain = (props: any) => {
                 });
                 const json = await response.json();
                 let ret = new Map(json.map((json: any) => [json.chat.id, json.chat.messages]))
-                
+
                 for (let entry of Array.from(ret.entries())) {
 
                     socket.emit('provaJoin', { idChat: entry[0] });
-                    
+
                 }
                 setMap(ret);
                 setJoin(true);
                 return ret;
             } catch (error) {
-                
+
             }
         };
             fetchData();
 
-        const updateMap = (key: any, value: any) => {
-            // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-            
-            const currentValues = map.get(key);
-            
-            
-            // setMap(map2 => new Map(map.set(key, [...currentValues, value])));
+        // const updateMap = (key: any, value: any) => {
+        //     // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
 
-        }
+        //     const currentValues = map.get(key);
 
-            socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
-                
-                updateMap(data.idChat, data);
-            });
+
+        //     // setMap(map2 => new Map(map.set(key, [...currentValues, value])));
+
+        // }
+
+        //     socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
+
+        //         updateMap(data.idChat, data);
+        //     });
 
     }, [triggerMessage]);
 
     React.useEffect(() => {
         const updateMap = (key: any, value: any) => {
             const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-            
-            
+
+
             setMap(map2 => new Map(map.set(key, [...currentValues, value])));
 
         }
 
             socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
-                
+
                 updateMap(data.idChat, data);
             });
 
     });
 
     React.useEffect(() => {
-            socket.off('newChannel').on('newChannel', (data: any) => {
+            socket.off('newChannelChatContain').on('newChannelChatContain', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
@@ -485,7 +485,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.off('addUser').on('addUser', (data: any) => {
+            socket.off('addUserChatContain').on('addUserChatContain', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
                     for (let i = 0; i < chats.length; i++) {
@@ -504,7 +504,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.off('removeUser').on('removeUser', (data: any) => {
+            socket.off('removeUserChatContain').on('removeUserChatContain', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [];
                     for (let i = 0; i < chats.length; i++) {
@@ -515,8 +515,8 @@ export const ChatContain = (props: any) => {
                     setChats(newChats);
                     if (map !== undefined) {
                         var newMap = new Map(map);
-                        
-                        
+
+
                         if (newMap.has(data.id)) {
                             newMap.delete(data.id);
                             if (data.idIntra === idIntra) {
@@ -529,7 +529,7 @@ export const ChatContain = (props: any) => {
                 }
             });
     });
-    
+
     React.useEffect(() => {
             socket.off('newDm').on('newDm', (data: any) => {
                 if (dms !== undefined && data.id !== undefined && data.partecipant) {
@@ -557,7 +557,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.off('blockUser').on('blockUser', (data: any) => {
+            socket.off('blockUserChatContain').on('blockUserChatContain', (data: any) => {
                 if (data.ciao === "ciao" && data.idIntra) {
                         setTriggerMessage(!triggerMessage);
                 }
@@ -565,7 +565,7 @@ export const ChatContain = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.off('unBlockUser').on('unBlockUser', (data: any) => {
+            socket.off('unBlockUserChatContain').on('unBlockUserChatContain', (data: any) => {
                 if (data.ciao === "ciao" && data.idIntra ) {
                         setTriggerMessage(!triggerMessage);
                 }
@@ -574,7 +574,7 @@ export const ChatContain = (props: any) => {
 
     React.useEffect(() => {
             socket.off('banUser').on('banUser', (data: any) => {
-                
+
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
                     for (let i = 0; i < chats.length; i++) {
@@ -605,8 +605,8 @@ export const ChatContain = (props: any) => {
             });
     });
 
-    
-    
+
+
 
 
     // React.useEffect(() => {
@@ -623,13 +623,13 @@ export const ChatContain = (props: any) => {
     //             body: JSON.stringify({ count: 50 }),
     //         });
     //         const json = await response.json();
-    
+
     //         setMap(json.map((chat: any) => {
     //             map.set(chat.idChat, chat.messages);
     //         }));
-    
+
     //     } catch (error) {
-    
+
     //     }
     //     getMessages();
     // }}, []);
@@ -649,8 +649,8 @@ export const ChatContain = (props: any) => {
     function renderDmsRow(props: any) {
         const { index, style } = props;
         /*to fix to real id of the chat*/
-        
-        
+
+
         return (
             <ListItem style={style} key={index} onClick={() => navigate(`/Chat/` + dms[index]["partecipant"][0]["user"]?.idIntra)}>
                 <img width="50px" height="50px" style={{borderRadius: '100%'}} src={dms[index]["partecipant"][0]["user"]?.img} />

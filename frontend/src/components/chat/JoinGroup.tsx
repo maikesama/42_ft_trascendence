@@ -100,37 +100,37 @@ export const JoinGroup = (props: any) => {
             }
             });
             const json = await response.json();
-            
+
             setChats(json);
         } catch (error) {
-            
+
         }
         };
         fetchData();
-            socket.off('newChannel').on('newChannel', (data: any) => {
+            socket.off('newChannelJoinGroup').on('newChannelJoinGroup', (data: any) => {
                 fetchData();
-            });  
-            socket.off('removeUser').on('removeUser', (data: any) => {
+            });
+            socket.off('removeUserJoinGroup').on('removeUserJoinGroup', (data: any) => {
                 fetchData();
-            });  
-            socket.off('addUser').on('addUser', (data: any) => {
+            });
+            socket.off('addUserJoinGroup').on('addUserJoinGroup', (data: any) => {
                 fetchData();
-            });  
+            });
             socket.off('newJoin').on('newJoin', (data: any) => {
                 fetchData();
-            });  
+            });
     }, []);
 
 
-        
+
 
 
     async function joinChannel(id : number, index: any) {
         let pwd = "";
 
-        
+
         // pwd = pass.current[index].value;
-        
+
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/joinChannel`;
         try {
             const response = await fetch(url, {
@@ -144,27 +144,27 @@ export const JoinGroup = (props: any) => {
             const data = await response.json();
             manageError(data, response , null, setAlert);
 
-            if (response.status === 200) 
+            if (response.status === 200)
             {
-                
+
                 socket.emit('addUser', { idChat: id, idIntra: [idIntra] });
                 props.closeStatus();
             }
-            
+
         } catch (error) {
-            
+
         }
     }
 
     function handleJoin(index: any)
     {
         var pass = document.getElementById(String(index)) as HTMLInputElement | null;
-        
+
         var newPassArray = password;
         newPassArray[index] = pass?.value;
         setPassword(newPassArray);
     }
-    
+
 
     function renderRow(props: ListChildComponentProps) {
         const { index, style } = props;
