@@ -44,3 +44,19 @@ togliere join and leave
 added friend after block
 
 notifiche achivment
+
+
+
+
+nuove
+qrcode 
+merge con link 
+messaggi 90 sia front che back
+mettere 1 minuto quando 0 --> muted
+caratteri muted banned
+togliere alcuni console.log()
+cambiare icone promoted muted banned
+friend other profile se sono io
+trigger acceptFrien frienHandler
+--silent
+block search bar 
