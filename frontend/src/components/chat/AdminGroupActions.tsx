@@ -188,6 +188,15 @@ export const AdminGroupActions = (props: any) => {
 
     async function ban() {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/banUser`;
+        var data;
+        if (bantime.current.value)
+        {
+            data = { id: props.idChat, idIntra: selectedName, time: bantime.current.value }
+        }
+        else
+        {
+            data = { id: props.idChat, idIntra: selectedName }
+        }
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -195,10 +204,10 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: bantime.current.value }),
+                body: JSON.stringify(data),
             })
-            // const data = await response.json();
-            manageError(null, response, null, setAlert);
+            const data2 = await response.json();
+            manageError(data2, response, null, setAlert);
             if (response.status == 200)
             {
                 setBanButton(false);
@@ -215,6 +224,15 @@ export const AdminGroupActions = (props: any) => {
 
     async function mute() {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/muteUser`;
+        var data;
+        if (mutetime.current.value)
+        {
+            data = { id: props.idChat, idIntra: selectedName, time: mutetime.current.value }
+        }
+        else
+        {
+            data = { id: props.idChat, idIntra: selectedName }
+        }
         try {
             const response = await fetch(url, {
                 method: 'POST',
@@ -222,10 +240,12 @@ export const AdminGroupActions = (props: any) => {
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ id: props.idChat, idIntra: selectedName, time: mutetime.current.value }),
+                body: JSON.stringify(data),
             })
-            // const data = await response.json();
-            manageError(null, response, null, setAlert);
+            console.log(response);
+            const data2 = await response.json();
+            console.log(data2);
+            manageError(data2, response, null, setAlert);
             if (response.status == 200)
             {
                 setMuteButton(false);

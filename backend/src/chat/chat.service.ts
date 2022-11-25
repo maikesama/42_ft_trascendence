@@ -948,6 +948,7 @@ export class ChatService {
                         }
                     })
                 }
+                return {statusCode: 200, message: 'User muted'}
             }
             else {
                 throw new HttpException('You are not allowed to mute this user', HttpStatus.UNAUTHORIZED)
@@ -1400,6 +1401,7 @@ export class ChatService {
                     }
                 })
             }
+            return {statusCode: 200, message: 'User banned'}
         }
         catch (err) {
             console.log(err)
