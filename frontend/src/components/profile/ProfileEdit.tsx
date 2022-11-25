@@ -487,8 +487,8 @@ export const ProfileEdit = (props: any) => {
 
   const [Qr, setQr] = React.useState('');
 
-  React.useEffect(() => {
     async function generate2faQr() {
+
       const url = `http://${process.env.REACT_APP_HOST_URI}/api/auth/2fa/generate`;
       try {
         const response = await fetch(url, {
@@ -496,14 +496,14 @@ export const ProfileEdit = (props: any) => {
           credentials: 'include',
         })
         const json = await response.json();
-        //console.log(json);
+        console.log('newcode')
+        console.log(json);
         setQr(json);
       } catch (error) {
-        //console.log("error", error);
+        console.log("error", error);
       }
     }
-    generate2faQr();
-  }, []);
+
 
   const [user, setUser] = useState({} as any);
   const [isCheck, setCheck] = React.useState(false);
@@ -541,7 +541,15 @@ export const ProfileEdit = (props: any) => {
   }
 
   const handleOpen2FA = () => {
+    console.log('newcod1')
+    console.log('newcod1')
+    console.log('newcod1')
+    console.log('newcod1')
+    console.log('newcod1')
+    console.log('newcod1')
+    console.log('newcod1')
     setOpen2FA(true);
+    generate2faQr();
   }
 
   async function turnOff2FA() {
@@ -563,15 +571,17 @@ export const ProfileEdit = (props: any) => {
     try {
 
       const bool = !isCheck;
-      setCheck(!isCheck);
 
       if (bool === false) {
         await turnOff2FA();
       }
       else {
         // await generate2faQr()
-        handleOpen2FA();
+        await handleOpen2FA();
       }
+      setCheck(!isCheck);
+
+      
     }
     catch (error) {
       //console.log("error", error);
@@ -651,6 +661,7 @@ export const ProfileEdit = (props: any) => {
         </CardActions>
       </Card >
       <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+      
       <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr} />
     </>
   );

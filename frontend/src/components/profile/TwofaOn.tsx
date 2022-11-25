@@ -78,7 +78,7 @@ export const TwofaOn = (props: any) => {
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
         <DialogTitle style={{fontSize: 18}}>Use Google Authenticator</DialogTitle>
-        <DialogTitle><img style={{width: '100%'}} src={props?.qr?.QRcode} /></DialogTitle>
+        <DialogTitle><img style={{width: '100%'}} src={props.qr?.QRcode} /></DialogTitle>
         <DialogContent>
           <TextField style={{width: '100%'}} placeholder='insert code' variant='standard' inputRef={code} />
         </DialogContent>
