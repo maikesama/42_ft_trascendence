@@ -16,7 +16,6 @@ import { socket } from '../../App';
 export const BlockedList = (props: any) => {
 
   const [blocked, setBlocked] = useState({} as any);
-  const isSecondRender = useRef(false);
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/getBlocked`;
 
@@ -39,15 +38,12 @@ export const BlockedList = (props: any) => {
     };
 
     fetchData();
-      if (isSecondRender.current) {
         socket.off('blockUser2').on('blockUser2', (data: any) => {
             fetchData();
           });
           socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
             fetchData();
           });
-      }
-      isSecondRender.current = true;
   }, []);
 
   async function unblock(index: any) {

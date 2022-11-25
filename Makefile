@@ -5,6 +5,8 @@ run: up
 run2: up2
 
 del:
+	@rm -rf frontend/build
+	@rm -rf frontend/node_modules
 	@sed -ie '/REACT_APP_HOST_URI/d' .env
 	@rm .enve
 

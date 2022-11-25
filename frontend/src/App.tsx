@@ -34,7 +34,6 @@ function App() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   //const [notify, setNotify] = useState(true);
   const { authed, loading } = useAuth();
-  const isSecondRender = useRef(false);
   let navigate = useNavigate();
   console.log(authed);
 
@@ -53,7 +52,6 @@ function App() {
     //   // toast(data);
     // }
 
-    if (isSecondRender.current) {
       socket.off('notify').on('notify', (data: any) => {
         if (data)
         {
@@ -103,8 +101,6 @@ function App() {
 
         }
         });
-      }
-    isSecondRender.current = true;
 
 
   }, []);

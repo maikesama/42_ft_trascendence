@@ -51,7 +51,6 @@ export const SocialEdit = (props: any) => {
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const [openInvited, setOpenInvited] = React.useState(false);
-  const isSecondRender = useRef(false);
 
   let navigate = useNavigate();
   const isAddFriendNew = useRef(true);

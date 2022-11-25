@@ -84,7 +84,6 @@ export const JoinGroup = (props: any) => {
     const [join, setJoin] = React.useState(-1);
     const [password, setPassword] = React.useState([] as any);
     const [alert, setAlert] = useState("");
-    const isSecondRender = useRef(false);
     const { idIntra } = useAuth();
 
 
@@ -108,7 +107,6 @@ export const JoinGroup = (props: any) => {
         }
         };
         fetchData();
-        if (isSecondRender.current) {
             socket.off('newChannel').on('newChannel', (data: any) => {
                 fetchData();
             });  
@@ -121,8 +119,6 @@ export const JoinGroup = (props: any) => {
             socket.off('newJoin').on('newJoin', (data: any) => {
                 fetchData();
             });  
-        }
-        isSecondRender.current = true;
     }, []);
 
 

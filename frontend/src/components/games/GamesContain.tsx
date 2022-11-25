@@ -41,7 +41,6 @@ export const canvasDim = {
 
 
 export const GamesContain = (props: any) => {
-  const isSecondRender = useRef(false);
   // axios.get('api/getinfo').then(data=>data.json() )
   //console.log(props.match.params.username)
   // const [loading, setLoading] = useState(false);
@@ -72,10 +71,7 @@ export const GamesContain = (props: any) => {
       setIsConnectedGames(true);
     });
 
-    if (isSecondRender.current) {
       socketGames.emit('newPlayer', params.idIntra);
-    }
-    isSecondRender.current = true;
 
 
     socketGames.on('disconnect', () => {

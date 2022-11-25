@@ -81,7 +81,6 @@ export const SearchBar = (props: any) => {
     const [search, setSearch] = useState({} as any);
     const initials = useRef<any>('');
     const [alert, setAlert] = useState("");
-    const isSecondRender = useRef(false);
     let navigate = useNavigate();
     // const [isBlocked, setIsBlocked] = useState(false);
     // const [isFriend, setIsFriend] = useState(false);
@@ -107,31 +106,22 @@ export const SearchBar = (props: any) => {
     }
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('blockUser2').on('blockUser2', (data: any) => {
                 searchUser();
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
                 searchUser();
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('friendHandler').on('friendHandler', (data: any) => {
                 console.log("friendHandler");
                 searchUser();
             });
-        }
-        isSecondRender.current = true;
     });
 
     function renderSearchRow(props: any) {

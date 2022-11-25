@@ -59,21 +59,16 @@ export const Channel = (props: any) => {
     const setPermission = props.setPermission;
     const setPartecipants = props.setPartecipants;
     const [openAdminActions, setopenAdminActions] = React.useState(false);
-    const isSecondRender = React.useRef(false);
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('refreshPartecipants').on('refreshPartecipants', (data: any) => {
                 if (props.id === data.idChat) {
                     setPartecipants(data.partecipants);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('demoteUser').on('demoteUser', (data: any) => {
                 if (props.id === data.idChat) {
                     setPermission({owner: false, admin: false});
@@ -81,12 +76,9 @@ export const Channel = (props: any) => {
                     // setopenGroupInfo(false);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('promoteUser').on('promoteUser', (data: any) => {
                 if (props.id === data.idChat) {
                     setPermission({owner: false, admin: true});
@@ -94,8 +86,6 @@ export const Channel = (props: any) => {
                     setopenGroupInfo(false);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
 

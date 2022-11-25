@@ -17,7 +17,6 @@ import { socket } from '../../App';
 export const InvitedList = (props: any) => {
 
   const [invited, setInvited] = useState({} as any);
-  const isSecondRender = useRef(false);
 
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getInvite`;
@@ -41,12 +40,9 @@ export const InvitedList = (props: any) => {
     };
 
     fetchData();
-    if (isSecondRender.current) {
       socket.off('friendHandler').on('friendHandler', (data: any) => {
         fetchData();
       });
-  }
-  isSecondRender.current = true;
   }, []);
 
 

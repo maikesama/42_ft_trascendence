@@ -245,7 +245,6 @@ export const ProfileEdit =  (props: any) => {
   const [isFriend, setIsFriend] = useState(false);
   const [isPending, setIsPending] = useState(false);
   const [alert, setAlert] = useState("");
-  const isSecondRender = useRef(false);
   const [friendHandler, setFriendHandler] = useState(false);
   const [blockHandler, setBlockHandler] = useState(false);
 
@@ -276,36 +275,27 @@ export const ProfileEdit =  (props: any) => {
   }, [props.idIntra, friendHandler]);
 
   React.useEffect(() => {
-    if (isSecondRender.current) {
       socket.off('friendHandler').on('friendHandler', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setFriendHandler(!friendHandler);
           }
       });
-    }
-    isSecondRender.current = true;
   });
 
   React.useEffect(() => {
-    if (isSecondRender.current) {
       socket.off('blockUser').on('blockUser', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setBlockHandler(!blockHandler);
           }
       });
-    }
-    isSecondRender.current = true;
   });
 
   React.useEffect(() => {
-    if (isSecondRender.current) {
       socket.off('unBlockUser').on('unBlockUser', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setBlockHandler(!blockHandler);
           }
       });
-    }
-    isSecondRender.current = true;
   });
 
   useEffect(() => {

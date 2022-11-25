@@ -400,7 +400,6 @@ export const ChatContain = (props: any) => {
     const [map, setMap] = useState(new Map());
     const [join, setJoin] = useState(false);
     // const [mapped, setMapped] = useState(false);
-    const isSecondRender = useRef(false);
 
     React.useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/getMessages`;
@@ -429,9 +428,7 @@ export const ChatContain = (props: any) => {
                 console.log("error", error);
             }
         };
-        if (isSecondRender.current) {
             fetchData();
-        }
 
         const updateMap = (key: any, value: any) => {
             // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
@@ -443,13 +440,10 @@ export const ChatContain = (props: any) => {
 
         }
 
-        if (isSecondRender.current) {
             socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
                 console.log("data: ", data);
                 updateMap(data.idChat, data);
             });
-        }
-        isSecondRender.current = true;
 
     }, [triggerMessage]);
 
@@ -462,18 +456,14 @@ export const ChatContain = (props: any) => {
 
         }
 
-        if (isSecondRender.current) {
             socket.off('provaMessaggi').on('provaMessaggi', (data: any) => {
                 console.log("data: ", data);
                 updateMap(data.idChat, data);
             });
-        }
-        isSecondRender.current = true;
 
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('newChannel').on('newChannel', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
@@ -492,12 +482,9 @@ export const ChatContain = (props: any) => {
                 }
                 //message.current?.scrollIntoView({ behavior: 'smooth' });
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('addUser').on('addUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [ ];
@@ -514,12 +501,9 @@ export const ChatContain = (props: any) => {
                     setTriggerMessage(!triggerMessage);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('removeUser').on('removeUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var newChats = [];
@@ -544,12 +528,9 @@ export const ChatContain = (props: any) => {
                     }
                 }
             });
-        }
-        isSecondRender.current = true;
     });
     // console.log("map", map);
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('newDm').on('newDm', (data: any) => {
                 if (dms !== undefined && data.id !== undefined && data.partecipant) {
                     var newDms = [];
@@ -573,34 +554,25 @@ export const ChatContain = (props: any) => {
                     setMap(newMap);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('blockUser').on('blockUser', (data: any) => {
                 if (data.ciao === "ciao" && data.idIntra) {
                         setTriggerMessage(!triggerMessage);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('unBlockUser').on('unBlockUser', (data: any) => {
                 if (data.ciao === "ciao" && data.idIntra ) {
                         setTriggerMessage(!triggerMessage);
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
             socket.off('banUser').on('banUser', (data: any) => {
                 console.log("banUser");
                 if (chats !== undefined && data.id !== undefined) {
@@ -615,12 +587,9 @@ export const ChatContain = (props: any) => {
                     }
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     React.useEffect(() => {
-        if (isSecondRender.current) {
                 socket.off('unBanUser').on('unBanUser', (data: any) => {
                 if (chats !== undefined && data.id !== undefined) {
                     var find = false;
@@ -634,8 +603,6 @@ export const ChatContain = (props: any) => {
                     }
                 }
             });
-        }
-        isSecondRender.current = true;
     });
 
     // console.log("dms", dms);

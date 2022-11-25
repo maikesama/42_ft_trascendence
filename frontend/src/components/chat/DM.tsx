@@ -117,7 +117,6 @@ export const DM = (props: any) => {
 	// const [map, setMap] = useState(new Map());
 	// const [message, setMessage] = useState('');
 	// const [idChat, setIdChat] = useState(props.idChat);
-	// const isSecondRender = useRef(false);
 
 	// const handleMessage = (event: any) => {
 	// 	if (event.target.value !== '') {
