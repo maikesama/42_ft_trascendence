@@ -68,3 +68,6 @@ searchbar ban friend
 
 friend otherprofile + ban emit remove friend
 search bar
+togliere join leave
+
+username error

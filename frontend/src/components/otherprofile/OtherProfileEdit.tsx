@@ -194,8 +194,8 @@ export const SocialEdit = (props: any) => {
     socket.on('friendHandler', (data: any) => {
       console.log("qui");
       console.log(data);
-      console.log(data);
-      if (data.idIntra === idIntra|| data.idIntra === user.idUser) {
+      console.log(user.idUser);
+      if (data.idIntra === idIntra || data.idIntra === user.idUser) {
         fetchData();
       }
     });

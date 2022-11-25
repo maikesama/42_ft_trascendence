@@ -39,9 +39,9 @@ export const Alert = (props: any) => {
         <>
             <Dialog open={props.status} onClose={props.closeStatus}>
             <div style={{backgroundColor: '#bc3945' , border: '2px solid #f5c6cb', color: 'white'}}>
-            <DialogTitle style={{textAlign: 'center', fontSize: 24}}>Errore!</DialogTitle>
+            <DialogTitle style={{textAlign: 'center', fontSize: 24}}>Error!</DialogTitle>
             <DialogContent >
-                <Typography variant="h6" color="initial">L'errore é stato il seguente:</Typography>
+                <Typography variant="h6" color="initial">The error is: </Typography>
                 <Typography variant="h6" color="initial">{props.error}</Typography>
             </DialogContent>
             <DialogActions>

@@ -401,7 +401,7 @@ export const ProfileEdit = (props: any) => {
   const clickSave = async () => {
 
     let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
-    const inputbox = document.getElementById('txtNick');
+    const inputbox = document.getElementById('txtNick') as HTMLInputElement;
     const save = document.getElementById('saveButton');
     
     inputbox?.setAttribute('disabled', 'true');
@@ -419,8 +419,9 @@ export const ProfileEdit = (props: any) => {
       if (response.status === 200 || response.status === 201) {
         // window.location.reload();
         save?.setAttribute('hidden', 'true');
-        save?.setAttribute('placeholder', nick.current.value );
-        inputbox?.setAttribute('disabled', 'true');
+        if (inputbox) {
+          inputbox.classList.remove('Mui-disabled');
+        }
       }
       else {
         inputbox?.removeAttribute('disabled');
@@ -467,6 +468,10 @@ export const ProfileEdit = (props: any) => {
     inputbox?.setAttribute('placeholder', 'Inserisci Nickname');
     const save = document.getElementById('saveButton');
     save?.removeAttribute('hidden')
+    if (inputbox) {
+      inputbox.classList.add('Mui-disabled');
+      inputbox.style.color = "rgba(0, 0, 0, 0.20)";
+    }
   }
 
   const fontColor = {
