@@ -692,7 +692,8 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                         idIntra: game.user1
                     },
                     select: {
-                        img: true
+                        img: true,
+                        userName : true
                     }
                 })
 
@@ -701,14 +702,17 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
                         idIntra: game.user2
                     },
                     select: {
-                        img: true
+                        img: true,
+                        userName : true
                     }
                 })
 
                 return {
                     ...game,
                     img1: userToGetImg1.img,
-                    img2: userToGetImg2.img
+                    img2: userToGetImg2.img,
+                    userName1: userToGetImg1.userName,
+                    userName2: userToGetImg2.userName,
                 }
             }))
 

@@ -19,14 +19,16 @@ export class UserService {
 
 						}
 					}
+
 				}
 			})
 			const blockedInfo = user.blocked.map((b) => {
 				return {
 					idIntra: b.blocked.idIntra,
 					img: b.blocked.img,
+					userName: b.blocked.userName
 				}})
-
+				
 			return blockedInfo
 		}
 		catch(e){

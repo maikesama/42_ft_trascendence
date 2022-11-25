@@ -78,7 +78,7 @@ export const BlockedList = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar src={blocked[index]?.img} />
-        <ListItemText id="idIntraBlock" primary={blocked[index]?.idIntra} />
+        <ListItemText id="idIntraBlock" primary={blocked[index]?.userName} />
         <Divider variant="middle" />
         <IconButton aria-label="unblock" size="small" style={{ color: 'green' }} onClick={() => unblock(index)}><HowToRegOutlinedIcon fontSize="large" /></IconButton>
       </ListItem>

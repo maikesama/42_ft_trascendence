@@ -407,8 +407,8 @@ export class ChatService {
 
             const users: { idIntra: String, img: String }[] = await this.prismaService.user.findMany({
                 where: {
-                    idIntra: {
-                        not: me.idIntra,
+                    userName: {
+                        not: me.userName,
                         startsWith: body.initials,
                     }
                 },

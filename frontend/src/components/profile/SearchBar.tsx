@@ -356,7 +356,7 @@ export const SearchBar = (props: any) => {
             <>
                 <ListItem style={style} key={index} >
                     {search[index]?.img ? <><Avatar src={search[index]?.img} />
-                        <ListItemText id="idIntraSearch" primary={search[index]?.idIntra} />
+                        <ListItemText id="idIntraSearch" primary={search[index]?.userName} />
                         { search[index]?.status === 0 ? <i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /> : search[index]?.status === 1 ? <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> : search[index]?.status === 2 ? <i style={{ fontSize: 8, color: 'gray' }} className="bi bi-circle-fill" /> : null }
                         
                         <Divider variant="middle" />

@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
 
-  frontend2:
+  frontend:
     image: "frontend2"
     build:
       dockerfile: 'Dockerfile'
@@ -14,7 +14,7 @@ services:
     environment:
       REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
       # WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
-    container_name: frontend2
+    container_name: frontend
     depends_on:
       - "backend"
     networks:

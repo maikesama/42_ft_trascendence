@@ -96,7 +96,7 @@ export const InvitedList = (props: any) => {
     return (
       <ListItem style={style} key={index} >
         <Avatar src={invited[index]?.img} />
-        <ListItemText id="idIntraInvite" primary={invited[index]?.idIntra} />
+        <ListItemText id="idIntraInvite" primary={invited[index]?.userName} />
         <Divider variant="middle" />
         <IconButton aria-label="acceptInvite" size="small" style={{ color: 'green' }} onClick={() => acceptInvite(index)}><CheckCircleOutlinedIcon fontSize="large" /></IconButton>
         <IconButton aria-label="declineInvite" size="small" style={{ color: 'red' }} onClick={() => declineInvite(index)}><CancelOutlinedIcon fontSize="large" /></IconButton>

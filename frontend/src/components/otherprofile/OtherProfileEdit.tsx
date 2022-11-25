@@ -84,9 +84,9 @@ export const SocialEdit = (props: any) => {
           <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
             <ListItem key={index} style={style2}>
               <Avatar src={games[index]?.img1} />
-              <Typography sx={{ color: 'black', textDecoration: 'none' }}>{games[index]?.user1}</Typography>
+              <Typography sx={{ color: 'black', textDecoration: 'none' }}>{games[index]?.userName1}</Typography>
               <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
-              <Typography>{games[index]?.user2}</Typography>
+              <Typography>{games[index]?.userName2}</Typography>
               <Avatar src={games[index]?.img2} />
             </ListItem>
           </Link>
@@ -96,9 +96,9 @@ export const SocialEdit = (props: any) => {
             <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
               <ListItem key={index} style={style2}>
                 <Avatar src={games[index]?.img2} />
-                <Typography>{games[index]?.user2}</Typography>
+                <Typography>{games[index]?.userName2}</Typography>
                 <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
-                <Typography>{games[index]?.user1}</Typography>
+                <Typography>{games[index]?.userName1}</Typography>
                 <Avatar src={games[index]?.img1} />
               </ListItem>
             </Link>
@@ -134,7 +134,7 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img}/>
-          <Typography style={{paddingLeft: "0.25rem", width: '30%'}}>{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{paddingLeft: "0.25rem", width: '30%'}}>{(friends[index]?.userName)}</Typography>
           <Typography style={{fontSize: 12, paddingLeft: "0.75rem", width: "55%"}}>{` From ${String(data[0])} ${String(hour[0])}`}</Typography>
           {/* <i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /> */}
         </Link>
@@ -558,7 +558,7 @@ async function toDm(index: any) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
-            Nickname:
+            Username:
           </Typography>
           <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
         </div>
@@ -566,7 +566,7 @@ async function toDm(index: any) {
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 
           <Typography variant="h5" component="div" sx={{ marginTop: 2, marginRight: 2 }}>
-            Username:
+            Intra:
           </Typography>
           <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
         </div>

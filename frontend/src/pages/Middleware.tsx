@@ -132,7 +132,7 @@ export const Middleware = () => {
                                     <i className="fas fa-cubes fa-2x me-3" style={{ color: '#ff6219' }}></i>
                                     <span className="h1 fw-bold mb-0 center">Hello {user.idIntra}!</span>
                                 </div>
-                                <h5 className="align-items-center fw-normal mb-1 pb-1" style={{ letterSpacing: '1px', margin: '0' }}>Choose your nickname:</h5>
+                                <h5 className="align-items-center fw-normal mb-1 pb-1" style={{ letterSpacing: '1px', margin: '0' }}>Choose your username:</h5>
                                 <TextField label={user.userName} inputRef={nick} id="txtNick" variant="outlined" onBlur={clickSave} />
                                 <div className="pt-1 mb-4">
                                     <button className="btn btn-dark btn-lg btn-block" style={{ marginTop: '10px', backgroundColor: '#1976d2', border: '2px solid #1976d2', marginRight: '2px' }} onClick={logFunction}>Next</button>

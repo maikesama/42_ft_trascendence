@@ -86,9 +86,9 @@ export class FriendService{
                 return {
                     idIntra: user.invitedBy.idIntra,
                     img: user.invitedBy.img,
+                    userName: user.invitedBy.userName,
                 }
             })
-
 
             return invitedByInfo
         }

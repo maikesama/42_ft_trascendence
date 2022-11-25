@@ -298,9 +298,9 @@ export const SocialEdit = (props: any) => {
           <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user2}`} underline="none" color="inherit" sx={{ display: "contents" }}>
             <ListItem key={index} style={style2}>
               <Avatar src={games[index]?.img1} />
-              <Typography sx={{ color: 'black', textDecoration: 'none' }}>{games[index]?.user1}</Typography>
+              <Typography sx={{ color: 'black', textDecoration: 'none' }}>{games[index]?.userName1}</Typography>
               <Typography>{games[index]?.scoreP1 + " - " + games[index]?.scoreP2}</Typography>
-              <Typography>{games[index]?.user2}</Typography>
+              <Typography>{games[index]?.userName2}</Typography>
               <Avatar src={games[index]?.img2} />
             </ListItem>
           </Link>
@@ -310,9 +310,9 @@ export const SocialEdit = (props: any) => {
             <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${games[index]?.user1}`} underline="none" color="inherit" sx={{ display: "contents" }}>
               <ListItem key={index} style={style2}>
                 <Avatar src={games[index]?.img2} />
-                <Typography>{games[index]?.user2}</Typography>
+                <Typography>{games[index]?.userName2}</Typography>
                 <Typography>{games[index]?.scoreP2 + " - " + games[index]?.scoreP1}</Typography>
-                <Typography>{games[index]?.user1}</Typography>
+                <Typography>{games[index]?.userName1}</Typography>
                 <Avatar src={games[index]?.img1} />
               </ListItem>
             </Link>
@@ -329,7 +329,7 @@ export const SocialEdit = (props: any) => {
       <ListItem style={style} key={index} >
         <Link key={`/Profile/other`} component={RouterLink} to={`/Profile/${friends[index]?.idIntra}`} underline="none" color="inherit" sx={{ display: "contents" }}>
           <Avatar src={friends[index]?.img} />
-          <Typography style={{ paddingLeft: "0.25rem", width: '30%' }} id="idIntraFriend" >{(friends[index]?.idIntra)}</Typography>
+          <Typography style={{ paddingLeft: "0.25rem", width: '30%' }} id="idIntraFriend" >{(friends[index]?.userName)}</Typography>
           <div style={{ paddingLeft: '0.75rem', width: '15%' }}>
             {friends[index]?.status === 0 ? <><i style={{ fontSize: 8, color: 'red' }} className="bi bi-circle-fill" /></> : null}
             {friends[index]?.status === 1 ? <><i style={{ fontSize: 8, color: 'green' }} className="bi bi-circle-fill" /></> : null}
@@ -624,7 +624,7 @@ export const ProfileEdit = (props: any) => {
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-              Nickname:
+              Username:
             </Typography>
             <TextField inputProps={fontColor} inputRef={nick} id="txtNick" placeholder={props.username} variant="standard" disabled />
             <button style={{ backgroundColor: 'white', color: 'black', border: 0 }} onClick={handleNick}>
@@ -638,7 +638,7 @@ export const ProfileEdit = (props: any) => {
           <div style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'left' }}>
 
             <Typography variant="h5" component="div" sx={{ marginTop: 1, marginRight: 1 }}>
-              Username:
+              Intra:
             </Typography>
             <TextField id="txtNick" placeholder={props.idIntra} variant="standard" disabled />
           </div>
