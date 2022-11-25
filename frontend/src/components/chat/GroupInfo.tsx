@@ -73,7 +73,7 @@ export const GroupInfo = (props: any) => {
             }
 
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }

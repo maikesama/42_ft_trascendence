@@ -37,8 +37,8 @@ export class TwoFactorAuthenticationService {
 
 	async complete2fa(body: any) : Promise<string>{
 		var Id: number = +body
-		console.log(Id)
-		this.turnOnTwoFa(Id)
+		
+		await this.turnOnTwoFa(Id)
 		let secret : {otpUrl: string, twoFa: Boolean} = await this.prisma.user.findUniqueOrThrow({
 			where:{
 				id : Id
@@ -66,7 +66,7 @@ export class TwoFactorAuthenticationService {
 			if (id === undefined || body.totp === undefined)
 				throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
 			const idNumber: number = +id;
-			console.log(idNumber)
+			
 			let user = await this.prisma.user.findUniqueOrThrow({
 				where:{
 					id : idNumber
@@ -90,7 +90,7 @@ export class TwoFactorAuthenticationService {
 
 		}
 		catch (e) {
-			console.log(e)
+			
 			throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED);
 		}
 	}

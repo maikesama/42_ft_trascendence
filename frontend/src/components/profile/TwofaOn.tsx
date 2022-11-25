@@ -35,12 +35,12 @@ export const TwofaOn = (props: any) => {
   //           })
   //         });
   //         //const json = await response.json();
-  //         //console.log(json);
+  
   //         window.location.reload();
   //         // setInvited(json);
-  //         //console.log(json.friends)
+  
   //       } catch (error) {
-  //         console.log("error", error);
+  
   //       }
   //     };
   //     fetchData();
@@ -64,28 +64,28 @@ export const TwofaOn = (props: any) => {
           })
         });
         const json = await response.json();
-        console.log(json);
+        
         window.location.reload();
         // setInvited(json);
-        //console.log(json.friends)
+        
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();
   }
-  console.log(props.qr)
+  
   return (
     <Dialog open={props.status} onClose={props.closeStatus}>
-      <DialogTitle>Use Google Authenticator</DialogTitle>
-      <DialogTitle><img src={props?.qr?.QRcode} /></DialogTitle>
-      <DialogContent>
-        <TextField placeholder='insert code' variant='standard' inputRef={code} />
-      </DialogContent>
-      <DialogContent>
-        <Button variant="outlined" onClick={props.closeStatus}>Cancel</Button>
-        <Button variant="contained" onClick={verifyCode}>Submit</Button>
-      </DialogContent>
+        <DialogTitle style={{fontSize: 18}}>Use Google Authenticator</DialogTitle>
+        <DialogTitle><img style={{width: '100%'}} src={props.qr?.QRcode} /></DialogTitle>
+        <DialogContent>
+          <TextField style={{width: '100%'}} placeholder='insert code' variant='standard' inputRef={code} />
+        </DialogContent>
+        <DialogContent >
+          <Button style={{width: '50%'}} variant="outlined" onClick={props.closeStatus}>Cancel</Button>
+          <Button style={{width: '50%'}} variant="contained" onClick={verifyCode}>Submit</Button>
+        </DialogContent>
     </Dialog>
   );
 }

@@ -86,6 +86,7 @@ export const Tutorial = (props: any) => {
                                     {index === 2 ?
                                     <>
                                     <table border={1} style={{padding: 3}}>
+                                        <tbody>
                                         <tr style={{border: '1px solid'}}>
                                             {/* <th colspan="2">When the ball hits the power ups/downs:</th> */}
                                             <th colSpan={2} style={{border: 1}}>When the ball hits the power ups/downs:</th>
@@ -106,6 +107,7 @@ export const Tutorial = (props: any) => {
                                             <td><img width="25px" height="25px" src={step.img4}/></td>
                                             <td>Ball black, the ball bounces</td>
                                         </tr>
+                                        </tbody>
                                     </table>
                                     </>
                                     : null

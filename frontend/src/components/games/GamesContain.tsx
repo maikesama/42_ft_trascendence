@@ -27,11 +27,11 @@ var ch = window.innerHeight;
 
 //Images array
 var images = new Array();
-images.push("../../images/tie.jpg")
-images.push("../../images/diablo.jpg")
-images.push("../../images/minecraft.jpg")
-images.push("../../images/lenovo.jpg")
-images.push("../../images/doodle.jpg")
+images.push("../../images/tie.png")
+images.push("../../images/diablo.png")
+images.push("../../images/minecraft.png")
+images.push("../../images/lenovo.png")
+images.push("../../images/doodle.png")
 
 // set canvas dimensions
 export const canvasDim = {
@@ -42,7 +42,7 @@ export const canvasDim = {
 
 export const GamesContain = (props: any) => {
   // axios.get('api/getinfo').then(data=>data.json() )
-  //console.log(props.match.params.username)
+  
   // const [loading, setLoading] = useState(false);
   const params = useParams()
   const [esit, setEsit] = useState<string | null>(null);
@@ -50,14 +50,14 @@ export const GamesContain = (props: any) => {
   const [textMatchmaking, setTextMatchmaking] = useState("Matchmaking...");
   const [restart, setReStart] = useState(false);
   const [loading, setLoading] = useState(true);
-  // console.log("id", )
+  
   // const [userLeft, setUserLeft] = useState(null);
   // const [userRight, setUserRight] = useState(null);
 
   const [isConnectedGames, setIsConnectedGames] = useState(socketGames.connected);
   const start2 = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
-  console.log("Games", isConnectedGames)
+  
 
 
   // useEffect(() => {
@@ -161,7 +161,7 @@ export const GamesContain = (props: any) => {
 
       // clear the canvas
       drawRect(0, 0, canvas.width, canvas.height, 'black');
-      // drawImg("../../images/tie.jpg", 0, 0, canvas.width, canvas.height);
+      // drawImg("../../images/tie.png", 0, 0, canvas.width, canvas.height);
 
       // draw the user score to the left
       drawUsername(user.username, canvas.width / 4.6, (canvas.height / 20));
@@ -194,7 +194,7 @@ export const GamesContain = (props: any) => {
     }
 
     const fireworks = () => {
-      console.log("fireworks")
+      
       let particles: any;
       let loop = setInterval(() => {
         ctx.globalAlpha -= 0.01;
@@ -210,7 +210,7 @@ export const GamesContain = (props: any) => {
             vy: Math.random() * 10 - 5,
           });
         }
-        console.log(particles)
+        
 
         particles.forEach((p: any) => {
           ctx.beginPath();
@@ -240,14 +240,14 @@ export const GamesContain = (props: any) => {
       setStart(false);
       start2.current = false;
       setEsit(LoserImage)
-      console.log("lose")
+      
     });
 
     socketGames.off('win').on('win', (gameState: any) => {
       setStart(false);
       start2.current = false;
       setEsit(WinnerImage)
-      console.log("win")
+      
       // fireworks();
     });
 
@@ -255,7 +255,7 @@ export const GamesContain = (props: any) => {
       setStart(false);
       start2.current = false;
       setEsit(GameNotFoundImage)
-      console.log("GameNotFound")
+      
     });
 
     socketGames.off('trigger').on('trigger', (data: any) => {
@@ -270,13 +270,13 @@ export const GamesContain = (props: any) => {
       start2.current = false;
       setTextMatchmaking("Waiting for a player to accept the invitation");
       // setEsit(WinnerImage)
-      // console.log("win")
+      
     });
 
     socketGames.off('newAchievement').on('newAchievement', (data: any) => {
       socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!", idIntra: data.idIntra });
       // setEsit(WinnerImage)
-      // console.log("win")
+      
     });
 
     const playerMovement = {
@@ -341,20 +341,20 @@ export const GamesContain = (props: any) => {
     //   socket.emit('movement', playerMovement);
     // }
     // setInterval(() => {
-    //   console.log("start2.current", start2.current)
+    
     //   if (start2.current)
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);
     socketGames.on('start', () => {
       start2.current = true;
-      console.log("start2.current", start2.current)
-      console.log("start2.current", start2.current)
+      
+      
       const interval = setInterval(() => {
         if (playerMovement.up || playerMovement.down || playerMovement.left || playerMovement.right) {
           socketGames.emit('playerMovement', playerMovement);
         }
         if (!start2.current) {
-          console.log("mi sono fermato")
+          
           clearInterval(interval);
         }
       }, 1000 / 60);
@@ -367,7 +367,7 @@ export const GamesContain = (props: any) => {
 
   useEffect(() => {
     socketGames.off('gameOver').on('gameOver', () => {
-      console.log("gameOver")
+      
       if (esit === null || esit === undefined) {
         window.location.href = "/";
       }
@@ -398,8 +398,8 @@ export const GamesContain = (props: any) => {
     // window.location.assign('/')
   }
 
-  console.log("esit", esit)
-  console.log("start", start)
+  
+  
 
   // function back(){
   //   // window.history.back();

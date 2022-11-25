@@ -30,10 +30,10 @@ export const Middleware = () => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setUser(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -48,7 +48,7 @@ export const Middleware = () => {
     //const [user, setUser] = useState({} as any);
 
     const clickSave = async () => {
-        //return console.log(nick.current.value)
+        
 
         let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
 
@@ -65,13 +65,13 @@ export const Middleware = () => {
             const data = await response.json();
             manageError(data, response, null, setAlert)
             // const json = await response.json();
-            // // console.log(json);
+            
             // // setUser(json);
             // if (json && json.status === 400) {
-            //     console.log(json.message);
+            
 
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -84,7 +84,7 @@ export const Middleware = () => {
     };
 
     const uploadImage = async (imageList: ImageListType) => {
-        console.log(JSON.stringify(imageList[0].dataURL))
+        
         try {
             const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
                 method: "POST",
@@ -95,9 +95,9 @@ export const Middleware = () => {
                 body: JSON.stringify({ dataURL: imageList[0].dataURL }),
             });
             const json = await response.json();
-            //console.log(json);
+            
         } catch (error) {
-            console.log("error", error);
+            
         }
         window.location.reload()
     };

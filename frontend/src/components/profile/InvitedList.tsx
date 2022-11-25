@@ -30,12 +30,12 @@ export const InvitedList = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         setInvited(json);
         // setInvited(json);
-        //console.log(json.friends)
+        
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -50,7 +50,7 @@ export const InvitedList = (props: any) => {
   {
     const idIntra = await invited[index]?.idIntra;
     const fetchData = async () => {
-      console.log(idIntra);
+      
         socket.emit('acceptFriend', {idIntra: idIntra});
         socket.emit("friendHandler", {idIntra: idIntra, type: 1});
         setInvited(invited.filter((_: any, i: any) => i !== index));
@@ -77,14 +77,14 @@ export const InvitedList = (props: any) => {
           })
         });
         //const json = await response.json();
-        //console.log(json);
+        
         if (response.status === 200){
           socket.emit("friendHandler", {idIntra: idIntra, type: 3});
          }
         // setInvited(json);
-        //console.log(json.friends)
+        
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();

@@ -31,6 +31,10 @@ import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
 import { useNavigate } from "react-router-dom";
 import { useAuth } from '../../hooks/useAuth';
+import LockOpenIcon from '@mui/icons-material/LockOpen';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import PersonAddDisabledIcon from '@mui/icons-material/PersonAddDisabled';
+
 
 export const AdminGroupActions = (props: any) => {
 
@@ -94,10 +98,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value, id: props.idChat }),
             });
             const json = await response.json();
-            console.log(json);
+            
             setSearch(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -113,15 +117,15 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             // const data = await response.json();
-            // console.log(data);
-            // console.log(data);
-            // console.log(data);
+            
+            
+            
             manageError(null, response, null, setAlert);
             if (response.status === 200) {
                 socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -146,7 +150,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -162,7 +166,7 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify({ id: props.idChat, idIntra: userGroup }),
             })
-            console.log(response)
+            
             const data = await response.json();
             manageError(data, response, null, setAlert);
 
@@ -177,7 +181,7 @@ export const AdminGroupActions = (props: any) => {
             }
 
         } catch (error) {
-            console.log("error", error);
+            
         }
         //window.location.reload();
     }
@@ -204,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('ban', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -235,7 +239,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('muteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -253,10 +257,10 @@ export const AdminGroupActions = (props: any) => {
             })
 
             const data = await response.json();
-            console.log(data)
+            
             setBanned(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -273,10 +277,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            console.log(data)
+            
             setMuted(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -293,10 +297,10 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             const data = await response.json();
-            console.log(data)
+            
             setPromoted(data);
         } catch (error) {
-            console.log("error", error);
+            
         }
 
     }
@@ -323,7 +327,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unBan', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -353,7 +357,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('unMuteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -383,7 +387,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('promoteUser', { idIntra: selectedName, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -414,7 +418,7 @@ export const AdminGroupActions = (props: any) => {
                 socket.emit('demoteUser', { idIntra: idIntra, idChat: props.idChat, });
             }
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -430,10 +434,10 @@ export const AdminGroupActions = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setMySelf(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -454,10 +458,10 @@ export const AdminGroupActions = (props: any) => {
                     body: JSON.stringify({ id: props.idChat }),
                 });
                 const json = await response.json();
-                //console.log("Aoooooone " + JSON.stringify(json));
+                
                 setChan(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
 
@@ -510,7 +514,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={banned[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={banned[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unBan(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} onClick={() => unBan(index)}><LockOpenIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -525,14 +529,14 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={muted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={muted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => unMute(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="unMute" size="small" style={{ color: 'green' }}  onClick={() => unMute(index)}><VolumeUpIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
 
     function PromotedUserItem(props: any) {
         const { index, style } = props;
-        console.log('promoted', promoted);
+        
         let isMuted = promoted[index]?.muted ? " [ muted ]" : "";
         //let ci = muted[index]?.mutedUntil > Date.now() ? <VolumeOffIcon /> : <></>;
         return (
@@ -540,7 +544,7 @@ export const AdminGroupActions = (props: any) => {
                 <Avatar src={promoted[index]?.img} style={{ marginRight: 10 }} />
                 <ListItemText id="idIntraBlock" primary={promoted[index]?.idIntra} />
                 <Divider variant="middle" />
-                <IconButton aria-label="Demote" size="small" style={{ color: 'green' }} ><HowToRegOutlinedIcon onClick={() => demote(index)} fontSize="large" /></IconButton>
+                <IconButton aria-label="Demote" size="small" style={{ color: 'red' }} onClick={() => demote(index)}><PersonAddDisabledIcon fontSize="large" /></IconButton>
             </ListItem>
         );
     }
@@ -597,12 +601,12 @@ export const AdminGroupActions = (props: any) => {
             newGroup.splice(index, 1);
         }
         setUserGroup(newGroup);
-        console.log('newGroup', newGroup);
+        
     };
 
     function searchRow(props: ListChildComponentProps) {
         const { index, style } = props;
-        console.log('search', search);
+        
         return (
             <ListItem key={index}>
 
@@ -636,10 +640,10 @@ export const AdminGroupActions = (props: any) => {
                     {clickLists === "" ? <>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={partecipants?.length > 9 ? 450 : partecipants?.length * 70}
+                            height={partecipants?.length > 9 ? 450 : partecipants?.length <= 9 ? partecipants?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={partecipants?.length}
+                            itemCount={Object.values(partecipants).length}
                             overscanCount={5}
                         >
 
@@ -651,10 +655,10 @@ export const AdminGroupActions = (props: any) => {
                         </DialogContentText>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={banned?.length > 9 ? 450 : banned?.length * 70}
+                            height={banned?.length > 9 ? 450 : banned?.length <= 9 ? banned?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={banned?.length}
+                            itemCount={Object.values(banned).length}
                             overscanCount={5}
                         >
                             {BannedUserItem}
@@ -665,10 +669,10 @@ export const AdminGroupActions = (props: any) => {
                         </DialogContentText>
                         <FixedSizeList
                             style={{ marginTop: 20 }}
-                            height={muted?.length > 9 ? 450 : muted?.length * 70}
+                            height={muted?.length > 9 ? 450 : muted?.length <= 9 ? muted?.length * 70 : 70}
                             width={500}
                             itemSize={60}
-                            itemCount={muted?.length}
+                            itemCount={Object.values(muted).length}
                             overscanCount={5}
                         >
                             {MutedUserItem}

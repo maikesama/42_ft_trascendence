@@ -35,7 +35,7 @@ function App() {
   //const [notify, setNotify] = useState(true);
   const { authed, loading } = useAuth();
   let navigate = useNavigate();
-  console.log(authed);
+  
 
   //toast("Wow so easy!");
   React.useEffect(() => {
@@ -48,7 +48,7 @@ function App() {
     });
 
     // const handleNewMessage = (data) => {
-    //   console.log("new message");
+    
     //   // toast(data);
     // }
 
@@ -57,9 +57,9 @@ function App() {
         {
           if (data.type === 1)
           {
-            toast(<>
+            toast(<div style={{}}>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to become friend</Typography>
+              <Typography style={{ textAlign: "center" }}>{data.userName} invited you to become friend</Typography>
               <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("acceptFriend", data);
                 socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
@@ -70,13 +70,13 @@ function App() {
                 socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Decline</Button>
-            </>);
+            </div>);
           }
           else if (data.type === 2)
           {
             toast(<>
               <img src={data.img} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
-              <Typography style={{ marginLeft: "10px" }}>{data.userName} invited you to a game</Typography>
+              <Typography style={{ textAlign: "center" }}>{data.userName} invited you to a game</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
                 // navigate(`/games/2${data.idIntra}`);
                 // window.location.assign("/games/2" + data.idIntra);
@@ -92,7 +92,7 @@ function App() {
             toast(<>
               <img src={"https://png2.cleanpng.com/sh/04c32f7f6682dfa282c3e3e6d1036a56/L0KzQYm3U8MyN5N4j5H0aYP2gLBuTfRiepwyi9HAbIOwebrwTgdqc5oyf9N2ZT3nccPyTgNwfZ14RadqYnblSYGBUfI6P5Q4Rqg8MUm4R4a4UcUzOmY2TKMDNEG0Q4K1kP5o/kisspng-dark-souls-iii-wiki-game-dark-souls-5abfb9081b97c3.6319575115225141841131.png"} style={{ width: "50px", height: "50px", borderRadius: "50%" }} />
               {/* <Typography style={{ marginLeft: "10px" }}>{data.userName} You have a new Achievement</Typography> */}
-              <Typography style={{ marginLeft: "10px" }}>You have a new Achievement</Typography>
+              <Typography style={{ textAlign: "center" }}>You have a new Achievement</Typography>
               <Button style={{ marginLeft: "10px" }} variant="success" onClick={() => {
                 navigate(`/profile`);
               }}>Go see it!</Button>
@@ -108,7 +108,7 @@ function App() {
 
   function pippo()
   {
-    console.log("poppoo");
+    
   }
 
   return (
@@ -119,8 +119,6 @@ function App() {
         <Routes>
           {!authed ? <Route path="/" element={<Landing />} /> : <Route path="/" element={<Homepage />} />}
           {!authed ? <Route path="/twofa" element={<Twofa />} /> : <Route path="/twofa" element={<Homepage />} />}
-          <Route path="/test" element={<Test />} />
-
           <Route element={<PrivateRoutes />}>
             <Route path="/Middleware" element={<Middleware />} />
             <Route path='/home' element={<Homepage />} />
@@ -133,7 +131,6 @@ function App() {
             <Route path="/matches" element={<Matches />} />
             <Route path="/friends" element={<Friends />} />
             <Route path="/games/:idIntra" element={<Games />} />
-            <Route path="/test" element={<Test />} />
             <Route path="/" element={<Homepage />} />
           </Route>
           <Route path="*" element={<Error404 />} />

@@ -69,10 +69,10 @@ export const AdminSettings = (props: any) => {
                 body: JSON.stringify({id: props.idChat, type: type, password: pwd})
             });
             //const json = await response.json();
-            //console.log(json);
+            
             window.location.reload();
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
     

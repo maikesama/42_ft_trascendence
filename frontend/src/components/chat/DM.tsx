@@ -127,7 +127,7 @@ export const DM = (props: any) => {
 	// 	}
 	// }
 
-	// console.log("idChat: " + props.idChat + " idChat: " + idChat);
+	
 	// React.useEffect(() => {
 
 	// 	if ( idChat !== props.idChat || idChat) {
@@ -137,11 +137,11 @@ export const DM = (props: any) => {
 	// }, [props.idChat, props.messages]);
 
 	// const sendMessage = () => {
-	// 	console.log("message: " + message);
+	
 	// 	socket.emit('prova', { idChat: props.idChat, message: message });
 
 	// }
-	// console.log(messages)
+	
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};
@@ -151,7 +151,7 @@ export const DM = (props: any) => {
 	};
 
 	const handleInvite = () => {
-		console.log("Invite");
+		
 		socket.emit('notification', { type: 2, idIntra: props.idIntra});
 		// navigate('/games/1' + props.idIntra);
 		// window.location.assign("/games/1" + props.idIntra);

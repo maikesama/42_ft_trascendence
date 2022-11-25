@@ -27,11 +27,11 @@ export const ProfileContain = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         setUser(json);
         setTriggerUser(false);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -52,10 +52,10 @@ export const ProfileContain = (props: any) => {
           }
         });
         const json = await response.json();
-        console.log(json);
+        
         setRank(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 

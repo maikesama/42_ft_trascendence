@@ -68,10 +68,10 @@ export const FriendsCheckList = (props: any) => {
                     }
                 });
                 const json = await response.json();
-                console.log(json);
+                
                 setFriends(json);
             } catch (error) {
-                console.log("error", error);
+                
             }
         };
         fetchData();

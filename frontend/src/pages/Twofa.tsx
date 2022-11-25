@@ -40,7 +40,7 @@ export const Twofa = () => {
 
         const fetchData = async () => {
             try {
-                console.log("ciao");
+                
                 const response = await fetch(url, {
                     method: 'POST',
                     credentials: 'include',
@@ -54,14 +54,14 @@ export const Twofa = () => {
                 const json = await response.json();
                 if (json.status === 200) {
                     // window.location.replace('/middleware');
-                    console.log("ciao");
+                    
                 }
                 else {
                     setMesage(json.message);
                 }
             } catch (error) {
                 window.location.replace('/middleware');
-                console.log("error", error);
+                
             }
         };
             fetchData();
@@ -85,7 +85,7 @@ export const Twofa = () => {
                 <div className="row d-flex justify-content-center align-items-center h-100">
                 <div className="col col-xl-10">
                     <div className="card" style={{borderRadius: '1rem'}}>
-                    <div className="row g-0">
+                    <div className="row g-0" >
                         <div className="col-md-6 col-lg-5 d-none d-md-block">
                         <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/42_Logo.svg/2048px-42_Logo.svg.png"
                             alt="login form" className="img-fluid" style={{borderRadius: '1rem 0 0 1rem', objectFit: 'cover', maxHeight: '80%', maxWidth: '80%', marginTop: '42px'}} />

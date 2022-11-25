@@ -85,9 +85,9 @@ export const CreateChannel = (props: any) => {
             }
             // window.location.reload()
             //const json = await response.json();
-            //console.log(json);
+            
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 
@@ -106,10 +106,10 @@ export const CreateChannel = (props: any) => {
             }
             });
             const json = await response.json();
-            console.log(json);
+            
             setFriends(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
         };
         fetchData();
@@ -137,7 +137,7 @@ export const CreateChannel = (props: any) => {
             newGroup.splice(index, 1);
         }
         setUserGroup(newGroup);
-        console.log('newGroup', newGroup);
+        
     };
 
     function friendsRow(props: ListChildComponentProps) {
@@ -193,7 +193,7 @@ export const CreateChannel = (props: any) => {
         let input = document.getElementById('searchBar') as HTMLInputElement | null;
 
         let init = input?.value
-        console.log(init)
+        
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/searchUser`;
         try {
             const response = await fetch(url, {
@@ -205,10 +205,10 @@ export const CreateChannel = (props: any) => {
                 body: JSON.stringify({ initials: init }),
             });
             const json = await response.json();
-            console.log(json);
+            
             setSearch(json);
         } catch (error) {
-            console.log("error", error);
+            
         }
     }
 

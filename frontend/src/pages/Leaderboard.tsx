@@ -37,10 +37,10 @@ export const Leaderboard = () => {
 					}
 				});
 				const json = await response.json();
-				console.log(json);
+				
 				setUser(json);
 			} catch (error) {
-				console.log("error", error);
+				
 			}
 		};
 

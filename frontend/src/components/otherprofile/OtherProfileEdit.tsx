@@ -43,7 +43,7 @@ export const SocialEdit = (props: any) => {
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const { idIntra } = useAuth();
   const user = props.user;
-  console.log(user);
+  
 
   const handleClickOpenBlockedList = () => {
     setOpenBlockedList(true);
@@ -114,7 +114,7 @@ export const SocialEdit = (props: any) => {
     let date = friends[index]?.addedAt;
     
     // date = String(date.split("T"));
-    // console.log(date[1].split("."));
+    
     // let hour = String(date[1].split("."));
     let data;
     let hour;
@@ -161,7 +161,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -184,10 +184,10 @@ export const SocialEdit = (props: any) => {
           body: JSON.stringify({ idIntra: user.idUser }),
         });
         const json = await response.json();
-        console.log(json);
+        
         setFriends(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
     fetchData();
@@ -272,12 +272,12 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        console.log("isF" +json);
+        
         setIsFriend(json);
         //window.location.reload();
-        //console.log(json.friends)
+        
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -322,10 +322,10 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        console.log(json);
+        
         setIsPending(json);
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -346,12 +346,12 @@ export const ProfileEdit =  (props: any) => {
           body: JSON.stringify({idIntra: props.idIntra}),
         });
         const json = await response.json();
-        console.log("isB" +json);
+        
         setIsBlocked(json);
         //window.location.reload();
-        //console.log(json.friends)
+        
       } catch (error) {
-        console.log("error", error);
+        
       }
     };
 
@@ -372,14 +372,14 @@ export const ProfileEdit =  (props: any) => {
             body: JSON.stringify({idIntra: props.idIntra}),
         });
         // window.location.reload();
-        console.log(response.status);
+        
         if (response.status === 201) {
           // setAlert("User blocked");
           // setIsBlocked(true);
           socket.emit("blockUser", {idIntra: props.idIntra});
         }
     } catch (error) {
-        console.log("error", error);
+        
     }
 }
 
@@ -395,7 +395,7 @@ async function unblock(index: any) {
       }
     });
     // window.location.reload();
-    console.log(response.status);
+    
     if (response.status === 201) {
       // setAlert("User unblocked");
       // setIsBlocked(false);
@@ -403,7 +403,7 @@ async function unblock(index: any) {
     }
 
   } catch (error) {
-    console.log("error", error);
+    
   }
 }
 
@@ -434,7 +434,7 @@ async function addInviteFriend(index: any) {
 
       // window.location.reload();
   } catch (error) {
-      console.log("error", error);
+      
   }
 }
 
@@ -451,14 +451,14 @@ async function removeInviteFriend(index: any) {
           },
           body: JSON.stringify({idIntra: props.idIntra}),
       });
-      console.log(response.status);
+      
       if (response.status === 200) {
-        console.log("removeInviteFriend");
+        
         socket.emit('friendHandler', {type: 4, idIntra: props.idIntra});
       }
       // window.location.reload();
   } catch (error) {
-      console.log("error", error);
+      
   }
 }
 
@@ -481,7 +481,7 @@ async function removeFriend(index: any) {
         // window..reload();
       }
   } catch (error) {
-      console.log("error", error);
+      
   }
 }
 
@@ -490,7 +490,7 @@ async function newDm(index: any) {
   const url = `http://${process.env.REACT_APP_HOST_URI}/api/chat/newDm/`;
 
   try {
-      console.log("newDm");
+      
       const response = await fetch(url, {
           method: 'POST',
           credentials: 'include',
@@ -500,17 +500,17 @@ async function newDm(index: any) {
           body: JSON.stringify({idIntra: props.idIntra}),
       });
       const json = await response.json();
-      console.log(json);
+      
       if (response.status === 200) {
-        // console.log(json)
+        
         socket.emit('newDm', json);
         // window.location.href = ;
         navigate(`/chat/${props.idIntra}`);
       }
-      console.log(json);
+      
       // window.location.reload();
   } catch (error) {
-      console.log("error", error);
+      
   }
 }
 
@@ -528,7 +528,7 @@ async function toDm(index: any) {
           body: JSON.stringify({idIntra: props.idIntra}),
       });
       const json = await response.json();
-      console.log(json);
+      
       if (response.status !== 200) {
         await newDm(index);
       }
@@ -537,10 +537,10 @@ async function toDm(index: any) {
        navigate(`/chat/${props.idIntra}`);
       }
 
-      console.log(json);
+      
       // window.location.reload();
   } catch (error) {
-      console.log("error", error);
+      
   }
 }
   return (

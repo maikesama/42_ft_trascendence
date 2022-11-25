@@ -137,7 +137,7 @@ export const Messages = (props: any) => {
 		}
 	}
 
-	console.log("idChat: " + props.idChat + " idChat: " + idChat);
+	
 	React.useEffect(() => {
 
 		if ( idChat !== props.idChat || idChat) {
@@ -148,12 +148,12 @@ export const Messages = (props: any) => {
 
 	const sendMessage = (e:any) => {
         e.preventDefault();
-		console.log("message: " + message);
+		
 		socket.emit('prova', { idChat: props.idChat, message: message });
         setMessage('');
 	}
 
-	// console.log(messages)
+	
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};
@@ -162,10 +162,10 @@ export const Messages = (props: any) => {
 		setopenUserActions(false);
 	};
 
-	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
-	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
-	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
-	// console.log("iasjdhsjdihsadihasidhasidhiashdohiasdhiasd")
+	
+	
+	
+	
 	//scoll always donw chat
 	React.useEffect(() => {
 		if (el) {
@@ -174,7 +174,7 @@ export const Messages = (props: any) => {
 	}, [messages]);
 
 
-	// console.log(messages)
+	
 	return (
 		<>
 		{/* scoll down always */}

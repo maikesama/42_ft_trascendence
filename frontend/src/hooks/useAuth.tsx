@@ -19,7 +19,7 @@ const [idIntra, setIdinta] = useState('nul');
                 }
             });
             const json = await response.json();
-            console.log(json);
+            
             if (json.statusCode) {
                 setAuthed(false);
                 setLoading(false);
