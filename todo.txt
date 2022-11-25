@@ -56,9 +56,15 @@ nuove
 merge con link 
 ✅messaggi 90 sia front che back
 ✅mettere 1 minuto quando 0 --> muted
-🔞caratteri muted banned
+✅caratteri muted banned
 ✅friend other profile se sono io
 trigger acceptFrien frienHandler
---silent
+✅--silent
 block search bar 
+
 lento game
+otherprofile
+searchbar ban friend
+
+friend otherprofile + ban emit remove friend
+search bar

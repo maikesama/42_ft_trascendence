@@ -10,8 +10,8 @@ import { GamesService, maxScoreClassic, maxScoreCustom, canvas, players, rooms} 
 // var playersNumberClassic = 0;
 // var playersNumberCustom = 0;
 
-var movSpeed = 3
-var movSpeedCustom = 7
+var movSpeed = 6;
+var movSpeedCustom = 12
 var playerClassic = [];
 var playerCustom = [];
 var playerInvited = new Map<string, any>();
@@ -408,7 +408,7 @@ export class GamesGateway implements OnGatewayInit {
 						}
 					}
 					if (playerMovement.right && userToMove.x < canvas.width - userToMove.width) {
-						if ((type === 0 && (userToMove.x + movSpeedNow) <= canvas.width / 2 - 30) || type === 1 ) {
+						if ((type === 0 && (userToMove.x + movSpeedNow) <= canvas.width / 2 - 40) || type === 1 ) {
 							userToMove.x += movSpeedNow
 						}
 					}

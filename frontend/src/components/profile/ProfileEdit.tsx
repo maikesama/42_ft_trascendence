@@ -417,7 +417,7 @@ export const ProfileEdit = (props: any) => {
         body: JSON.stringify({ userName: nick.current.value })
       });
       if (response.status === 200 || response.status === 201) {
-        window.location.reload();
+        // window.location.reload();
         save?.setAttribute('hidden', 'true');
         save?.setAttribute('placeholder', nick.current.value );
         inputbox?.setAttribute('disabled', 'true');

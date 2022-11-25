@@ -29,7 +29,7 @@ export const ballDefault = {
 	radius : 10,
 	velocityX : 5,
 	velocityY : 5,
-	speed : 13,
+	speed : 16,
 	color : "WHITE"
 }
 
@@ -37,7 +37,7 @@ export const ballDefault = {
 export const userDefault = {
 	x : 0, // left side of canvas
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 30,
+	width : 40,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -49,9 +49,9 @@ export const userDefault = {
 
 // COM Paddle
 export const comDefault = {
-	x : canvas.width - 30, // - width of paddle
+	x : canvas.width - 40, // - width of paddle
 	y : (canvas.height - 100)/2, // -100 the height of paddle
-	width : 30,
+	width : 40,
 	height : 100,
 	score : 0,
 	color : "WHITE",
@@ -188,8 +188,8 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 
 	// computer plays for itself, and we must be able to beat it
 	// simple AI
-    // var iaArray = ["ltorrean", "gscala"]
-    var iaArray = [ "gscala"]
+    var iaArray = ["ltorrean"]
+    // var iaArray = [ "gscala"]
     //set
     for (var i = 0; i < iaArray.length; i++){
         if (com.username === iaArray[i]){
@@ -312,13 +312,13 @@ update(ball:any, user:any, com:any, net:any, powerUp:any, typeGame:any){
 			ball.velocityY = ball.speed * Math.sin(angleRad);
 
 			// speed up the ball everytime a paddle hits it.
-            if (ball.speed < 19)
+            if (ball.speed < 36)
             {
                 ball.speed += 0.2;
             }
             else
             {
-                ball.speed = 19;
+                ball.speed = 36;
             }
 
             if (ball.radius > 8)
