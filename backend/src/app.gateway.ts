@@ -145,14 +145,16 @@ export class AppGateway implements OnGatewayInit {
           const muted = await this.chat.getMuted({id: message.idChat}, user.idIntra)
           const now = new Date();
           const diff = muted[0].time - now.getTime();
-          const minutes = Math.floor(diff / 60000);
+          var minutes = Math.floor(diff / 60000);
+          if (minutes === 0)
+            minutes = 1
           const messageError = "You need to shut up for " + minutes + " minutes"
           client.emit('provaMessaggi', {errorMessage: messageError, idChat : message.idChat})
           //prendere tempo di mute
         }
         else {
-          if (!(message.message.length > 0 && message.message.length <= 100)) {
-            client.emit('provaMessaggi', {errorMessage: "message too long (max 100 characters)", idChat : message.idChat})
+          if (!(message.message.length > 0 && message.message.length <= 90)) {
+            client.emit('provaMessaggi', {errorMessage: "message too long (max 90 characters)", idChat : message.idChat})
           }
           else
           {

@@ -22,9 +22,9 @@ services:
   frontend:
     image: "node:16-slim"
     user: "node"
-    # build:
-    #   dockerfile: 'Dockerfile.prod'
-    #   context: ./frontend
+    build:
+      dockerfile: 'Dockerfile.prod'
+      context: ./frontend
     working_dir: /home/node/app
     restart: unless-stopped
     volumes:
@@ -34,7 +34,7 @@ services:
     environment:
       REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
     container_name: frontend
-    command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
+    # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
    # command: sh -c "npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm audit fix --force --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build"
     depends_on:
       - "backend"

@@ -899,6 +899,8 @@ export class ChatService {
 
     async muteUser(body: any, userId: number) {
         try {
+            console.log(body)
+            console.log(typeof body.time)
             const user = await this.prismaService.user.findUniqueOrThrow({
                 where: {
                     idIntra: body.idIntra
@@ -948,11 +950,11 @@ export class ChatService {
                 }
             }
             else {
-                throw new BadRequestException('You are not an admin')
+                throw new HttpException('You are not allowed to mute this user', HttpStatus.UNAUTHORIZED)
             }
         }
         catch (err) {
-            throw new BadRequestException(err)
+            throw new HttpException(err, HttpStatus.BAD_REQUEST)
         }
     }
 
@@ -1354,11 +1356,14 @@ export class ChatService {
                 }
             })
             if (user.idIntra !== body.idIntra)
-                throw new BadRequestException("Can't ban yorself")
+                // throw new BadRequestException("Can't ban yorself")
+                throw new HttpException('Can\'t ban yorself', HttpStatus.BAD_REQUEST)
             if (!await this.isAlreadyIn(body.id, user.idIntra))
-                throw new BadRequestException('User is not in the channel');
+                // throw new BadRequestException('User is not in the channel');
+                throw new HttpException('User is not in the channel', HttpStatus.BAD_REQUEST)
             if (await this.isBanned(body.id, user.idIntra))
-                throw new BadRequestException('User is already Banned');
+                // throw new BadRequestException('User is already Banned');
+                throw new HttpException('User is already Banned', HttpStatus.BAD_REQUEST)
             const channel = await this.prismaService.chat.findUnique({
                 where: {
                     id: body.id
@@ -1370,7 +1375,8 @@ export class ChatService {
                 }
             })
             if ((!await this.isAdmin(body.id, userId) && !await this.isChanOwner(channel.id, reqUser.idIntra)) || await this.isChanOwner(channel.id, user.idIntra))
-                throw new BadRequestException('Not enough rights');
+                // throw new BadRequestException('Not enough rights');
+                throw new HttpException('Not enough rights', HttpStatus.BAD_REQUEST)
             if (body.time) {
                 const partecipant = await this.prismaService.partecipant.update({
                     where: {
@@ -1397,7 +1403,8 @@ export class ChatService {
         }
         catch (err) {
             console.log(err)
-            throw new BadRequestException(err)
+            throw new HttpException(err, HttpStatus.BAD_REQUEST)
+            // throw new BadRequestException(err)
         }
     }
 

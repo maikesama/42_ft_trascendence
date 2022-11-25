@@ -229,7 +229,7 @@ export const GamesContain = (props: any) => {
       }, 1000 / 60);
     }
 
-    socketGames.off('state').on('state', (gameState: any) => {
+    socketGames.on('state', (gameState: any) => {
       start2.current = true;
       setStart(true);
       setTextMatchmaking("Matchmaking....");

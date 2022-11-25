@@ -28,6 +28,7 @@ import { SearchBar } from './SearchBar';
 import { MatchesList } from './MatchesList';
 import { Alert, manageError } from '../generic/Alert';
 import { socket } from '../../App';
+import { useAuth } from '../../hooks/useAuth';
 
 const fontColor = {
   style: { color: 'rgb(50, 50, 50)' }
@@ -40,6 +41,7 @@ export const SocialEdit = (props: any) => {
   const [openBlockedList, setOpenBlockedList] = React.useState(false);
   const [openMatchesList, setOpenMatchesList] = React.useState(false);
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
+  const { idIntra } = useAuth();
   const user = props.user;
   console.log(user);
 
@@ -189,6 +191,14 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
+    socket.off('friendHandler').on('friendHandler', (data: any) => {
+      console.log("qui");
+      console.log(data);
+      console.log(data);
+      if (data.idIntra === idIntra|| data.idIntra === user.idUser) {
+        fetchData();
+      }
+    });
   }, [props.user]);
 
   //retrigger

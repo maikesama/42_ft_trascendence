@@ -4,10 +4,16 @@ WORKDIR /home/node/app
 
 COPY ./ ./
 
+RUN npm cache clean --force
+RUN rm -rf node_modules build
 RUN npm install --legacy-peer-deps
+# RUN npm run build
+# RUN npm install serve --legacy-peer-deps
+
+# npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build
 
     
-CMD sh -c "npm run build;npm install serve --legacy-peer-deps;npx serve -s build"  
+CMD npm run build;npm install serve --legacy-peer-deps;npx serve -s build
     
     
     

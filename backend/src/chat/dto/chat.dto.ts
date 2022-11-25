@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsEmail, IsNumber, IsBoolean, MaxLength, MinLength, IsNotEmpty, IsAlphanumeric } from 'class-validator';
+import { IsString, IsOptional, IsEmail, IsNumber, IsBoolean, MaxLength, MinLength, IsNotEmpty, IsAlphanumeric, IsNumberString } from 'class-validator';
 
 export class createChannelDTO {
 
@@ -27,4 +27,20 @@ export class createChannelDTO {
 	@IsOptional()
 	partecipants: string[];
 
+}
+
+export class MuteBanDTO {
+
+	@IsString()
+	@IsNotEmpty()
+  	@IsAlphanumeric()
+	idIntra: string;
+
+	@IsNumber()
+	id: number;
+
+	@IsString()
+	@IsNumberString()
+	@IsOptional()
+	time: string;
 }

@@ -1,7 +1,7 @@
 import { Controller, Post, Body, Req, UseGuards, HttpCode, Get } from '@nestjs/common'
 import { AtGuard } from 'src/auth/guards';
 import { ChatService } from './chat.service';
-import { createChannelDTO } from './dto/chat.dto';
+import { createChannelDTO, MuteBanDTO } from './dto/chat.dto';
 
 @Controller('chat')
 export class ChatController{
@@ -73,7 +73,7 @@ export class ChatController{
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('muteUser')
-    async muteUser(@Body() body, @Req() req){
+    async muteUser(@Body() body: MuteBanDTO, @Req() req){
         const user = req.user
         return await this.chatService.muteUser(body, user['sub'])
     }
@@ -89,7 +89,7 @@ export class ChatController{
     @UseGuards(AtGuard)
     @HttpCode(200)
     @Post('banUser')
-    async banUser(@Body() body, @Req() req){
+    async banUser(@Body() body: MuteBanDTO, @Req() req){
         const user = req.user
         return await this.chatService.banUser(body, user['sub'])
         // control if theres a time limit in body
