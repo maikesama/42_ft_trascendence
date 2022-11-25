@@ -43,7 +43,7 @@ export const canvasDim = {
 export const GamesContain = (props: any) => {
   const isSecondRender = useRef(false);
   // axios.get('api/getinfo').then(data=>data.json() )
-  //console.log(props.match.params.username)
+  
   // const [loading, setLoading] = useState(false);
   const params = useParams()
   const [esit, setEsit] = useState<string | null>(null);
@@ -51,7 +51,7 @@ export const GamesContain = (props: any) => {
   const [textMatchmaking, setTextMatchmaking] = useState("Matchmaking...");
   const [restart, setReStart] = useState(false);
   const [loading, setLoading] = useState(true);
-  // console.log("id", )
+  
   // const [userLeft, setUserLeft] = useState(null);
   // const [userRight, setUserRight] = useState(null);
 
@@ -274,7 +274,7 @@ export const GamesContain = (props: any) => {
       start2.current = false;
       setTextMatchmaking("Waiting for a player to accept the invitation");
       // setEsit(WinnerImage)
-      // console.log("win")
+      
     });
 
     socketGames.off('newAchievement').on('newAchievement', (data: any) => {
@@ -294,7 +294,7 @@ export const GamesContain = (props: any) => {
       console.log("newAchievement")
       socket.emit('notification', { type: 3, message: "You have unlocked a new achievement!", idIntra: data.idIntra });
       // setEsit(WinnerImage)
-      // console.log("win")
+      
     });
 
     const playerMovement = {
@@ -359,7 +359,7 @@ export const GamesContain = (props: any) => {
     //   socket.emit('movement', playerMovement);
     // }
     // setInterval(() => {
-    //   console.log("start2.current", start2.current)
+    
     //   if (start2.current)
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);

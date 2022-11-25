@@ -117,9 +117,9 @@ export const AdminGroupActions = (props: any) => {
                 body: JSON.stringify({ id: props.idChat }),
             })
             // const data = await response.json();
-            // console.log(data);
-            // console.log(data);
-            // console.log(data);
+            
+            
+            
             manageError(null, response, null, setAlert);
             if (response.status === 200) {
                 socket.emit('removeUser', { idChat: props.idChat, idIntra: idIntra});
@@ -458,7 +458,7 @@ export const AdminGroupActions = (props: any) => {
                     body: JSON.stringify({ id: props.idChat }),
                 });
                 const json = await response.json();
-                //console.log("Aoooooone " + JSON.stringify(json));
+                
                 setChan(json);
             } catch (error) {
                 console.log("error", error);

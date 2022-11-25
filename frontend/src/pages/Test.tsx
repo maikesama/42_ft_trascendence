@@ -11,12 +11,12 @@ export function Test() {
 //   useEffect(() => {
 //     socket.on('connect', () => {
 //       setIsConnected(true);
-//       console.log('connected');
+
 //     });
 
 //     socket.on('disconnect', () => {
 //       setIsConnected(false);
-//       console.log('disconnected');
+
 //     });
 //   }, []);
 

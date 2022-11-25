@@ -3,7 +3,7 @@ import { OtherProfileContain } from '../components/otherprofile/OtherProfileCont
 
 export const OtherUserProfile = (props: any) => {
     // axios.get('api/getinfo').then(data=>data.json() )
-    //console.log(props.match.params.username)
+    
     return (
         <>
        

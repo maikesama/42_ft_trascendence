@@ -99,7 +99,7 @@ export const SearchBar = (props: any) => {
                 body: JSON.stringify({ initials: initials.current.value }),
             });
             const json = await response.json();
-            // console.log("ciao :" + JSON.stringify(json));
+            
             setSearch(json);
         } catch (error) {
             console.log("error", error);
@@ -243,12 +243,12 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        //             console.log("isF" + json);
+        
         //             setIsFriend(json);
         //             //window.location.reload();
-        //             //console.log(json.friends)
+        
         //         } catch (error) {
-        //             console.log("error", error);
+        
         //         }
         //         fetchData();
         //     };
@@ -269,10 +269,10 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        //             console.log(json);
+        
         //             setIsPending(json);
         //         } catch (error) {
-        //             console.log("error", error);
+        
         //         }
         //         fetchData();
         //     };
@@ -294,12 +294,12 @@ export const SearchBar = (props: any) => {
         //                 body: JSON.stringify({ idIntra: idIntra }),
         //             });
         //             const json = await response.json();
-        //             console.log("isB" + json);
+        
         //             setIsBlocked(json);
         //             //window.location.reload();
-        //             //console.log(json.friends)
+        
         //         } catch (error) {
-        //             console.log("error", error);
+        
         //         }
         //         fetchData();
         //     };
@@ -322,7 +322,7 @@ export const SearchBar = (props: any) => {
                 });
                 const json = await response.json();
                 if (response.status === 200) {
-                  // console.log(json)
+                  
                   socket.emit('newDm', json);
                   // window.location.href = ;
                   navigate(`/chat/${idIntra}`);

@@ -139,7 +139,7 @@ export const Channel = (props: any) => {
     // const sendMessage = () => {
     //     messaggi.push(message);
     //     for (var i in messaggi) {
-    //         console.log(messaggi[i]);
+    
     //     }
     // }
 

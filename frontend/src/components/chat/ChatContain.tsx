@@ -55,7 +55,7 @@ export const ChatContain = (props: any) => {
     const classes = useStyles();
     const onstatus = props.status;
     const params = useParams()
-    // console.log("params : " + JSON.stringify(params))
+    
     let status;
 
     const [triggerMessage, setTriggerMessage] = useState(false);
@@ -195,10 +195,10 @@ export const ChatContain = (props: any) => {
     //                 }
     //             });
     //             const json = await response.json();
-    //             console.log(json);
+    
     //             setUser(json);
     //         } catch (error) {
-    //             console.log("error", error);
+    
     //         }
     //     };
 
@@ -221,10 +221,10 @@ export const ChatContain = (props: any) => {
     //                 }
     //             });
     //             const json = await response.json();
-    //             console.log(json);
+    
     //             setFriends(json);
     //         } catch (error) {
-    //             console.log("error", error);
+    
     //         }
     //     };
     //     fetchData();
@@ -343,11 +343,11 @@ export const ChatContain = (props: any) => {
             console.log('matenevai')
             console.log(json);
             if (response.status === 200) {
-                // console.log(json)
+                
                 socket.emit('newDm', json);
                 // window.location.href = ;
                 // setonChangeDm(!onChangeDm);
-                // console.log({ idIntra: user.idIntra, userName: user.userName, userImg: user.img, userIdIntra: user.userName });
+                
                 // changeChat('DM', user.userName, json.id, user.img, user.idIntra, '');
                 window.location.assign(`/Chat/${user.idIntra}`);
                 //changeChat('DM', user.userName , json.id, user.img , user.idIntra , '');
@@ -435,10 +435,10 @@ export const ChatContain = (props: any) => {
 
         const updateMap = (key: any, value: any) => {
             // const currentValues = map.get(key) || []; // get current values for the key, or use empty array
-            // console.log(map)
+            
             const currentValues = map.get(key);
-            // console.log("currentValues", currentValues);
-            // console.log("key", key);
+            
+            
             // setMap(map2 => new Map(map.set(key, [...currentValues, value])));
 
         }
@@ -547,7 +547,7 @@ export const ChatContain = (props: any) => {
         }
         isSecondRender.current = true;
     });
-    // console.log("map", map);
+    
     React.useEffect(() => {
         if (isSecondRender.current) {
             socket.off('newDm').on('newDm', (data: any) => {
@@ -638,8 +638,8 @@ export const ChatContain = (props: any) => {
         isSecondRender.current = true;
     });
 
-    // console.log("dms", dms);
-    // console.log (map);
+    
+    
 
 
     // React.useEffect(() => {
@@ -656,13 +656,13 @@ export const ChatContain = (props: any) => {
     //             body: JSON.stringify({ count: 50 }),
     //         });
     //         const json = await response.json();
-    //         console.log("aoooooo1" + json);
+    
     //         setMap(json.map((chat: any) => {
     //             map.set(chat.idChat, chat.messages);
     //         }));
-    //         console.log("aooooooo2" + map);
+    
     //     } catch (error) {
-    //         console.log("error", error);
+    
     //     }
     //     getMessages();
     // }}, []);
@@ -682,8 +682,8 @@ export const ChatContain = (props: any) => {
     function renderDmsRow(props: any) {
         const { index, style } = props;
         /*to fix to real id of the chat*/
-        // console.log("DMSSS INDEX", JSON.stringify(dms[index]));
-        // console.log("DMSSS userName", dms[index]["partecipant"][0]["user"]);
+        
+        
         return (
             <ListItem style={style} key={index} onClick={() => navigate(`/Chat/` + dms[index]["partecipant"][0]["user"]?.idIntra)}>
                 <img width="50px" height="50px" style={{borderRadius: '100%'}} src={dms[index]["partecipant"][0]["user"]?.img} />

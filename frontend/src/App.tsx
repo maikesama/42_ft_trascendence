@@ -49,7 +49,7 @@ function App() {
     });
 
     // const handleNewMessage = (data) => {
-    //   console.log("new message");
+    
     //   // toast(data);
     // }
 

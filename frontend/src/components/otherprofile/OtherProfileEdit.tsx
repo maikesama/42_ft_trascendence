@@ -112,7 +112,7 @@ export const SocialEdit = (props: any) => {
     let date = friends[index]?.addedAt;
     
     // date = String(date.split("T"));
-    // console.log(date[1].split("."));
+    
     // let hour = String(date[1].split("."));
     let data;
     let hour;
@@ -266,7 +266,7 @@ export const ProfileEdit =  (props: any) => {
         console.log("isF" +json);
         setIsFriend(json);
         //window.location.reload();
-        //console.log(json.friends)
+        
       } catch (error) {
         console.log("error", error);
       }
@@ -349,7 +349,7 @@ export const ProfileEdit =  (props: any) => {
         console.log("isB" +json);
         setIsBlocked(json);
         //window.location.reload();
-        //console.log(json.friends)
+        
       } catch (error) {
         console.log("error", error);
       }
@@ -502,7 +502,7 @@ async function newDm(index: any) {
       const json = await response.json();
       console.log(json);
       if (response.status === 200) {
-        // console.log(json)
+        
         socket.emit('newDm', json);
         // window.location.href = ;
         navigate(`/chat/${props.idIntra}`);

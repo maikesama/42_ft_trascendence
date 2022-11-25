@@ -128,7 +128,7 @@ export const DM = (props: any) => {
 	// 	}
 	// }
 
-	// console.log("idChat: " + props.idChat + " idChat: " + idChat);
+	
 	// React.useEffect(() => {
 
 	// 	if ( idChat !== props.idChat || idChat) {
@@ -138,11 +138,11 @@ export const DM = (props: any) => {
 	// }, [props.idChat, props.messages]);
 
 	// const sendMessage = () => {
-	// 	console.log("message: " + message);
+	
 	// 	socket.emit('prova', { idChat: props.idChat, message: message });
 
 	// }
-	// console.log(messages)
+	
 	const handleClickOpenUserActions = () => {
 		setopenUserActions(true);
 	};

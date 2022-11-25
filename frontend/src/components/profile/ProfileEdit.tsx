@@ -73,7 +73,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setUser(json);
       } catch (error) {
-        //console.log("error", error);
+        
       }
     };
 
@@ -95,10 +95,10 @@ export const SocialEdit = (props: any) => {
           }
         });
         const json = await response.json();
-        //console.log(json);
+        
         setFriends(json);
       } catch (error) {
-        //console.log("error", error);
+        
       }
     };
     fetchData();
@@ -106,7 +106,7 @@ export const SocialEdit = (props: any) => {
 
   useEffect(() => {
     socket.off('friendStatus').on("friendStatus", (data: any) => {
-      //console.log("friendStatus", data);
+      
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {
         const newFriends = friends.map((friend: any) => {
@@ -178,7 +178,7 @@ export const SocialEdit = (props: any) => {
         }
       });
       //const json = await response.json();
-      //console.log(json);
+      
       // window.location.reload();
       //
       if (response.status === 201) {
@@ -186,7 +186,7 @@ export const SocialEdit = (props: any) => {
         socket.emit("blockUser", { idIntra: idIntra });
       }
     } catch (error) {
-      //console.log("error", error);
+      
     }
   }
 
@@ -211,10 +211,10 @@ export const SocialEdit = (props: any) => {
         // window..reload();
       }
       //const json = await response.json();
-      ////console.log(json);
+      
       // window.location.reload();
     } catch (error) {
-      //console.log("error", error);
+      
     }
   }
 
@@ -237,7 +237,7 @@ export const SocialEdit = (props: any) => {
         const json = await response.json();
         setGames(json);
       } catch (error) {
-        //console.log("error", error);
+        
       }
     };
 
@@ -280,7 +280,7 @@ export const SocialEdit = (props: any) => {
   function renderMatchesRowPreview(props: any) {
     let { index, style, matches } = props;
 
-    //console.log(style)
+    
 
     var style2 = {
       ...style,
@@ -291,7 +291,7 @@ export const SocialEdit = (props: any) => {
     // let style2 = {position:"absolute",left:0,top:0,height:90,width:"100%", display : 'flex', justifyContent: 'space-between'}
 
 
-    // //console.log("vaffanc" + JSON.stringify(style2))
+    
 
     return (
       <>
@@ -438,7 +438,7 @@ export const ProfileEdit = (props: any) => {
   };
 
   const uploadImage = async (imageList: ImageListType) => {
-    //console.log(JSON.stringify(imageList[0].dataURL))
+    
     try {
       const response = await fetch(`http://${process.env.REACT_APP_HOST_URI}/api/user/update/pp`, {
         method: "POST",
@@ -450,9 +450,9 @@ export const ProfileEdit = (props: any) => {
       });
       manageError({}, response, props.triggerUser, setAlert);
       // setAlert(c);
-      ////console.log(json);
+      
     } catch (error) {
-      //console.log("error", error);
+      
     }
     // window.location.reload()
   };
@@ -480,7 +480,7 @@ export const ProfileEdit = (props: any) => {
       //window.location.reload();
       manageError({}, response, props.triggerUser, setAlert);
     } catch (error) {
-      //console.log("error", error);
+      
     }
 
   }
@@ -523,14 +523,14 @@ export const ProfileEdit = (props: any) => {
         setUser(json);
         setCheck(json.twoFa);
       } catch (error) {
-        //console.log("error", error);
+        
       }
     };
 
     fetchData();
   }, []);
 
-  //console.log(user.twoFa)
+  
   const [open2FA, setOpen2FA] = React.useState(false);
 
   const close2FA = (event: any, reason: any) => {
@@ -560,10 +560,10 @@ export const ProfileEdit = (props: any) => {
         credentials: 'include',
       })
       const json = await response.json();
-      //console.log(json);
+      
       setCheck(false);
     } catch (error) {
-      //console.log("error", error);
+      
     }
   }
 
@@ -584,7 +584,7 @@ export const ProfileEdit = (props: any) => {
       
     }
     catch (error) {
-      //console.log("error", error);
+      
     }
   }
 

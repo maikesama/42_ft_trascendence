@@ -25,7 +25,7 @@ const settings = ['Logout'];
 
 export function Header(props: any) {
   const location = useLocation();
-  // console.log("location", location.pathname)
+  
   const [user, setUser] = useState({} as any);
 
   async function logout()

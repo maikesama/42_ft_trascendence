@@ -34,7 +34,7 @@ export const InvitedList = (props: any) => {
         console.log(json);
         setInvited(json);
         // setInvited(json);
-        //console.log(json.friends)
+        
       } catch (error) {
         console.log("error", error);
       }
@@ -80,12 +80,12 @@ export const InvitedList = (props: any) => {
           })
         });
         //const json = await response.json();
-        //console.log(json);
+        
         if (response.status === 200){
           socket.emit("friendHandler", {idIntra: idIntra, type: 3});
          }
         // setInvited(json);
-        //console.log(json.friends)
+        
       } catch (error) {
         console.log("error", error);
       }

@@ -32,7 +32,7 @@ export const BlockedList = (props: any) => {
         console.log(json);
         setBlocked(json);
         //window.location.reload();
-        //console.log(json.friends)
+        
       } catch (error) {
         console.log("error", error);
       }
