@@ -6,6 +6,7 @@ COPY ./ ./
 
 RUN npm cache clean --force
 RUN rm -rf node_modules build
+RUN npm config set legacy-peer-deps true
 RUN npm install --legacy-peer-deps
 # RUN npm run build
 # RUN npm install serve --legacy-peer-deps
@@ -13,7 +14,7 @@ RUN npm install --legacy-peer-deps
 # npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build
 
     
-CMD npm run build;npm install serve --legacy-peer-deps;npx serve -s build
+CMD npm install --legacy-peer-deps;npm run build;npm install serve --legacy-peer-deps;npx serve -s build
     
     
     

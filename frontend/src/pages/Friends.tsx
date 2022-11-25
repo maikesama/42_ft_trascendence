@@ -3,7 +3,7 @@ import { Grid } from '@mui/material';
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import TextField from '@mui/material/TextField';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import {  createTheme } from '@mui/material/styles';
 import { AdminItem } from "../components/admin/AdminItem";
 import { AdminHeader } from "../components/admin/AdminHeader";
 import '../font/font.css';

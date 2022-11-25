@@ -1,9 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
+import { FixedSizeList } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@mui/material/Dialog';
@@ -38,10 +38,10 @@ export const BlockedList = (props: any) => {
     };
 
     fetchData();
-        socket.off('blockUser2').on('blockUser2', (data: any) => {
+        socket.on('blockUser2', (data: any) => {
             fetchData();
           });
-          socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+          socket.on('unBlockUser2', (data: any) => {
             fetchData();
           });
   }, []);

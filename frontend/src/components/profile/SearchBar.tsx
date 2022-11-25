@@ -31,7 +31,7 @@ import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import BlockIcon from '@mui/icons-material/Block';
 // import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 // import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
-import { styled, alpha } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import SearchIcon from '@mui/icons-material/Search';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
@@ -106,20 +106,20 @@ export const SearchBar = (props: any) => {
     }
 
     React.useEffect(() => {
-            socket.off('blockUser2').on('blockUser2', (data: any) => {
+            socket.on('blockUser2', (data: any) => {
                 searchUser();
             });
     });
 
     React.useEffect(() => {
-            socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
+            socket.on('unBlockUser2', (data: any) => {
                 searchUser();
             });
     });
 
     React.useEffect(() => {
             socket.off('friendHandler').on('friendHandler', (data: any) => {
-                
+                console.log("friendHandler");
                 searchUser();
             });
     });

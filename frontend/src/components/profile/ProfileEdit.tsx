@@ -33,7 +33,7 @@ import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import { Alert, manageError } from '../generic/Alert';
-import { Twofa } from '../../pages/Twofa';
+// import { Twofa } from '../../pages/Twofa';
 import { TwofaOn } from './TwofaOn';
 import { socket } from '../../App';
 
@@ -402,6 +402,8 @@ export const ProfileEdit = (props: any) => {
 
     let url = `http://${process.env.REACT_APP_HOST_URI}/api/user/update/username`;
     const inputbox = document.getElementById('txtNick');
+    const save = document.getElementById('saveButton');
+    
     inputbox?.setAttribute('disabled', 'true');
     inputbox?.removeAttribute('placeholder');
 
@@ -416,6 +418,9 @@ export const ProfileEdit = (props: any) => {
       });
       if (response.status === 200 || response.status === 201) {
         window.location.reload();
+        save?.setAttribute('hidden', 'true');
+        save?.setAttribute('placeholder', nick.current.value );
+        inputbox?.setAttribute('disabled', 'true');
       }
       else {
         inputbox?.removeAttribute('disabled');

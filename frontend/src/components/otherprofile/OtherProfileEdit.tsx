@@ -5,18 +5,18 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import EditIcon from '@mui/icons-material/Edit';
+// import EditIcon from '@mui/icons-material/Edit';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Avatar from '@mui/material/Avatar';
 import Divider from '@mui/material/Divider';
 import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
+// import ListItemText from '@material-ui/core/ListItemText';
 import PersonAddOutlinedIcon from '@mui/icons-material/PersonAddOutlined';
 import MapsUgcOutlinedIcon from '@mui/icons-material/MapsUgcOutlined';
 import BlockIcon from '@mui/icons-material/Block';
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+// import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import PersonRemoveIcon from '@mui/icons-material/PersonRemove';
@@ -191,7 +191,7 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
-    socket.off('friendHandler').on('friendHandler', (data: any) => {
+    socket.on('friendHandler', (data: any) => {
       console.log("qui");
       console.log(data);
       console.log(data);
@@ -285,7 +285,7 @@ export const ProfileEdit =  (props: any) => {
   }, [props.idIntra, friendHandler]);
 
   React.useEffect(() => {
-      socket.off('friendHandler').on('friendHandler', (data: any) => {
+      socket.on('friendHandler', (data: any) => {
         if (data.idIntra === props.idIntra) {
             setFriendHandler(!friendHandler);
           }
@@ -582,8 +582,8 @@ async function toDm(index: any) {
       </CardContent>
       <CardActions sx={{ justifyContent: 'center', paddingTop: '0px' }}>
         <IconButton aria-label="message" size="small" onClick={toDm}><MapsUgcOutlinedIcon fontSize="large" /></IconButton>
-        {isFriend === false && isPending === false ? <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
-        {isFriend === false && isPending === true ? <IconButton aria-label="removeinvite" size="small" onClick={removeInviteFriend} style={{ color: 'orange' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
+        {isFriend === false && isPending === false && isBlocked === 0 ? <IconButton aria-label="addfriend" size="small" onClick={addInviteFriend} style={{ color: '#00e200' }}><PersonAddOutlinedIcon fontSize="large" /></IconButton> : null}
+        {isFriend === false && isPending === true && isBlocked === 0 ? <IconButton aria-label="removeinvite" size="small" onClick={removeInviteFriend} style={{ color: 'orange' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
         {isFriend === true ? <IconButton aria-label="removefriend" size="small" onClick={removeFriend} style={{ color: '#f30000' }}><PersonRemoveIcon fontSize="large" /></IconButton> : null}
         {isBlocked === 0 ? <IconButton aria-label="block" size="small" onClick={block} style={{ color: '#f30000' }}><BlockIcon fontSize="large" /></IconButton> : null}
         {isBlocked === 1 ? <IconButton aria-label="unblock" size="small" onClick={unblock} style={{ color: '#00e200' }}><CancelIcon fontSize="large" /></IconButton> : null}

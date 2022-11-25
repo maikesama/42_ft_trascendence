@@ -1,7 +1,5 @@
 import '../font/font.css';
 
-let logged = false;
-
 export const Error404 = () => {
     const modality = {
         color : 'white',

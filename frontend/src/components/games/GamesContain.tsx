@@ -2,12 +2,12 @@
 import { useEffect, useState, useRef } from 'react';
 import io from 'socket.io-client';
 import "../css/Games.css";
-import Button from '@mui/material/Button';
+// import Button from '@mui/material/Button';
 import { Link as RouterLink } from 'react-router-dom';
 import { Link } from '@mui/material';
 // import * as React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
-import Box from '@mui/material/Box';
+// import Box from '@mui/material/Box';
 import KeyboardBackspaceIcon from '@mui/icons-material/KeyboardBackspace';
 import { useParams } from 'react-router';
 import { socket } from '../../App';
@@ -229,7 +229,7 @@ export const GamesContain = (props: any) => {
       }, 1000 / 60);
     }
 
-    socketGames.on('state', (gameState: any) => {
+    socketGames.off('state').on('state', (gameState: any) => {
       start2.current = true;
       setStart(true);
       setTextMatchmaking("Matchmaking....");
@@ -345,7 +345,7 @@ export const GamesContain = (props: any) => {
     //   if (start2.current)
     //     socketGames.emit('playerMovement', playerMovement);
     // }, 1000 / 60);
-    socketGames.on('start', () => {
+    socketGames.off('start').on('start', () => {
       start2.current = true;
       
       
