@@ -112,7 +112,7 @@ export const SearchBar = (props: any) => {
     });
 
     React.useEffect(() => {
-            socket.off('blockUser2').on('blockUser2', (data: any) => {
+            socket.off('unBlockUser2').on('unBlockUser2', (data: any) => {
                 searchUser();
             });
     });
