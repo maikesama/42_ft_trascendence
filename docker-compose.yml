@@ -19,6 +19,18 @@ services:
   #     - "backend"
   #   networks:
   #     - trascendecne
+
+  ft_transcendence:
+    image: "hello"
+    build:
+      dockerfile: 'Dockerfile'
+      context: ./hello
+    container_name: hello
+    depends_on:
+      - "backend"
+    networks:
+      - trascendecne
+
   frontend:
     image: "node:16-slim"
     user: "node"
