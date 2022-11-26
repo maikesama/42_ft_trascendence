@@ -149,7 +149,7 @@ export class AuthService {
 		}
 		catch (e) {
 			res.redirect(`http://${process.env.HOST}/`)
-			throw new HttpException("Something wrong ", HttpStatus.CONFLICT)
+			throw new HttpException("Something wrong " + e.message, HttpStatus.CONFLICT)
 		}
 	}
 
