@@ -88,13 +88,13 @@ removeUser 2
 blockUser 4
     blockUserChatContain
     blockUserOtherProfileEdit
-    blockUserBlockedList
+    blockUserBlockedList - no
     blockUserSearchBar
 unBlockUser 4
     unBlockUserChatContain
     unBlockUserOtherProfileEdit
-    unBlockUserBlockedList
-    unBlockUserSearchBar
+    unBlockUserBlockedList 
+    unBlockUserSearchBar - forse
 
 friendHandler 4
     friendHandlerOtherProfileEditSocialEdit
@@ -102,6 +102,10 @@ friendHandler 4
     friendHandlerSearchBar
     friendHandlerInviteList
 
+accept not work
+decline not work
 
 
 
+prisma
+npm 
