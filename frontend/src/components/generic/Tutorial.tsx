@@ -87,19 +87,19 @@ export const Tutorial = (props: any) => {
                                             <th colSpan={2} style={{border: 1}}>When the ball hits the power ups/downs:</th>
                                         </tr>
                                         <tr style={{border: '1px solid'}}>
-                                            <td><img width="25px" height="25px" src={step.img1}/></td>
+                                            <td><img width="25px" alt="icon" height="25px" src={step.img1}/></td>
                                             <td>Speed, the ball starts to go faster</td>
                                         </tr>
                                         <tr style={{border: '1px solid'}}>
-                                            <td><img width="25px" height="25px" src={step.img2}/></td>
+                                            <td><img width="25px" height="25px"  alt="icon" src={step.img2}/></td>
                                             <td>Size, the ball changes the size</td>
                                         </tr>
                                         <tr style={{border: '1px solid'}}>
-                                            <td><img width="25px" height="25px" src={step.img3}/></td>
+                                            <td><img width="25px" height="25px" alt="icon" src={step.img3}/></td>
                                             <td>Reverse, the ball reverses its direction</td>
                                         </tr>
                                         <tr style={{border: '1px solid'}}>
-                                            <td><img width="25px" height="25px" src={step.img4}/></td>
+                                            <td><img width="25px" height="25px" alt="icon" src={step.img4}/></td>
                                             <td>Ball black, the ball bounces</td>
                                         </tr>
                                         </tbody>

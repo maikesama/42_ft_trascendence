@@ -19,7 +19,7 @@ export const MatchesList = (props: any) => {
 
     useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getHistory`;
-
+        
         const fetchData = async () => {
             try {
                 const response = await fetch(url, {
@@ -41,32 +41,8 @@ export const MatchesList = (props: any) => {
         fetchData();
     }, [params]);
 
-    const [user, setUser] = useState({} as any);
-
-    useEffect(() => {
-        const url = `http://${process.env.REACT_APP_HOST_URI}/api/user/me`;
-
-        const fetchData = async () => {
-            try {
-                const response = await fetch(url, {
-                    credentials: 'include',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    }
-                });
-                const json = await response.json();
-                
-                setUser(json);
-            } catch (error) {
-                
-            }
-        };
-
-        fetchData();
-    }, []);
-
     function renderMatchesRow(props: any) {
-        const { index, style, matches } = props;
+        const { index, style } = props;
 
         var style2 = {
             ...style,

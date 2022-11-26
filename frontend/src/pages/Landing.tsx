@@ -1,6 +1,6 @@
 import './css/Homepage.css';
 
-let logged = false;
+
 
 export const Landing = () => {
 

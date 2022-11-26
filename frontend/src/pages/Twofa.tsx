@@ -20,7 +20,7 @@ import Typography from '@mui/material/Typography';
 import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import { TextField } from '@mui/material';
 
-let logged = false;
+
 
 export const Twofa = () => {
     const [open, setOpen] = useState(false);

@@ -49,8 +49,8 @@ export const Homepage = () => {
                     <div className="col-md-5 d-flex justify-content-center align-items-center" style={{position: 'relative'}}>
                         <div className="classic_hover" onClick={classico}>
                             <div>
-                                <img className="image_hover" src={require('../images/classic.jpg')} />
-                                <img className="image_hover" src={require('../images/classic.gif')} />
+                                <img className="image_hover" alt="img" src={require('../images/classic.jpg')} />
+                                <img className="image_hover" alt="img" src={require('../images/classic.gif')} />
                             </div>
                             <div className="text"><h1 className="modalityName">Classico</h1></div>
                         </div>
@@ -66,8 +66,8 @@ export const Homepage = () => {
                     <div className="col-md-5 d-flex justify-content-center align-items-center" style={{position: 'relative'}}>
                         <div className="classic_hover" onClick={custom}>
                             <div>
-                                <img className="image_hover" src={require('../images/custom.jpg')} />
-                                <img className="image_hover" src={require('../images/custom.gif')} />
+                                <img className="image_hover" alt="img" src={require('../images/custom.jpg')} />
+                                <img className="image_hover" alt="img" src={require('../images/custom.gif')} />
                             </div>
                             <div className="text"><h1 className="modalityName">Custom</h1></div>
                         </div>

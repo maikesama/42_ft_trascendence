@@ -8,7 +8,7 @@ import { AdminItem } from "../components/admin/AdminItem";
 import { AdminHeader } from "../components/admin/AdminHeader";
 import '../font/font.css';
 
-let logged = false;
+
 
 export const Friends = () => {
     const modality = {

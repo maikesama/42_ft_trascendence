@@ -67,7 +67,7 @@ export function LeaderboardItem(props: any) {
                         </span>
                     </label>
                         <span style={{width: '8%', textAlign: 'left'}}>
-                            <img src={props.image} style={img} />
+                            <img src={props.image} style={img} alt="userAvatar"/>
                         </span>
                     <label  style={{width: '20%'}}><span style={leaderboardItemCliccable}>{props.nickname}</span></label>
                     <label  style={{width: '15%'}}><span style={leaderboardItemCliccable}>{props.win}</span></label>

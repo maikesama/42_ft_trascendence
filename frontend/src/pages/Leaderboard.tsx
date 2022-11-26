@@ -3,12 +3,10 @@ import { Header } from '../components/generic/Header';
 import { LeaderboardHeader } from "../components/leaderboard/LeaderboardHeader";
 import { LeaderboardItem } from "../components/leaderboard/LeaderboardItem";
 import { socket } from "../App";
-import Link from '@mui/material/Link';
-import { Link as RouterLink } from 'react-router-dom';
 
 import '../font/font.css';
 
-let logged = false;
+
 
 export const Leaderboard = () => {
 
