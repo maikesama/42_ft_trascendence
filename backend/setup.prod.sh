@@ -1,7 +1,7 @@
 
-npx prisma generate
+npx prisma generate &> /dev/null
 
-npx prisma migrate dev --name Mig
+npx prisma migrate dev --name Mig &> /dev/null
 
 npm run build
 

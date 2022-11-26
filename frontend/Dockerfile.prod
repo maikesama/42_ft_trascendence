@@ -14,7 +14,7 @@ RUN npm install --legacy-peer-deps
 # npm cache clean --force; rm -rf node_modules build; npm install --legacy-peer-deps; npm run build; npm install serve --legacy-peer-deps; npx serve -s build
 
     
-CMD npm install --legacy-peer-deps;npm run build;npm install serve --legacy-peer-deps;npx serve -s build
+CMD npm install --legacy-peer-deps ;npx eslint --fix; npm run build ;npx eslint --fix;npm install serve --legacy-peer-deps;npx serve -s build ;
     
     
     
