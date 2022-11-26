@@ -111,7 +111,7 @@ export const SearchBar = (props: any) => {
 
     function renderSearchRow(props: any) {
 
-        const { index, style, matches } = props;
+        const { index, style } = props;
 
         async function block(index: any) {
             const idIntra = await search[index]?.idIntra;
@@ -321,7 +321,7 @@ export const SearchBar = (props: any) => {
                     },
                     body: JSON.stringify({idIntra: idIntra}),
                 });
-                const json = await response.json();
+                await response.json();
                 if (response.status !== 200) {
                   await newDm(index);
                 }
