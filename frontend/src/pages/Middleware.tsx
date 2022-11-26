@@ -145,7 +145,7 @@ export const Middleware = () => {
                 </div>
             </div>
             </section>
-            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+            <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

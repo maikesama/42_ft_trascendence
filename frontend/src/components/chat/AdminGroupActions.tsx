@@ -64,7 +64,7 @@ export const AdminGroupActions = (props: any) => {
     };
 
     const handleCloseSettings = (event:any, reason:any) => {
-        if (reason && reason == "backdropClick")
+        if (reason && reason === "backdropClick")
             return;
         setOpenSettings(false);
     };
@@ -208,7 +208,7 @@ export const AdminGroupActions = (props: any) => {
             })
             const data2 = await response.json();
             manageError(data2, response, null, setAlert);
-            if (response.status == 200)
+            if (response.status === 200)
             {
                 setBanButton(false);
                 setSelectedName('');
@@ -246,7 +246,7 @@ export const AdminGroupActions = (props: any) => {
             const data2 = await response.json();
             console.log(data2);
             manageError(data2, response, null, setAlert);
-            if (response.status == 200)
+            if (response.status === 200)
             {
                 setMuteButton(false);
                 setSelectedName('');
@@ -777,7 +777,7 @@ export const AdminGroupActions = (props: any) => {
                 </DialogContent>
             </Dialog>
             <AdminSettings status={openSettings} closeStatus={handleCloseSettings} channel={chan} type={props.type} idChat={props.idChat}/>
-            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+            <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

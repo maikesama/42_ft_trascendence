@@ -586,7 +586,7 @@ async function toDm(index: any) {
         {isBlocked === 2 ? <><IconButton aria-label="block" size="small" disabled style={{ color: 'black' }}><BlockIcon fontSize="large" /></IconButton></> : null}
       </CardActions>
     </Card>
-    <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+    <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
     </>
   );
 }

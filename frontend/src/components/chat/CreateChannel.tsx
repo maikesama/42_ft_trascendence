@@ -282,7 +282,7 @@ export const CreateChannel = (props: any) => {
             </DialogActions>
         </Dialog>
 
-        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

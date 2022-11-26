@@ -87,7 +87,7 @@ export const ChatContain = (props: any) => {
     };
 
     const handleCloseCreateGroup = (event: any, reason: any) => {
-        if (reason && reason == "backdropClick")
+        if (reason && reason === "backdropClick")
             return;
         setopenCreateGroup(false);
     };
@@ -126,7 +126,7 @@ export const ChatContain = (props: any) => {
     };
 
     const changeChat = (param: React.SetStateAction<string>, name: React.SetStateAction<string>, id: React.SetStateAction<number>, img: React.SetStateAction<string>, idIntra: React.SetStateAction<string>, type: React.SetStateAction<string>) => {
-        if (param != 'Blank' && param != 'DM') {
+        if (param !== 'Blank' && param !== 'DM') {
             clickChannelInfo(Number(id));
         }
         setChatView(param);
@@ -298,7 +298,7 @@ export const ChatContain = (props: any) => {
     let initials = useRef<any>('');
 
     async function searchUser() {
-        if (initials.current.value == '')
+        if (initials.current.value === '')
             setSearching(false)
         else if (!searching)
             setSearching(true)
@@ -701,10 +701,10 @@ export const ChatContain = (props: any) => {
                         <IconButton aria-label="delete" style={{ marginTop: '10px' }} size="small" onClick={handleClickOpenJoineGroup}><Diversity3OutlinedIcon fontSize="large" /></IconButton>
                     </Grid>
                     <Divider />
-                    {searching && initials.current != '' ?
+                    {searching && initials.current !== '' ?
                         <>
                             <FixedSizeList
-                                height={Object.values(search).length == 0 ? 90 : Object.values(search).length > 5 ? 450 : ((Object.values(search).length) * 90)}
+                                height={Object.values(search).length === 0 ? 90 : Object.values(search).length > 5 ? 450 : ((Object.values(search).length) * 90)}
                                 width='full'
                                 itemSize={90}
                                 itemCount={Object.values(search).length}
@@ -715,7 +715,7 @@ export const ChatContain = (props: any) => {
                         </> : <>
                             <h4>DM</h4>
                             <FixedSizeList
-                                height={Object.values(dms).length == 0 ? 90 : Object.values(dms).length > 5 ? 450 : ((Object.values(dms).length) * 90)}
+                                height={Object.values(dms).length === 0 ? 90 : Object.values(dms).length > 5 ? 450 : ((Object.values(dms).length) * 90)}
                                 width='full'
                                 itemSize={90}
                                 itemCount={Object.values(dms).length}
@@ -727,7 +727,7 @@ export const ChatContain = (props: any) => {
                             <h4>Channels</h4>
                             <FixedSizeList
 
-                                height={(Object.values(chats).length == 0 ? 90 : Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length) * 90))}
+                                height={(Object.values(chats).length === 0 ? 90 : Object.values(chats).length > 5 ? 450 : ((Object.values(chats).length) * 90))}
                                 width='full'
                                 itemSize={90}
                                 itemCount={Object.values(chats).length}

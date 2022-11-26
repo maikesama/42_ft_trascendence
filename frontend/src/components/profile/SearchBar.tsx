@@ -388,7 +388,7 @@ export const SearchBar = (props: any) => {
                     </DialogActions>
                 </DialogContent>
             </Dialog>
-            <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+            <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

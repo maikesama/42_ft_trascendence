@@ -216,7 +216,7 @@ export const JoinGroup = (props: any) => {
                 </div>
             </DialogContent>
         </Dialog>
-        <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+        <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
         </>
     );
 }

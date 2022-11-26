@@ -541,7 +541,7 @@ export const ProfileEdit = (props: any) => {
   const [open2FA, setOpen2FA] = React.useState(false);
 
   const close2FA = (event: any, reason: any) => {
-    if (reason && reason == "backdropClick")
+    if (reason && reason === "backdropClick")
       return;
     setOpen2FA(false);
     setCheck(false)
@@ -667,7 +667,7 @@ export const ProfileEdit = (props: any) => {
           <Button onClick={clickSave}>Save</Button>
         </CardActions>
       </Card >
-      <Alert status={alert != "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
+      <Alert status={alert !== "" ? true : false} closeStatus={() => setAlert("")} error={alert} />
 
       <TwofaOn status={open2FA} closeStatus={close2FA} qr={Qr} />
     </>
