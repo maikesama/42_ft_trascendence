@@ -1,23 +1,22 @@
-import React from 'react';
+import Avatar from '@material-ui/core/Avatar';
 import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
+import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import ListItemButton from '@mui/material/ListItemButton';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
-import { UserActions } from './UserActions';
-import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
-import { useAuth } from '../../hooks/useAuth';
-import { useNavigate } from "react-router-dom";
+import ListItemButton from '@mui/material/ListItemButton';
+import React from 'react';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { FixedSizeList, ListChildComponentProps } from 'react-window';
 import { socket } from '../../App';
+import { useAuth } from '../../hooks/useAuth';
+import { UserActions } from './UserActions';
 
 
 export const GroupInfo = (props: any) => {
@@ -27,9 +26,6 @@ export const GroupInfo = (props: any) => {
     let navigate = useNavigate();
 
     const [openUserActions, setopenUserActions] = React.useState(false);
-    const handleClickOpenUserActions = () => {
-        setopenUserActions(true);
-    };
 
     const handleCloseUserActions = () => {
         setopenUserActions(false);

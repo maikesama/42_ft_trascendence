@@ -1,24 +1,24 @@
-import React, { useState, useRef } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import ListItem from '@material-ui/core/ListItem';
-import { IconButton } from '@mui/material';
-import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 import Diversity3OutlinedIcon from '@mui/icons-material/Diversity3Outlined';
-import { FixedSizeList } from 'react-window';
-import { CreateChannel } from './CreateChannel';
-import { Messages } from './Messages';
-import { JoinGroup } from './JoinGroup';
-import { UserActions } from './UserActions';
-import { Blank } from './Blank';
-import { DM } from './DM';
-import { Channel } from './Channel';
-import { socket } from "../../App";
+import GroupAddSharpIcon from '@mui/icons-material/GroupAddSharp';
+import { IconButton } from '@mui/material';
+import React, { useRef, useState } from 'react';
 import { useParams } from 'react-router';
 import { useNavigate } from "react-router-dom";
+import { FixedSizeList } from 'react-window';
+import { socket } from "../../App";
 import { useAuth } from '../../hooks/useAuth';
+import { Blank } from './Blank';
+import { Channel } from './Channel';
+import { CreateChannel } from './CreateChannel';
+import { DM } from './DM';
+import { JoinGroup } from './JoinGroup';
+import { Messages } from './Messages';
+import { UserActions } from './UserActions';
 
 
 const useStyles = makeStyles({
@@ -129,6 +129,7 @@ export const ChatContain = (props: any) => {
 
             fetchData();
         }
+        // eslint-disable-next-line
     }, [params.idIntra]);
 
     const [chats, setChats] = useState({} as any);

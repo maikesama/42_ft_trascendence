@@ -39,6 +39,7 @@ export const MatchesList = (props: any) => {
         };
 
         fetchData();
+        // eslint-disable-next-line
     }, [params]);
 
     function renderMatchesRow(props: any) {
