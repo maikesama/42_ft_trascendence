@@ -15,7 +15,7 @@ import { useParams } from 'react-router';
 export const MatchesList = (props: any) => {
 
     const [games, setGames] = useState({} as any);
-    const params = useParams()
+    const params = useParams();
 
     useEffect(() => {
         const url = `http://${process.env.REACT_APP_HOST_URI}/api/games/getHistory`;

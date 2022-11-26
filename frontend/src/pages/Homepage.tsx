@@ -1,16 +1,10 @@
 import {Header} from '../components/generic/Header';
 import '../font/font.css';
 import './css/Homepage.css';
-import { Link as RouterLink } from 'react-router-dom';
-import { Link } from '@mui/material';
 import HelpIcon from '@mui/icons-material/Help';
-import IconButton from '@mui/material/IconButton';
 import Button from '@mui/material/Button';
 import {Tutorial} from '../components/generic/Tutorial'
 import React, {useState} from 'react';
-import Alert from '@mui/material/Alert';
-import CloseIcon from '@mui/icons-material/Close';
-import CheckIcon from '@mui/icons-material/Check';
 
 export const Homepage = () => {
 
