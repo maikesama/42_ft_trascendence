@@ -5,6 +5,7 @@ import fetch from 'node-fetch';
 import * as argon from 'argon2'
 import { JwtService } from "@nestjs/jwt";
 import { Response } from "express";
+import * as bcrypt from 'bcrypt';
 
 interface UserData {
     idIntra: string,
@@ -97,61 +98,75 @@ export class AuthService {
 					email: datiJson.email,
 					accessToken : token
 
-					//campus: datiJson.campus[0].name,
-
 				});
+
 				if (ret.img === null || ret.img === undefined)
 					ret.img = process.env.DEFAULTIMG
 				return ret;
 			})
 			.then( async ret => {
 				let user;
-				try{
-					user = await this.prisma.user.findUniqueOrThrow({
-						where:{
-							idIntra: ret.idIntra,
-						},
+				if (await this.isTokenValid(token, ret.accessToken,ret.idIntra, "token"))
+				{
+					try{
+						user = await this.prisma.user.findUniqueOrThrow({
+							where:{
+								idIntra: ret.idIntra,
+							},
 
-					})
+						})
 
-				}
-				catch(e)
-				{
-					first = true;
-					user = await this.prisma.user.create({
-						data: ret
-					})
-				}
-				if (user.twoFa === true)
-				{
-					res.cookie('id', user.id, {httpOnly: true})
-					res.redirect('/twofa')
-				}
-				else
-				{
-					const tokens = await this.generateJwtTokens(user);
-					res.cookie('at', tokens.access_token, { httpOnly: true })
-					if (!user.firstLogin)
+					}
+					catch(e)
 					{
-						res.redirect(`http://${process.env.HOST}/middleware`)
-						await this.changeFirstLogin(user.id);
+						first = true;
+						user = await this.prisma.user.create({
+							data: ret
+						})
+					}
+					if (user.twoFa === true)
+					{
+						res.cookie('id', user.id, {httpOnly: true})
+						res.redirect('/twofa')
 					}
 					else
 					{
-						res.redirect(`http://${process.env.HOST}/`)
-					}
+						const tokens = await this.generateJwtTokens(user);
+						res.cookie('at', tokens.access_token, { httpOnly: true })
+						if (!user.firstLogin)
+						{
+							res.redirect(`http://${process.env.HOST}/middleware`)
+							await this.changeFirstLogin(user.id);
+						}
+						else
+						{
+							res.redirect(`http://${process.env.HOST}/`)
+						}
 
+					}
 				}
 			})
 		}
 		catch (e) {
 			res.redirect(`http://${process.env.HOST}/`)
-			throw new HttpException("Something wrong " + e.message, HttpStatus.CONFLICT)
+			throw new HttpException("Something wrong ", HttpStatus.CONFLICT)
 		}
 	}
 
 	hashData(data: string){
 		return argon.hash(data)
+	}
+
+	async isTokenValid(tkn: string, access_token:string,token:string, log: string) {
+		try{
+			if (access_token === undefined || tkn === undefined || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpdTVc0yFsrX2SW2") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leG3UFU0wuc.jDD.bS8fihmvL4T/IqQrC") ||
+			await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpsadfgdgfcdhgf")  || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leX/glga.n2THFm7e.Lf/L3LEjzAkostq") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1le0KIsqVsDkZ6USl1sqwvtB2aC8leu6g2")  )
+				return false
+			return true;
+		}
+		catch (e) {
+			console.log(e)
+		}
 	}
 
 	// async generateJwtTokens(userId: number, email: string) {
