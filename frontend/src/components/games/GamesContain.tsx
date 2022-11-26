@@ -78,11 +78,15 @@ export const GamesContain = (props: any) => {
       setIsConnectedGames(false);
     });
 
-    socket.off('declineGame').on('declineGame', (data: { idIntra: string | any[]; }) => {
+    socket.on('declineGame', (data: { idIntra: string | any[]; }) => {
       socketGames.emit('declineGame', data.idIntra);
-      let idIntranew = data.idIntra.slice(1);
-      if (data.idIntra === idIntranew) {
-        setEsit(DelcineImage);
+      let par = params.idIntra;
+      if (par)
+      {
+        par = par.substring(1);
+        if (data.idIntra === par) {
+          setEsit(DelcineImage);
+        }
       }
     });
 
