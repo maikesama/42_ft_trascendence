@@ -32,7 +32,6 @@ import { BlockedList } from './BlockedList';
 import { MatchesList } from './MatchesList';
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import { Alert, manageError } from '../generic/Alert';
-// import { Twofa } from '../../pages/Twofa';
 import { TwofaOn } from './TwofaOn';
 import { socket } from '../../App';
 
