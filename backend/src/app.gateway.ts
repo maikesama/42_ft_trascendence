@@ -286,6 +286,7 @@ async acceptFriend(client: Socket, message: { idIntra: string }) {
             this.server.to(users.get(message.idIntra).id).emit('acceptFriend', { idIntra: user.idIntra, userName: user.userName, img: user.img, status: user.status })
           }
           client.emit('acceptFriend', { idIntra: user2.idIntra, userName: user2.userName, img: user2.img, status: user2.status })
+          client.emit('friendHandler', {idIntra: message.idIntra })
         }
       }
     }
@@ -307,6 +308,7 @@ async declineFriend(client: Socket, message: { idIntra: string }) {
         // this.server.to(users.get(message.idIntra).id).emit('declineFriend', { idIntra: user.idIntra })
         // client.emit('declineFriend', { idIntra: user2.idIntra })
       }
+      client.emit('friendHandler', {idIntra: message.idIntra })
     }
   }
 }
@@ -322,6 +324,7 @@ async removeFriend(client: Socket, message: { idIntra: string }) {
         this.server.to(users.get(message.idIntra).id).emit('removeFriend', { idIntra: user.idIntra })
       }
       client.emit('removeFriend', { idIntra: user2.idIntra })
+      client.emit('friendHandler', {idIntra: message.idIntra })
     }
   }
 }
@@ -529,6 +532,7 @@ async newDm2(client: Socket, data: any) {
         if (users.has(message.idIntra)) {
           this.server.to(users.get(message.idIntra).id).emit('blockUserChatContain', { ciao : "ciao" , idIntra: user.idIntra })
           this.server.to(users.get(message.idIntra).id).emit('blockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user.idIntra })
+          this.server.to(users.get(message.idIntra).id).emit('blockUserSearchBar', { ciao : "ciao" , idIntra: user.idIntra })
         }
         client.emit('blockUserChatContain', { ciao : "ciao" , idIntra: user2.idIntra})
         client.emit('blockUserOtherProfileEdit', { ciao : "ciao" , idIntra: user2.idIntra})

@@ -18,6 +18,7 @@ export const InvitedList = (props: any) => {
 
   const [invited, setInvited] = useState({} as any);
 
+  const isFirstRender = React.useRef(true);
   useEffect(() => {
     const url = `http://${process.env.REACT_APP_HOST_URI}/api/friend/getInvite`;
 
@@ -40,9 +41,12 @@ export const InvitedList = (props: any) => {
     };
 
     fetchData();
-      socket.off('friendHandlerInviteList').on('friendHandlerInviteList', (data: any) => {
-        fetchData();
-      });
+      if (isFirstRender.current) {
+        socket.on('friendHandlerInviteList', (data: any) => {
+          fetchData();
+        });
+      }
+      isFirstRender.current = false;
   }, []);
 
 

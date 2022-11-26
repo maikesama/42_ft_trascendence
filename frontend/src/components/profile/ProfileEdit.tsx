@@ -118,7 +118,7 @@ export const SocialEdit = (props: any) => {
     });
 
     if (isAddFriendNew.current) {
-      socket.off('acceptFriend').on("acceptFriend", (data: any) => {
+      socket.on("acceptFriend", (data: any) => {
         var isAlreadyFriend = false;
         if (friends.length > 0) {
           friends.forEach((friend: any) => {
@@ -138,7 +138,7 @@ export const SocialEdit = (props: any) => {
     }
     isAddFriendNew.current = false;
     // if (isDelFriendNew.current) {
-      socket.off('removeFriend').on("removeFriend", (data: any) => {
+      socket.on("removeFriend", (data: any) => {
       var isAlreadyFriend = false;
       if (friends.length > 0) {
         friends.forEach((friend: any) => {
@@ -181,6 +181,7 @@ export const SocialEdit = (props: any) => {
       if (response.status === 201) {
         // Alert("User blocked", "success");
         socket.emit("blockUser", { idIntra: idIntra });
+        socket.emit("removeFriend", { idIntra: idIntra });
       }
     } catch (error) {
 
@@ -204,7 +205,7 @@ export const SocialEdit = (props: any) => {
       });
       if (response.status === 200) {
         socket.emit("removeFriend", { idIntra: idIntra });
-        socket.emit("friendHandler", { idIntra: idIntra, type: 5});
+        // socket.emit("friendHandler", { idIntra: idIntra, type: 5});
         // window..reload();
       }
       //const json = await response.json();

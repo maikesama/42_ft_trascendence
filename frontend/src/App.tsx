@@ -42,6 +42,10 @@ function App() {
       setIsConnected(false);
     });
 
+    socket.on('friendHandler', (data) => {
+      socket.emit("friendHandler", { idIntra: data.idIntra, type: 5});
+    });
+
     // const handleNewMessage = (data) => {
     
     //   // toast(data);
@@ -57,12 +61,12 @@ function App() {
               <Typography style={{ textAlign: "center" }}>{data.userName} invited you to become friend</Typography>
               <Button variant="outline-success" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("acceptFriend", data);
-                socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
+                // socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Accept</Button>
               <Button variant="outline-danger" style={{ marginLeft: "10px" }} onClick={() => {
                 socket.emit("declineFriend", data);
-                socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
+                // socket.emit("friendHandler", {idIntra: data.idIntra, type: 1});
                 toast.dismiss();
               }}>Decline</Button>
             </div>);
