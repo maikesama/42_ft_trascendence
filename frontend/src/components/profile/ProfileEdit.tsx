@@ -22,7 +22,6 @@ import UploadIcon from '@mui/icons-material/Upload';
 import DisabledByDefaultIcon from '@mui/icons-material/DisabledByDefault';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
-import { useNavigate } from "react-router-dom";
 import DoneIcon from '@mui/icons-material/Done';
 
 
@@ -52,7 +51,6 @@ export const SocialEdit = (props: any) => {
   const [openSearchBar, setOpenSearchBar] = React.useState(false);
   const [openInvited, setOpenInvited] = React.useState(false);
 
-  let navigate = useNavigate();
   const isAddFriendNew = useRef(true);
   const isDelFriendNew = useRef(true);
 

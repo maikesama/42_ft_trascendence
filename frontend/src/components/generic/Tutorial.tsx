@@ -1,21 +1,16 @@
 
-import React, { useState, useRef } from 'react';
+import React from 'react';
 import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import "../css/Message.css";
 import Typography from '@material-ui/core/Typography';
 import Button from '@mui/material/Button/Button';
-import DialogActions from '@mui/material/DialogActions/DialogActions';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 import StepContent from '@mui/material/StepContent';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import  stella  from "../../images/stella.png";
+import  stella from "../../images/stella.png";
 import  fungo  from "../../images/fungo.png";
 import  fiore  from "../../images/fiore.png";
 import  fantasma  from "../../images/fantasma.png";

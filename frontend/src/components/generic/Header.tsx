@@ -1,4 +1,4 @@
-import React, { Fragment, useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Toolbar from '@mui/material/Toolbar';
@@ -14,7 +14,6 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link as RouterLink } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Grid from '@mui/material/Grid';
 import "../css/Header.css"
 import { useLocation } from 'react-router-dom';

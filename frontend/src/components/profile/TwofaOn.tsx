@@ -1,18 +1,8 @@
 import React, { useRef } from 'react';
 import Button from '@mui/material/Button';
-// import IconButton from '@mui/material/IconButton';
-// import Avatar from '@mui/material/Avatar';
-// import Divider from '@mui/material/Divider';
-// import { FixedSizeList, ListChildComponentProps } from 'react-window';
-// import ListItem from '@material-ui/core/ListItem';
-// import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@mui/material/Dialog';
-// import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-// import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-// import Typography from '@mui/material/Typography';
-// import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
 import { TextField } from '@mui/material';
 
 export const TwofaOn = (props: any) => {

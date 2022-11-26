@@ -2,10 +2,8 @@ import '../css/Navbar.css';
 import Link from '@mui/material/Link';
 import { Link as RouterLink } from 'react-router-dom';
 import SportsEsportsOutlinedIcon from '@mui/icons-material/SportsEsportsOutlined';
-import DesktopAccessDisabledIcon from '@mui/icons-material/DesktopAccessDisabled';
 import { socket } from "../../App";
 import { useNavigate } from "react-router-dom";
-import IconButton from '@material-ui/core/IconButton';
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import { useAuth } from '../../hooks/useAuth';
 

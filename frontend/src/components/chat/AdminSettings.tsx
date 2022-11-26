@@ -1,30 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
-import Divider from '@material-ui/core/Divider';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Avatar from '@material-ui/core/Avatar';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import InputLabel from '@mui/material/InputLabel';
-import Typography from '@mui/material/Typography';
 import TextField from '@mui/material/TextField';
-import CancelOutlinedIcon from '@mui/icons-material/CancelOutlined';
-import CheckCircleOutlinedIcon from '@mui/icons-material/CheckCircleOutlined';
-import { FixedSizeList, ListChildComponentProps } from 'react-window';
-import VolumeOffIcon from '@mui/icons-material/VolumeOff';
-import Radio from '@mui/material/Radio';
-import IconButton from '@mui/material/IconButton';
-import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import Checkbox from '@mui/material/Checkbox';
-import SettingsIcon from '@mui/icons-material/Settings';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { PropaneSharp } from '@mui/icons-material';
 import NativeSelect from '@mui/material/NativeSelect';
 
 export const AdminSettings = (props: any) => {

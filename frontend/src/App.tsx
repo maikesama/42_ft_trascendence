@@ -1,5 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
-import logo from './logo.svg';
+import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import './App.css';
@@ -18,9 +17,8 @@ import { Games } from './pages/Games';
 import { useAuth } from './hooks/useAuth';
 import PrivateRoutes from './components/utils/PrivateRoutes';
 import io from 'socket.io-client';
-import { Alert, Button } from 'react-bootstrap';
-import CheckIcon from '@mui/icons-material/Check';
-import { IconButton, Typography } from '@mui/material';
+import { Button } from 'react-bootstrap';
+import { Typography } from '@mui/material';
 import { ToastContainer, toast } from 'react-toastify';
 import { useNavigate } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';

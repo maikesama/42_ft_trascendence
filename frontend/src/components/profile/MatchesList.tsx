@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Avatar from '@mui/material/Avatar';
 import { FixedSizeList } from 'react-window';
 import ListItem from '@material-ui/core/ListItem';
-// import ListItemText from '@material-ui/core/ListItemText';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
