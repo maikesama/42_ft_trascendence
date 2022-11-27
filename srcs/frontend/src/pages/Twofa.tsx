@@ -60,7 +60,7 @@ export const Twofa = () => {
                     setMesage(json.message);
                 }
             } catch (error) {
-                window.location.replace('/middleware');
+                window.location.replace('/');
                 
             }
         };

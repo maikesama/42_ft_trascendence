@@ -104,7 +104,7 @@ export const SocialEdit = (props: any) => {
   }, []);
 
   useEffect(() => {
-    socket.off('friendStatus').on("friendStatus", (data: any) => {
+    socket.on("friendStatus", (data: any) => {
 
       //  edit status where idIntra = data.idIntra
       setFriends((friends: any) => {

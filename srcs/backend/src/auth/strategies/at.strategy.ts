@@ -1,6 +1,8 @@
-import { Injectable, HttpStatus, HttpException } from "@nestjs/common";
+import { Injectable, HttpStatus, HttpException, Res} from "@nestjs/common";
 import { PassportStrategy } from "@nestjs/passport";
 import { ExtractJwt, Strategy } from 'passport-jwt'
+import { UserService } from "../../user/user.service";
+import { Response } from 'express'
 
 var cookieExtractor = function(req) {
 
@@ -30,7 +32,7 @@ var cookieExtractor = function(req) {
 @Injectable()
 export class AtStrategy extends PassportStrategy(Strategy, 'jwt')
 {
-	constructor() {
+	constructor( private userService: UserService) {
 		super({
 			jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
 			ignoreExpiration: false,
@@ -39,12 +41,14 @@ export class AtStrategy extends PassportStrategy(Strategy, 'jwt')
 		});
 	}
 
-	validate(payload: any) {
-		console.log(JSON.stringify(payload))
-		if (!payload || !payload.idIntra || !payload.sub)
+	async validate(payload: any, @Res() res) {
+		// console.log(JSON.stringify(payload))
+		const user = await this.userService.getUserById(payload.sub);
+		if (!user || user === undefined|| user === null || !payload || !payload.idIntra || !payload.sub || user.idIntra !== payload.idIntra)
 		{
 			console.log("no payload")
-			throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED)
+			res.redirect('/');
+			// throw new HttpException('Invalid token', HttpStatus.UNAUTHORIZED)
 		}
 		return payload;
 	}

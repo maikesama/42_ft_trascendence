@@ -6,9 +6,9 @@ services:
   #   image: "frontend2"
   #   build:
   #     dockerfile: 'Dockerfile'
-  #     context: ./frontend
+  #     context: ./srcs/frontend
   #   volumes:
-  #     - ./frontend/src:/app/src
+  #     - ./srcs/frontend/src:/app/src
   #   expose:
   #     - "3000"
   #   environment:

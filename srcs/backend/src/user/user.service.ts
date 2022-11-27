@@ -108,6 +108,21 @@ export class UserService {
 		}
 	}
 
+	async getUserById(id: number){
+		try{
+			const user = await this.prisma.user.findUnique({
+				where: {
+					id: id
+				},
+			})
+			return user
+		}
+		catch(e){
+			return null;
+			// throw new HttpException(e, HttpStatus.BAD_REQUEST)
+		}
+	}
+
 	async changeUserStatus(idIntra: string, st: number){
 		try{
 			st === 0
