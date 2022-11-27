@@ -1,7 +1,7 @@
 FROM node:16-slim
 
 WORKDIR /home/node/app
-
+USER root
 COPY ./ ./
 # USER node
 # RUN npm cache clean --force
@@ -14,8 +14,8 @@ RUN npm install --legacy-peer-deps
 # RUN chmod 666 /home/node/app/build/favicon.ico
 
 
-# CMD npm install --legacy-peer-deps ;npx eslint --fix; npm run build ;chmod 666 /home/node/app/build/favicon.ico;npm install serve --legacy-peer-deps;npx serve -s build ;
-CMD npm run build ;npm install serve --legacy-peer-deps;npx serve -s build ;
+CMD npm install --legacy-peer-deps ; npm run build ;npm install serve --legacy-peer-deps;npx serve -s build ;
+# CMD npm run build ;npm install serve --legacy-peer-deps;npx serve -s build ;
 # CMD npx serve -s build
 
 

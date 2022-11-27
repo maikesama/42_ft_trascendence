@@ -22,7 +22,7 @@ services:
 
   frontend:
     image: "node:16-slim"
-    user: "node"
+    # user: "node"
     build:
       dockerfile: 'Dockerfile.prod'
       context: ./srcs/frontend
