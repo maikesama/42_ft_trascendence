@@ -3,5 +3,4 @@ build
 .dockerignore
 Dockerfile
 Dockerfile.prod
-./src
 ./node_modules

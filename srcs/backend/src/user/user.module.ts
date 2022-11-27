@@ -6,8 +6,8 @@ import { JwtService } from "@nestjs/jwt";
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { AuthModule } from 'src/auth/auth.module';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { TwoFactorAuthenticationService} from './../auth/TwoFA/TwoFA.service'
-import { AuthService} from './../auth/auth.service'
+import { TwoFactorAuthenticationService} from '../auth/TwoFA/TwoFA.service'
+import { AuthService} from '../auth/auth.service'
 
 @Module({
 	imports:[

@@ -259,12 +259,12 @@ async friendHandler(client: Socket, message: { idIntra: string, type: number }) 
     const user2 = await this.userService.getUserByIdIntra(message.idIntra)
     if (user2 && message.type) {
         if (users.has(message.idIntra)) {
-          this.server.to(users.get(message.idIntra).id).emit('friendHandlerOtherProfileEditSocialEdit', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
+          // this.server.to(users.get(message.idIntra).id).emit('friendHandlerOtherProfileEditSocialEdit', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
           this.server.to(users.get(message.idIntra).id).emit('friendHandlerOtherProfileEditProfileEdit', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
           this.server.to(users.get(message.idIntra).id).emit('friendHandlerSearchBar', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
           this.server.to(users.get(message.idIntra).id).emit('friendHandlerInviteList', { ciao: "ciao",idIntra: user.idIntra, type: message.type })
         }
-        client.emit("friendHandlerOtherProfileEditSocialEdit", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
+        // client.emit("friendHandlerOtherProfileEditSocialEdit", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
         client.emit("friendHandlerOtherProfileEditProfileEdit", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
         client.emit("friendHandlerSearchBar", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })
         client.emit("friendHandlerInviteList", { ciao: "ciao",idIntra: user2.idIntra, type: message.type })

@@ -119,7 +119,6 @@ export const SearchBar = (props: any) => {
 
     React.useEffect(() => {
             socket.off('friendHandlerSearchBar').on('friendHandlerSearchBar', (data: any) => {
-                console.log("friendHandler");
                 searchUser();
             });
     });

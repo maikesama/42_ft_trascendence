@@ -20,31 +20,20 @@ services:
   #   networks:
   #     - trascendecne
 
-  ft_transcendence:
-    image: "hello"
-    build:
-      dockerfile: 'Dockerfile'
-      context: ./hello
-    container_name: hello
-    depends_on:
-      - "backend"
-    networks:
-      - trascendecne
-
   frontend:
     image: "node:16-slim"
     user: "node"
     build:
       dockerfile: 'Dockerfile.prod'
-      context: ./frontend
+      context: ./srcs/frontend
     working_dir: /home/node/app
     restart: unless-stopped
-    volumes:
-      - ./frontend:/home/node/app
+    # volumes:
+    #   - ./srcs/frontend:/home/node/app
     expose:
       - "3000"
-    logging:
-      driver: "none"
+    # logging:
+    #   driver: "none"
     environment:
       REACT_APP_HOST_URI: ${REACT_APP_HOST_URI}
     container_name: frontend
@@ -57,19 +46,18 @@ services:
     image: "backend"
     build:
       dockerfile: 'Dockerfile'
-      context: ./backend
+      context: ./srcs/backend
     restart: unless-stopped
     volumes:
-      - ./backend/src:/app/src
+      - ./srcs/backend/src:/app/src
     expose:
       - "3333"
       - "4244"
-    ports:
-      - "8080:5555"
+    # ports:
+    #   - "8080:5555"
     environment:
       HOST: ${REACT_APP_HOST_URI}
       DATABASE_URL: ${DATABASE_URL}
-      # WDS_SOCKET_PORT: ${WDS_SOCKET_PORT}
     container_name: backend
     depends_on:
       - "database"
@@ -88,22 +76,12 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
     networks:
       - trascendecne
-  # redis:
-  #   image: redis:latest
-  #   ports:
-  #     - '6379:6379'
-
-  # rcli:
-  #   image: redis:latest
-  #   links:
-  #     - redis
-  #   command: redis-cli -h redis
 
   proxy:
     container_name: proxy
     image: proxy
     build:
-      context: ./proxy
+      context: ./srcs/proxy
       dockerfile: Dockerfile
     ports:
       - "80:80"
@@ -120,7 +98,7 @@ services:
     container_name: adminer
     image: adminer
     ports:
-      - 8081:8080
+      - 8080:8080
     restart: always
     networks:
       - trascendecne

@@ -6,5 +6,5 @@ COPY ./ ./
 
 RUN npm install
 
-# CMD [ "sh", "setup.sh" ]
-CMD [ "sh", "setup.prod.sh" ]
+CMD [ "sh", "setup.sh" ]
+# CMD [ "sh", "setup.prod.sh" ]

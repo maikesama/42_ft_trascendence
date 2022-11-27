@@ -28,7 +28,7 @@ export class UserService {
 					img: b.blocked.img,
 					userName: b.blocked.userName
 				}})
-				
+
 			return blockedInfo
 		}
 		catch(e){
@@ -52,7 +52,7 @@ export class UserService {
 
 		}
 		catch (e) {
-			console.log(e)
+			// console.log(e)
 			throw new HttpException('User not found', HttpStatus.NOT_FOUND)
 		}
 	}
@@ -234,7 +234,7 @@ export class UserService {
 				else
 					blockArray.push(block.blockId)
 			})
-	
+
 			return blockArray
 		}
 		catch (e) {
@@ -400,7 +400,7 @@ export class UserService {
 		}
 		catch(e)
 		{
-			console.log(body.dataURL)
+			// console.log(body.dataURL)
 			throw new HttpException(e, HttpStatus.NOT_FOUND)
 		}
 	}

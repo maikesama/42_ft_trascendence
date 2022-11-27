@@ -19,7 +19,7 @@ export class AuthController{
 		//@Public()
 		@Get()
 		login(@Res() res) {
-			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=http%3A%2F%2F${process.env.HOST}%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`)
+			return res.redirect(`https://api.intra.42.fr/oauth/authorize?client_id=${process.env.CLIENT_SECRET}&redirect_uri=http%3A%2F%2F${process.env.HOST}%2Fapi%2Fauth%2F42%2Fcallback&response_type=code`)
 		}
 		//@Public()
 		@Get('42/callback')

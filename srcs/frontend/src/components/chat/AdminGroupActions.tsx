@@ -242,9 +242,7 @@ export const AdminGroupActions = (props: any) => {
                 },
                 body: JSON.stringify(data),
             })
-            console.log(response);
             const data2 = await response.json();
-            console.log(data2);
             manageError(data2, response, null, setAlert);
             if (response.status == 200)
             {

@@ -5,7 +5,7 @@ import {JwtService} from "@nestjs/jwt";
 import { PrismaService } from "src/prisma/prisma.service";
 import { UserService } from "./user.service";
 import { bindCallback } from "rxjs";
-import { TwoFactorAuthenticationService} from './../auth/TwoFA/TwoFA.service'
+import { TwoFactorAuthenticationService} from '../auth/TwoFA/TwoFA.service'
 import { MessageBody } from "@nestjs/websockets";
 import { setUsernameDTO } from './dto/user.dto';
 

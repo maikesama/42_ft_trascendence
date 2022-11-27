@@ -191,14 +191,14 @@ export const SocialEdit = (props: any) => {
       }
     };
     fetchData();
-    socket.off('friendHandlerOtherProfileEditSocialEdit').on('friendHandlerOtherProfileEditSocialEdit', (data: any) => {
-      console.log("qui");
-      console.log(data);
-      console.log(user.idUser);
-      if (data.idIntra === idIntra || data.idIntra === user.idUser) {
-        fetchData();
-      }
-    });
+    // socket.off('friendHandlerOtherProfileEditSocialEdit').on('friendHandlerOtherProfileEditSocialEdit', (data: any) => {
+    //   console.log("qui");
+    //   console.log(data);
+    //   console.log(user.idUser);
+    //   if (data.idIntra === idIntra || data.idIntra === user.idUser) {
+    //     fetchData();
+    //   }
+    // });
   }, [props.user]);
 
   //retrigger

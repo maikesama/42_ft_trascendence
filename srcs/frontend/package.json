@@ -1,6 +1,7 @@
 {
   "name": "frontend",
   "version": "0.1.0",
+  "main": "index.tsx",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.10.4",
@@ -38,7 +39,9 @@
     "start": "DISABLE_ESLINT_PLUGIN=true react-scripts start",
     "build": "DISABLE_ESLINT_PLUGIN=true react-scripts build",
     "test": "DISABLE_ESLINT_PLUGIN=true react-scripts test",
-    "eject": "DISABLE_ESLINT_PLUGIN=true react-scripts eject"
+    "eject": "DISABLE_ESLINT_PLUGIN=true react-scripts eject",
+    "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,.jsx --fix"
   },
   "eslintConfig": {
     "extends": [

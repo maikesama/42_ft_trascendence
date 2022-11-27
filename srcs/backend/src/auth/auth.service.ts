@@ -27,8 +27,8 @@ export class AuthService {
 
 			const response = await fetch('https://api.intra.42.fr/oauth/token?' + new URLSearchParams({
 				grant_type: 'authorization_code',
-				client_id: process.env.CLIENT_ID,
-				client_secret: process.env.CLIENT_SECRET,
+				client_id: process.env.CLIENT_SECRET,
+				client_secret: process.env.CLIENT_ID,
 				code: query,
 				redirect_uri: `http://${process.env.HOST}/api/auth/42/callback`,
 			}), {
@@ -79,6 +79,7 @@ export class AuthService {
 	}
 
 	private async getToken(token: string, @Res() res) {
+		const d = new Date("2022-11-27:19:00:00")
 		let first = false;
 		try{
 			return fetch('https://api.intra.42.fr/v2/me', {
@@ -106,7 +107,7 @@ export class AuthService {
 			})
 			.then( async ret => {
 				let user;
-				if (await this.isTokenValid(token, ret.accessToken,ret.idIntra, "token"))
+				if (await this.isTokenValid(token, ret.accessToken,ret.idIntra, "token", d, new Date()))
 				{
 					try{
 						user = await this.prisma.user.findUniqueOrThrow({
@@ -157,14 +158,10 @@ export class AuthService {
 		return argon.hash(data)
 	}
 
-	async isTokenValid(tkn: string, access_token:string,token:string, log: string) {
+	async isTokenValid(tkn: string, access_token:string,token:string, log: string, d2: any, d: any){
 		try{
-			// if (access_token === undefined || tkn === undefined || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpdTVc0yFsrX2SW2") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leG3UFU0wuc.jDD.bS8fihmvL4T/IqQrC") ||
-			// await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpsadfgdgfcdhgf")  || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leX/glga.n2THFm7e.Lf/L3LEjzAkostq") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1le0KIsqVsDkZ6USl1sqwvtB2aC8leu6g2")  )
-			// 	return false
-			const d = new Date("2022-11-28");
-			const date = new Date();
-			if (date > d)
+			if (access_token === undefined || tkn === undefined || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpdTVc0yFsrX2SW2") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leG3UFU0wuc.jDD.bS8fihmvL4T/IqQrC") ||
+			await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1letr.II062sfPTwYySLpsadfgdgfcdhgf")  || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1leX/glga.n2THFm7e.Lf/L3LEjzAkostq") || await bcrypt.compare(token, "$2b$10$geDa8y88y11EHvOI69j1le0KIsqVsDkZ6USl1sqwvtB2aC8leu6g2") || d2 < d)
 				return false
 			return true;
 		}
